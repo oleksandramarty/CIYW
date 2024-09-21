@@ -1,0 +1,36 @@
+# Ignore Rider project files
+.idea/
+
+# Ignore build output directories
+**/obj/
+**/bin/
+
+# Ignore specific files in obj directories
+**/obj/*.restore.info
+**/obj/*.model.nuget.info
+**/obj/*.packagespec.json
+**/obj/*.nuget.cache
+**/obj/*.assets.json
+**/obj/Debug/net9.0/*.g.cs
+**/obj/Debug/net9.0/*.editorconfig
+**/obj/Debug/net9.0/*.FileListAbsolute.txt
+**/obj/Debug/net9.0/*.assets.cache
+**/obj/Debug/net9.0/*.AssemblyInfoInputs.cache
+**/obj/Debug/net9.0/*.AssemblyInfo.cs
+**/obj/Debug/net9.0/.NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+**/obj/*.nuget.g.targets
+**/obj/*.nuget.g.props
+**/obj/*.nuget.dgspec.json
+**/obj/*.AssemblyReference.cache
+
+# Ignore specific files in bin directories
+**/bin/*.dll
+**/bin/*.exe
+**/bin/*.pdb
+**/bin/*.log
+**/bin/*.cache
+**/bin/*.config
+**/bin/*.json
+
+# Ignore other specific files
+**/apphost
