@@ -52,13 +52,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(options => options.SerializeAsV2 = true);
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/V1/swagger.json", $"{builder.Configuration["Microservice:Title"]} v{builder.Configuration["Microservice:Version"]} "));
-    
-    // var cts = new CancellationTokenSource();
-    // var cancellationToken = cts.Token;
-
-    // app.UpdateDatabaseAsync<UserDataContext>().Wait(cancellationToken);
+    app.AddSwagger(builder);
 }
 
 app.UseCors("AllowSpecificOrigins");

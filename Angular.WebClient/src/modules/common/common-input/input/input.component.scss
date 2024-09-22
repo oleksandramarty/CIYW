@@ -1,0 +1,18 @@
+.input-wrapper {
+}
+
+mat-hint {
+  opacity: 0.5;
+}
+
+.input-icon {
+  height: 1rem;
+  position: absolute;
+  right: 0rem;
+  top: 50%;
+  transform: translate(0rem, -50%);
+}
+
+.input-icon-wrapper {
+  position: relative;
+}

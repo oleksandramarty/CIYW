@@ -1,0 +1,44 @@
+.filter {
+  &-wrapper {}
+
+  &-item {
+    height: 3.5rem !important;
+    display: inline-block;
+
+    &.location {
+      width: 20%;
+    }
+    &.title {
+      width: 50%;
+    }
+    &.status {
+      width: 20%;
+    }
+    &.search {
+      width: 10%;
+    }
+  }
+}
+
+button.filter-item.search,
+.mat-mdc-notch-piece.mdc-notched-outline__trailing,
+.mat-mdc-notch-piece.mdc-notched-outline__leading{
+  border-radius: 0rem;
+}
+
+.filter {
+  &-wrapper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &-first {
+    margin: 2rem 0rem 0rem 0rem;
+  }
+  &-second {
+    margin: 0rem 0rem 2rem 0rem;
+  }
+}

@@ -1,0 +1,151 @@
+<div *ngIf="!!formGroup"
+     [ngClass]="className ? 'input-wrapper ' + className : 'input-wrapper'"
+     [style]="'text-align: ' + align"
+     style="font-size: 12px"
+     [formGroup]="formGroup">
+  <ng-container *ngIf="type === 'input'">
+    <mat-form-field [appearance]="appearance">
+      <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
+      <input
+        matInput
+        #input
+        [ngClass]="!!icon ? 'input-icon-wrapper' : ''"
+        (input)="onInput($event)"
+        [translation]="placeholder" [translationAttr]="'placeholder'"
+        [required]="!!isRequired"
+        [formControlName]="controlName">
+      <ng-container *ngIf="!!icon">
+        <i [class]="icon + ' input-icon'"></i>
+      </ng-container>
+      <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
+      <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currenValue?.length > maxLength}">
+        {{currenValue?.length}}/{{maxLength}}
+      </mat-hint>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'select' || type === 'multiselect'">
+    <mat-form-field [appearance]="appearance">
+      <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
+      <mat-select
+        [ngClass]="!!icon ? 'input-icon-wrapper' : ''"
+        [required]="isRequired"
+        [multiple]="type === 'multiselect'"
+        [formControlName]="controlName">
+        <mat-option *ngFor="let item of dataItems; let i=index" [value]="item.id">
+          <span [translation]="item.name"></span>
+        </mat-option>
+      </mat-select>
+      <ng-container *ngIf="!!icon">
+        <i [class]="icon + ' input-icon'"></i>
+      </ng-container>
+      <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'textarea'">
+    <mat-form-field [appearance]="appearance">
+      <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
+      <textarea
+        matInput
+        #input
+        [ngClass]="!!icon ? 'input-icon-wrapper' : ''"
+        (input)="onInput($event)"
+        [translation]="placeholder" [translationAttr]="'placeholder'"
+        [required]="isRequired"
+        [attr.rows]="rows"
+        [attr.cols]="cols"
+        [formControlName]="controlName"></textarea>
+      <ng-container *ngIf="!!icon">
+        <i [class]="icon + ' input-icon'"></i>
+      </ng-container>
+      <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
+      <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currenValue?.length > maxLength}">
+        {{currenValue?.length}}/{{maxLength}}
+      </mat-hint>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'password'">
+    <mat-form-field [appearance]="appearance">
+      <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
+      <input matInput #input (input)="onInput($event)" [type]="hide() ? 'password' : 'text'" [required]="isRequired" [formControlName]="controlName"/>
+      <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()">
+        <i [class.fa-eye]="!hide()" [class.fa-eye-slash]="hide()" class="fa-solid"></i>
+      </button>
+      <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
+      <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currenValue?.length > maxLength}">
+        {{currenValue?.length}}/{{maxLength}}
+      </mat-hint>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'datepicker'">
+    <mat-form-field [appearance]="appearance">
+      <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
+      <input matInput [matDatepicker]="picker" [required]="isRequired" [min]="minDate" [max]="maxDate" [formControlName]="controlName">
+      <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'rangedatapicker'">
+    <mat-form-field [appearance]="appearance" [formGroup]="internalFormGroup!">
+      <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
+      <mat-date-range-input [rangePicker]="picker" [required]="isRequired" [min]="minDate" [max]="maxDate" [formControlName]="controlName">
+        <input
+          matStartDate
+          [translation]="placeholder" [translationAttr]="'placeholder'"
+          [formControlName]="'left'">
+        <input
+          matEndDate
+          [translation]="placeholder" [translationAttr]="'placeholder'"
+          [formControlName]="'right'">
+      </mat-date-range-input>
+      <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'radio'">
+    <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
+    <h1 translation="SELECT.SELECT_OPTION"></h1>
+    <mat-radio-group aria-label="Select an option" [required]="!!isRequired" [formControlName]="controlName">
+      <mat-radio-button
+        *ngFor="let item of dataItems; let i=index"
+        [value]="item.id"
+        [ngStyle]="mode === 'block' ? { 'display': 'block' } : mode === 'inline' ? { 'display': 'inline-block' } : {}">
+        <span [translation]="item.name"></span>
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'checkbox'">
+    <mat-checkbox
+      [required]="!!isRequired"
+      [formControlName]="controlName"
+    ><span [translation]="label"></span></mat-checkbox>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'toggle'">
+    <mat-slide-toggle [formControlName]="controlName">{{label}}</mat-slide-toggle>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'slider'">
+    <mat-slider
+      [attr.min]="minLength ?? null"
+      [attr.max]="maxLength ?? null"
+      [step]="sliderStep ?? 1"
+      showTickMarks
+      discrete
+      [displayWith]="formatLabel"
+      [formGroup]="internalFormGroup!"
+    >
+      <input matSliderStartThumb [formControlName]="'left'">
+      <input matSliderEndThumb [formControlName]="'right'">
+    </mat-slider>
+  </ng-container>
+</div>

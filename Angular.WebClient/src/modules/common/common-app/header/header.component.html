@@ -1,0 +1,54 @@
+<mat-toolbar color="primary" class="app-header">
+  <!-- Title on the left -->
+  <span class="app-title">Cash in your wallet</span>
+
+  <nav class="header-center" *ngIf="(isAuthorized$ | async) && currentUser">
+    <a
+      *ngFor="let item of menuItems; let i=index"
+      mat-button
+      (click)="goto(item.url)"
+      [translation]="item.title"></a>
+  </nav>
+
+  <div class="header-right">
+    <ng-container *ngIf="currentLocale">
+      <div class="user-info pointer" [matMenuTriggerFor]="menuLang">
+        <span class="lang-icon-current">{{langFlags.get(currentLocale.isoCode ?? '')}}</span>
+      </div>
+      <mat-menu #menuLang="matMenu" class="custom-menu-header-position">
+        <ng-container *ngFor="let locale of locales; let i=index">
+          <button mat-menu-item (click)="localeChanged(locale.id)">
+            <div class="lang-menu-item">
+            <span class="lang-icon">
+            {{langFlags.get(locale.isoCode ?? '')}}
+          </span>
+              {{locale.title}}
+            </div>
+          </button>
+        </ng-container>
+      </mat-menu>
+    </ng-container>
+    <ng-container *ngIf="(isAuthorized$ | async) && currentUser">
+      <div class="user-info pointer" [matMenuTriggerFor]="menu" >
+        <div class="avatar-placeholder">
+          {{ currentUser.login?.charAt(0).toUpperCase() ?? '' }}
+        </div>
+        <span class="user-full-name">{{ currentUser.login }}</span>
+      </div>
+      <mat-menu #menu="matMenu" class="custom-menu-header-position">
+        <button mat-menu-item (click)="goto('notifications')">
+          <i class="fa-regular fa-bell mr-5p"></i>
+          <span translation="USER.MENU.NOTIFICATIONS"></span>
+        </button>
+        <button mat-menu-item (click)="goto('settings')">
+          <i class="fa-solid fa-gears mr-5p"></i>
+          <span translation="USER.MENU.SETTINGS"></span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <i class="fa-solid fa-arrow-right-from-bracket mr-5p"></i>
+          <span translation="USER.MENU.LOGOUT"></span>
+        </button>
+      </mat-menu>
+    </ng-container>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,7 @@
+<mat-paginator *ngIf="!!paginator"
+               [length]="totalCount ?? 0"
+               [pageSize]="paginator.pageSize"
+               [pageSizeOptions]="[5, 10, 25, 100, 150]"
+               aria-label="Select page">
+</mat-paginator>
+<h1 translation="PAGINATOR.SELECT_PAGE"></h1>
