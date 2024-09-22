@@ -13,18 +13,18 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
 {
     private readonly IMapper mapper;
-    private readonly IEntityValidator<AuthDataContext> entityValidator;
+    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
     private readonly IJwtTokenFactory jwtTokenFactory;
-    private readonly IGenericRepository<Guid, User, AuthDataContext> userRepository;
-    private readonly IGenericRepository<Guid, UserRole, AuthDataContext> userRoleRepository;
+    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
+    private readonly IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository;
 
     public AuthSignUpCommandHandler(
         IMediator mediator,
         IMapper mapper, 
-        IEntityValidator<AuthDataContext> entityValidator,
+        IEntityValidator<AuthGatewayDataContext> entityValidator,
         IJwtTokenFactory jwtTokenFactory,
-        IGenericRepository<Guid, User, AuthDataContext> userRepository,
-        IGenericRepository<Guid, UserRole, AuthDataContext> userRoleRepository)
+        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
+        IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository)
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;

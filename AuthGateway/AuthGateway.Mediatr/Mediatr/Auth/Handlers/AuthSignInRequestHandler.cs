@@ -13,12 +13,12 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthSignInRequestHandler: IRequestHandler<AuthSignInRequest, JwtTokenResponse>
 {
-    private readonly IGenericRepository<Guid, User, AuthDataContext> userRepository;
+    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
     private readonly ITokenRepository tokenService;
     private readonly IJwtTokenFactory jwtTokenFactory;
 
     public AuthSignInRequestHandler(
-        IGenericRepository<Guid, User, AuthDataContext> userRepository,
+        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
         ITokenRepository tokenService,
         IJwtTokenFactory jwtTokenFactory)
     {

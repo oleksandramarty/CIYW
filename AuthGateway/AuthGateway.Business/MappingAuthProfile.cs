@@ -12,7 +12,6 @@ public class MappingAuthProfile: Profile
     {
         this.CreateMap<User, UserResponse>();
         this.CreateMap<Role, RoleResponse>();
-        this.CreateMap<UserRole, UserRoleResponse>();
         
         this.CreateMap<AuthSignUpCommand, User>()
             .AfterMap((src, dest) =>

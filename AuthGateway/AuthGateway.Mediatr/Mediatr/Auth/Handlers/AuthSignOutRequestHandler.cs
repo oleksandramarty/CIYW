@@ -10,14 +10,14 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSignOutRequest>
 {
-    private readonly IEntityValidator<AuthDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, User, AuthDataContext> userRepository;
+    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
+    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
     private readonly ITokenRepository tokenService;
     
     public AuthSignOutRequestHandler(
         IAuthRepository authRepository,
-        IEntityValidator<AuthDataContext> entityValidator,
-        IGenericRepository<Guid, User, AuthDataContext> userRepository,
+        IEntityValidator<AuthGatewayDataContext> entityValidator,
+        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
         ITokenRepository tokenService): base(authRepository)
     {
         this.entityValidator = entityValidator;

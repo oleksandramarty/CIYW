@@ -15,5 +15,5 @@ public class UserResponse: BaseDateTimeEntity<Guid>
     public bool IsTemporaryPassword { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
     
-    public ICollection<UserRoleResponse>? Roles { get; set; }
+    public ICollection<RoleResponse>? Roles { get; set; }
 }

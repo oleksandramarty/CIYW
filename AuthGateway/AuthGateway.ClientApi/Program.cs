@@ -21,7 +21,7 @@ if (builder.Environment.IsDevelopment())
 builder.AddGoogleAuthentication();
 
 // Configure PostgreSQL with EF Core
-builder.AddDatabaseContext<AuthDataContext>();
+builder.AddDatabaseContext<AuthGatewayDataContext>();
 
 builder.AddSwagger();
 

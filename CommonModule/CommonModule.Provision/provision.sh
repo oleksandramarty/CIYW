@@ -1,0 +1,64 @@
+#!/bin/bash
+
+clear
+
+# Record the start time
+START_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
+echo "Provision running..."
+# Truncate the provision_logs.txt file
+truncate -s 0 "$SCRIPT_DIR/provision_logs.txt"
+
+cfg=(false false true)
+
+# Set the dropMigrations parameter
+dropMigrations=${cfg[0]}
+# Set the addNewMigration parameter
+addNewMigration=${cfg[1]}
+# Set the isBulkUpdate parameter
+isBulkUpdate=${cfg[2]}
+
+# Make each script executable and run it
+chmod +x "$SCRIPT_DIR/reinitialize_db.sh"
+"$SCRIPT_DIR/reinitialize_db.sh" $dropMigrations $addNewMigration
+
+chmod +x "$SCRIPT_DIR/reinitialize_db_data.sh"
+"$SCRIPT_DIR/reinitialize_db_data.sh" $isBulkUpdate
+
+# Make each script executable and run it
+chmod +x "$SCRIPT_DIR/InitScripts/update_version.sh"
+"$SCRIPT_DIR/InitScripts/update_version.sh"
+
+# Generate client typescript files for Angular app
+chmod +x "$SCRIPT_DIR/InitScripts/generate_client_ts.sh"
+"$SCRIPT_DIR/InitScripts/generate_client_ts.sh"
+
+echo "Provision completed."
+echo
+
+chmod +x "$SCRIPT_DIR/provision_demo.sh"
+"$SCRIPT_DIR/provision_demo.sh"
+
+# Record the end time
+END_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Convert timestamps to seconds since epoch
+START_SECONDS=$(date -j -f '%Y-%m-%d %H:%M:%S' "$START_TIMESTAMP" +%s)
+END_SECONDS=$(date -j -f '%Y-%m-%d %H:%M:%S' "$END_TIMESTAMP" +%s)
+
+# Calculate the duration in seconds
+DURATION=$((END_SECONDS - START_SECONDS))
+
+# Print the results
+printf "%-30s : %s\n" "Provision Start Date" "$START_TIMESTAMP"
+printf "%-30s : %s\n" "Provision End Date" "$END_TIMESTAMP"
+printf "%-30s : %s\n" "Duration:" "$DURATION second(s)"
+
+# Write the results to provision_logs.txt
+{
+  printf "%-30s : %s\n" "Provision Start Date" "$START_TIMESTAMP"
+  printf "%-30s : %s\n" "Provision End Date" "$END_TIMESTAMP"
+  printf "%-30s : %s\n" "Duration:" "$DURATION second(s)"
+} >> "$SCRIPT_DIR/provision_logs.txt"

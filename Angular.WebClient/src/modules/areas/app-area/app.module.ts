@@ -26,6 +26,9 @@ import {PreloadAllModules, RouterModule, RouterOutlet, Routes} from "@angular/ro
 import {AuthGuard} from "../../../core/auth-guard";
 import {NotFoundComponent} from "../../common/common-app/not-found/not-found.component";
 import {InDevelopmentComponent} from "../../common/common-in-development/in-development/in-development.component";
+import {API_BASE_URL_AuthGateway} from "../../../core/api-clients/auth-client";
+import {API_BASE_URL_Localizations} from "../../../core/api-clients/localizations-client";
+import {API_BASE_URL_Expenses} from "../../../core/api-clients/expenses-client";
 
 export const MY_FORMATS = {
   parse: {
@@ -85,6 +88,9 @@ const routes: Routes = [
     BaseHttpService,
     DictionaryService,
     LocalStorageService,
+    {provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl},
+    {provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl},
+    {provide: API_BASE_URL_Expenses, useValue: environment.apiExpensesUrl},
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

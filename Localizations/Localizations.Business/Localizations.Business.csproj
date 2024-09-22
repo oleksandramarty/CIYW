@@ -10,4 +10,13 @@
         <PackageReference Include="AutoMapper" Version="12.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
+      <ProjectReference Include="..\Localizations.Domain\Localizations.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
