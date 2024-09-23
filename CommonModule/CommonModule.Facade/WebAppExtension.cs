@@ -1,8 +1,5 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +11,11 @@ using CommonModule.Core.Filters;
 using CommonModule.Interfaces;
 using CommonModule.Repositories;
 using CommonModule.Repositories.Builders;
+using CommonModule.Shared.Constants;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using StackExchange.Redis;
 using OpenApiInfo = Microsoft.OpenApi.Models.OpenApiInfo;
 using OpenApiSecurityRequirement = Microsoft.OpenApi.Models.OpenApiSecurityRequirement;
 using OpenApiSecurityScheme = Microsoft.OpenApi.Models.OpenApiSecurityScheme;
@@ -24,36 +25,35 @@ namespace CommonModule.Facade
     public static class WebAppExtension
     {
         #region Auth
-        public static void AddGoogleAuthentication(this WebApplicationBuilder builder)
-        {
-            builder.Services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                })
-                .AddCookie()
-                .AddGoogle(options =>
-                {
-                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-                });
-        }
 
+        public static void AddAuthorization(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthorization();
+            // builder.Services.AddAuthorization(options =>
+            // {
+            //     options.DefaultPolicy = new AuthorizationPolicyBuilder(AuthSchema.Schema)
+            //         .RequireAuthenticatedUser()
+            //         .Build();
+            // });
+        }
+        
         public static void AddJwt(this WebApplicationBuilder builder)
         {
+            
             byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Jwt:SecretKey"]);
 
-            builder.Services.AddAuthentication(x =>
+            builder.Services.AddAuthentication(options =>
                 {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    // options.DefaultAuthenticateScheme = AuthSchema.Schema;
+                    // options.DefaultChallengeScheme = AuthSchema.Schema;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(x =>
+                .AddJwtBearer(AuthSchema.Schema, options =>
                 {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -69,25 +69,23 @@ namespace CommonModule.Facade
             {
                 try
                 {
-                    if (context.User.Identity.IsAuthenticated)
+                    var tokenService = context.RequestServices.GetRequiredService<ITokenRepository>();
+                    var token = context.Request.Headers["Authorization"].ToString().Split(' ').Last();
+                    
+                    if (!string.IsNullOrEmpty(token) && 
+                        !await tokenService.IsTokenValidAsync(token))
                     {
-                        var tokenService = context.RequestServices.GetRequiredService<ITokenRepository>();
-                        var token = context.Request.Headers["Authorization"].ToString().Split(' ').Last();
+                        var tokenFactory = context.RequestServices.GetRequiredService<IJwtTokenFactory>();
 
-                        if (!await tokenService.IsTokenValidAsync(token))
+                        if (tokenService.IsTokenExpired(token) && tokenFactory.IsTokenRefreshable(token))
                         {
-                            var tokenFactory = context.RequestServices.GetRequiredService<IJwtTokenFactory>();
-
-                            if (tokenService.IsTokenExpired(token) && tokenFactory.IsTokenRefreshable(token))
-                            {
-                                var newToken = tokenFactory.GenerateNewJwtToken(context.User);
-                                context.Response.Headers.Add("Authorization", $"JwtHonk {newToken}");
-                            }
-                            else
-                            {
-                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                                return;
-                            }
+                            var newToken = tokenFactory.GenerateNewJwtToken(context.User);
+                            context.Response.Headers.Add("Authorization", $"{AuthSchema.Schema} {newToken}");
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            return;
                         }
                     }
                 }
@@ -101,9 +99,11 @@ namespace CommonModule.Facade
                 await next();
             });
         }
+
         #endregion
 
         #region Cors
+
         public static void AddCors(this WebApplicationBuilder builder)
         {
             string origin = builder.Configuration.GetValue<string>("Origin") ?? string.Empty;
@@ -120,10 +120,13 @@ namespace CommonModule.Facade
                     });
             });
         }
+
         #endregion
 
         #region Databases
-        public static void AddDatabaseContext<TDataContext>(this WebApplicationBuilder builder, string dbName = "Database")
+
+        public static void AddDatabaseContext<TDataContext>(this WebApplicationBuilder builder,
+            string dbName = "Database")
             where TDataContext : DbContext
         {
             builder.Services.AddDbContext<TDataContext>(options =>
@@ -140,9 +143,11 @@ namespace CommonModule.Facade
             builder.Services.AddSingleton<IAmazonDynamoDB>(sp => new AmazonDynamoDBClient(dynamoDbConfig));
             builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
         }
+
         #endregion
 
         #region DependencyInjection
+
         public static void AddDependencyInjection(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpContextAccessor();
@@ -157,36 +162,41 @@ namespace CommonModule.Facade
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
             builder.Services.AddScoped<IJwtTokenFactory, JwtTokenFactory>();
 
-            builder.Services.AddScoped<ITokenRepository, DynamoDbTokenRepository>();
-            builder.Services.AddScoped<ILocalizationRepository, LocalizationRepository>();
+            // builder.Services.AddScoped<ITokenRepository, DynamoDbTokenRepository>();
+            //TODO replace to DynamoDB
+
+            var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];
+            builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+
+            builder.Services.AddScoped<ITokenRepository, RedisTokenRepository>();
+            builder.Services.AddScoped<ILocalizationRepository, RedisLocalizationRepository>();
         }
+
         #endregion
 
         #region Swagger
+
         public static void AddSwagger(this WebApplicationBuilder builder)
         {
             builder.Services.AddOpenApiDocument();
-            
-            builder.Services.AddSwaggerDocument(config =>
-            {
-                config.DocumentName = "swagger";
-            });
-            
+
+            builder.Services.AddSwaggerDocument(config => { config.DocumentName = "swagger"; });
+
             string version = builder.Configuration["Microservice:Version"];
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(version,
                     new OpenApiInfo { Title = builder.Configuration["Microservice:Title"], Version = version });
-                c.AddSecurityDefinition("JwtHonk", new OpenApiSecurityScheme
+                c.AddSecurityDefinition(AuthSchema.Schema, new OpenApiSecurityScheme
                 {
-                    Description = @"JWT Authorization header using the JwtHonk scheme. \r\n\r\n 
-                          Enter 'JwtHonk' [space] and then your token in the text input below.
-                          \r\n\r\nExample: 'JwtHonk 12345abcdef'",
+                    Description = @$"JWT Authorization header using the {AuthSchema.Schema} scheme. \r\n\r\n 
+                          Enter '{AuthSchema.Schema}' [space] and then your token in the text input below.
+                          \r\n\r\nExample: '{AuthSchema.Schema} 12345abcdef'",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = "JwtHonk"
+                    Scheme = AuthSchema.Schema
                 });
 
                 c.OperationFilter<CustomOperationIdFilter>();
@@ -199,10 +209,10 @@ namespace CommonModule.Facade
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "JwtHonk"
+                                Id = AuthSchema.Schema
                             },
                             Scheme = "oauth2",
-                            Name = "JwtHonk",
+                            Name = AuthSchema.Schema,
                             In = ParameterLocation.Header,
                         },
                         new List<string>()
@@ -223,6 +233,7 @@ namespace CommonModule.Facade
                     $"/swagger/{builder.Configuration["Microservice:Version"]}/swagger.json",
                     $"{builder.Configuration["Microservice:Title"]} v{builder.Configuration["Microservice:Version"]}"));
         }
+
         #endregion
     }
 }

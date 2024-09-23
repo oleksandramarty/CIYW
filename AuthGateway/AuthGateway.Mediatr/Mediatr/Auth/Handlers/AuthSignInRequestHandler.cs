@@ -14,16 +14,16 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 public class AuthSignInRequestHandler: IRequestHandler<AuthSignInRequest, JwtTokenResponse>
 {
     private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
-    private readonly ITokenRepository tokenService;
+    private readonly ITokenRepository tokenRepository;
     private readonly IJwtTokenFactory jwtTokenFactory;
 
     public AuthSignInRequestHandler(
         IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
-        ITokenRepository tokenService,
+        ITokenRepository tokenRepository,
         IJwtTokenFactory jwtTokenFactory)
     {
         this.userRepository = userRepository;
-        this.tokenService = tokenService;
+        this.tokenRepository = tokenRepository;
         this.jwtTokenFactory = jwtTokenFactory;
     }
 
@@ -52,7 +52,7 @@ public class AuthSignInRequestHandler: IRequestHandler<AuthSignInRequest, JwtTok
             string.Join(",", user.Roles.Select(r => r.Role.Title)),
             request.RememberMe);
 
-        await this.tokenService.AddTokenAsync(token, request.RememberMe ? TimeSpan.FromDays(30) : TimeSpan.FromDays(1));
+        await this.tokenRepository.AddTokenAsync(token, request.RememberMe ? TimeSpan.FromDays(30) : TimeSpan.FromDays(1));
 
         return new JwtTokenResponse
         {

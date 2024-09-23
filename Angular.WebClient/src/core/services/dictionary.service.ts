@@ -1,24 +1,21 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
-import { BaseHttpService } from './base-http.service';
 import {take, tap, switchMap, BehaviorSubject} from 'rxjs';
 import { handleApiError } from '../helpers/rxjs.helper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dictionary } from '../models/common/dictionarie.model';
-import { LocalizationData } from '../models/common/dictionary.model';
-import {ISiteSettings, SiteSettings} from "../models/common/site-settings.model";
-import {API_ROUTES} from "../helpers/api-route.helper";
 import {environment} from "../environments/environment";
-import {LocaleResponse} from "../models/localizations/localizations.model";
+import {LocaleResponse, LocalizationClient, LocalizationsResponse} from "../api-clients/localizations-client";
+import {AuthClient, SiteSettingsResponse} from "../api-clients/auth-client";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DictionaryService {
   private _dictionaries: Dictionary | undefined;
-  private _localizations: LocalizationData | undefined;
+  private _localizations: LocalizationsResponse | undefined;
   private _currentLocale: LocaleResponse | undefined;
-  private _settings: SiteSettings | undefined;
+  private _settings: SiteSettingsResponse | undefined;
 
   public localeChangedSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -26,7 +23,7 @@ export class DictionaryService {
     return this._dictionaries;
   }
 
-  get localizations(): LocalizationData | undefined {
+  get localizations(): LocalizationsResponse | undefined {
     return this._localizations;
   }
 
@@ -34,28 +31,29 @@ export class DictionaryService {
     return this._currentLocale;
   }
 
-  get settings(): SiteSettings | undefined {
+  get settings(): SiteSettingsResponse | undefined {
     return this._settings;
   }
 
   constructor(
     private readonly snackBar: MatSnackBar,
-    private readonly baseHttpService: BaseHttpService,
+    private readonly authClient: AuthClient,
+    private readonly localizationClient: LocalizationClient,
     private readonly localStorageService: LocalStorageService,
   ) {}
 
   public initialize(): void {
-    const settingsLocalStorage: SiteSettings | undefined = this.localStorageService.getItem('settings');
+    const settingsLocalStorage: SiteSettingsResponse | undefined = this.localStorageService.getItem('settings');
 
-    this.baseHttpService.get<ISiteSettings | undefined>(API_ROUTES.DATA_API.SITE_SETTINGS.GET)
+    this.authClient.user_GetSettings()
       .pipe(
         take(1),
         tap((data) => {
-          this._settings = new SiteSettings(data);
+          this._settings = data
           this._settings.clientVersion = environment.buildVersion;
 
           if (!this._settings) {
-            this._settings = new SiteSettings({locale: 'en', apiVersion: 'honk', clientVersion: environment.buildVersion});
+            this._settings = new SiteSettingsResponse({locale: 'en', apiVersion: 'honk', clientVersion: environment.buildVersion});
           }
 
           if (this._settings.locale != settingsLocalStorage?.locale) {
@@ -106,36 +104,31 @@ export class DictionaryService {
     this.localeChangedSub.next(true);
   }
 
-  public updateLocalizations(data: LocalizationData): void {
+  public updateLocalizations(data: LocalizationsResponse): void {
     this._localizations = data;
     this.localStorageService.setItem('localizations', data);
   }
 
   private initializeFromApi(): void {
-    this.baseHttpService.get<LocalizationData>(API_ROUTES.DATA_API.LOCALIZATIONS.GET)
-      .pipe(
-        take(1),
-        tap((data) => {
-          this.updateLocalizations(data);
-        }),
-        switchMap(() =>
-          this.baseHttpService.get<LocaleResponse[] | undefined>(API_ROUTES.DATA_API.LOCALIZATIONS.LOCALES)
-            .pipe(
-              take(1),
-              tap((data) => {
-                this._dictionaries = new Dictionary(data);
-                this.localStorageService.setItem('dictionaries', this._dictionaries);
-                this.setCurrentLocale();
-              })
-            )
-        ),
-        handleApiError(this.snackBar)
-      ).subscribe();
+    this.localizationClient.localization_GetLocalization()
+        .pipe(
+            take(1),
+            switchMap((data) =>{
+              this.updateLocalizations(data);
+              return this.localizationClient.localization_GetLocales()
+            }),
+            tap((data) => {
+              this._dictionaries = new Dictionary(data);
+              this.localStorageService.setItem('dictionaries', this._dictionaries);
+              this.setCurrentLocale();
+            }),
+            handleApiError(this.snackBar)
+        ).subscribe();
   }
 
   private initializeFromLocalStorage(): void {
     const dictionaries: Dictionary | undefined = this.localStorageService.getItem('dictionaries');
-    const localizations: LocalizationData | undefined = this.localStorageService.getItem('localizations');
+    const localizations: LocalizationsResponse | undefined = this.localStorageService.getItem('localizations');
 
     if (
       !dictionaries ||

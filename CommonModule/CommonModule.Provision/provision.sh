@@ -11,7 +11,7 @@ echo "Provision running..."
 # Truncate the provision_logs.txt file
 truncate -s 0 "$SCRIPT_DIR/provision_logs.txt"
 
-cfg=(false false true)
+cfg=(true true true)
 
 # Set the dropMigrations parameter
 dropMigrations=${cfg[0]}

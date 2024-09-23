@@ -23,15 +23,16 @@ public class UserController : BaseController
     
     [HttpGet("current")]
     [ProducesResponseType(typeof(UserResponse), 200)]
-    public async Task<IActionResult> GetUserId()
+    public async Task<IActionResult> GetCurrentUserAsync()
     {
         UserResponse response = await this.mediator.Send(new GetCurrentUserRequest());
         return Ok(response);
     }
     
     [HttpGet("settings")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(SiteSettingsResponse), 200)]
-    public IActionResult GetVersion()
+    public IActionResult GetSettingsAsync()
     {
         SiteSettingsResponse response = new SiteSettingsResponse
         {

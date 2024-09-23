@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { setToken, clearToken, setUser, clearUser, clearAll } from '../actions/auth.actions';
-import { UserResponse } from '../../models/users/user.model';
-import {JwtTokenResponse} from "../../models/auth/account.model";
+import {JwtTokenResponse, UserResponse} from "../../api-clients/auth-client";
 
 export interface AuthState {
   token: JwtTokenResponse | undefined;

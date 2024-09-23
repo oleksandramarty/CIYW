@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Subject, switchMap, take, takeUntil } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { API_ROUTES } from '../helpers/api-route.helper';
 import { clearAll, setToken, setUser } from "../store/actions/auth.actions";
-import { LocalizationData } from "../models/common/dictionary.model";
-import { BaseHttpService } from "./base-http.service";
 import { DictionaryService } from "./dictionary.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { handleApiError } from "../helpers/rxjs.helper";
-import {UserResponse} from "../models/users/user.model";
 import {selectToken} from "../store/selectors/auth.selectors";
-import {JwtTokenResponse} from "../models/auth/account.model";
+import {AuthClient, AuthSignInRequest, JwtTokenResponse} from "../api-clients/auth-client";
+import {LocalizationClient} from "../api-clients/localizations-client";
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +22,11 @@ export class AuthService {
   }
 
   constructor(
-    private readonly baseHttpService: BaseHttpService,
     private readonly dictionaryService: DictionaryService,
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
+    private readonly authClient: AuthClient,
+    private readonly localizationClient: LocalizationClient,
     private readonly store: Store
   ) {}
 
@@ -47,19 +45,20 @@ export class AuthService {
   }
 
   public login(login: string, password: string, rememberMe: boolean, ngUnsubscribe: Subject<void>): void {
-    this.baseHttpService.post<JwtTokenResponse>(
-      API_ROUTES.USER_API.ACCOUNT.LOGIN,
-      { login, password, rememberMe }
-    ).pipe(
+    this.authClient.auth_SignIn(new AuthSignInRequest({
+        login,
+        password,
+        rememberMe
+    })).pipe(
       takeUntil(ngUnsubscribe),
       switchMap((token) => {
         this.setToken(token);
         this.store.dispatch(setToken({ token }));
-        return this.baseHttpService.get<UserResponse>(API_ROUTES.USER_API.USER.CURRENT);
+        return this.authClient.user_GetCurrentUser();
       }),
       switchMap((user) => {
         this.store.dispatch(setUser({ user }));
-        return this.baseHttpService.get<LocalizationData>(API_ROUTES.DATA_API.LOCALIZATIONS.GET);
+        return this.localizationClient.localization_GetLocalization();
       }),
       tap((data) => {
         this.dictionaryService.updateLocalizations(data);
@@ -72,7 +71,7 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.baseHttpService.get<boolean>(API_ROUTES.USER_API.ACCOUNT.LOGOUT)
+    this.authClient.auth_SignOut()
       .pipe(
         take(1),
         tap(() => {
@@ -84,7 +83,7 @@ export class AuthService {
   }
 
   private getCurrentUser(): void {
-    this.baseHttpService.get<UserResponse>(API_ROUTES.USER_API.USER.CURRENT).pipe(
+    this.authClient.user_GetCurrentUser().pipe(
       take(1),
       tap((user) => {
         this.store.dispatch(setUser({ user }));

@@ -20,8 +20,8 @@ public class AuthRepository : IAuthRepository
     public string GetCurrentToken()
     {
         var authorizationHeader = this.httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
-        return authorizationHeader.StartsWith("Bearer ")
-            ? authorizationHeader.Substring("Bearer ".Length).Trim()
+        return authorizationHeader.StartsWith($"{AuthSchema.Schema} ")
+            ? authorizationHeader.Substring($"{AuthSchema.Schema} ".Length).Trim()
             : null;
     }
 
@@ -32,18 +32,23 @@ public class AuthRepository : IAuthRepository
 
     public Guid? GetCurrentUserId()
     {
-        var userIdClaim = this.httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
+        var userIdClaim = this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId);
         if (userIdClaim == null)
         {
-            throw new AuthException(ErrorMessages.JwtUserClaimInvalidConversion, 409);
+            return null;
         }
 
-        return userIdClaim.Value.ConvertTo<Guid>();
+        if (Guid.TryParse(userIdClaim.Value, out var userId))
+        {
+            return userId;
+        }
+
+        return null;
     }
 
     public UserRoleEnum GetCurrentUserRole()
     {
-        var roleString = this.httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+        var roleString = this.httpContextAccessor.HttpContext.User.FindFirst(AuthClaims.Role)?.Value;
         if (Enum.TryParse<UserRoleEnum>(roleString, out var role))
         {
             return role;

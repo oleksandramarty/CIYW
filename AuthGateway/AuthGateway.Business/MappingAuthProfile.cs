@@ -10,7 +10,19 @@ public class MappingAuthProfile: Profile
 {
     public MappingAuthProfile()
     {
-        this.CreateMap<User, UserResponse>();
+        this.CreateMap<User, UserResponse>()
+            .ForMember(dest => 
+                dest.Roles, 
+                opt => 
+                    opt.MapFrom(src => 
+                        src.Roles != null ? 
+                            src.Roles.Select(r => 
+                                new RoleResponse
+                                {
+                                    Id = r.Role.Id,
+                                    Title = r.Role.Title,
+                                    UserRole = r.Role.UserRole
+                                }).ToList() : new List<RoleResponse>()));
         this.CreateMap<Role, RoleResponse>();
         
         this.CreateMap<AuthSignUpCommand, User>()

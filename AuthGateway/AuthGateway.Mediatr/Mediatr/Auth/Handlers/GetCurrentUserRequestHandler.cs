@@ -43,7 +43,6 @@ public class GetCurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<GetC
         this.entityValidator.ValidateExist<User, Guid?>(user, userId);
         
         UserResponse response = this.mapper.Map<User, UserResponse>(user);
-        response.Roles = user.Roles.Select(r => this.mapper.Map<Role, RoleResponse>(r.Role)).ToList();
 
         return response;
     }

@@ -1,4 +1,4 @@
-using JobPathfinder.Data.Domain.Models.Locales;
+using Localizations.Domain.Models.Locales;
 using Microsoft.EntityFrameworkCore;
 
 namespace Localizations.Domain;

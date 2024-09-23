@@ -30,5 +30,8 @@ fi
 chmod +x "$SCRIPT_DIR/DataBaseScripts/apply_migration_microservice.sh"
 "$SCRIPT_DIR/DataBaseScripts/apply_migration_microservice.sh"
 
+chmod +x "$SCRIPT_DIR/DataBaseScripts/remove_cache.sh"
+"$SCRIPT_DIR/DataBaseScripts/remove_cache.sh"
+
 echo "Database reinitialized."
 echo

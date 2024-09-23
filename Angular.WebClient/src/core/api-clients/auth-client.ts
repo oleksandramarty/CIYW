@@ -26,7 +26,7 @@ export class AuthClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    auth_SignIn(request: AuthSignInRequest): Observable<void> {
+    auth_SignIn(request: AuthSignInRequest): Observable<JwtTokenResponse> {
         let url_ = this.baseUrl + "/api/v1/auth/signIn";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -38,6 +38,7 @@ export class AuthClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -48,14 +49,14 @@ export class AuthClient {
                 try {
                     return this.processAuth_SignIn(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<JwtTokenResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<JwtTokenResponse>;
         }));
     }
 
-    protected processAuth_SignIn(response: HttpResponseBase): Observable<void> {
+    protected processAuth_SignIn(response: HttpResponseBase): Observable<JwtTokenResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -113,7 +114,10 @@ export class AuthClient {
             }));
         } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = JwtTokenResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -123,18 +127,14 @@ export class AuthClient {
         return _observableOf(null as any);
     }
 
-    auth_SignOut(request: AuthSignOutRequest): Observable<void> {
+    auth_SignOut(): Observable<void> {
         let url_ = this.baseUrl + "/api/v1/auth/signOut";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(request);
-
         let options_ : any = {
-            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
             })
         };
 
@@ -317,7 +317,7 @@ export class AuthClient {
         return _observableOf(null as any);
     }
 
-    user_GetUserId(): Observable<UserResponse> {
+    user_GetCurrentUser(): Observable<UserResponse> {
         let url_ = this.baseUrl + "/api/v1/users/current";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -330,11 +330,11 @@ export class AuthClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUser_GetUserId(response_);
+            return this.processUser_GetCurrentUser(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUser_GetUserId(response_ as any);
+                    return this.processUser_GetCurrentUser(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<UserResponse>;
                 }
@@ -343,7 +343,7 @@ export class AuthClient {
         }));
     }
 
-    protected processUser_GetUserId(response: HttpResponseBase): Observable<UserResponse> {
+    protected processUser_GetCurrentUser(response: HttpResponseBase): Observable<UserResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -414,7 +414,7 @@ export class AuthClient {
         return _observableOf(null as any);
     }
 
-    user_GetVersion(): Observable<SiteSettingsResponse> {
+    user_GetSettings(): Observable<SiteSettingsResponse> {
         let url_ = this.baseUrl + "/api/v1/users/settings";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -427,11 +427,11 @@ export class AuthClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUser_GetVersion(response_);
+            return this.processUser_GetSettings(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUser_GetVersion(response_ as any);
+                    return this.processUser_GetSettings(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<SiteSettingsResponse>;
                 }
@@ -440,7 +440,7 @@ export class AuthClient {
         }));
     }
 
-    protected processUser_GetVersion(response: HttpResponseBase): Observable<SiteSettingsResponse> {
+    protected processUser_GetSettings(response: HttpResponseBase): Observable<SiteSettingsResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -611,6 +611,42 @@ export interface IInvalidFieldInfoModel {
     errorMessage: string;
 }
 
+export class JwtTokenResponse implements IJwtTokenResponse {
+    token!: string;
+
+    constructor(data?: IJwtTokenResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.token = _data["token"];
+        }
+    }
+
+    static fromJS(data: any): JwtTokenResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new JwtTokenResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["token"] = this.token;
+        return data;
+    }
+}
+
+export interface IJwtTokenResponse {
+    token: string;
+}
+
 export class AuthSignInRequest implements IAuthSignInRequest {
     login!: string;
     password!: string;
@@ -653,36 +689,6 @@ export interface IAuthSignInRequest {
     login: string;
     password: string;
     rememberMe: boolean;
-}
-
-export class AuthSignOutRequest implements IAuthSignOutRequest {
-
-    constructor(data?: IAuthSignOutRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): AuthSignOutRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthSignOutRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IAuthSignOutRequest {
 }
 
 export class BaseIdEntityOfNullableGuid implements IBaseIdEntityOfNullableGuid {

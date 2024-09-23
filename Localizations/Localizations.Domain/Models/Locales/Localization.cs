@@ -1,4 +1,4 @@
-namespace JobPathfinder.Data.Domain.Models.Locales;
+namespace Localizations.Domain.Models.Locales;
 
 public class Localization: LocalizationBase
 {

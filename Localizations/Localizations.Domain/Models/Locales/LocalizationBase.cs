@@ -1,6 +1,6 @@
 using CommonModule.Shared.Common;
 
-namespace JobPathfinder.Data.Domain.Models.Locales;
+namespace Localizations.Domain.Models.Locales;
 
 public class LocalizationBase: BaseIdEntity<Guid>
 {

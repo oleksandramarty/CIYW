@@ -4,44 +4,31 @@ using CommonModule.Facade;
 using Expenses.Business;
 using Expenses.Domain;
 using Expenses.Mediatr;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
-builder.AddGoogleAuthentication();
-
-// Configure PostgreSQL with EF Core
 builder.AddDatabaseContext<ExpensesDataContext>();
-
+builder.AddDynamoDB();
 builder.AddSwagger();
-
 builder.AddCors();
+builder.Services.AddControllers();
+builder.AddAuthorization();
 
-//Validators here
-//builder.Services.AddValidatorsFromAssemblyContaining<AuthSignUpCommandValidator>();
-
+// validators
 builder.AddJwt();
-
 builder.AddDependencyInjection();
-
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile(new MappingExpensesProfile());
 });
-
-//Strategies here
-
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrExpensesModule()); });
 
 var app = builder.Build();
@@ -53,16 +40,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowSpecificOrigins");
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseTokenValidator();
 app.UseAuthorization();
-
+app.UseTokenValidator();
 app.MapControllers();
-
 app.Run();

@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {catchError, Observable, switchMap, take, throwError} from "rxjs";
 import {Store} from "@ngrx/store";
 import {selectToken} from "./store/selectors/auth.selectors";
-import {JwtTokenResponse} from "./models/account/account.model";
+import {environment} from "./environments/environment";
 
 export const HTTP_METHODS = {
   GET: 'GET',
@@ -37,7 +37,7 @@ export class BaseUrlInterceptor implements HttpInterceptor {
           if (token?.token) {
             request = request.clone({
               setHeaders: {
-                Authorization: `Bearer ${token?.token}`
+                Authorization: `${environment.authSchema} ${token?.token}`
               }
             });
           }

@@ -1,5 +1,4 @@
 import { Component, Inject } from '@angular/core';
-import {environment} from "../../../../core/environments/environment";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
 

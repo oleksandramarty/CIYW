@@ -40,6 +40,13 @@ Records already exist          : 7
 Errors encountered             : 0
 ==============
 
-Provision Start Date           : 2024-09-21 23:48:42
-Provision End Date             : 2024-09-21 23:49:23
-Duration:                      : 41 second(s)
+==============
+Title                          : CACHE LOCALIZATIONS
+Total records processed        : 385
+Records already exist          : 0
+Errors encountered             : 0
+==============
+
+Provision Start Date           : 2024-09-22 22:52:31
+Provision End Date             : 2024-09-22 22:53:37
+Duration:                      : 66 second(s)

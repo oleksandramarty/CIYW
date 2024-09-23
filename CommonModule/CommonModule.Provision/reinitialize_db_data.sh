@@ -23,3 +23,6 @@ chmod +x "$SCRIPT_DIR/init_localizations.sh"
 
 chmod +x "$SCRIPT_DIR/check_localizations.sh"
 "$SCRIPT_DIR/check_localizations.sh"
+
+chmod +x "$SCRIPT_DIR/init_cache_localizations.sh"
+"$SCRIPT_DIR/init_cache_localizations.sh"

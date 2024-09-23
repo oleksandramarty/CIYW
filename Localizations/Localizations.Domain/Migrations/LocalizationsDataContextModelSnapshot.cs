@@ -22,7 +22,7 @@ namespace Localizations.Domain.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("JobPathfinder.Data.Domain.Models.Locales.Locale", b =>
+            modelBuilder.Entity("Localizations.Domain.Models.Locales.Locale", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace Localizations.Domain.Migrations
                     b.ToTable("Locales", "Locales");
                 });
 
-            modelBuilder.Entity("JobPathfinder.Data.Domain.Models.Locales.Localization", b =>
+            modelBuilder.Entity("Localizations.Domain.Models.Locales.Localization", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,9 +100,9 @@ namespace Localizations.Domain.Migrations
                     b.ToTable("Localizations", "Locales");
                 });
 
-            modelBuilder.Entity("JobPathfinder.Data.Domain.Models.Locales.Localization", b =>
+            modelBuilder.Entity("Localizations.Domain.Models.Locales.Localization", b =>
                 {
-                    b.HasOne("JobPathfinder.Data.Domain.Models.Locales.Locale", "Locale")
+                    b.HasOne("Localizations.Domain.Models.Locales.Locale", "Locale")
                         .WithMany("Localizations")
                         .HasForeignKey("LocaleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -111,7 +111,7 @@ namespace Localizations.Domain.Migrations
                     b.Navigation("Locale");
                 });
 
-            modelBuilder.Entity("JobPathfinder.Data.Domain.Models.Locales.Locale", b =>
+            modelBuilder.Entity("Localizations.Domain.Models.Locales.Locale", b =>
                 {
                     b.Navigation("Localizations");
                 });

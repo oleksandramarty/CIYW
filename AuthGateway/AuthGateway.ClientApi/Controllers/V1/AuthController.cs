@@ -1,6 +1,7 @@
 using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using CommonModule.Core;
+using CommonModule.Shared.Responses.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,18 +19,18 @@ public class AuthController: BaseController
     }
     
     [HttpPost("signIn")]
-    [ProducesResponseType(typeof(void), 200)]
+    [ProducesResponseType(typeof(JwtTokenResponse), 200)]
     public async Task<IActionResult> SignInAsync(AuthSignInRequest request, CancellationToken cancellationToken)
     {
-        await this.mediator.Send(request, cancellationToken);
-        return Ok();
+        JwtTokenResponse response = await this.mediator.Send(request, cancellationToken);
+        return Ok(response);
     }
     
     [HttpPost("signOut")]
     [ProducesResponseType(typeof(void), 200)]
-    public async Task<IActionResult> SignOutAsync(AuthSignOutRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> SignOutAsync(CancellationToken cancellationToken)
     {
-        await this.mediator.Send(request, cancellationToken);
+        await this.mediator.Send(new AuthSignOutRequest(), cancellationToken);
         return Ok();
     }
     

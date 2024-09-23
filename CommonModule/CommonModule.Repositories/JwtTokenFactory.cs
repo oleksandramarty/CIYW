@@ -59,10 +59,10 @@ public class JwtTokenFactory: IJwtTokenFactory
 
         var defaultClaims = new[]
         {
-            new Claim(ClaimTypes.Name, login),
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Role, roles),
+            new Claim(AuthClaims.Login, login),
+            new Claim(AuthClaims.Email, email),
+            new Claim(AuthClaims.UserId, userId.ToString()),
+            new Claim(AuthClaims.Role, roles),
             new Claim(AuthClaims.RememberMe, rememberMe.ToString())
         };
 
@@ -99,10 +99,10 @@ public class JwtTokenFactory: IJwtTokenFactory
             throw new ArgumentNullException(nameof(user));
         }
 
-        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var login = user.FindFirst(ClaimTypes.Name)?.Value;
-        var email = user.FindFirst(ClaimTypes.Email)?.Value;
-        var roles = user.FindFirst(ClaimTypes.Role)?.Value;
+        var userId = user.FindFirst(AuthClaims.UserId)?.Value;
+        var login = user.FindFirst(AuthClaims.Login)?.Value;
+        var email = user.FindFirst(AuthClaims.Email)?.Value;
+        var roles = user.FindFirst(AuthClaims.Role)?.Value;
 
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(login) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(roles))
         {
@@ -123,7 +123,7 @@ public class JwtTokenFactory: IJwtTokenFactory
     
     public Guid GetUserIdFromToken(string token)
     {
-        var userIdClaim = this.GetClaim(token, ClaimTypes.NameIdentifier);
+        var userIdClaim = this.GetClaim(token, AuthClaims.UserId);
 
         if (userIdClaim == null)
         {

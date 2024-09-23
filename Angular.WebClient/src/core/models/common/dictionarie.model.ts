@@ -1,5 +1,5 @@
 import {DataItem, IDataItem} from "./data-item.model";
-import {ILocaleResponse, LocaleResponse} from "../localizations/localization.model";
+import {ILocaleResponse, LocaleResponse} from "../../api-clients/localizations-client";
 
 export interface IKeyValue {
   key: string | undefined;
@@ -28,7 +28,8 @@ export class Dictionary implements IDictionary{
   constructor(localeResponsesData: ILocaleResponse[] | undefined) {
     if (localeResponsesData) {
       this.localeResponses = localeResponsesData.map(data => new LocaleResponse(data));
-      this.locales = this.localeResponses.map(localeResponse => localeResponse.toDataItem()).filter(item => item !== undefined) as DataItem[];
+      this.locales =
+          this.localeResponses.map(l => new DataItem(String(l.id), l.titleEn, l.title, true, false)).filter(item => item !== undefined) as DataItem[];
     } else {
       this.localeResponses = undefined;
       this.locales = undefined;

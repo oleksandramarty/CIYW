@@ -1,7 +1,7 @@
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Enums;
 
-namespace JobPathfinder.Data.Domain.Models.Locales;
+namespace Localizations.Domain.Models.Locales;
 
 public class Locale: BaseIdEntity<int>
 {

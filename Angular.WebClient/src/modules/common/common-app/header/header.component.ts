@@ -8,9 +8,8 @@ import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
-import {JwtTokenResponse} from "../../../../core/models/auth/account.model";
-import {LocaleResponse} from "../../../../core/models/localizations/localizations.model";
-import {UserResponse} from "../../../../core/models/users/user.model";
+import {JwtTokenResponse, UserResponse} from "../../../../core/api-clients/auth-client";
+import {LocaleResponse} from "../../../../core/api-clients/localizations-client";
 
 @Component({
   selector: 'app-header',
@@ -20,7 +19,8 @@ import {UserResponse} from "../../../../core/models/users/user.model";
 export class HeaderComponent implements OnInit {
   public langFlags: Map<string, string> = new Map([
     ['en', '🇬🇧'], ['fr', '🇫🇷'], ['de', '🇩🇪'],
-    ['ua', '🇺🇦'], ['ru', '🇷🇺'], ['es', '🇪🇸']
+    ['ua', '🇺🇦'], ['ru', '🇷🇺'], ['es', '🇪🇸'],
+    ['it', '🇮🇹'],
   ]);
   public menuItems: { url: string, title: string }[] = [
     {url: 'home', title: 'MENU.HOME'},
