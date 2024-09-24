@@ -1,4 +1,4 @@
-using CommonModule.Shared.Responses.Localizations;
+using CommonModule.Shared.Responses.Localizations.Models.Locales;
 using MediatR;
 
 namespace Localizations.Mediatr.Mediatr.Locations.Requests;

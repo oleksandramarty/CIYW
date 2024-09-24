@@ -1,5 +1,6 @@
 using CommonModule.Core;
 using CommonModule.Shared.Responses.Localizations;
+using CommonModule.Shared.Responses.Localizations.Models.Locales;
 using Localizations.Mediatr.Mediatr.Locations.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

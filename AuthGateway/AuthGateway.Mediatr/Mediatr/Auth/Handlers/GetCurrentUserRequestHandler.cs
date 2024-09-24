@@ -4,8 +4,7 @@ using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using AutoMapper;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
-using CommonModule.Shared.Constants;
-using CommonModule.Shared.Responses.Users;
+using CommonModule.Shared.Responses.AuthGateway.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

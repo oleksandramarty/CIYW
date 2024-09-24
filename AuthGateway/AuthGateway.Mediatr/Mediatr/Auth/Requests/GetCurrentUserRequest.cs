@@ -1,4 +1,4 @@
-using CommonModule.Shared.Responses.Users;
+using CommonModule.Shared.Responses.AuthGateway.Users;
 using MediatR;
 
 namespace AuthGateway.Mediatr.Mediatr.Auth.Requests;

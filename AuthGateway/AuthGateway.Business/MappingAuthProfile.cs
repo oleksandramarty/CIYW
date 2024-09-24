@@ -2,7 +2,7 @@ using AuthGateway.Domain.Models.Users;
 using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AutoMapper;
 using CommonModule.Shared.Enums;
-using CommonModule.Shared.Responses.Users;
+using CommonModule.Shared.Responses.AuthGateway.Users;
 
 namespace AuthGateway.ClientApi;
 

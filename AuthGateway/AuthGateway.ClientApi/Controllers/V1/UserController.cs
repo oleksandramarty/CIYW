@@ -1,8 +1,6 @@
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using CommonModule.Core;
-using CommonModule.Facade;
-using CommonModule.Shared.Responses.SiteSettings;
-using CommonModule.Shared.Responses.Users;
+using CommonModule.Shared.Responses.AuthGateway.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,20 +24,6 @@ public class UserController : BaseController
     public async Task<IActionResult> GetCurrentUserAsync()
     {
         UserResponse response = await this.mediator.Send(new GetCurrentUserRequest());
-        return Ok(response);
-    }
-    
-    [HttpGet("settings")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(SiteSettingsResponse), 200)]
-    public IActionResult GetSettingsAsync()
-    {
-        SiteSettingsResponse response = new SiteSettingsResponse
-        {
-            Locale = "en",
-            ApiVersion = VersionGenerator.GetVersion(),
-            ClientVersion = string.Empty
-        };
         return Ok(response);
     }
 }

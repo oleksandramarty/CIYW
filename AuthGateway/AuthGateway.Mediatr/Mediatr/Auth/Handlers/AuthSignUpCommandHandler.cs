@@ -5,7 +5,6 @@ using AuthGateway.Mediatr.Validators.Auth;
 using AutoMapper;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
-using CommonModule.Shared.Responses.Users;
 using MediatR;
 
 namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;

@@ -50,6 +50,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localizations.Business", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonModule.Provision", "CommonModule\CommonModule.Provision\CommonModule.Provision.csproj", "{7499F60A-24B6-462D-B11A-2726971201B1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionaries", "Dictionaries", "{DC6B496C-B980-43B9-AA5D-A7FE4F0E12B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionaries.Infrastructure", "Dictionaries\Dictionaries.Infrastructure", "{34F63CC4-C57F-4B13-9873-A4C027215A46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionaries.ClientApi", "Dictionaries\Dictionaries.ClientApi\Dictionaries.ClientApi.csproj", "{8274E029-C746-4281-9A58-21C6DDBF043C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionaries.Business", "Dictionaries\Dictionaries.Business\Dictionaries.Business.csproj", "{AA7CF8C1-8303-44EF-A322-1075FC1B76ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionaries.Domain", "Dictionaries\Dictionaries.Domain\Dictionaries.Domain.csproj", "{A2BF98B8-7CEB-4B0B-869B-1819720BA979}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionaries.Mediatr", "Dictionaries\Dictionaries.Mediatr\Dictionaries.Mediatr.csproj", "{9E38B2D4-DF15-40FC-80CC-BE94DAB252D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +89,11 @@ Global
 		{E152A1E4-6C45-417D-A03B-498F1A6A2917} = {8A35BA34-C167-44CC-B87E-2EAEFA14AB85}
 		{6A0AA6B8-5BD0-43D2-91E2-C7236868837D} = {8A35BA34-C167-44CC-B87E-2EAEFA14AB85}
 		{7499F60A-24B6-462D-B11A-2726971201B1} = {6FA52701-60FE-407F-BC12-67DE1B851940}
+		{34F63CC4-C57F-4B13-9873-A4C027215A46} = {DC6B496C-B980-43B9-AA5D-A7FE4F0E12B2}
+		{8274E029-C746-4281-9A58-21C6DDBF043C} = {DC6B496C-B980-43B9-AA5D-A7FE4F0E12B2}
+		{AA7CF8C1-8303-44EF-A322-1075FC1B76ED} = {34F63CC4-C57F-4B13-9873-A4C027215A46}
+		{A2BF98B8-7CEB-4B0B-869B-1819720BA979} = {34F63CC4-C57F-4B13-9873-A4C027215A46}
+		{9E38B2D4-DF15-40FC-80CC-BE94DAB252D9} = {34F63CC4-C57F-4B13-9873-A4C027215A46}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3CBEF98E-1366-4763-8AAB-955A2DA5E201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -151,5 +168,21 @@ Global
 		{7499F60A-24B6-462D-B11A-2726971201B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7499F60A-24B6-462D-B11A-2726971201B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7499F60A-24B6-462D-B11A-2726971201B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8274E029-C746-4281-9A58-21C6DDBF043C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8274E029-C746-4281-9A58-21C6DDBF043C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8274E029-C746-4281-9A58-21C6DDBF043C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8274E029-C746-4281-9A58-21C6DDBF043C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA7CF8C1-8303-44EF-A322-1075FC1B76ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA7CF8C1-8303-44EF-A322-1075FC1B76ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA7CF8C1-8303-44EF-A322-1075FC1B76ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA7CF8C1-8303-44EF-A322-1075FC1B76ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2BF98B8-7CEB-4B0B-869B-1819720BA979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2BF98B8-7CEB-4B0B-869B-1819720BA979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2BF98B8-7CEB-4B0B-869B-1819720BA979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2BF98B8-7CEB-4B0B-869B-1819720BA979}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E38B2D4-DF15-40FC-80CC-BE94DAB252D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E38B2D4-DF15-40FC-80CC-BE94DAB252D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E38B2D4-DF15-40FC-80CC-BE94DAB252D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E38B2D4-DF15-40FC-80CC-BE94DAB252D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
