@@ -59,10 +59,40 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
         return entity;
     }
     
-    public async Task<List<T>> GetListAsync(Expression<Func<T, bool>> condition,  CancellationToken cancellationToken)
+    public async Task<List<T>> GetListAsync(
+        Expression<Func<T, bool>> condition,  
+        CancellationToken cancellationToken,
+        params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs)
     {
-        List<T> entities = await dbSet.Where(condition).ToListAsync(cancellationToken);
+        IQueryable<T> query = dbSet;
+        
+        if (includeFuncs != null)
+        {
+            foreach (var includeFunc in includeFuncs)
+            {
+                query = includeFunc(query);
+            }            
+        }
+        
+        List<T> entities = await query.Where(condition).ToListAsync(cancellationToken);
         return entities;
+    }
+    
+    public IQueryable<T> GetQueryable(
+        Expression<Func<T, bool>> condition,
+        params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs)
+    {
+        IQueryable<T> query = dbSet;
+        
+        if (includeFuncs != null)
+        {
+            foreach (var includeFunc in includeFuncs)
+            {
+                query = includeFunc(query);
+            }            
+        }
+        
+        return query.Where(condition);
     }
     
     public async Task<ListWithIncludeResponse<TResponse>> GetListWithIncludeAsync<TResponse>(
@@ -80,6 +110,8 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
                 query = includeFunc(query);
             }            
         }
+        
+        long totalCountWithoutFilter = await query.LongCountAsync(cancellationToken);
 
         var filterBuilder = new FilterBuilder<TId, T>(query);
 
@@ -91,7 +123,7 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
             .ApplyDateRangeFilter(filter.DateRange)
             .Build();
 
-        int total = filterBuilder.GetTotalCount();
+        long total = filterBuilder.GetTotalCount();
 
         List<T> entities = await queryResult.ToListAsync(cancellationToken);
 
@@ -99,7 +131,8 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
         {
             Entities = entities.Select(x => this.mapper.Map<T, TResponse>(x)).ToList(),
             Paginator = filter?.Paginator,
-            TotalCount = total
+            TotalCount = total,
+            TotalCountWithoutFilter = totalCountWithoutFilter
         };
     }
 

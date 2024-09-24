@@ -7,4 +7,6 @@ public class BalanceResponse: BaseDateTimeEntity<Guid>
     public Guid UserId { get; set; }
     public decimal Amount { get; set; }
     public int CurrencyId { get; set; }
+    
+    public Guid UserProjectId { get; set; }
 }

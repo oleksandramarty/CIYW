@@ -8,7 +8,7 @@ namespace CommonModule.Repositories.Builders;
 public class FilterBuilder<TId, T> where T : class
 {
     private IQueryable<T> query;
-    private int totalCount;
+    private long totalCount;
 
     public FilterBuilder(IQueryable<T> query)
     {
@@ -21,7 +21,7 @@ public class FilterBuilder<TId, T> where T : class
         {
             query = query.Where(condition);
         }
-        totalCount = query.Count(); // Calculate and store the total count
+        totalCount = query.LongCount(); // Calculate and store the total count
         return this;
     }
 
@@ -41,7 +41,7 @@ public class FilterBuilder<TId, T> where T : class
         return this;
     }
 
-    public int GetTotalCount()
+    public long GetTotalCount()
     {
         return totalCount;
     }

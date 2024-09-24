@@ -14,10 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Mediatr\Categories\Commands\" />
+      <Folder Include="Mediatr\Categories\Handlers\" />
       <Folder Include="Mediatr\Categories\Requests\" />
       <Folder Include="Mediatr\Expenses\Commands\" />
-      <Folder Include="Mediatr\Expenses\Handlers\" />
-      <Folder Include="Mediatr\Expenses\Requests\" />
     </ItemGroup>
 
     <ItemGroup>

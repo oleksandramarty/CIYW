@@ -19,4 +19,6 @@ public class ListWithIncludeResponse<TResponse>
     public IList<TResponse> Entities { get; set; }
     public PaginatorEntity? Paginator { get; set; }
     public long TotalCount { get; set; }
+    
+    public long TotalCountWithoutFilter { get; set; }
 }

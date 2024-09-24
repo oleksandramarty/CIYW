@@ -23,4 +23,5 @@ public class ErrorMessages
     public const string ForgotPasswordRequestTooSoon = "ERROR.FORGOT_PASSWORD_REQUEST_TOO_SOON";
     public const string RestorePasswordProcessingIssue = "ERROR.RESTORE_PASSWORD_PROCESSING_ISSUE";
     public const string VersionNotSpecified = "ERROR.VERSION_NOT_SPECIFIED";
+    public const string UserProjectLimitExceeded = "ERROR.USER_PROJECT_LIMIT_EXCEEDED";
 }

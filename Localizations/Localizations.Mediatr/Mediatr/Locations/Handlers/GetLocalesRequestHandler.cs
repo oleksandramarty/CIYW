@@ -25,7 +25,7 @@ public class GetLocalesRequestHandler: IRequestHandler<GetLocalesRequest, List<L
     
     public async Task<List<LocaleResponse>> Handle(GetLocalesRequest request, CancellationToken cancellationToken)
     {
-        List<Locale> locales = await this.localeRepository.GetListAsync(r => true, cancellationToken);
+        List<Locale> locales = await this.localeRepository.GetListAsync(null, cancellationToken);
         List<LocaleResponse> response = 
             locales.Select(l => this.mapper.Map<LocaleResponse>(l)).ToList();
         return response;
