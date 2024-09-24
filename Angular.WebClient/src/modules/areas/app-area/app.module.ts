@@ -30,9 +30,9 @@ import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/au
 import {API_BASE_URL_Localizations, LocalizationClient} from "../../../core/api-clients/localizations-client";
 import {API_BASE_URL_Expenses} from "../../../core/api-clients/expenses-client";
 import {API_BASE_URL_Dictionaries, DictionaryClient} from "../../../core/api-clients/dictionaries-client";
-import {DictionaryService} from "../../../core/services/dictionaryService";
 import {BaseInitializationService} from "../../../core/services/base-initialization.service";
 import {SiteSettingsService} from "../../../core/services/site-settings.service";
+import {DictionaryService} from "../../../core/services/dictionary.service";
 
 export const MY_FORMATS = {
   parse: {

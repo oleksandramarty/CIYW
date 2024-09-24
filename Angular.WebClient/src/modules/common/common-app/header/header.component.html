@@ -31,7 +31,7 @@
     <ng-container *ngIf="(isAuthorized$ | async) && currentUser">
       <div class="user-info pointer" [matMenuTriggerFor]="menu" >
         <div class="avatar-placeholder">
-          {{ currentUser.login?.charAt(0).toUpperCase() ?? '' }}
+          {{ currentUser.login?.charAt(0)?.toUpperCase() ?? '' }}
         </div>
         <span class="user-full-name">{{ currentUser.login }}</span>
       </div>

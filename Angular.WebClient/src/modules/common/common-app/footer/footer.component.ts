@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import {LocalizationService} from "../../../../core/services/localization.service";
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
+import {SiteSettingsService} from "../../../../core/services/site-settings.service";
 
 @Component({
   selector: 'app-footer',
@@ -9,16 +9,12 @@ import {LocalStorageService} from "../../../../core/services/local-storage.servi
 })
 export class FooterComponent {
   constructor(
-    private readonly localizationService: LocalizationService,
+    private readonly siteSettingsService: SiteSettingsService,
     private readonly localStorageService: LocalStorageService) {
   }
 
-  get apiVersion(): string {
-    return this.localizationService.settings?.apiVersion ?? 'honk';
-  }
-
-  get clientVersion(): string {
-    return this.localizationService.settings?.clientVersion ?? 'honk';
+  get buildVersion(): string {
+    return this.siteSettingsService.siteSettings?.buildVersion ?? 'honk';
   }
 
   public clearCache(): void {

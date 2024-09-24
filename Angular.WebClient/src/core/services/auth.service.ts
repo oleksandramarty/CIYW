@@ -36,7 +36,7 @@ export class AuthService {
     this._token$ = this.store.select(selectToken);
   }
 
-  public async initialize(): Promise<void> {
+  public initialize(): void {
     const storedToken = this.getToken();
     if (storedToken) {
       this.store.dispatch(setToken({ token: storedToken }));
@@ -46,7 +46,7 @@ export class AuthService {
       this.getCurrentUser();
     } else {
       this.clearAuthData();
-      await this.router.navigate(['/auth/sign-in']);
+      this.router.navigate(['/auth/sign-in']);
     }
   }
 

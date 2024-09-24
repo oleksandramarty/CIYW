@@ -13,8 +13,7 @@ export class AppComponent {
     private readonly authService: AuthService,
     private readonly baseInitializationService: BaseInitializationService
   ) {
-    this.authService.initialize().then(() => {
-      this.baseInitializationService.initialize();
-    });
+    this.authService.initialize();
+    this.baseInitializationService.initialize();
   }
 }
