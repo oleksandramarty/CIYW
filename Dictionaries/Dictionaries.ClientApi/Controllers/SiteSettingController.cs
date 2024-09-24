@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dictionaries.ClientApi.Controllers;
 
-
 [Authorize]
 [ApiController]
 [Route("api/v1/siteSettings")]

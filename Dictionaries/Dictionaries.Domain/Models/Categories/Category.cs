@@ -1,8 +1,9 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 
-namespace Expenses.Domain.Models.Categories;
+namespace Dictionaries.Domain.Models.Categories;
 
-public class Category: BaseIdEntity<int>
+public class Category: BaseIdEntity<int>, IActivatable
 {
     public string Title { get; set; }
     public string Icon { get; set; }

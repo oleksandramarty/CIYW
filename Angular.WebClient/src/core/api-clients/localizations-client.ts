@@ -419,7 +419,7 @@ export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResp
     title!: string;
     titleEn!: string;
     titleNormalized!: string;
-    titleEnormalized!: string;
+    titleEnNormalized!: string;
     isDefault!: boolean;
     isActive!: boolean;
     localeEnum!: LocaleEnum;
@@ -436,7 +436,7 @@ export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResp
             this.title = _data["title"];
             this.titleEn = _data["titleEn"];
             this.titleNormalized = _data["titleNormalized"];
-            this.titleEnormalized = _data["titleEnormalized"];
+            this.titleEnNormalized = _data["titleEnNormalized"];
             this.isDefault = _data["isDefault"];
             this.isActive = _data["isActive"];
             this.localeEnum = _data["localeEnum"];
@@ -457,7 +457,7 @@ export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResp
         data["title"] = this.title;
         data["titleEn"] = this.titleEn;
         data["titleNormalized"] = this.titleNormalized;
-        data["titleEnormalized"] = this.titleEnormalized;
+        data["titleEnNormalized"] = this.titleEnNormalized;
         data["isDefault"] = this.isDefault;
         data["isActive"] = this.isActive;
         data["localeEnum"] = this.localeEnum;
@@ -472,7 +472,7 @@ export interface ILocaleResponse extends IBaseIdEntityOfInteger {
     title: string;
     titleEn: string;
     titleNormalized: string;
-    titleEnormalized: string;
+    titleEnNormalized: string;
     isDefault: boolean;
     isActive: boolean;
     localeEnum: LocaleEnum;

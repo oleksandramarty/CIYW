@@ -1,9 +1,10 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 
 namespace CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 
-public class CurrencyResponse: BaseIdEntity<int>
+public class CurrencyResponse: BaseIdEntity<int>, IActivatable
 {
     public string Title { get; set; }
     public string Code { get; set; }

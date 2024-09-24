@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -13,7 +12,7 @@ namespace Expenses.Domain.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Categories");
+                name: "Balance");
 
             migrationBuilder.EnsureSchema(
                 name: "Expenses");
@@ -21,21 +20,42 @@ namespace Expenses.Domain.Migrations
             migrationBuilder.EnsureSchema(
                 name: "Projects");
 
+            migrationBuilder.EnsureSchema(
+                name: "Categories");
+
             migrationBuilder.CreateTable(
-                name: "Categories",
-                schema: "Categories",
+                name: "Balances",
+                schema: "Balance",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Icon = table.Column<string>(type: "text", nullable: false),
-                    Color = table.Column<string>(type: "text", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Balances", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserCategories",
+                schema: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Icon = table.Column<string>(type: "text", nullable: false),
+                    Color = table.Column<string>(type: "text", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,22 +76,37 @@ namespace Expenses.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserCategories",
-                schema: "Categories",
+                name: "Expenses",
+                schema: "Expenses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoryId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserCategoryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CategoryId = table.Column<int>(type: "integer", nullable: true),
+                    IsPositive = table.Column<bool>(type: "boolean", nullable: false),
+                    UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserCategories", x => x.Id);
+                    table.PrimaryKey("PK_Expenses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserCategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Expenses_UserCategories_UserCategoryId",
+                        column: x => x.UserCategoryId,
                         principalSchema: "Categories",
-                        principalTable: "Categories",
+                        principalTable: "UserCategories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Expenses_UserProjects_UserProjectId",
+                        column: x => x.UserProjectId,
+                        principalSchema: "Projects",
+                        principalTable: "UserProjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -98,42 +133,6 @@ namespace Expenses.Domain.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Expenses",
-                schema: "Expenses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UserCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsPositive = table.Column<bool>(type: "boolean", nullable: false),
-                    UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Expenses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Expenses_UserCategories_UserCategoryId",
-                        column: x => x.UserCategoryId,
-                        principalSchema: "Categories",
-                        principalTable: "UserCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Expenses_UserProjects_UserProjectId",
-                        column: x => x.UserProjectId,
-                        principalSchema: "Projects",
-                        principalTable: "UserProjects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Expenses_UserCategoryId",
                 schema: "Expenses",
@@ -151,17 +150,15 @@ namespace Expenses.Domain.Migrations
                 schema: "Projects",
                 table: "UserAllowedProjects",
                 column: "UserProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserCategories_CategoryId",
-                schema: "Categories",
-                table: "UserCategories",
-                column: "CategoryId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Balances",
+                schema: "Balance");
+
             migrationBuilder.DropTable(
                 name: "Expenses",
                 schema: "Expenses");
@@ -177,10 +174,6 @@ namespace Expenses.Domain.Migrations
             migrationBuilder.DropTable(
                 name: "UserProjects",
                 schema: "Projects");
-
-            migrationBuilder.DropTable(
-                name: "Categories",
-                schema: "Categories");
         }
     }
 }

@@ -4,9 +4,9 @@
 BASE_DIR=$(cd "$(dirname "$0")" && pwd | sed 's|/CommonModule/CommonModule.Provision/InitScripts||')
 
 # Microservice params
-microservices=("Localizations" "Expenses" "AuthGateway")
-microserviceClientApiNames=("localizations-client.ts" "expenses-client.ts" "auth-client.ts")
-microserviceClientApiClassNames=("LocalizationClient" "ExpenseClient" "AuthClient")
+microservices=("Localizations" "Expenses" "AuthGateway" "Dictionaries")
+microserviceClientApiNames=("localizations-client.ts" "expenses-client.ts" "auth-client.ts" "dictionaries-client.ts")
+microserviceClientApiClassNames=("LocalizationClient" "ExpenseClient" "AuthClient" "DictionaryClient")
 
 # Loop through each microservice and generate the client API configuration
 for index in "${!microservices[@]}"; do

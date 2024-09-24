@@ -29,6 +29,7 @@ import {InDevelopmentComponent} from "../../common/common-in-development/in-deve
 import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/auth-client";
 import {API_BASE_URL_Localizations, LocalizationClient} from "../../../core/api-clients/localizations-client";
 import {API_BASE_URL_Expenses} from "../../../core/api-clients/expenses-client";
+import {API_BASE_URL_Dictionaries, DictionaryClient} from "../../../core/api-clients/dictionaries-client";
 
 export const MY_FORMATS = {
   parse: {
@@ -90,10 +91,12 @@ const routes: Routes = [
     LocalStorageService,
     AuthClient,
     LocalizationClient,
-    // ExpenseClient,
+    //ExpenseClient,
+    DictionaryClient,
     {provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl},
     {provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl},
     {provide: API_BASE_URL_Expenses, useValue: environment.apiExpensesUrl},
+    {provide: API_BASE_URL_Dictionaries, useValue: environment.apiDictionariesUrl},
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

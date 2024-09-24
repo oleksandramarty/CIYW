@@ -1,9 +1,10 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Enums;
 
 namespace AuthGateway.Domain.Models.Users;
 
-public class User: BaseDateTimeEntity<Guid>
+public class User: BaseDateTimeEntity<Guid>, IActivatable
 {
     public string Login { get; set; }
     public string LoginNormalized { get; set; }
@@ -13,8 +14,8 @@ public class User: BaseDateTimeEntity<Guid>
     public string Salt { get; set; }
     public bool IsActive { get; set; }
     public bool IsTemporaryPassword { get; set; }
-    public int CountryId { get; set; }
-    public int CurrencyId { get; set; }
+    public int? CountryId { get; set; }
+    public int? CurrencyId { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
     
     public DateTime? LastForgotPassword { get; set; }

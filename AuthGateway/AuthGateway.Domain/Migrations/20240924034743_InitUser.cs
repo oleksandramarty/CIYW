@@ -44,6 +44,8 @@ namespace AuthGateway.Domain.Migrations
                     Salt = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     IsTemporaryPassword = table.Column<bool>(type: "boolean", nullable: false),
+                    CountryId = table.Column<int>(type: "integer", nullable: true),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: true),
                     AuthType = table.Column<int>(type: "integer", nullable: false),
                     LastForgotPassword = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastForgotPasswordRequest = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),

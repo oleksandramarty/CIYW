@@ -1,8 +1,9 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace Dictionaries.Domain.Models.Countries;
 
-public class Country: BaseIdEntity<int>
+public class Country: BaseIdEntity<int>, IActivatable
 {
     public string Title { get; set; }
     public string Code { get; set; }

@@ -1,9 +1,10 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Enums;
 
 namespace CommonModule.Shared.Responses.Localizations.Models.Locales;
 
-public class LocaleResponse: BaseIdEntity<int>
+public class LocaleResponse: BaseIdEntity<int>, IActivatable
 {
     public string IsoCode { get; set; }
     public string Title { get; set; }

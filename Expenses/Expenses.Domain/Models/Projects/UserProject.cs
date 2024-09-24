@@ -1,9 +1,10 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 using Expenses.Domain.Models.Expenses;
 
 namespace Expenses.Domain.Models.Projects;
 
-public class UserProject: BaseDateTimeEntity<Guid>
+public class UserProject: BaseDateTimeEntity<Guid>, IActivatable
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }

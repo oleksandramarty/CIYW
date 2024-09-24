@@ -13,5 +13,7 @@ public class MediatrDictionariesModule: Autofac.Module
             .AsImplementedInterfaces();
         
         builder.RegisterAssemblyTypes(typeof(GetCategoriesRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
+        builder.RegisterAssemblyTypes(typeof(GetCurrenciesRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
+        builder.RegisterAssemblyTypes(typeof(GetCountriesRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
     }
 }
