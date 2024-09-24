@@ -18,3 +18,9 @@ do
   sed -i '' "s/buildVersion: '.*'/buildVersion: '$NEW_BUILD_VERSION'/" "$FULL_PATH"
   echo "buildVersion updated to $NEW_BUILD_VERSION in $FULL_PATH"
 done
+
+VERSION_FOLDER="$BASE_DIR/CommonModule/CommonModule.Facade"
+
+# Write the new build version to version.txt in the VERSION_FOLDER
+echo "$NEW_BUILD_VERSION" > "$VERSION_FOLDER/version.txt"
+echo "New build version written to $VERSION_FOLDER/version.txt"

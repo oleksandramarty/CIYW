@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
-import { DictionaryService } from '../services/dictionary.service';
+import { LocalizationService } from '../services/localization.service';
 import { Subject, takeUntil, tap } from 'rxjs';
 
 @Directive({
@@ -12,7 +12,7 @@ export class TranslateDirective implements OnInit, OnDestroy {
 
   constructor(
     private el: ElementRef,
-    private dictionaryService: DictionaryService
+    private localizationService: LocalizationService
   ) {}
 
   ngOnInit() {
@@ -22,7 +22,7 @@ export class TranslateDirective implements OnInit, OnDestroy {
 
     this.updateTranslation();
 
-    this.dictionaryService.localeChangedSub
+    this.localizationService.localeChangedSub
       .pipe(
         takeUntil(this.ngUnsubscribe),
         tap((state) => {
@@ -41,7 +41,7 @@ export class TranslateDirective implements OnInit, OnDestroy {
 
   private updateTranslation() {
     if (this.key) {
-      const translation = this.dictionaryService.getTranslation(this.key);
+      const translation = this.localizationService.getTranslation(this.key);
       if (this.translationAttr === 'innerText') {
         this.el.nativeElement.innerText = translation || this.key;
       } else if (this.translationAttr === 'placeholder') {

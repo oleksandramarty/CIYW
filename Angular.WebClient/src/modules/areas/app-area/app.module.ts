@@ -15,7 +15,7 @@ import { AppComponent } from "./app/app.component";
 import { AppCommonModule } from "../../common/common-app/app-common.module";
 import { GoogleLoginProvider, SocialAuthServiceConfig } from "@abacritt/angularx-social-login";
 import { LocalStorageService } from "../../../core/services/local-storage.service";
-import { DictionaryService } from "../../../core/services/dictionary.service";
+import { LocalizationService } from "../../../core/services/localization.service";
 import { BaseHttpService } from "../../../core/services/base-http.service";
 import { StoreModule } from "@ngrx/store";
 import { reducers } from "../../../core/store/reducers";
@@ -30,6 +30,9 @@ import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/au
 import {API_BASE_URL_Localizations, LocalizationClient} from "../../../core/api-clients/localizations-client";
 import {API_BASE_URL_Expenses} from "../../../core/api-clients/expenses-client";
 import {API_BASE_URL_Dictionaries, DictionaryClient} from "../../../core/api-clients/dictionaries-client";
+import {DictionaryService} from "../../../core/services/dictionaryService";
+import {BaseInitializationService} from "../../../core/services/base-initialization.service";
+import {SiteSettingsService} from "../../../core/services/site-settings.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -87,7 +90,10 @@ const routes: Routes = [
   providers: [
     AuthService,
     BaseHttpService,
+    BaseInitializationService,
+    SiteSettingsService,
     DictionaryService,
+    LocalizationService,
     LocalStorageService,
     AuthClient,
     LocalizationClient,

@@ -6,6 +6,6 @@ export const environment = {
   apiExpensesUrl: 'https://localhost:7048',
   apiDictionariesUrl: 'https://localhost:7192',
   googleClientApi: '123162768880-nhcrhv4p8d3sih8k4lbltg2j70kiphtc.apps.googleusercontent.com',
-  buildVersion: 'f52efd1abfe841b4b9560037525a6605',
+  buildVersion: '9c17b8c5df174f80b1172048503276b9',
   authSchema: 'Bearer'
 };

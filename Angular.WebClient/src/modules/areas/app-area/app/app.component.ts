@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {AuthService} from "../../../../core/services/auth.service";
-import {DictionaryService} from "../../../../core/services/dictionary.service";
+import {BaseInitializationService} from "../../../../core/services/base-initialization.service";
 
 @Component({
   selector: 'app-root',
@@ -11,9 +11,10 @@ export class AppComponent {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly dictionaryService: DictionaryService
+    private readonly baseInitializationService: BaseInitializationService
   ) {
-    this.authService.initialize();
-    this.dictionaryService.initialize();
+    this.authService.initialize().then(() => {
+      this.baseInitializationService.initialize();
+    });
   }
 }

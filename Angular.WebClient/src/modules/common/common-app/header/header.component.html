@@ -2,7 +2,7 @@
   <!-- Title on the left -->
   <span class="app-title">Cash in your wallet</span>
 
-  <nav class="header-center" *ngIf="(isAuthorized$ | async) && currentUser">
+  <nav class="header-center" *ngIf="!!isAuthorized$ && (isAuthorized$ | async) && currentUser">
     <a
       *ngFor="let item of menuItems; let i=index"
       mat-button
@@ -17,7 +17,7 @@
       </div>
       <mat-menu #menuLang="matMenu" class="custom-menu-header-position">
         <ng-container *ngFor="let locale of locales; let i=index">
-          <button mat-menu-item (click)="localeChanged(locale.id)">
+          <button mat-menu-item (click)="localeChanged(locale.isoCode)">
             <div class="lang-menu-item">
             <span class="lang-icon">
             {{langFlags.get(locale.isoCode ?? '')}}

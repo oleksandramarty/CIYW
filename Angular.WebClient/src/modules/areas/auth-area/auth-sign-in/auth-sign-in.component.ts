@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { DictionaryService } from "../../../../core/services/dictionary.service";
+import { LocalizationService } from "../../../../core/services/localization.service";
 import { AuthService } from "../../../../core/services/auth.service";
 
 @Component({
@@ -17,7 +17,7 @@ export class AuthSignInComponent implements OnInit {
   constructor(
     private readonly snackBar: MatSnackBar,
     private fb: FormBuilder,
-    private readonly dictionaryService: DictionaryService,
+    private readonly localizationService: LocalizationService,
     private readonly authService: AuthService
   ) {}
 
@@ -37,7 +37,7 @@ export class AuthSignInComponent implements OnInit {
           control.markAsTouched();
         }
       });
-      this.snackBar.open(this.dictionaryService?.getTranslation('ERROR.FORM_VALIDATION') ?? 'ERROR', 'Close', { duration: 3000 });
+      this.snackBar.open(this.localizationService?.getTranslation('ERROR.FORM_VALIDATION') ?? 'ERROR', 'Close', { duration: 3000 });
       return;
     }
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Subject, switchMap, take, takeUntil } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Observable, Subject, switchMap, take, takeUntil} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
 import { clearAll, setToken, setUser } from "../store/actions/auth.actions";
-import { DictionaryService } from "./dictionary.service";
+import { LocalizationService } from "./localization.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
@@ -16,21 +16,27 @@ import {LocalizationClient} from "../api-clients/localizations-client";
 })
 export class AuthService {
   private readonly _tokenKey = 'honk-token';
+  private _token$: Observable<JwtTokenResponse | undefined> | undefined;
 
   get isAuthorized(): boolean {
     return !!this.getToken() || !!this.getTokenFromStore();
   }
 
+  get isAuthorized$(): Observable<boolean> | undefined {
+    return this._token$?.pipe(map(token => token !== null));
+  }
+
   constructor(
-    private readonly dictionaryService: DictionaryService,
+    private readonly localizationService: LocalizationService,
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly authClient: AuthClient,
-    private readonly localizationClient: LocalizationClient,
     private readonly store: Store
-  ) {}
+  ) {
+    this._token$ = this.store.select(selectToken);
+  }
 
-  public initialize(): void {
+  public async initialize(): Promise<void> {
     const storedToken = this.getToken();
     if (storedToken) {
       this.store.dispatch(setToken({ token: storedToken }));
@@ -40,7 +46,7 @@ export class AuthService {
       this.getCurrentUser();
     } else {
       this.clearAuthData();
-      this.router.navigate(['/auth/sign-in']);
+      await this.router.navigate(['/auth/sign-in']);
     }
   }
 
@@ -56,17 +62,13 @@ export class AuthService {
         this.store.dispatch(setToken({ token }));
         return this.authClient.user_GetCurrentUser();
       }),
-      switchMap((user) => {
+      tap((user) => {
         this.store.dispatch(setUser({ user }));
-        return this.localizationClient.localization_GetLocalization();
-      }),
-      tap((data) => {
-        this.dictionaryService.updateLocalizations(data);
-      }),
-      tap(() => {
+         this.localizationService.reinitialize();
+
         this.router.navigate(['/home']);
       }),
-      handleApiError(this.snackBar, this.dictionaryService)
+      handleApiError(this.snackBar, this.localizationService)
     ).subscribe();
   }
 
@@ -78,7 +80,7 @@ export class AuthService {
           this.clearAuthData();
           this.router.navigate(['/auth/sign-in']);
         }),
-        handleApiError(this.snackBar, this.dictionaryService)
+        handleApiError(this.snackBar, this.localizationService)
       ).subscribe();
   }
 
@@ -88,7 +90,7 @@ export class AuthService {
       tap((user) => {
         this.store.dispatch(setUser({ user }));
       }),
-      handleApiError(this.snackBar, this.dictionaryService)
+      handleApiError(this.snackBar, this.localizationService)
     ).subscribe();
   }
 

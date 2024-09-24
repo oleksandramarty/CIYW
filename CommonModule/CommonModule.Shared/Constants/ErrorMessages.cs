@@ -22,4 +22,5 @@ public class ErrorMessages
     public const string JwtUserClaimInvalidConversion = "ERROR.JWT_USER_CLAIM_INVALID_CONVERSION";
     public const string ForgotPasswordRequestTooSoon = "ERROR.FORGOT_PASSWORD_REQUEST_TOO_SOON";
     public const string RestorePasswordProcessingIssue = "ERROR.RESTORE_PASSWORD_PROCESSING_ISSUE";
+    public const string VersionNotSpecified = "ERROR.VERSION_NOT_SPECIFIED";
 }

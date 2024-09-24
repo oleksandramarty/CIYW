@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {DictionaryService} from "../../../../core/services/dictionary.service";
+import {LocalizationService} from "../../../../core/services/localization.service";
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
 
 @Component({
@@ -9,16 +9,16 @@ import {LocalStorageService} from "../../../../core/services/local-storage.servi
 })
 export class FooterComponent {
   constructor(
-    private readonly dictionaryService: DictionaryService,
+    private readonly localizationService: LocalizationService,
     private readonly localStorageService: LocalStorageService) {
   }
 
   get apiVersion(): string {
-    return this.dictionaryService.settings?.apiVersion ?? 'honk';
+    return this.localizationService.settings?.apiVersion ?? 'honk';
   }
 
   get clientVersion(): string {
-    return this.dictionaryService.settings?.clientVersion ?? 'honk';
+    return this.localizationService.settings?.clientVersion ?? 'honk';
   }
 
   public clearCache(): void {

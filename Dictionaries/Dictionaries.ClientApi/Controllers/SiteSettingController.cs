@@ -9,7 +9,7 @@ namespace Dictionaries.ClientApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/siteSettings")]
-public class UserController : BaseController
+public class SiteSettingController : BaseController
 {
     [HttpGet]
     [AllowAnonymous]
@@ -18,9 +18,9 @@ public class UserController : BaseController
     {
         SiteSettingsResponse response = new SiteSettingsResponse
         {
+            //TODO set locale if authorized
             Locale = "en",
-            ApiVersion = VersionGenerator.GetVersion(),
-            ClientVersion = string.Empty
+            BuildVersion = VersionGenerator.GetVersion()
         };
         return Ok(response);
     }

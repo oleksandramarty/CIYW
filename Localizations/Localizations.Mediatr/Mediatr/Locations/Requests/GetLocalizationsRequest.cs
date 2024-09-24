@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Localizations.Mediatr.Mediatr.Locations.Requests;
 
-public class GetLocalizationRequest: IRequest<LocalizationsResponse>
+public class GetLocalizationsRequest: IRequest<LocalizationsResponse>
 {
     
 }

@@ -338,7 +338,7 @@ export class DictionaryClient {
         return _observableOf(null as any);
     }
 
-    user_GetSettings(): Observable<SiteSettingsResponse> {
+    siteSetting_GetSettings(): Observable<SiteSettingsResponse> {
         let url_ = this.baseUrl + "/api/v1/siteSettings";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -351,11 +351,11 @@ export class DictionaryClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUser_GetSettings(response_);
+            return this.processSiteSetting_GetSettings(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUser_GetSettings(response_ as any);
+                    return this.processSiteSetting_GetSettings(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<SiteSettingsResponse>;
                 }
@@ -364,7 +364,7 @@ export class DictionaryClient {
         }));
     }
 
-    protected processUser_GetSettings(response: HttpResponseBase): Observable<SiteSettingsResponse> {
+    protected processSiteSetting_GetSettings(response: HttpResponseBase): Observable<SiteSettingsResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -742,8 +742,7 @@ export interface ICategoryResponse extends IBaseIdEntityOfInteger {
 
 export class SiteSettingsResponse implements ISiteSettingsResponse {
     locale!: string;
-    apiVersion!: string;
-    clientVersion!: string;
+    buildVersion!: string;
 
     constructor(data?: ISiteSettingsResponse) {
         if (data) {
@@ -757,8 +756,7 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
     init(_data?: any) {
         if (_data) {
             this.locale = _data["locale"];
-            this.apiVersion = _data["apiVersion"];
-            this.clientVersion = _data["clientVersion"];
+            this.buildVersion = _data["buildVersion"];
         }
     }
 
@@ -772,16 +770,14 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["locale"] = this.locale;
-        data["apiVersion"] = this.apiVersion;
-        data["clientVersion"] = this.clientVersion;
+        data["buildVersion"] = this.buildVersion;
         return data;
     }
 }
 
 export interface ISiteSettingsResponse {
     locale: string;
-    apiVersion: string;
-    clientVersion: string;
+    buildVersion: string;
 }
 
 export class ApiException extends Error {

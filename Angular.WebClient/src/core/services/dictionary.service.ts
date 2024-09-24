@@ -1,156 +1,82 @@
-import { Injectable } from '@angular/core';
-import { LocalStorageService } from './local-storage.service';
-import {take, tap, switchMap, BehaviorSubject} from 'rxjs';
-import { handleApiError } from '../helpers/rxjs.helper';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Dictionary } from '../models/common/dictionarie.model';
+import { Injectable } from "@angular/core";
+import { DictionaryClient } from "../api-clients/dictionaries-client";
+import {catchError, forkJoin, Observable, of, take, tap} from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { handleApiError } from "../helpers/rxjs.helper";
+import {LocaleResponse, LocalizationClient} from "../api-clients/localizations-client";
+import { Dictionary } from "../models/common/dictionarie.model";
+import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../environments/environment";
-import {LocaleResponse, LocalizationClient, LocalizationsResponse} from "../api-clients/localizations-client";
-import {AuthClient, SiteSettingsResponse} from "../api-clients/auth-client";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class DictionaryService {
-  private _dictionaries: Dictionary | undefined;
-  private _localizations: LocalizationsResponse | undefined;
-  private _currentLocale: LocaleResponse | undefined;
-  private _settings: SiteSettingsResponse | undefined;
+    private _dictionaries: Dictionary | undefined;
 
-  public localeChangedSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-  get dictionaries(): Dictionary | undefined {
-    return this._dictionaries;
-  }
-
-  get localizations(): LocalizationsResponse | undefined {
-    return this._localizations;
-  }
-
-  get currentLocale(): LocaleResponse | undefined {
-    return this._currentLocale;
-  }
-
-  get settings(): SiteSettingsResponse | undefined {
-    return this._settings;
-  }
-
-  constructor(
-    private readonly snackBar: MatSnackBar,
-    private readonly authClient: AuthClient,
-    private readonly localizationClient: LocalizationClient,
-    private readonly localStorageService: LocalStorageService,
-  ) {}
-
-  public initialize(): void {
-    const settingsLocalStorage: SiteSettingsResponse | undefined = this.localStorageService.getItem('settings');
-
-    this.authClient.user_GetSettings()
-      .pipe(
-        take(1),
-        tap((data) => {
-          this._settings = data
-          this._settings.clientVersion = environment.buildVersion;
-
-          if (!this._settings) {
-            this._settings = new SiteSettingsResponse({locale: 'en', apiVersion: 'honk', clientVersion: environment.buildVersion});
-          }
-
-          if (this._settings.locale != settingsLocalStorage?.locale) {
-            this._settings.locale = settingsLocalStorage?.locale ?? 'en';
-          }
-
-          if (this._settings?.apiVersion !== settingsLocalStorage?.apiVersion ||
-            this._settings?.clientVersion !== settingsLocalStorage?.clientVersion) {
-            this.localStorageService.setItem('settings', this._settings);
-            this.initializeFromApi();
-          } else {
-            this.initializeFromLocalStorage();
-          }
-        }),
-        handleApiError(this.snackBar),
-      ).subscribe();
-  }
-
-  public getTranslation(key: string | undefined): string | undefined {
-    if (!key) {
-      return undefined;
-    }
-    return !!this._localizations?.data ? (this._localizations.data[this._settings?.locale ?? 'en']?.[key] ?? key) : key;
-  }
-
-  public getTranslationByLocale(locale: string | undefined, key: string | undefined): string | undefined {
-    if (!key) {
-      return undefined;
-    }
-    return !!this._localizations?.data ? (this._localizations.data[locale ?? 'en']?.[key] ?? key) : key;
-  }
-
-  public getAllTranslations(locale: string): { [key: string]: string } | undefined {
-    if (!this._localizations?.data) {
-      return undefined;
+    get dictionaries(): Dictionary | undefined {
+        if (!this._dictionaries) {
+            this._dictionaries = this.localStorageService.getItem('dictionaries');
+        }
+        return this._dictionaries;
     }
 
-    return this._localizations.data[locale];
-  }
-
-  public localeChanged(id: number | undefined): void {
-    this._currentLocale = this._dictionaries?.localeResponses?.find(l => l.id === id);
-    if (this._settings) {
-      this._settings.locale = this._currentLocale?.isoCode ?? 'en';
-      this.localStorageService.setItem('settings', this._settings);
+    set dictionaries(value: Dictionary | undefined) {
+        this._dictionaries = value;
+        this.localStorageService.setItem('dictionaries', this._dictionaries);
     }
 
-    this.localeChangedSub.next(true);
-  }
+    get currentLocale(): LocaleResponse | undefined {
+        return this.dictionaries?.
+        locales?.
+        find(locale => locale.isoCode === this.dictionaries?.siteSettings?.locale);
+    }
 
-  public updateLocalizations(data: LocalizationsResponse): void {
-    this._localizations = data;
-    this.localStorageService.setItem('localizations', data);
-  }
+    constructor(
+        private readonly snackBar: MatSnackBar,
+        private readonly localizationClient: LocalizationClient,
+        private readonly dictionaryClient: DictionaryClient,
+        private readonly localStorageService: LocalStorageService
+    ) {
+        this.dictionaries = new Dictionary();
+    }
 
-  private initializeFromApi(): void {
-    this.localizationClient.localization_GetLocalization()
-        .pipe(
-            take(1),
-            switchMap((data) =>{
-              this.updateLocalizations(data);
-              return this.localizationClient.localization_GetLocales()
+    public initialize(isAuthorized: boolean): void {
+        if (!this.dictionaries || this.dictionaries.isLoaded()) {
+            this.reinitialize(isAuthorized);
+        }
+    }
+
+    public reinitialize(isAuthorized: boolean): void {
+        forkJoin({
+            countries: isAuthorized && !this.dictionaries?.countries ?
+                this.dictionaryClient.dictionary_GetCountries().pipe(take(1)) :
+                of(undefined),
+            currencies: isAuthorized && !this.dictionaries?.currencies ?
+                    this.dictionaryClient.dictionary_GetCurrencies().pipe(take(1)) :
+                    of(undefined),
+            categories: isAuthorized && !this.dictionaries?.currencies ?
+                this.dictionaryClient.dictionary_GetCategories().pipe(take(1)) :
+                of(undefined),
+            locales: !this.dictionaries?.currencies ?
+                this.localizationClient.localization_GetLocales().pipe(take(1)) :
+                of(undefined),
+            siteSettings: !this.dictionaries?.currencies ?
+                this.dictionaryClient.siteSetting_GetSettings().pipe(take(1)) :
+                of(undefined)
+        }).pipe(
+            tap(({ countries, currencies, categories, locales, siteSettings }) => {
+                if (this.dictionaries) {
+                    this.dictionaries.countries = countries;
+                    this.dictionaries.currencies = currencies;
+                    this.dictionaries.categories = categories;
+                    this.dictionaries.locales = locales;
+                    this.dictionaries.siteSettings = siteSettings;
+
+                    this.dictionaries.updateDateItems();
+                }
             }),
-            tap((data) => {
-              this._dictionaries = new Dictionary(data);
-              this.localStorageService.setItem('dictionaries', this._dictionaries);
-              this.setCurrentLocale();
-            }),
-            handleApiError(this.snackBar)
+            catchError(handleApiError(this.snackBar))
         ).subscribe();
-  }
-
-  private initializeFromLocalStorage(): void {
-    const dictionaries: Dictionary | undefined = this.localStorageService.getItem('dictionaries');
-    const localizations: LocalizationsResponse | undefined = this.localStorageService.getItem('localizations');
-
-    if (
-      !dictionaries ||
-      !localizations ||
-      !dictionaries.localeResponses ||
-      !localizations.data ||
-      (!localizations.data || Object.keys(localizations.data).length === 0)
-      ) {
-      this.initializeFromApi();
-      return;
     }
-
-    this._dictionaries = dictionaries;
-    this._localizations = localizations;
-
-    this.setCurrentLocale();
-  }
-
-  private setCurrentLocale(): void {
-    const locale = this._settings?.locale ?? 'en';
-    this._currentLocale = this._dictionaries?.localeResponses?.find(l => l.isoCode === locale);
-
-    this.localeChangedSub.next(true);
-  }
 }

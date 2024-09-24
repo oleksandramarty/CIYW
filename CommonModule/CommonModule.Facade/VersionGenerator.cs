@@ -1,21 +1,27 @@
-namespace CommonModule.Facade;
+using System;
+using System.IO;
+using CommonModule.Core.Exceptions;
 
-public static class VersionGenerator
+namespace CommonModule.Facade
 {
-    private static readonly string version;
-
-    static VersionGenerator()
+    public static class VersionGenerator
     {
-        version = GenerateVersion();
-    }
+        private static readonly string version;
+        private static readonly string versionFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "version.txt");
 
-    private static string GenerateVersion()
-    {
-        return Guid.NewGuid().ToString().Replace("-", "");
-    }
-
-    public static string GetVersion()
-    {
-        return version;
+        static VersionGenerator()
+        {
+            if (!File.Exists(versionFilePath))
+            {
+                throw new VersionException();
+            }
+            
+            version = File.ReadAllText(versionFilePath);
+        }
+        
+        public static string GetVersion()
+        {
+            return version;
+        }
     }
 }

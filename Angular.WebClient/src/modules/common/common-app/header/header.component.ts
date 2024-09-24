@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import { Store } from '@ngrx/store';
 import {Observable, tap} from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DictionaryService } from '../../../../core/services/dictionary.service';
-import {selectToken, selectUser} from '../../../../core/store/selectors/auth.selectors';
+import { LocalizationService } from '../../../../core/services/localization.service';
+import {selectUser} from '../../../../core/store/selectors/auth.selectors';
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
-import {JwtTokenResponse, UserResponse} from "../../../../core/api-clients/auth-client";
+import {UserResponse} from "../../../../core/api-clients/auth-client";
 import {LocaleResponse} from "../../../../core/api-clients/localizations-client";
+import {DictionaryService} from "../../../../core/services/dictionary.service";
 
 @Component({
   selector: 'app-header',
@@ -30,14 +30,12 @@ export class HeaderComponent implements OnInit {
   ];
   public currentUser: UserResponse | undefined
 
-  private _token$: Observable<JwtTokenResponse | undefined>;
-
-  get isAuthorized$(): Observable<boolean> {
-    return this._token$.pipe(map(token => token !== null));
+  get isAuthorized$(): Observable<boolean> | undefined {
+    return this.authService.isAuthorized$;
   }
 
   get locales(): LocaleResponse[] | undefined {
-    return this.dictionaryService.dictionaries?.localeResponses;
+    return this.dictionaryService.dictionaries?.locales;
   }
 
   get currentLocale(): LocaleResponse | undefined {
@@ -48,10 +46,10 @@ export class HeaderComponent implements OnInit {
     private readonly store: Store,
     private readonly snackBar: MatSnackBar,
     private router: Router,
+    private readonly localizationService: LocalizationService,
+    private readonly authService: AuthService,
     private readonly dictionaryService: DictionaryService,
-    private readonly authService: AuthService
   ) {
-    this._token$ = this.store.select(selectToken);
   }
 
   ngOnInit(): void {
@@ -68,8 +66,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([`/${url ?? ''}`]);
   }
 
-  public localeChanged(id: number | undefined): void {
-    this.dictionaryService.localeChanged(id);
+  public localeChanged(code: string | undefined): void {
+    this.localizationService.localeChanged(code);
   }
 
   public logout() {

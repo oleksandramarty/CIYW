@@ -26,7 +26,7 @@ export class LocalizationClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    localization_GetLocalization(): Observable<LocalizationsResponse> {
+    localization_GetLocalizations(): Observable<LocalizationsResponse> {
         let url_ = this.baseUrl + "/api/v1/localizations";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -39,11 +39,11 @@ export class LocalizationClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processLocalization_GetLocalization(response_);
+            return this.processLocalization_GetLocalizations(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processLocalization_GetLocalization(response_ as any);
+                    return this.processLocalization_GetLocalizations(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<LocalizationsResponse>;
                 }
@@ -52,7 +52,7 @@ export class LocalizationClient {
         }));
     }
 
-    protected processLocalization_GetLocalization(response: HttpResponseBase): Observable<LocalizationsResponse> {
+    protected processLocalization_GetLocalizations(response: HttpResponseBase): Observable<LocalizationsResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -329,6 +329,7 @@ export interface IInvalidFieldInfoModel {
 
 export class LocalizationsResponse implements ILocalizationsResponse {
     data!: { [key: string]: { [key: string]: string; }; };
+    version!: string;
 
     constructor(data?: ILocalizationsResponse) {
         if (data) {
@@ -351,6 +352,7 @@ export class LocalizationsResponse implements ILocalizationsResponse {
                         (<any>this.data)![key] = _data["data"][key] !== undefined ? _data["data"][key] : {};
                 }
             }
+            this.version = _data["version"];
         }
     }
 
@@ -370,12 +372,14 @@ export class LocalizationsResponse implements ILocalizationsResponse {
                     (<any>data["data"])[key] = (<any>this.data)[key];
             }
         }
+        data["version"] = this.version;
         return data;
     }
 }
 
 export interface ILocalizationsResponse {
     data: { [key: string]: { [key: string]: string; }; };
+    version: string;
 }
 
 export class BaseIdEntityOfInteger implements IBaseIdEntityOfInteger {
