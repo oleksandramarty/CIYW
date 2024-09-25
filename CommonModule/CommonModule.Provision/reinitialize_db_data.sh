@@ -15,6 +15,9 @@ chmod +x "$SCRIPT_DIR/init_roles.sh"
 chmod +x "$SCRIPT_DIR/init_users.sh"
 "$SCRIPT_DIR/init_users.sh"
 
+chmod +x "$SCRIPT_DIR/init_categories.sh"
+"$SCRIPT_DIR/init_categories.sh" $isBulkUpdate
+
 chmod +x "$SCRIPT_DIR/init_locales.sh"
 "$SCRIPT_DIR/init_locales.sh"
 

@@ -43,7 +43,12 @@ namespace Expenses.Domain.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("UserProjectId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserProjectId");
 
                     b.ToTable("Balances", "Balance");
                 });
@@ -89,6 +94,9 @@ namespace Expenses.Domain.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
+                    b.Property<Guid?>("BalanceId")
+                        .HasColumnType("uuid");
+
                     b.Property<int?>("CategoryId")
                         .HasColumnType("integer");
 
@@ -104,9 +112,6 @@ namespace Expenses.Domain.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
-
-                    b.Property<bool>("IsPositive")
-                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("timestamp with time zone");
@@ -180,6 +185,17 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("UserProjects", "Projects");
                 });
 
+            modelBuilder.Entity("Expenses.Domain.Models.Balances.Balance", b =>
+                {
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                        .WithMany("Balances")
+                        .HasForeignKey("UserProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UserProject");
+                });
+
             modelBuilder.Entity("Expenses.Domain.Models.Expenses.Expense", b =>
                 {
                     b.HasOne("Expenses.Domain.Models.Categories.UserCategory", "UserCategory")
@@ -216,6 +232,8 @@ namespace Expenses.Domain.Migrations
             modelBuilder.Entity("Expenses.Domain.Models.Projects.UserProject", b =>
                 {
                     b.Navigation("AllowedUsers");
+
+                    b.Navigation("Balances");
 
                     b.Navigation("Expenses");
                 });

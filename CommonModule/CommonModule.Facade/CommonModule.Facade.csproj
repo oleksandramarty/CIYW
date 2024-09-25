@@ -35,4 +35,10 @@
       <ProjectReference Include="..\CommonModule.Repositories\CommonModule.Repositories.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="version.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>

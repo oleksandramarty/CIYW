@@ -1,3 +1,4 @@
+using Dictionaries.Domain.Models.Categories;
 using Dictionaries.Domain.Models.Countries;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace Dictionaries.Domain
         public DbSet<Country> Countries { get; set; }
         public DbSet<Models.Currencies.Currency> Currencies { get; set; }
         public DbSet<CountryCurrency> CountryCurrencies { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public DictionariesDataContext(DbContextOptions<DictionariesDataContext> options) : base(options)
         {
@@ -35,6 +37,20 @@ namespace Dictionaries.Domain
             {
                 entity.ToTable("CountryCurrencies", "Dictionaries");
                 entity.HasKey(cc => new { cc.CountryId, cc.CurrencyId });
+            });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.ToTable("Categories", "Dictionaries");
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Title).IsRequired().HasMaxLength(255);
+                entity.Property(c => c.Icon).HasMaxLength(255);
+                entity.Property(c => c.Color).HasMaxLength(50);
+                entity.Property(c => c.IsActive).IsRequired();
+                entity.Property(c => c.IsPositive).IsRequired();
+                entity.HasMany(c => c.Children)
+                      .WithOne()
+                      .HasForeignKey(c => c.ParentId);
             });
 
             var cascadeFKs = modelBuilder.Model.GetEntityTypes()

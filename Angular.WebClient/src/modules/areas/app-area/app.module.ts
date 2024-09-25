@@ -28,7 +28,7 @@ import {NotFoundComponent} from "../../common/common-app/not-found/not-found.com
 import {InDevelopmentComponent} from "../../common/common-in-development/in-development/in-development.component";
 import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/auth-client";
 import {API_BASE_URL_Localizations, LocalizationClient} from "../../../core/api-clients/localizations-client";
-import {API_BASE_URL_Expenses} from "../../../core/api-clients/expenses-client";
+import {API_BASE_URL_Expenses, ExpenseClient} from "../../../core/api-clients/expenses-client";
 import {API_BASE_URL_Dictionaries, DictionaryClient} from "../../../core/api-clients/dictionaries-client";
 import {BaseInitializationService} from "../../../core/services/base-initialization.service";
 import {SiteSettingsService} from "../../../core/services/site-settings.service";
@@ -97,7 +97,7 @@ const routes: Routes = [
     LocalStorageService,
     AuthClient,
     LocalizationClient,
-    //ExpenseClient,
+    ExpenseClient,
     DictionaryClient,
     {provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl},
     {provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl},

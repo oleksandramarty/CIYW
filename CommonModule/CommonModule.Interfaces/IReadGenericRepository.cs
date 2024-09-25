@@ -14,12 +14,12 @@ public interface IReadGenericRepository<TId, T, TDataContext>
     Task<T> GetAsync(Expression<Func<T, bool>> condition,  CancellationToken cancellationToken,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
     Task<List<T>> GetListAsync(
-        Expression<Func<T, bool>> condition,  
+        Expression<Func<T, bool>>? condition,  
         CancellationToken cancellationToken,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
     
     IQueryable<T> GetQueryable(
-        Expression<Func<T, bool>> condition,
+        Expression<Func<T, bool>>? condition,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
     Task<ListWithIncludeResponse<TResponse>> GetListWithIncludeAsync<TResponse>(Expression<Func<T, bool>>? condition,
         BaseFilterRequest<TId> filter,

@@ -13,7 +13,6 @@ using CommonModule.Repositories;
 using CommonModule.Repositories.Builders;
 using CommonModule.Shared.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using StackExchange.Redis;
 using OpenApiInfo = Microsoft.OpenApi.Models.OpenApiInfo;
@@ -182,7 +181,7 @@ namespace CommonModule.Facade
 
             builder.Services.AddSwaggerDocument(config => { config.DocumentName = "swagger"; });
 
-            string version = builder.Configuration["Microservice:Version"];
+            string version = builder.Configuration.GetVersion();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -226,12 +225,19 @@ namespace CommonModule.Facade
 
         public static void AddSwagger(this IApplicationBuilder app, WebApplicationBuilder builder)
         {
+            string version = builder.Configuration.GetVersion();
+            
             app.UseDeveloperExceptionPage();
             app.UseSwagger(options => options.SerializeAsV2 = true);
             app.UseSwaggerUI(c =>
                 c.SwaggerEndpoint(
-                    $"/swagger/{builder.Configuration["Microservice:Version"]}/swagger.json",
-                    $"{builder.Configuration["Microservice:Title"]} v{builder.Configuration["Microservice:Version"]}"));
+                    $"/swagger/{version}/swagger.json",
+                    $"{builder.Configuration["Microservice:Title"]} v{version}"));
+        }
+        
+        private static string GetVersion(this IConfiguration configuration)
+        {
+            return $"{configuration["Microservice:Version"]}-{VersionGenerator.GetVersion()}";
         }
 
         #endregion

@@ -19,9 +19,6 @@ public class Expense: BaseDateTimeEntity<Guid>
     public Guid? UserCategoryId { get; set; }
     public UserCategory UserCategory { get; set; }
     public int? CategoryId { get; set; }
-    
-    public bool IsPositive { get; set; }
-    
     public Guid UserProjectId { get; set; }
     public UserProject UserProject { get; set; }
     

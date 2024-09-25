@@ -23,8 +23,14 @@ export class LocalStorageService {
     localStorage.clear();
   }
 
-  clearLocalStorageAndRefresh(): void {
-    localStorage.clear();
+  clearLocalStorageAndRefresh(force = false): void {
+    if (force) {
+      this.clear();
+    } else {
+      localStorage.removeItem('dictionaries');
+      localStorage.removeItem('localizations');
+      localStorage.removeItem('settings');
+    }
     location.reload();
   }
 }

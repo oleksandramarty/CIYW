@@ -1,4 +1,5 @@
 using CommonModule.Core;
+using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
@@ -38,10 +39,10 @@ public class DictionaryController: BaseController
     }
     
     [HttpGet("categories")]
-    [ProducesResponseType(typeof(List<CategoryResponse>), 200)]
+    [ProducesResponseType(typeof(List<TreeNodeResponse<CategoryResponse>>), 200)]
     public async Task<IActionResult> GetCategoriesAsync()
     {
-        List<CategoryResponse> response = await mediator.Send(new GetCategoriesRequest());
+        List<TreeNodeResponse<CategoryResponse>> response = await mediator.Send(new GetCategoriesRequest());
         return Ok(response);
     }
 }

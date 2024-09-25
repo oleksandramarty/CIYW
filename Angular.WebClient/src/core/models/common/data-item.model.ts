@@ -4,6 +4,8 @@ export interface IDataItem {
   description: string | undefined;
   isActive: boolean | undefined;
   isImportant: boolean | undefined;
+
+  children: IDataItem[] | undefined;
 }
 
 export class DataItem implements IDataItem {
@@ -13,17 +15,21 @@ export class DataItem implements IDataItem {
   isActive: boolean | undefined;
   isImportant: boolean | undefined;
 
+  children: DataItem[] | undefined;
+
   constructor(
     id: string | undefined,
     name: string | undefined,
     description: string | undefined,
-    isActive: boolean | undefined,
-    isImportant: boolean | undefined
+    isActive: boolean | undefined = true,
+    isImportant: boolean | undefined = false,
+    children: DataItem[] | undefined = []
   ) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.isActive = isActive;
     this.isImportant = isImportant;
+    this.children = children;
   }
 }

@@ -60,7 +60,7 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
     }
     
     public async Task<List<T>> GetListAsync(
-        Expression<Func<T, bool>> condition,  
+        Expression<Func<T, bool>>? condition,  
         CancellationToken cancellationToken,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs)
     {
@@ -74,12 +74,12 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
             }            
         }
         
-        List<T> entities = await query.Where(condition).ToListAsync(cancellationToken);
+        List<T> entities = await (condition == null ? query : query.Where(condition)).ToListAsync(cancellationToken);
         return entities;
     }
     
     public IQueryable<T> GetQueryable(
-        Expression<Func<T, bool>> condition,
+        Expression<Func<T, bool>>? condition,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs)
     {
         IQueryable<T> query = dbSet;
@@ -92,7 +92,7 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
             }            
         }
         
-        return query.Where(condition);
+        return condition == null ? query : query.Where(condition);
     }
     
     public async Task<ListWithIncludeResponse<TResponse>> GetListWithIncludeAsync<TResponse>(

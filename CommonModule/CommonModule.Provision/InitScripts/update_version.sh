@@ -8,8 +8,8 @@ ENV_FOLDER="$BASE_DIR/Angular.WebClient/src/core/environments"
 # List all environment files and extract their names, including environment.ts
 ENV_FILES=$(ls "$ENV_FOLDER" | grep -oE 'environment(\.[^.]+)?\.ts')
 
-# Generate a new build version
-NEW_BUILD_VERSION=$(uuidgen | tr '[:upper:]' '[:lower:]' | tr -d '-')
+# Generate a new build version using the current timestamp
+NEW_BUILD_VERSION=$(date '+%Y%m%d%H%M%S')
 
 # Loop through each environment file and update the build version
 for ENV_FILE in $ENV_FILES;

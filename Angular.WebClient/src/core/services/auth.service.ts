@@ -23,7 +23,7 @@ export class AuthService {
   }
 
   get isAuthorized$(): Observable<boolean> | undefined {
-    return this._token$?.pipe(map(token => token !== null));
+    return this._token$?.pipe(map(token => !!token));
   }
 
   constructor(

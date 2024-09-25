@@ -9,15 +9,15 @@ namespace CommonModule.Facade
         private static readonly string version;
         private static readonly string versionFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "version.txt");
 
-        static VersionGenerator()
+    static VersionGenerator()
+    {
+        if (!File.Exists(versionFilePath))
         {
-            if (!File.Exists(versionFilePath))
-            {
-                throw new VersionException();
-            }
-            
-            version = File.ReadAllText(versionFilePath);
+            throw new VersionException();
         }
+        
+        version = File.ReadLines(versionFilePath).First();
+    }
         
         public static string GetVersion()
         {

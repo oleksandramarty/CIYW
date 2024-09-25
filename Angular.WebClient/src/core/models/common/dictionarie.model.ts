@@ -1,15 +1,14 @@
 import { DataItem, IDataItem } from "./data-item.model";
 import { ILocaleResponse, LocaleResponse } from "../../api-clients/localizations-client";
 import {
-  CategoryResponse,
   CountryResponse,
   CurrencyResponse,
-  ICategoryResponse,
   ICountryResponse,
   ICurrencyResponse,
-  ISiteSettingsResponse, SiteSettingsResponse
+  ISiteSettingsResponse, ITreeNodeResponseOfCategoryResponse, SiteSettingsResponse, TreeNodeResponseOfCategoryResponse
 } from "../../api-clients/dictionaries-client";
 import {environment} from "../../environments/environment";
+import {LocalStorageService} from "../../services/local-storage.service";
 
 export interface IKeyValue {
   key: string | undefined;
@@ -85,7 +84,7 @@ export class DictionaryDataItems implements IDictionaryDataItems {
 export interface IDictionary {
   countries: ICountryResponse[] | undefined;
   currencies: ICurrencyResponse[] | undefined;
-  categories: ICategoryResponse[] | undefined;
+  categories: ITreeNodeResponseOfCategoryResponse[] | undefined;
   locales: ILocaleResponse[] | undefined;
 
   dataItems: IDictionaryDataItems | undefined;
@@ -98,14 +97,16 @@ export interface IDictionary {
 export class Dictionary implements IDictionary {
   private _countries: CountryResponse[] | undefined;
   private _currencies: CurrencyResponse[] | undefined;
-  private _categories: CategoryResponse[] | undefined;
+  private _categories: TreeNodeResponseOfCategoryResponse[] | undefined;
   private _locales: LocaleResponse[] | undefined;
 
   private _dataItems: DictionaryDataItems | undefined;
   private _siteSettings: SiteSettingsResponse | undefined;
   private _buildVersion: string | undefined;
 
-  constructor() {}
+  constructor(
+      private readonly localStorageService: LocalStorageService
+  ) {}
 
   get countries(): CountryResponse[] | undefined {
     return this._countries;
@@ -114,6 +115,7 @@ export class Dictionary implements IDictionary {
   set countries(value: CountryResponse[] | undefined) {
     if (this._countries === undefined || value !== undefined) {
       this._countries = value;
+      this._updateCache();
     }
   }
 
@@ -124,16 +126,18 @@ export class Dictionary implements IDictionary {
   set currencies(value: CurrencyResponse[] | undefined) {
     if (this._currencies === undefined || value !== undefined) {
       this._currencies = value;
+      this._updateCache();
     }
   }
 
-  get categories(): CategoryResponse[] | undefined {
+  get categories(): TreeNodeResponseOfCategoryResponse[] | undefined {
     return this._categories;
   }
 
-  set categories(value: CategoryResponse[] | undefined) {
+  set categories(value: TreeNodeResponseOfCategoryResponse[] | undefined) {
     if (this._categories === undefined || value !== undefined) {
       this._categories = value;
+      this._updateCache();
     }
   }
 
@@ -144,6 +148,7 @@ export class Dictionary implements IDictionary {
   set locales(value: LocaleResponse[] | undefined) {
     if (this._locales === undefined || value !== undefined) {
       this._locales = value;
+      this._updateCache();
     }
   }
 
@@ -154,6 +159,7 @@ export class Dictionary implements IDictionary {
   set dataItems(value: DictionaryDataItems | undefined) {
     if (this._dataItems === undefined || value !== undefined) {
       this._dataItems = value;
+      this._updateCache();
     }
   }
 
@@ -164,6 +170,7 @@ export class Dictionary implements IDictionary {
   set siteSettings(value: SiteSettingsResponse | undefined) {
     if (this._siteSettings === undefined || value !== undefined) {
       this._siteSettings = value;
+      this._updateCache();
     }
   }
 
@@ -174,6 +181,7 @@ export class Dictionary implements IDictionary {
   set buildVersion(value: string | undefined) {
     if (this._buildVersion === undefined || value !== undefined) {
       this._buildVersion = value;
+      this._updateCache();
     }
   }
 
@@ -182,10 +190,12 @@ export class Dictionary implements IDictionary {
       this.dataItems = new DictionaryDataItems();
     }
 
-    this.dataItems.countries = this.countries?.map(country => new DataItem(String(country.id), country.titleEn, country.title, country.isActive, false));
-    this.dataItems.currencies = this.currencies?.map(currency => new DataItem(String(currency.id), currency.titleEn, `${currency.code} - ${currency.title}`, currency.isActive, false));
-    this.dataItems.categories = this.categories?.map(category => new DataItem(String(category.id), category.title, '', category.isActive, false));
-    this.dataItems.locales = this.locales?.map(locale => new DataItem(String(locale.id), locale.title, locale.titleEn, locale.isActive, false));
+    this.dataItems.countries = this.countries?.map(country => new DataItem(String(country.id), country.titleEn, country.title));
+    this.dataItems.currencies = this.currencies?.map(currency => new DataItem(String(currency.id), currency.titleEn, `${currency.code} - ${currency.title}`));
+    this.dataItems.categories = this._mapCategories(this.categories || []);
+    this.dataItems.locales = this.locales?.map(locale => new DataItem(String(locale.id), locale.title, locale.titleEn));
+
+    this._updateCache();
   }
 
   public isLoaded(): boolean {
@@ -203,5 +213,25 @@ export class Dictionary implements IDictionary {
       this.dataItems.categories &&
       this.dataItems.locales
     );
+  }
+
+  private _updateCache(): void {
+    this.localStorageService.setItem('dictionaries', this);
+  }
+
+  private _mapCategories(categories: TreeNodeResponseOfCategoryResponse[]): DataItem[] {
+    return categories.map(category => this._mapCategory(category));
+  }
+
+  private _mapCategory(category: TreeNodeResponseOfCategoryResponse): DataItem {
+    const dataItem: DataItem = {
+      id: category.node?.id?.toString(),
+      name: category.node?.title,
+      description: category.node?.icon,
+      isActive: category.node?.isActive,
+      isImportant: category.node?.isPositive,
+      children: category.node?.children ? this._mapCategories(category.node.children) : []
+    };
+    return dataItem;
   }
 }

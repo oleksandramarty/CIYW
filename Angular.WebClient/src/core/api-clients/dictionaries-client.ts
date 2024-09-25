@@ -234,7 +234,7 @@ export class DictionaryClient {
         return _observableOf(null as any);
     }
 
-    dictionary_GetCategories(): Observable<CategoryResponse[]> {
+    dictionary_GetCategories(): Observable<TreeNodeResponseOfCategoryResponse[]> {
         let url_ = this.baseUrl + "/api/v1/dictionaries/categories";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -253,14 +253,14 @@ export class DictionaryClient {
                 try {
                     return this.processDictionary_GetCategories(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<CategoryResponse[]>;
+                    return _observableThrow(e) as any as Observable<TreeNodeResponseOfCategoryResponse[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<CategoryResponse[]>;
+                return _observableThrow(response_) as any as Observable<TreeNodeResponseOfCategoryResponse[]>;
         }));
     }
 
-    protected processDictionary_GetCategories(response: HttpResponseBase): Observable<CategoryResponse[]> {
+    protected processDictionary_GetCategories(response: HttpResponseBase): Observable<TreeNodeResponseOfCategoryResponse[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -323,7 +323,7 @@ export class DictionaryClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(CategoryResponse.fromJS(item));
+                    result200!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -695,14 +695,60 @@ export interface ICurrencyResponse extends IBaseIdEntityOfInteger {
     countries: CountryResponse[];
 }
 
+export class TreeNodeResponseOfCategoryResponse implements ITreeNodeResponseOfCategoryResponse {
+    node?: CategoryResponse | undefined;
+    parent?: CategoryResponse | undefined;
+
+    constructor(data?: ITreeNodeResponseOfCategoryResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.node = _data["node"] ? CategoryResponse.fromJS(_data["node"]) : <any>undefined;
+            this.parent = _data["parent"] ? CategoryResponse.fromJS(_data["parent"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TreeNodeResponseOfCategoryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeNodeResponseOfCategoryResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["node"] = this.node ? this.node.toJSON() : <any>undefined;
+        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ITreeNodeResponseOfCategoryResponse {
+    node?: CategoryResponse | undefined;
+    parent?: CategoryResponse | undefined;
+}
+
 export class CategoryResponse extends BaseIdEntityOfInteger implements ICategoryResponse {
     title!: string;
     icon!: string;
     color!: string;
     isActive!: boolean;
+    isPositive!: boolean;
+    parentId?: number | undefined;
+    children!: TreeNodeResponseOfCategoryResponse[];
 
     constructor(data?: ICategoryResponse) {
         super(data);
+        if (!data) {
+            this.children = [];
+        }
     }
 
     override init(_data?: any) {
@@ -712,6 +758,13 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
             this.icon = _data["icon"];
             this.color = _data["color"];
             this.isActive = _data["isActive"];
+            this.isPositive = _data["isPositive"];
+            this.parentId = _data["parentId"];
+            if (Array.isArray(_data["children"])) {
+                this.children = [] as any;
+                for (let item of _data["children"])
+                    this.children!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
+            }
         }
     }
 
@@ -728,6 +781,13 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
         data["icon"] = this.icon;
         data["color"] = this.color;
         data["isActive"] = this.isActive;
+        data["isPositive"] = this.isPositive;
+        data["parentId"] = this.parentId;
+        if (Array.isArray(this.children)) {
+            data["children"] = [];
+            for (let item of this.children)
+                data["children"].push(item.toJSON());
+        }
         super.toJSON(data);
         return data;
     }
@@ -738,6 +798,9 @@ export interface ICategoryResponse extends IBaseIdEntityOfInteger {
     icon: string;
     color: string;
     isActive: boolean;
+    isPositive: boolean;
+    parentId?: number | undefined;
+    children: TreeNodeResponseOfCategoryResponse[];
 }
 
 export class SiteSettingsResponse implements ISiteSettingsResponse {

@@ -13,6 +13,13 @@ Errors encountered             : 0
 ==============
 
 ==============
+Title                          : CATEGORIES
+Total records processed        : 107
+Records already exist          : 0
+Errors encountered             : 0
+==============
+
+==============
 Title                          : LOCALES
 Total records processed        : 7
 Records already exist          : 0
@@ -47,6 +54,6 @@ Records already exist          : 0
 Errors encountered             : 0
 ==============
 
-Provision Start Date           : 2024-09-23 23:43:58
-Provision End Date             : 2024-09-23 23:44:58
-Duration:                      : 60 second(s)
+Provision Start Date           : 2024-09-24 22:34:07
+Provision End Date             : 2024-09-24 22:35:09
+Duration:                      : 62 second(s)

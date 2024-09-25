@@ -38,11 +38,11 @@ export class DictionaryService {
         private readonly dictionaryClient: DictionaryClient,
         private readonly localStorageService: LocalStorageService
     ) {
-        this.dictionaries = new Dictionary();
+        this.dictionaries = new Dictionary(localStorageService);
     }
 
     public initialize(isAuthorized: boolean): void {
-        if (!this.dictionaries || this.dictionaries.isLoaded()) {
+        if (!this.dictionaries || !this.dictionaries.isLoaded()) {
             this.reinitialize(isAuthorized);
         }
     }

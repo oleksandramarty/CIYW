@@ -21,6 +21,45 @@ namespace Dictionaries.Domain.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPositive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Categories", "Dictionaries");
+                });
+
             modelBuilder.Entity("Dictionaries.Domain.Models.Countries.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -96,6 +135,13 @@ namespace Dictionaries.Domain.Migrations
                     b.ToTable("Currencies", "Dictionaries");
                 });
 
+            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.Category", b =>
+                {
+                    b.HasOne("Dictionaries.Domain.Models.Categories.Category", null)
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+                });
+
             modelBuilder.Entity("Dictionaries.Domain.Models.Countries.CountryCurrency", b =>
                 {
                     b.HasOne("Dictionaries.Domain.Models.Countries.Country", "Country")
@@ -113,6 +159,11 @@ namespace Dictionaries.Domain.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("Currency");
+                });
+
+            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.Category", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("Dictionaries.Domain.Models.Countries.Country", b =>
