@@ -1,37 +1,58 @@
-==============
+=================================================
 Title                          : ROLES
 Total records processed        : 4
 Records already exist          : 0
 Errors encountered             : 0
-==============
+=================================================
 
-==============
+=================================================
 Title                          : USERS
 Total records processed        : 7
 Records already exist          : 0
 Errors encountered             : 0
-==============
+=================================================
 
-==============
+=================================================
 Title                          : CATEGORIES
 Total records processed        : 107
 Records already exist          : 0
 Errors encountered             : 0
-==============
+=================================================
 
-==============
+=================================================
+Title                          : COUNTRIES
+Total records processed        : 249
+Records already exist          : 0
+Errors encountered             : 0
+=================================================
+
+=================================================
+Title                          : CURRENCIES
+Total records processed        : 154
+Records already exist          : 0
+Errors encountered             : 0
+=================================================
+
+=================================================
+Title                          : COUNTRY_CURRENCY
+Total records processed        : 253
+Records already exist          : 0
+Errors encountered             : 0
+=================================================
+
+=================================================
 Title                          : LOCALES
 Total records processed        : 7
 Records already exist          : 0
 Errors encountered             : 0
-==============
+=================================================
 
-==============
+=================================================
 Title                          : LOCALIZATIONS
-Total records processed        : 385
+Total records processed        : 1127
 Records already exist          : 0
 Errors encountered             : 0
-==============
+=================================================
 
 Checking localization for English(English)
 Checking localization for Spanish(Español)
@@ -40,20 +61,44 @@ Checking localization for Ukrainian(Українська)
 Checking localization for Russian(Русский)
 Checking localization for German(Deutsch)
 Checking localization for Italian(Italiano)
-==============
+=================================================
 Title                          : CHECK LOCALES LOCALIZATIONS
 Total records processed        : 7
 Records already exist          : 7
 Errors encountered             : 0
-==============
+=================================================
 
-==============
+=================================================
 Title                          : CACHE LOCALIZATIONS
-Total records processed        : 385
+Total records processed        : 1127
 Records already exist          : 0
 Errors encountered             : 0
-==============
+=================================================
 
-Provision Start Date           : 2024-09-24 22:34:07
-Provision End Date             : 2024-09-24 22:35:09
-Duration:                      : 62 second(s)
+Finished caching Categories.
+=================================================
+Title                          : CACHE CATEGORIES
+Total records processed        : 107
+Records already exist          : 0
+Errors encountered             : 0
+=================================================
+
+Finished caching Countries.
+=================================================
+Title                          : CACHE COUNTRIES
+Total records processed        : 249
+Records already exist          : 0
+Errors encountered             : 0
+=================================================
+
+Finished caching Currencies.
+=================================================
+Title                          : CACHE CURRENCIES
+Total records processed        : 154
+Records already exist          : 0
+Errors encountered             : 0
+=================================================
+
+Provision Start Date           : 2024-09-25 21:30:58
+Provision End Date             : 2024-09-25 21:33:05
+Duration:                      : 127 second(s)

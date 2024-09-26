@@ -100,6 +100,9 @@ namespace Dictionaries.Domain.Migrations
 
                     b.HasIndex("CurrencyId");
 
+                    b.HasIndex("CountryId", "CurrencyId")
+                        .IsUnique();
+
                     b.ToTable("CountryCurrencies", "Dictionaries");
                 });
 

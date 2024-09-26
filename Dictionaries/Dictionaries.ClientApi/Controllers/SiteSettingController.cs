@@ -20,7 +20,6 @@ public class SiteSettingController : BaseController
         {
             //TODO set locale if authorized
             Locale = "en",
-            BuildVersion = VersionGenerator.GetVersion()
         };
         return Ok(response);
     }

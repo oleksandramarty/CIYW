@@ -327,23 +327,54 @@ export interface IInvalidFieldInfoModel {
     errorMessage: string;
 }
 
-export class LocalizationsResponse implements ILocalizationsResponse {
-    data!: { [key: string]: { [key: string]: string; }; };
+export class BaseVersionEntity implements IBaseVersionEntity {
     version!: string;
 
-    constructor(data?: ILocalizationsResponse) {
+    constructor(data?: IBaseVersionEntity) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.version = _data["version"];
+        }
+    }
+
+    static fromJS(data: any): BaseVersionEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseVersionEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["version"] = this.version;
+        return data;
+    }
+}
+
+export interface IBaseVersionEntity {
+    version: string;
+}
+
+export class LocalizationsResponse extends BaseVersionEntity implements ILocalizationsResponse {
+    data!: { [key: string]: { [key: string]: string; }; };
+
+    constructor(data?: ILocalizationsResponse) {
+        super(data);
         if (!data) {
             this.data = {};
         }
     }
 
-    init(_data?: any) {
+    override init(_data?: any) {
+        super.init(_data);
         if (_data) {
             if (_data["data"]) {
                 this.data = {} as any;
@@ -352,18 +383,17 @@ export class LocalizationsResponse implements ILocalizationsResponse {
                         (<any>this.data)![key] = _data["data"][key] !== undefined ? _data["data"][key] : {};
                 }
             }
-            this.version = _data["version"];
         }
     }
 
-    static fromJS(data: any): LocalizationsResponse {
+    static override fromJS(data: any): LocalizationsResponse {
         data = typeof data === 'object' ? data : {};
         let result = new LocalizationsResponse();
         result.init(data);
         return result;
     }
 
-    toJSON(data?: any) {
+    override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         if (this.data) {
             data["data"] = {};
@@ -372,14 +402,13 @@ export class LocalizationsResponse implements ILocalizationsResponse {
                     (<any>data["data"])[key] = (<any>this.data)[key];
             }
         }
-        data["version"] = this.version;
+        super.toJSON(data);
         return data;
     }
 }
 
-export interface ILocalizationsResponse {
+export interface ILocalizationsResponse extends IBaseVersionEntity {
     data: { [key: string]: { [key: string]: string; }; };
-    version: string;
 }
 
 export class BaseIdEntityOfInteger implements IBaseIdEntityOfInteger {

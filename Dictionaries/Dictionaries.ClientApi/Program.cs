@@ -17,12 +17,12 @@ if (builder.Environment.IsDevelopment())
 builder.AddDatabaseContext<DictionariesDataContext>();
 builder.AddDynamoDB();
 builder.AddSwagger();
-builder.AddCors();
+builder.AddCorsPolicy();
 builder.Services.AddControllers();
 builder.AddAuthorization();
 
 // validators
-builder.AddJwt();
+builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
 builder.Services.AddAutoMapper(config =>
 {
@@ -37,7 +37,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.AddSwagger(builder);
+    app.UseSwaggerUI(builder);
 }
 
 app.UseCors("AllowSpecificOrigins");

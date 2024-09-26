@@ -27,10 +27,6 @@ chmod +x "$SCRIPT_DIR/reinitialize_db.sh"
 chmod +x "$SCRIPT_DIR/reinitialize_db_data.sh"
 "$SCRIPT_DIR/reinitialize_db_data.sh" $isBulkUpdate
 
-# Make each script executable and run it
-chmod +x "$SCRIPT_DIR/InitScripts/update_version.sh"
-"$SCRIPT_DIR/InitScripts/update_version.sh"
-
 # Generate client typescript files for Angular app
 chmod +x "$SCRIPT_DIR/InitScripts/generate_client_ts.sh"
 "$SCRIPT_DIR/InitScripts/generate_client_ts.sh"

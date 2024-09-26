@@ -1,6 +1,6 @@
 using System.Reflection;
 using Autofac;
-using Dictionaries.Mediatr.Mediatr.Categories.Categories.Requests;
+using Dictionaries.Mediatr.Mediatr.Requests;
 using MediatR;
 
 namespace Dictionaries.Mediatr;

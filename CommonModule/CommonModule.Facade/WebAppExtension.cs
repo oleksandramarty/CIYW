@@ -28,23 +28,14 @@ namespace CommonModule.Facade
         public static void AddAuthorization(this WebApplicationBuilder builder)
         {
             builder.Services.AddAuthorization();
-            // builder.Services.AddAuthorization(options =>
-            // {
-            //     options.DefaultPolicy = new AuthorizationPolicyBuilder(AuthSchema.Schema)
-            //         .RequireAuthenticatedUser()
-            //         .Build();
-            // });
         }
         
-        public static void AddJwt(this WebApplicationBuilder builder)
+        public static void AddJwtAuthentication(this WebApplicationBuilder builder)
         {
-            
             byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Jwt:SecretKey"]);
 
             builder.Services.AddAuthentication(options =>
                 {
-                    // options.DefaultAuthenticateScheme = AuthSchema.Schema;
-                    // options.DefaultChallengeScheme = AuthSchema.Schema;
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
@@ -88,7 +79,7 @@ namespace CommonModule.Facade
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     await context.Response.WriteAsync("Internal Server Error");
@@ -103,7 +94,7 @@ namespace CommonModule.Facade
 
         #region Cors
 
-        public static void AddCors(this WebApplicationBuilder builder)
+        public static void AddCorsPolicy(this WebApplicationBuilder builder)
         {
             string origin = builder.Configuration.GetValue<string>("Origin") ?? string.Empty;
 
@@ -115,7 +106,7 @@ namespace CommonModule.Facade
                         builder.WithOrigins(origin.Split(","))
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .AllowCredentials(); // If cookies or authorization headers are needed
+                            .AllowCredentials();
                     });
             });
         }
@@ -124,8 +115,7 @@ namespace CommonModule.Facade
 
         #region Databases
 
-        public static void AddDatabaseContext<TDataContext>(this WebApplicationBuilder builder,
-            string dbName = "Database")
+        public static void AddDatabaseContext<TDataContext>(this WebApplicationBuilder builder, string dbName = "Database")
             where TDataContext : DbContext
         {
             builder.Services.AddDbContext<TDataContext>(options =>
@@ -154,21 +144,21 @@ namespace CommonModule.Facade
             builder.Services.AddScoped(typeof(FilterBuilder<,>));
             builder.Services.AddScoped(typeof(IEntityValidator<>), typeof(EntityValidator<>));
 
-            // Register Generic Repository with TDataContext
             builder.Services.AddScoped(typeof(IReadGenericRepository<,,>), typeof(GenericRepository<,,>));
             builder.Services.AddScoped(typeof(IGenericRepository<,,>), typeof(GenericRepository<,,>));
 
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
             builder.Services.AddScoped<IJwtTokenFactory, JwtTokenFactory>();
 
-            // builder.Services.AddScoped<ITokenRepository, DynamoDbTokenRepository>();
-            //TODO replace to DynamoDB
-
             var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];
             builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
 
             builder.Services.AddScoped<ITokenRepository, RedisTokenRepository>();
             builder.Services.AddScoped<ILocalizationRepository, RedisLocalizationRepository>();
+            builder.Services.AddScoped(typeof(ICacheRepository<,>), typeof(RedisCacheRepository<,>));
+            
+            builder.Services.AddScoped(typeof(IDictionaryRepository<,,,>), typeof(DictionaryRepository<,,,>));
+            builder.Services.AddScoped(typeof(ITreeDictionaryRepository<,,,,>), typeof(TreeDictionaryRepository<,,,,>));
         }
 
         #endregion
@@ -217,13 +207,10 @@ namespace CommonModule.Facade
                         new List<string>()
                     }
                 });
-                // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                // c.IncludeXmlComments(xmlPath);
             });
         }
 
-        public static void AddSwagger(this IApplicationBuilder app, WebApplicationBuilder builder)
+        public static void UseSwaggerUI(this IApplicationBuilder app, WebApplicationBuilder builder)
         {
             string version = builder.Configuration.GetVersion();
             
@@ -237,7 +224,7 @@ namespace CommonModule.Facade
         
         private static string GetVersion(this IConfiguration configuration)
         {
-            return $"{configuration["Microservice:Version"]}-{VersionGenerator.GetVersion()}";
+            return configuration["Microservice:Version"];
         }
 
         #endregion

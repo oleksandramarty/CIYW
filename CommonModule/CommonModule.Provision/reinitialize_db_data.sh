@@ -18,6 +18,15 @@ chmod +x "$SCRIPT_DIR/init_users.sh"
 chmod +x "$SCRIPT_DIR/init_categories.sh"
 "$SCRIPT_DIR/init_categories.sh" $isBulkUpdate
 
+chmod +x "$SCRIPT_DIR/init_countries.sh"
+"$SCRIPT_DIR/init_countries.sh" $isBulkUpdate
+
+chmod +x "$SCRIPT_DIR/init_currencies.sh"
+"$SCRIPT_DIR/init_currencies.sh" $isBulkUpdate
+
+chmod +x "$SCRIPT_DIR/init_country_currency.sh"
+"$SCRIPT_DIR/init_country_currency.sh" $isBulkUpdate
+
 chmod +x "$SCRIPT_DIR/init_locales.sh"
 "$SCRIPT_DIR/init_locales.sh"
 
@@ -29,3 +38,13 @@ chmod +x "$SCRIPT_DIR/check_localizations.sh"
 
 chmod +x "$SCRIPT_DIR/init_cache_localizations.sh"
 "$SCRIPT_DIR/init_cache_localizations.sh"
+
+dictionary_cache=("category" "country" "currency")
+
+for dictionary in "${dictionary_cache[@]}"; do
+  chmod +x "$SCRIPT_DIR/init_cache_dictionary_$dictionary.sh"
+  "$SCRIPT_DIR/init_cache_dictionary_$dictionary.sh"
+done
+
+chmod +x "$SCRIPT_DIR/init_cache_version.sh"
+"$SCRIPT_DIR/init_cache_version.sh"

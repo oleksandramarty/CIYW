@@ -8,6 +8,8 @@ public interface ILocalizationRepository
     Task<string> GetLocalizationDataByKeyAsync(string locale, string key, bool isPublic = false);
     Task<Dictionary<string, string>> GetLocalizationDataByLocaleAsync(string locale, bool isPublic = false);
     Task<Dictionary<string, Dictionary<string, string>>> GetLocalizationDataAllAsync(bool isPublic = false);
+    Task<string> GetLocalizationVersionAsync();
+    Task SetLocalizationVersionAsync();
     Task DeleteLocalizationDataByKeyAsync(string locale, string key);
     Task DeleteLocalizationDataByLocaleAsync(string locale);
     Task DeleteLocalizationDataAllAsync();

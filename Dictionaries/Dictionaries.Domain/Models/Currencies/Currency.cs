@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+using CommonModule.Core.JsonConverter;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 using Dictionaries.Domain.Models.Countries;
@@ -10,7 +12,9 @@ public class Currency: BaseIdEntity<int>, IActivatable
     public string Code { get; set; }
     public string Symbol { get; set; }
     public string TitleEn { get; set; }
+    [JsonConverter(typeof(BooleanJsonConverter))]
     public bool IsActive { get; set; }
     
+    [JsonIgnore]
     public ICollection<CountryCurrency> Countries { get; set; }
 }

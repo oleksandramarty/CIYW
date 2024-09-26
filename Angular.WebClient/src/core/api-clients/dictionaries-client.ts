@@ -26,7 +26,7 @@ export class DictionaryClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    dictionary_GetCountries(): Observable<CountryResponse[]> {
+    dictionary_GetCountries(): Observable<VersionedListOfCountryResponse> {
         let url_ = this.baseUrl + "/api/v1/dictionaries/countries";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -45,14 +45,14 @@ export class DictionaryClient {
                 try {
                     return this.processDictionary_GetCountries(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<CountryResponse[]>;
+                    return _observableThrow(e) as any as Observable<VersionedListOfCountryResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<CountryResponse[]>;
+                return _observableThrow(response_) as any as Observable<VersionedListOfCountryResponse>;
         }));
     }
 
-    protected processDictionary_GetCountries(response: HttpResponseBase): Observable<CountryResponse[]> {
+    protected processDictionary_GetCountries(response: HttpResponseBase): Observable<VersionedListOfCountryResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -112,14 +112,7 @@ export class DictionaryClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CountryResponse.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = VersionedListOfCountryResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -130,7 +123,7 @@ export class DictionaryClient {
         return _observableOf(null as any);
     }
 
-    dictionary_GetCurrencies(): Observable<CurrencyResponse[]> {
+    dictionary_GetCurrencies(): Observable<VersionedListOfCurrencyResponse> {
         let url_ = this.baseUrl + "/api/v1/dictionaries/currencies";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -149,14 +142,14 @@ export class DictionaryClient {
                 try {
                     return this.processDictionary_GetCurrencies(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<CurrencyResponse[]>;
+                    return _observableThrow(e) as any as Observable<VersionedListOfCurrencyResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<CurrencyResponse[]>;
+                return _observableThrow(response_) as any as Observable<VersionedListOfCurrencyResponse>;
         }));
     }
 
-    protected processDictionary_GetCurrencies(response: HttpResponseBase): Observable<CurrencyResponse[]> {
+    protected processDictionary_GetCurrencies(response: HttpResponseBase): Observable<VersionedListOfCurrencyResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -216,14 +209,7 @@ export class DictionaryClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CurrencyResponse.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = VersionedListOfCurrencyResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -234,7 +220,7 @@ export class DictionaryClient {
         return _observableOf(null as any);
     }
 
-    dictionary_GetCategories(): Observable<TreeNodeResponseOfCategoryResponse[]> {
+    dictionary_GetCategories(): Observable<VersionedListOfTreeNodeResponseOfCategoryResponse> {
         let url_ = this.baseUrl + "/api/v1/dictionaries/categories";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -253,14 +239,14 @@ export class DictionaryClient {
                 try {
                     return this.processDictionary_GetCategories(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TreeNodeResponseOfCategoryResponse[]>;
+                    return _observableThrow(e) as any as Observable<VersionedListOfTreeNodeResponseOfCategoryResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TreeNodeResponseOfCategoryResponse[]>;
+                return _observableThrow(response_) as any as Observable<VersionedListOfTreeNodeResponseOfCategoryResponse>;
         }));
     }
 
-    protected processDictionary_GetCategories(response: HttpResponseBase): Observable<TreeNodeResponseOfCategoryResponse[]> {
+    protected processDictionary_GetCategories(response: HttpResponseBase): Observable<VersionedListOfTreeNodeResponseOfCategoryResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -320,14 +306,7 @@ export class DictionaryClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = VersionedListOfTreeNodeResponseOfCategoryResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -535,6 +514,86 @@ export interface IInvalidFieldInfoModel {
     errorMessage: string;
 }
 
+export class BaseVersionEntity implements IBaseVersionEntity {
+    version!: string;
+
+    constructor(data?: IBaseVersionEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.version = _data["version"];
+        }
+    }
+
+    static fromJS(data: any): BaseVersionEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseVersionEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["version"] = this.version;
+        return data;
+    }
+}
+
+export interface IBaseVersionEntity {
+    version: string;
+}
+
+export class VersionedListOfCountryResponse extends BaseVersionEntity implements IVersionedListOfCountryResponse {
+    items!: CountryResponse[];
+
+    constructor(data?: IVersionedListOfCountryResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CountryResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListOfCountryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListOfCountryResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListOfCountryResponse extends IBaseVersionEntity {
+    items: CountryResponse[];
+}
+
 export class BaseIdEntityOfInteger implements IBaseIdEntityOfInteger {
     id!: number;
 
@@ -695,6 +754,94 @@ export interface ICurrencyResponse extends IBaseIdEntityOfInteger {
     countries: CountryResponse[];
 }
 
+export class VersionedListOfCurrencyResponse extends BaseVersionEntity implements IVersionedListOfCurrencyResponse {
+    items!: CurrencyResponse[];
+
+    constructor(data?: IVersionedListOfCurrencyResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CurrencyResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListOfCurrencyResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListOfCurrencyResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListOfCurrencyResponse extends IBaseVersionEntity {
+    items: CurrencyResponse[];
+}
+
+export class VersionedListOfTreeNodeResponseOfCategoryResponse extends BaseVersionEntity implements IVersionedListOfTreeNodeResponseOfCategoryResponse {
+    items!: TreeNodeResponseOfCategoryResponse[];
+
+    constructor(data?: IVersionedListOfTreeNodeResponseOfCategoryResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListOfTreeNodeResponseOfCategoryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListOfTreeNodeResponseOfCategoryResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListOfTreeNodeResponseOfCategoryResponse extends IBaseVersionEntity {
+    items: TreeNodeResponseOfCategoryResponse[];
+}
+
 export class TreeNodeResponseOfCategoryResponse implements ITreeNodeResponseOfCategoryResponse {
     node?: CategoryResponse | undefined;
     parent?: CategoryResponse | undefined;
@@ -805,7 +952,6 @@ export interface ICategoryResponse extends IBaseIdEntityOfInteger {
 
 export class SiteSettingsResponse implements ISiteSettingsResponse {
     locale!: string;
-    buildVersion!: string;
 
     constructor(data?: ISiteSettingsResponse) {
         if (data) {
@@ -819,7 +965,6 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
     init(_data?: any) {
         if (_data) {
             this.locale = _data["locale"];
-            this.buildVersion = _data["buildVersion"];
         }
     }
 
@@ -833,14 +978,12 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["locale"] = this.locale;
-        data["buildVersion"] = this.buildVersion;
         return data;
     }
 }
 
 export interface ISiteSettingsResponse {
     locale: string;
-    buildVersion: string;
 }
 
 export class ApiException extends Error {

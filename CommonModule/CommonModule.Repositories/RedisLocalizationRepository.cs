@@ -123,6 +123,18 @@ public class RedisLocalizationRepository : ILocalizationRepository
         return data;
     }
 
+    public async Task<string> GetLocalizationVersionAsync()
+    {
+        string redisKey = $"{instanceName}:version";
+        return await database.StringGetAsync(redisKey);
+    }
+    
+    public async Task SetLocalizationVersionAsync()
+    {
+        string redisKey = $"{instanceName}:version:localization";
+        await database.StringSetAsync(redisKey, $"{DateTime.UtcNow:yyyyMMddHHmmss}");
+    }
+
     public async Task DeleteLocalizationDataByKeyAsync(string locale, string key)
     {
         string redisKeyPublic = $"{this.instanceName}:{locale}:{key}:1";

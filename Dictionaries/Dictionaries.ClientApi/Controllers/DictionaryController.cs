@@ -3,7 +3,7 @@ using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
-using Dictionaries.Mediatr.Mediatr.Categories.Categories.Requests;
+using Dictionaries.Mediatr.Mediatr.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,26 +23,26 @@ public class DictionaryController: BaseController
     }
     
     [HttpGet("countries")]
-    [ProducesResponseType(typeof(List<CountryResponse>), 200)]
+    [ProducesResponseType(typeof(VersionedList<CountryResponse>), 200)]
     public async Task<IActionResult> GetCountriesAsync()
     {
-        List<CountryResponse> response = await mediator.Send(new GetCountriesRequest());
+        VersionedList<CountryResponse> response = await mediator.Send(new GetCountriesRequest());
         return Ok(response);
     }
     
     [HttpGet("currencies")]
-    [ProducesResponseType(typeof(List<CurrencyResponse>), 200)]
+    [ProducesResponseType(typeof(VersionedList<CurrencyResponse>), 200)]
     public async Task<IActionResult> GetCurrenciesAsync()
     {
-        List<CurrencyResponse> response = await mediator.Send(new GetCurrenciesRequest());
+        VersionedList<CurrencyResponse> response = await mediator.Send(new GetCurrenciesRequest());
         return Ok(response);
     }
     
     [HttpGet("categories")]
-    [ProducesResponseType(typeof(List<TreeNodeResponse<CategoryResponse>>), 200)]
+    [ProducesResponseType(typeof(VersionedList<TreeNodeResponse<CategoryResponse>>), 200)]
     public async Task<IActionResult> GetCategoriesAsync()
     {
-        List<TreeNodeResponse<CategoryResponse>> response = await mediator.Send(new GetCategoriesRequest());
+        VersionedList<TreeNodeResponse<CategoryResponse>> response = await mediator.Send(new GetCategoriesRequest());
         return Ok(response);
     }
 }

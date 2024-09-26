@@ -57,3 +57,21 @@ isBulkUpdate=false
 ```shell
 #Check DataBaseScripts Arrays for microservices
 ```
+### Get CountryCurrency csv file from DatabaseScripts
+```sql
+SELECT
+    CO."Id" || ';' || CO."Code" || ';' || CU."Id" || ';' || CU."Code" || ';' AS Result
+FROM "CIYW_DictionaryDb"."Dictionaries"."CountryCurrencies" AS CC
+         JOIN "CIYW_DictionaryDb"."Dictionaries"."Countries" CO ON CO."Id" = CC."CountryId"
+         JOIN "CIYW_DictionaryDb"."Dictionaries"."Currencies" CU ON CU."Id" = CC."CurrencyId"
+ORDER BY CO."Id", CU."Id";
+```
+
+### GET Localization default key
+```sql
+SELECT
+    "Id" || ';en;' || "Key" || ';' AS Result
+FROM "CIYW_LocalizationDb"."Locales"."Localizations"
+WHERE "LocaleId" = 1
+ORDER BY "Id";
+```

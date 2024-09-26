@@ -62,7 +62,7 @@ do
   # Set the localization in Redis using the new key pattern
   if redis-cli -h $redis_host -p $redis_port SET "localization_cache:$localeCode:$key:$isPublicValue" "$value"; then
     percentage=$((currentIndex * 100 / totalCount))
-    echo "Redis cached: $currentIndex/$totalCount = $percentage%"
+    echo "Redis cached localizations: $currentIndex/$totalCount = $percentage%"
   else
     ((errorAdded++))
     echo "Error caching localization with ID $id." >> "$log_file"

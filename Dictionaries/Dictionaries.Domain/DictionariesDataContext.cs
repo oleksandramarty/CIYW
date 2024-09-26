@@ -32,6 +32,10 @@ namespace Dictionaries.Domain
                       .WithOne(cc => cc.Currency)
                       .HasForeignKey(cc => cc.CurrencyId);
             });
+            
+            modelBuilder.Entity<CountryCurrency>()
+                .HasIndex(l => new { l.CountryId, l.CurrencyId })
+                .IsUnique();
 
             modelBuilder.Entity<CountryCurrency>(entity =>
             {

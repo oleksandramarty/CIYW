@@ -25,7 +25,7 @@ public class GetLocalizationsRequestHandler: IRequestHandler<GetLocalizationsReq
 
         LocalizationsResponse response = new LocalizationsResponse();
         response.Data = await this.localizationRepository.GetLocalizationDataAllAsync(!isAuthenticated);
-        response.Version = VersionGenerator.GetVersion();
+        response.Version = await this.localizationRepository.GetLocalizationVersionAsync();
         
         return response;
     }
