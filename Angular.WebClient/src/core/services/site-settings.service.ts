@@ -4,8 +4,6 @@ import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../environments/environment";
 import {take, tap} from "rxjs";
 import {handleApiError} from "../helpers/rxjs.helper";
-import {LocalizationClient} from "../api-clients/localizations-client";
-import {DictionaryService} from "./dictionary.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
@@ -34,7 +32,7 @@ export class SiteSettingsService {
     }
 
     public initialize(): void {
-        if (!this.siteSettings || this.siteSettings?.buildVersion !== environment.buildVersion) {
+        if (!this.siteSettings?.locale ) {
             this.reinitialize();
         }
     }

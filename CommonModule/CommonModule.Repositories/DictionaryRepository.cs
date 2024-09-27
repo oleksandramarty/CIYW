@@ -1,4 +1,5 @@
 using AutoMapper;
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Responses.Base;
@@ -26,23 +27,42 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
         this.dictionaryRepository = dictionaryRepository;
     }
 
-    public async Task<VersionedList<TResponse>> GetDictionaryAsync(CancellationToken cancellationToken)
+    public async Task<VersionedList<TResponse>> GetDictionaryAsync(string? count, string? version, CancellationToken cancellationToken)
     {
+        BaseVersionEntity baseVersionEntity = await this.cacheRepository.GetCacheVersionAsync();
+        
+        if (
+            !string.IsNullOrEmpty(version) && 
+            version.Equals(baseVersionEntity.Version) && 
+            !string.IsNullOrEmpty(count) && 
+            count.Equals(baseVersionEntity.Count))
+        {
+            return new VersionedList<TResponse>
+            {
+                Items = new List<TResponse>(),
+                Version = baseVersionEntity.Version,
+                Count = baseVersionEntity.Count
+            };
+        }
+        
         var items = await this.cacheRepository.GetItemsFromCacheAsync();
     
         if (items == null || items.Count == 0)
         {
             items = await dictionaryRepository.GetListAsync(null, cancellationToken);
             await this.cacheRepository.ReinitializeDictionaryAsync(items);
-            await this.cacheRepository.SetCacheVersionAsync();
+            await this.cacheRepository.SetCacheVersionAsync(new BaseVersionEntity
+            {
+                Count = items.Count.ToString(),
+                Version = DateTime.UtcNow.ToString("yyyyMMddHHmmss")
+            });
         }
-    
-        var currentVersion = await this.cacheRepository.GetCacheVersionAsync();
     
         return new VersionedList<TResponse>
         {
             Items = items.Where(i => i.IsActive).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
-            Version = currentVersion
+            Version = baseVersionEntity.Version,
+            Count = baseVersionEntity.Count
         };
     }
 }

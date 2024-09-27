@@ -16,31 +16,53 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
     private readonly ICacheRepository<TId, TEntity> cacheRepository;
     private readonly IReadGenericRepository<TId, TEntity, TDataContext> dictionaryRepository;
     
+    private readonly IKafkaMessageService kafkaMessageService;
+    
     public TreeDictionaryRepository(
         IMapper mapper,
         IEntityValidator<TDataContext> entityValidator,
         ICacheRepository<TId, TEntity> cacheRepository,
-        IReadGenericRepository<TId, TEntity, TDataContext> dictionaryRepository
+        IReadGenericRepository<TId, TEntity, TDataContext> dictionaryRepository,
+        IKafkaMessageService kafkaMessageService
         )
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.cacheRepository = cacheRepository;
         this.dictionaryRepository = dictionaryRepository;
+        this.kafkaMessageService = kafkaMessageService;
     }
     
-    public async Task<VersionedList<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(CancellationToken cancellationToken)
+    public async Task<VersionedList<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(string? count, string? version, CancellationToken cancellationToken)
     {
+        BaseVersionEntity baseVersionEntity = await this.cacheRepository.GetCacheVersionAsync();
+        
+        if (
+            !string.IsNullOrEmpty(version) && 
+            version.Equals(baseVersionEntity.Version) && 
+            !string.IsNullOrEmpty(count) && 
+            count.Equals(baseVersionEntity.Count))
+        {
+            return new VersionedList<TreeNodeResponse<TResponse>>
+            {
+                Items = new List<TreeNodeResponse<TResponse>>(),
+                Version = baseVersionEntity.Version,
+                Count = baseVersionEntity.Count
+            };
+        }
+        
         var items = await this.cacheRepository.GetItemsFromCacheAsync();
     
-        if (items == null || items.Count == 0)
+        if (items.Count == 0)
         {
             items = await dictionaryRepository.GetListAsync(null, cancellationToken);
             await this.cacheRepository.ReinitializeDictionaryAsync(items);
-            await this.cacheRepository.SetCacheVersionAsync();
+            await this.cacheRepository.SetCacheVersionAsync(new BaseVersionEntity
+            {
+                Count = items.Count.ToString(),
+                Version = DateTime.UtcNow.ToString("yyyyMMddHHmmss")
+            });
         }
-    
-        var currentVersion = await this.cacheRepository.GetCacheVersionAsync();
     
         return new VersionedList<TreeNodeResponse<TResponse>>
         {
@@ -48,7 +70,8 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
                 items.Where(c => c.ParentId == null && c.IsActive), 
                 items.Where(c => c.ParentId != null && c.IsActive), 
                 cancellationToken),
-            Version = currentVersion
+            Version = baseVersionEntity.Version,
+            Count = baseVersionEntity.Count
         };
     }
 

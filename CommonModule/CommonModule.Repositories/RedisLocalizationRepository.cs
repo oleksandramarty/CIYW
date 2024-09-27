@@ -1,4 +1,6 @@
+using System.Text.RegularExpressions;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Common.BaseInterfaces;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
@@ -11,7 +13,7 @@ public class RedisLocalizationRepository : ILocalizationRepository
     private readonly string instanceName;
 
     private readonly string fallbackLocale = "en";
-
+    
     public RedisLocalizationRepository(
         IConnectionMultiplexer connectionMultiplexer,
         IConfiguration configuration)
@@ -123,10 +125,18 @@ public class RedisLocalizationRepository : ILocalizationRepository
         return data;
     }
 
-    public async Task<string> GetLocalizationVersionAsync()
+    public async Task<BaseVersionEntity> GetLocalizationVersionAsync()
     {
-        string redisKey = $"{instanceName}:version";
-        return await database.StringGetAsync(redisKey);
+        var redisKey = $"{instanceName}:version:localization";
+        string version = await database.StringGetAsync(redisKey);
+        redisKey = $"{instanceName}:count:localization";
+        string count = await database.StringGetAsync(redisKey);
+
+        return new BaseVersionEntity
+        {
+            Count = count?.Replace(" ", ""),
+            Version = version
+        };
     }
     
     public async Task SetLocalizationVersionAsync()

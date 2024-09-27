@@ -29,7 +29,7 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
 
     public async Task Handle(AuthForgotRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetUserIdAsync();
+        Guid userId = await this.GetCurrentUserIdAsync();
         User user = await this.userRepository.GetByIdAsync(userId, cancellationToken);
         this.entityValidator.ValidateExist<User, Guid>(user, userId);
 

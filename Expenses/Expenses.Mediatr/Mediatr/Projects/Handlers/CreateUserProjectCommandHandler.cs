@@ -28,7 +28,7 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
     
     public async Task Handle(CreateUserProjectCommand command, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetUserIdAsync();
+        Guid userId = await this.GetCurrentUserIdAsync();
         int count = await this.userProjectRepository.GetQueryable(
             p => p.CreatedUserId == userId).CountAsync(cancellationToken);
 

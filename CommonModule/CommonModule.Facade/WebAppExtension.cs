@@ -1,23 +1,22 @@
+using System.Text;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
+using AuditTrail.Business;
 using CommonModule.Core.Filters;
+using CommonModule.Core.Kafka;
 using CommonModule.Interfaces;
 using CommonModule.Repositories;
 using CommonModule.Repositories.Builders;
 using CommonModule.Shared.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
-using OpenApiInfo = Microsoft.OpenApi.Models.OpenApiInfo;
-using OpenApiSecurityRequirement = Microsoft.OpenApi.Models.OpenApiSecurityRequirement;
-using OpenApiSecurityScheme = Microsoft.OpenApi.Models.OpenApiSecurityScheme;
 
 namespace CommonModule.Facade
 {
@@ -152,11 +151,17 @@ namespace CommonModule.Facade
 
             var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];
             builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
-
+            
+            // Register Kafka services
+            builder.Services.AddScoped<KafkaProducer>();
+            builder.Services.AddScoped<IKafkaMessageService, KafkaMessageService>();
+            
+            // Redis
             builder.Services.AddScoped<ITokenRepository, RedisTokenRepository>();
             builder.Services.AddScoped<ILocalizationRepository, RedisLocalizationRepository>();
             builder.Services.AddScoped(typeof(ICacheRepository<,>), typeof(RedisCacheRepository<,>));
-            
+            builder.Services.AddScoped(typeof(ICacheBaseRepository<>), typeof(RedisCacheBaseRepository<>));
+
             builder.Services.AddScoped(typeof(IDictionaryRepository<,,,>), typeof(DictionaryRepository<,,,>));
             builder.Services.AddScoped(typeof(ITreeDictionaryRepository<,,,,>), typeof(TreeDictionaryRepository<,,,,>));
         }

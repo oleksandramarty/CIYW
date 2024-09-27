@@ -33,6 +33,8 @@ import {API_BASE_URL_Dictionaries, DictionaryClient} from "../../../core/api-cli
 import {BaseInitializationService} from "../../../core/services/base-initialization.service";
 import {SiteSettingsService} from "../../../core/services/site-settings.service";
 import {DictionaryService} from "../../../core/services/dictionary.service";
+import {API_BASE_URL_AuditTrail} from "../../../core/api-clients/audit-trail-client";
+import {ExpensesAreaComponent} from "../expenses-area/expenses-area/expenses-area.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -53,12 +55,12 @@ const routes: Routes = [
   { path: 'profile', pathMatch: 'full', redirectTo: 'in-development' },
   { path: 'settings', pathMatch: 'full', redirectTo: 'in-development' },
   { path: 'notifications', pathMatch: 'full', redirectTo: 'in-development' },
-  // {
-  //   path: '',
-  //   loadChildren: () => import('../personal-area/personal-area.module')
-  //     .then(m => m.PersonalAreaModule),
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: '',
+    loadChildren: () => import('../expenses-area/expenses-area.module')
+      .then(m => m.ExpensesAreaModule),
+    canActivate: [AuthGuard]
+  },
   {
     path: 'auth',
     loadChildren: () => import('../auth-area/auth-area.module')
@@ -99,10 +101,12 @@ const routes: Routes = [
     LocalizationClient,
     ExpenseClient,
     DictionaryClient,
+    // AuditTrailClient,
     {provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl},
     {provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl},
     {provide: API_BASE_URL_Expenses, useValue: environment.apiExpensesUrl},
     {provide: API_BASE_URL_Dictionaries, useValue: environment.apiDictionariesUrl},
+    {provide: API_BASE_URL_AuditTrail, useValue: environment.apiAuditTrailUrl},
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

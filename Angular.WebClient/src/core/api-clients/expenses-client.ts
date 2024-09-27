@@ -26,6 +26,199 @@ export class ExpenseClient {
         this.baseUrl = baseUrl ?? "";
     }
 
+    expense_CreateOrUpdateExpense(request: CreateOrUpdateExpenseCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/v1/expenses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processExpense_CreateOrUpdateExpense(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processExpense_CreateOrUpdateExpense(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processExpense_CreateOrUpdateExpense(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    expense_RemoveExpense(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/v1/expenses/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processExpense_RemoveExpense(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processExpense_RemoveExpense(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processExpense_RemoveExpense(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     userProject_GetAllowedProjects(): Observable<UserAllowedProjectResponse[]> {
         let url_ = this.baseUrl + "/api/v1/localizations/allowed";
         url_ = url_.replace(/[?&]$/, "");
@@ -431,6 +624,70 @@ export interface IInvalidFieldInfoModel {
     errorMessage: string;
 }
 
+export class CreateOrUpdateExpenseCommand implements ICreateOrUpdateExpenseCommand {
+    id?: string | undefined;
+    title!: string;
+    description?: string | undefined;
+    amount!: number;
+    date!: Date;
+    categoryId!: number;
+    userProjectId!: string;
+    balanceId!: string;
+
+    constructor(data?: ICreateOrUpdateExpenseCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.amount = _data["amount"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.categoryId = _data["categoryId"];
+            this.userProjectId = _data["userProjectId"];
+            this.balanceId = _data["balanceId"];
+        }
+    }
+
+    static fromJS(data: any): CreateOrUpdateExpenseCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrUpdateExpenseCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["amount"] = this.amount;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["categoryId"] = this.categoryId;
+        data["userProjectId"] = this.userProjectId;
+        data["balanceId"] = this.balanceId;
+        return data;
+    }
+}
+
+export interface ICreateOrUpdateExpenseCommand {
+    id?: string | undefined;
+    title: string;
+    description?: string | undefined;
+    amount: number;
+    date: Date;
+    categoryId: number;
+    userProjectId: string;
+    balanceId: string;
+}
+
 export class BaseIdEntityOfGuid implements IBaseIdEntityOfGuid {
     id!: string;
 
@@ -670,19 +927,14 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
     title!: string;
     description?: string | undefined;
     amount!: number;
-    balanceId?: string | undefined;
+    balanceId!: string;
     date!: Date;
-    userCategoryId?: string | undefined;
-    userCategory!: UserCategoryResponse;
-    categoryId?: number | undefined;
+    categoryId!: number;
     userProjectId!: string;
     createdUserId!: string;
 
     constructor(data?: IExpenseResponse) {
         super(data);
-        if (!data) {
-            this.userCategory = new UserCategoryResponse();
-        }
     }
 
     override init(_data?: any) {
@@ -693,8 +945,6 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
             this.amount = _data["amount"];
             this.balanceId = _data["balanceId"];
             this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.userCategoryId = _data["userCategoryId"];
-            this.userCategory = _data["userCategory"] ? UserCategoryResponse.fromJS(_data["userCategory"]) : new UserCategoryResponse();
             this.categoryId = _data["categoryId"];
             this.userProjectId = _data["userProjectId"];
             this.createdUserId = _data["createdUserId"];
@@ -715,8 +965,6 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
         data["amount"] = this.amount;
         data["balanceId"] = this.balanceId;
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["userCategoryId"] = this.userCategoryId;
-        data["userCategory"] = this.userCategory ? this.userCategory.toJSON() : <any>undefined;
         data["categoryId"] = this.categoryId;
         data["userProjectId"] = this.userProjectId;
         data["createdUserId"] = this.createdUserId;
@@ -729,58 +977,11 @@ export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
     title: string;
     description?: string | undefined;
     amount: number;
-    balanceId?: string | undefined;
+    balanceId: string;
     date: Date;
-    userCategoryId?: string | undefined;
-    userCategory: UserCategoryResponse;
-    categoryId?: number | undefined;
+    categoryId: number;
     userProjectId: string;
     createdUserId: string;
-}
-
-export class UserCategoryResponse extends BaseDateTimeEntityOfGuid implements IUserCategoryResponse {
-    userId!: string;
-    title!: string;
-    icon!: string;
-    color!: string;
-
-    constructor(data?: IUserCategoryResponse) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.userId = _data["userId"];
-            this.title = _data["title"];
-            this.icon = _data["icon"];
-            this.color = _data["color"];
-        }
-    }
-
-    static override fromJS(data: any): UserCategoryResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserCategoryResponse();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userId"] = this.userId;
-        data["title"] = this.title;
-        data["icon"] = this.icon;
-        data["color"] = this.color;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IUserCategoryResponse extends IBaseDateTimeEntityOfGuid {
-    userId: string;
-    title: string;
-    icon: string;
-    color: string;
 }
 
 export class CreateUserProjectCommand implements ICreateUserProjectCommand {

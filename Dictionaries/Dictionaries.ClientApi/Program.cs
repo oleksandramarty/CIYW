@@ -1,7 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommonModule.Facade;
-using Dictionaries.Business;
 using Dictionaries.Domain;
 using Dictionaries.Mediatr;
 using FluentValidation;

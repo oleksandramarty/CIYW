@@ -25,4 +25,6 @@ public interface IReadGenericRepository<TId, T, TDataContext>
         BaseFilterRequest<TId> filter,
         CancellationToken cancellationToken,
         params Func<IQueryable<T>, IQueryable<T>>[]? includeFuncs);
+
+    Task RemoveByIdAsync(TId id, CancellationToken cancellationToken);
 }

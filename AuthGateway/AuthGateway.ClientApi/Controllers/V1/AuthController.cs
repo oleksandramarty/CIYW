@@ -20,7 +20,7 @@ public class AuthController: BaseController
     
     [HttpPost("signIn")]
     [ProducesResponseType(typeof(JwtTokenResponse), 200)]
-    public async Task<IActionResult> SignInAsync(AuthSignInRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> SignInAsync([FromBody]AuthSignInRequest request, CancellationToken cancellationToken)
     {
         JwtTokenResponse response = await this.mediator.Send(request, cancellationToken);
         return Ok(response);
@@ -36,7 +36,7 @@ public class AuthController: BaseController
     
     [HttpPost("signUp")]
     [ProducesResponseType(typeof(void), 200)]
-    public async Task<IActionResult> SignUpAsync(AuthSignUpCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> SignUpAsync([FromBody]AuthSignUpCommand command, CancellationToken cancellationToken)
     {
         await this.mediator.Send(command, cancellationToken);
         return Ok();

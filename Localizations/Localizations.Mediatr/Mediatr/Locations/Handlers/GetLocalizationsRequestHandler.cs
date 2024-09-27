@@ -1,5 +1,6 @@
 using CommonModule.Facade;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Responses.Localizations;
 using Localizations.Mediatr.Mediatr.Locations.Requests;
 using MediatR;
@@ -23,9 +24,29 @@ public class GetLocalizationsRequestHandler: IRequestHandler<GetLocalizationsReq
     {
         bool isAuthenticated = this.authRepository.IsAuthenticated();
 
+        BaseVersionEntity baseVersionEntity = await this.localizationRepository.GetLocalizationVersionAsync();
+
         LocalizationsResponse response = new LocalizationsResponse();
-        response.Data = await this.localizationRepository.GetLocalizationDataAllAsync(!isAuthenticated);
-        response.Version = await this.localizationRepository.GetLocalizationVersionAsync();
+        
+        var currentCount = isAuthenticated ? 
+            baseVersionEntity.Count?.Split(":").Select(int.Parse).Max().ToString() :
+            baseVersionEntity.Count?.Split(":").Select(int.Parse).Min().ToString();
+        
+        response.Version = baseVersionEntity.Version;
+        response.Count = currentCount;
+        
+        if (
+            !string.IsNullOrEmpty(request.Version) && 
+            request.Version.Equals(baseVersionEntity.Version) && 
+            !string.IsNullOrEmpty(request.Count) &&
+            request.Count.Equals(currentCount))
+        {
+            response.Data = new Dictionary<string, Dictionary<string, string>>();
+        }
+        else
+        {
+            response.Data = await this.localizationRepository.GetLocalizationDataAllAsync(!isAuthenticated);
+        }
         
         return response;
     }

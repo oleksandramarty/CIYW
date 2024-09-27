@@ -26,19 +26,23 @@ export class DictionaryClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    dictionary_GetCountries(): Observable<VersionedListOfCountryResponse> {
+    dictionary_GetCountries(request: GetCountriesRequest): Observable<VersionedListOfCountryResponse> {
         let url_ = this.baseUrl + "/api/v1/dictionaries/countries";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDictionary_GetCountries(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -123,19 +127,23 @@ export class DictionaryClient {
         return _observableOf(null as any);
     }
 
-    dictionary_GetCurrencies(): Observable<VersionedListOfCurrencyResponse> {
+    dictionary_GetCurrencies(request: GetCurrenciesRequest): Observable<VersionedListOfCurrencyResponse> {
         let url_ = this.baseUrl + "/api/v1/dictionaries/currencies";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDictionary_GetCurrencies(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -220,19 +228,23 @@ export class DictionaryClient {
         return _observableOf(null as any);
     }
 
-    dictionary_GetCategories(): Observable<VersionedListOfTreeNodeResponseOfCategoryResponse> {
+    dictionary_GetCategories(request: GetCategoriesRequest): Observable<VersionedListOfTreeNodeResponseOfCategoryResponse> {
         let url_ = this.baseUrl + "/api/v1/dictionaries/categories";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDictionary_GetCategories(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -515,7 +527,8 @@ export interface IInvalidFieldInfoModel {
 }
 
 export class BaseVersionEntity implements IBaseVersionEntity {
-    version!: string;
+    count?: string | undefined;
+    version?: string | undefined;
 
     constructor(data?: IBaseVersionEntity) {
         if (data) {
@@ -528,6 +541,7 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     init(_data?: any) {
         if (_data) {
+            this.count = _data["count"];
             this.version = _data["version"];
         }
     }
@@ -541,13 +555,15 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["count"] = this.count;
         data["version"] = this.version;
         return data;
     }
 }
 
 export interface IBaseVersionEntity {
-    version: string;
+    count?: string | undefined;
+    version?: string | undefined;
 }
 
 export class VersionedListOfCountryResponse extends BaseVersionEntity implements IVersionedListOfCountryResponse {
@@ -754,6 +770,33 @@ export interface ICurrencyResponse extends IBaseIdEntityOfInteger {
     countries: CountryResponse[];
 }
 
+export class GetCountriesRequest extends BaseVersionEntity implements IGetCountriesRequest {
+
+    constructor(data?: IGetCountriesRequest) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCountriesRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCountriesRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCountriesRequest extends IBaseVersionEntity {
+}
+
 export class VersionedListOfCurrencyResponse extends BaseVersionEntity implements IVersionedListOfCurrencyResponse {
     items!: CurrencyResponse[];
 
@@ -796,6 +839,33 @@ export class VersionedListOfCurrencyResponse extends BaseVersionEntity implement
 
 export interface IVersionedListOfCurrencyResponse extends IBaseVersionEntity {
     items: CurrencyResponse[];
+}
+
+export class GetCurrenciesRequest extends BaseVersionEntity implements IGetCurrenciesRequest {
+
+    constructor(data?: IGetCurrenciesRequest) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCurrenciesRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCurrenciesRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCurrenciesRequest extends IBaseVersionEntity {
 }
 
 export class VersionedListOfTreeNodeResponseOfCategoryResponse extends BaseVersionEntity implements IVersionedListOfTreeNodeResponseOfCategoryResponse {
@@ -948,6 +1018,33 @@ export interface ICategoryResponse extends IBaseIdEntityOfInteger {
     isPositive: boolean;
     parentId?: number | undefined;
     children: TreeNodeResponseOfCategoryResponse[];
+}
+
+export class GetCategoriesRequest extends BaseVersionEntity implements IGetCategoriesRequest {
+
+    constructor(data?: IGetCategoriesRequest) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCategoriesRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCategoriesRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCategoriesRequest extends IBaseVersionEntity {
 }
 
 export class SiteSettingsResponse implements ISiteSettingsResponse {

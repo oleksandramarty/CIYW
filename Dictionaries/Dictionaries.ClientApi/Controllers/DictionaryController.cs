@@ -22,27 +22,27 @@ public class DictionaryController: BaseController
         this.mediator = mediator;
     }
     
-    [HttpGet("countries")]
+    [HttpPost("countries")]
     [ProducesResponseType(typeof(VersionedList<CountryResponse>), 200)]
-    public async Task<IActionResult> GetCountriesAsync()
+    public async Task<IActionResult> GetCountriesAsync([FromBody]GetCountriesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<CountryResponse> response = await mediator.Send(new GetCountriesRequest());
+        VersionedList<CountryResponse> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
     
-    [HttpGet("currencies")]
+    [HttpPost("currencies")]
     [ProducesResponseType(typeof(VersionedList<CurrencyResponse>), 200)]
-    public async Task<IActionResult> GetCurrenciesAsync()
+    public async Task<IActionResult> GetCurrenciesAsync([FromBody]GetCurrenciesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<CurrencyResponse> response = await mediator.Send(new GetCurrenciesRequest());
+        VersionedList<CurrencyResponse> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
     
-    [HttpGet("categories")]
+    [HttpPost("categories")]
     [ProducesResponseType(typeof(VersionedList<TreeNodeResponse<CategoryResponse>>), 200)]
-    public async Task<IActionResult> GetCategoriesAsync()
+    public async Task<IActionResult> GetCategoriesAsync([FromBody]GetCategoriesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<TreeNodeResponse<CategoryResponse>> response = await mediator.Send(new GetCategoriesRequest());
+        VersionedList<TreeNodeResponse<CategoryResponse>> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }

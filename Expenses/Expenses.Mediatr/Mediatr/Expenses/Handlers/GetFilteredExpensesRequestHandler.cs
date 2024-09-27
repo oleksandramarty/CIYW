@@ -34,7 +34,7 @@ public class GetFilteredExpensesRequestHandler: MediatrAuthBase, IRequestHandler
 
     public async Task<ListWithIncludeResponse<ExpenseResponse>> Handle(GetFilteredExpensesRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetUserIdAsync();
+        Guid userId = await this.GetCurrentUserIdAsync();
         
         UserProject userProject = await this.userProjectRepository.GetAsync(
             up => up.Id == request.UserProjectId,

@@ -11,7 +11,7 @@ db_user="postgres"
 db_password="postgres"
 
 # Array of database names
-dbNames=("CIYW_LocalizationDb" "CIYW_ExpenseDb" "CIYW_UserDb" "CIYW_DictionaryDb")
+dbNames=("CIYW_LocalizationDb" "CIYW_ExpenseDb" "CIYW_UserDb" "CIYW_DictionaryDb" "CIYW_AuditTrailDb")
 
 # Export password to avoid password prompt
 export PGPASSWORD=$db_password

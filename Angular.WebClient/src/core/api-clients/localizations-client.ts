@@ -26,19 +26,23 @@ export class LocalizationClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    localization_GetLocalizations(): Observable<LocalizationsResponse> {
+    localization_GetLocalizations(request: GetLocalizationsRequest): Observable<LocalizationsResponse> {
         let url_ = this.baseUrl + "/api/v1/localizations";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processLocalization_GetLocalizations(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -328,7 +332,8 @@ export interface IInvalidFieldInfoModel {
 }
 
 export class BaseVersionEntity implements IBaseVersionEntity {
-    version!: string;
+    count?: string | undefined;
+    version?: string | undefined;
 
     constructor(data?: IBaseVersionEntity) {
         if (data) {
@@ -341,6 +346,7 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     init(_data?: any) {
         if (_data) {
+            this.count = _data["count"];
             this.version = _data["version"];
         }
     }
@@ -354,13 +360,15 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["count"] = this.count;
         data["version"] = this.version;
         return data;
     }
 }
 
 export interface IBaseVersionEntity {
-    version: string;
+    count?: string | undefined;
+    version?: string | undefined;
 }
 
 export class LocalizationsResponse extends BaseVersionEntity implements ILocalizationsResponse {
@@ -409,6 +417,33 @@ export class LocalizationsResponse extends BaseVersionEntity implements ILocaliz
 
 export interface ILocalizationsResponse extends IBaseVersionEntity {
     data: { [key: string]: { [key: string]: string; }; };
+}
+
+export class GetLocalizationsRequest extends BaseVersionEntity implements IGetLocalizationsRequest {
+
+    constructor(data?: IGetLocalizationsRequest) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetLocalizationsRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetLocalizationsRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetLocalizationsRequest extends IBaseVersionEntity {
 }
 
 export class BaseIdEntityOfInteger implements IBaseIdEntityOfInteger {

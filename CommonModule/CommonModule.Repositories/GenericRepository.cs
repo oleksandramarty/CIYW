@@ -178,4 +178,14 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
         this.dbSet.RemoveRange(entities);
         await this.dataContext.SaveChangesAsync(cancellationToken);
     }
+
+public async Task RemoveByIdAsync(TId id, CancellationToken cancellationToken)
+{
+    var entity = await this.GetByIdAsync(id, cancellationToken);
+    if (entity != null)
+    {
+        this.dbSet.Remove(entity);
+        await this.dataContext.SaveChangesAsync(cancellationToken);
+    }
+}
 }

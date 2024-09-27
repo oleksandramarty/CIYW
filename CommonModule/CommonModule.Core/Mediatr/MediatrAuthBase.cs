@@ -12,7 +12,7 @@ public class MediatrAuthBase
         this.authRepository = authRepository;
     }
 
-    protected async Task<Guid> GetUserIdAsync()
+    protected async Task<Guid> GetCurrentUserIdAsync()
     {
         Guid? userId = await this.authRepository.GetCurrentUserIdAsync();
 

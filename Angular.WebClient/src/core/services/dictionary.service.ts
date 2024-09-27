@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
-import { DictionaryClient } from "../api-clients/dictionaries-client";
+import {
+    DictionaryClient,
+    GetCategoriesRequest,
+    GetCountriesRequest,
+    GetCurrenciesRequest
+} from "../api-clients/dictionaries-client";
 import {catchError, forkJoin, Observable, of, take, tap} from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { handleApiError } from "../helpers/rxjs.helper";
@@ -7,6 +12,7 @@ import {LocaleResponse, LocalizationClient} from "../api-clients/localizations-c
 import { Dictionary } from "../models/common/dictionarie.model";
 import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../environments/environment";
+import {SiteSettingsService} from "./site-settings.service";
 
 @Injectable({
     providedIn: 'root'
@@ -29,14 +35,15 @@ export class DictionaryService {
     get currentLocale(): LocaleResponse | undefined {
         return this.dictionaries?.
         locales?.
-        find(locale => locale.isoCode === this.dictionaries?.siteSettings?.locale);
+        find(locale => locale.isoCode === this.siteSettingsService?.siteSettings?.locale);
     }
 
     constructor(
         private readonly snackBar: MatSnackBar,
         private readonly localizationClient: LocalizationClient,
         private readonly dictionaryClient: DictionaryClient,
-        private readonly localStorageService: LocalStorageService
+        private readonly localStorageService: LocalStorageService,
+        private readonly siteSettingsService: SiteSettingsService
     ) {
         this.dictionaries = new Dictionary(localStorageService);
     }
@@ -49,29 +56,37 @@ export class DictionaryService {
 
     public reinitialize(isAuthorized: boolean): void {
         forkJoin({
-            countries: isAuthorized && !this.dictionaries?.countries ?
-                this.dictionaryClient.dictionary_GetCountries().pipe(take(1)) :
+            countries: isAuthorized ?
+                this.dictionaryClient.dictionary_GetCountries(
+                    new GetCountriesRequest({
+                        version: this.dictionaries?.countriesVersion,
+                        count: this.dictionaries?.countriesCount
+                    })).pipe(take(1)) :
                 of(undefined),
-            currencies: isAuthorized && !this.dictionaries?.currencies ?
-                    this.dictionaryClient.dictionary_GetCurrencies().pipe(take(1)) :
+            currencies: isAuthorized ?
+                    this.dictionaryClient.dictionary_GetCurrencies(
+                        new GetCurrenciesRequest({
+                            version: this.dictionaries?.currenciesVersion,
+                            count: this.dictionaries?.currenciesCount
+                        })).pipe(take(1)) :
                     of(undefined),
-            categories: isAuthorized && !this.dictionaries?.currencies ?
-                this.dictionaryClient.dictionary_GetCategories().pipe(take(1)) :
+            categories: isAuthorized ?
+                this.dictionaryClient.dictionary_GetCategories(
+                    new GetCategoriesRequest({
+                            version: this.dictionaries?.categoriesVersion,
+                            count: this.dictionaries?.categoriesCount
+                        })).pipe(take(1)) :
                 of(undefined),
             locales: !this.dictionaries?.currencies ?
                 this.localizationClient.localization_GetLocales().pipe(take(1)) :
-                of(undefined),
-            siteSettings: !this.dictionaries?.currencies ?
-                this.dictionaryClient.siteSetting_GetSettings().pipe(take(1)) :
                 of(undefined)
         }).pipe(
-            tap(({ countries, currencies, categories, locales, siteSettings }) => {
+            tap(({ countries, currencies, categories, locales }) => {
                 if (this.dictionaries) {
                     this.dictionaries.countries = countries;
                     this.dictionaries.currencies = currencies;
                     this.dictionaries.categories = categories;
                     this.dictionaries.locales = locales;
-                    this.dictionaries.siteSettings = siteSettings;
 
                     this.dictionaries.updateDateItems();
                 }

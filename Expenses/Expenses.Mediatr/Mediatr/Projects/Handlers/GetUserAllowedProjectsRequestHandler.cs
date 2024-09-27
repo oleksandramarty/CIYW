@@ -26,7 +26,7 @@ public class GetUserAllowedProjectsRequestHandler: MediatrAuthBase, IRequestHand
     
     public async Task<List<UserAllowedProjectResponse>> Handle(GetUserAllowedProjectsRequest request, CancellationToken cancellationToken)
     {
-        var userId = await GetUserIdAsync();
+        Guid userId = await GetCurrentUserIdAsync();
         
         var userAllowedProjects = await userAllowedProjectRepository
             .GetListAsync(

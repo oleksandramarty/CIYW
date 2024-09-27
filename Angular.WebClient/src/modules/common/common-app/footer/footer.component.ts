@@ -1,8 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
-import {SiteSettingsService} from "../../../../core/services/site-settings.service";
 import {Store} from "@ngrx/store";
 import {clearAll} from "../../../../core/store/actions/auth.actions";
+import {environment} from "../../../../core/environments/environment";
 
 @Component({
   selector: 'app-footer',
@@ -12,12 +12,11 @@ import {clearAll} from "../../../../core/store/actions/auth.actions";
 export class FooterComponent {
   constructor(
       private readonly store: Store,
-      private readonly siteSettingsService: SiteSettingsService,
       private readonly localStorageService: LocalStorageService) {
   }
 
   get buildVersion(): string {
-    return this.siteSettingsService.siteSettings?.buildVersion ?? 'honk';
+    return environment.buildVersion ?? 'honk';
   }
 
   public clearCache(): void {

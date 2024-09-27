@@ -38,7 +38,7 @@ public class UserProjectController: BaseController
     
     [HttpPost]
     [ProducesResponseType(typeof(void), 200)]
-    public async Task<IActionResult> AddProjectAsync([FromBody] CreateUserProjectCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddProjectAsync([FromBody]CreateUserProjectCommand request, CancellationToken cancellationToken)
     {
         await mediator.Send(request, cancellationToken);
         return Ok();

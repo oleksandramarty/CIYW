@@ -4,6 +4,7 @@ using CommonModule.Facade;
 using Expenses.Business;
 using Expenses.Domain;
 using Expenses.Mediatr;
+using Expenses.Mediatr.Validators.Expenses;
 using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,8 +22,10 @@ builder.Services.AddControllers();
 builder.AddAuthorization();
 
 // validators
+builder.Services.AddValidatorsFromAssemblyContaining<CreateOrUpdateExpenseCommandValidator>();
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
+builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile(new MappingExpensesProfile());

@@ -3,7 +3,12 @@ import {LocalStorageService} from './local-storage.service';
 import {take, tap, switchMap, BehaviorSubject} from 'rxjs';
 import {handleApiError} from '../helpers/rxjs.helper';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {LocaleResponse, LocalizationClient, LocalizationsResponse} from "../api-clients/localizations-client";
+import {
+    GetLocalizationsRequest,
+    LocaleResponse,
+    LocalizationClient,
+    LocalizationsResponse
+} from "../api-clients/localizations-client";
 import {SiteSettingsResponse} from "../api-clients/dictionaries-client";
 import {SiteSettingsService} from "./site-settings.service";
 import {environment} from "../environments/environment";
@@ -28,9 +33,8 @@ export class LocalizationService {
         this.localStorageService.setItem('localizations', this._localizations);
     }
 
-    //TODO fix it
     get currentLocaleCode(): string {
-        return 'en';
+        return this.siteSettingsService.siteSettings?.locale ?? 'en';
     }
 
     constructor(
@@ -48,11 +52,20 @@ export class LocalizationService {
     }
 
     public reinitialize(): void {
-        this.localizationClient.localization_GetLocalizations()
+        this.localizationClient.localization_GetLocalizations(
+            new GetLocalizationsRequest(
+                {
+                    version: !this.localizations || !this.localizations.data ? undefined : this.localizations?.version,
+                    count: !this.localizations || !this.localizations.data ? undefined : String(Object.keys(this.localizations.data['en']).length)
+                })
+            )
             .pipe(
                 take(1),
                 tap((data) => {
-                    this.localizations = data;
+                    if (!!data && Object.keys(data.data).length > 0) {
+                        this.localizations = data;
+                    }
+                    this.localeChangedSub.next(true);
                 }),
                 handleApiError(this.snackBar)
             ).subscribe();

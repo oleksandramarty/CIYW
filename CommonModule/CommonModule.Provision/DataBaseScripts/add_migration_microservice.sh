@@ -5,9 +5,9 @@ echo "Adding migrations..."
 echo "----------------------"
 
 # Get the microservice name from the command line argument
-microservices=("Localizations" "Expenses" "AuthGateway" "Dictionaries")
-migrationNames=("InitLocalization" "InitExpense" "InitUser" "InitDictionary")
-shouldRunMigrations=(true true true true)
+microservices=("Localizations" "Expenses" "AuthGateway" "Dictionaries" "AuditTrail")
+migrationNames=("InitLocalization" "InitExpense" "InitUser" "InitDictionary" "InitAuditTrail")
+shouldRunMigrations=(true true true true true)
 
 # Get the directory of the current script
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)

@@ -6,5 +6,4 @@ namespace Localizations.Mediatr.Mediatr.Locations.Requests;
 
 public class GetLocalizationsRequest: BaseVersionEntity, IRequest<LocalizationsResponse>
 {
-    
 }

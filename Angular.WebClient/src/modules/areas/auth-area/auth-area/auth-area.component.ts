@@ -27,7 +27,7 @@ export class AuthAreaComponent implements OnInit{
         takeUntil(this.ngUnsubscribe),
         tap(token => {
           if (token) {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/dashboard']);
           }
         }),
         handleApiError(this.snackBar)

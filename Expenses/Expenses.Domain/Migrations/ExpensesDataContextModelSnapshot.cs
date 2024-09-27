@@ -53,38 +53,6 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("Balances", "Balance");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Categories.UserCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Icon")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserCategories", "Categories");
-                });
-
             modelBuilder.Entity("Expenses.Domain.Models.Expenses.Expense", b =>
                 {
                     b.Property<Guid>("Id")
@@ -94,10 +62,10 @@ namespace Expenses.Domain.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid?>("BalanceId")
+                    b.Property<Guid>("BalanceId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Created")
@@ -121,15 +89,10 @@ namespace Expenses.Domain.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid?>("UserCategoryId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserCategoryId");
 
                     b.HasIndex("UserProjectId");
 
@@ -198,17 +161,11 @@ namespace Expenses.Domain.Migrations
 
             modelBuilder.Entity("Expenses.Domain.Models.Expenses.Expense", b =>
                 {
-                    b.HasOne("Expenses.Domain.Models.Categories.UserCategory", "UserCategory")
-                        .WithMany("Expenses")
-                        .HasForeignKey("UserCategoryId");
-
                     b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
                         .WithMany("Expenses")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("UserCategory");
 
                     b.Navigation("UserProject");
                 });
@@ -222,11 +179,6 @@ namespace Expenses.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("UserProject");
-                });
-
-            modelBuilder.Entity("Expenses.Domain.Models.Categories.UserCategory", b =>
-                {
-                    b.Navigation("Expenses");
                 });
 
             modelBuilder.Entity("Expenses.Domain.Models.Projects.UserProject", b =>

@@ -31,6 +31,10 @@ chmod +x "$SCRIPT_DIR/reinitialize_db_data.sh"
 chmod +x "$SCRIPT_DIR/InitScripts/generate_client_ts.sh"
 "$SCRIPT_DIR/InitScripts/generate_client_ts.sh"
 
+# Initialize Kafka
+chmod +x "$SCRIPT_DIR/InitScripts/init_kafka.sh"
+"$SCRIPT_DIR/InitScripts/init_kafka.sh"
+
 echo "Provision completed."
 echo
 

@@ -11,7 +11,7 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 BASE_DIR=$(echo "$SCRIPT_DIR" | sed 's|/CommonModule/CommonModule.Provision/DataBaseScripts||')
 
 # Define the microservice names as an array
-microservices=("Localizations" "Expenses" "AuthGateway" "Dictionaries")
+microservices=("Localizations" "Expenses" "AuthGateway" "Dictionaries" "AuditTrail")
 
 # Loop through each microservice and delete the Migrations folder if it exists
 for microserviceName in "${microservices[@]}"; do

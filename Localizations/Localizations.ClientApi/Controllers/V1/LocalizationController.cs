@@ -18,11 +18,11 @@ public class LocalizationController : BaseController
         this.mediator = mediator;
     }
 
-    [HttpGet]
+    [HttpPost]
     [ProducesResponseType(typeof(LocalizationsResponse), 200)]
-    public async Task<IActionResult> GetLocalizationsAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetLocalizationsAsync([FromBody]GetLocalizationsRequest request, CancellationToken cancellationToken)
     {
-        LocalizationsResponse response = await this.mediator.Send(new GetLocalizationsRequest(), cancellationToken);
+        LocalizationsResponse response = await this.mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 

@@ -35,7 +35,7 @@ public class GetCurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<GetC
     
     public async Task<UserResponse> Handle(GetCurrentUserRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetUserIdAsync();
+        Guid userId = await this.GetCurrentUserIdAsync();
         
         User user = await this.userRepository.GetByIdAsync(userId, cancellationToken, 
             user => user.Include(u => u.Roles).ThenInclude(ur => ur.Role));

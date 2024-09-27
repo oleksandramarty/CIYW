@@ -1,7 +1,6 @@
 using Expenses.Domain.Models.Balances;
 using Microsoft.EntityFrameworkCore;
 using Expenses.Domain.Models.Expenses;
-using Expenses.Domain.Models.Categories;
 using Expenses.Domain.Models.Projects;
 
 namespace Expenses.Domain;
@@ -9,7 +8,6 @@ namespace Expenses.Domain;
 public class ExpensesDataContext : DbContext
 {
     public DbSet<Expense> Expenses { get; set; }
-    public DbSet<UserCategory> UserCategories { get; set; }
 
     public DbSet<UserProject> UserProjects { get; set; }
     public DbSet<UserAllowedProject> UserAllowedProjects { get; set; }
@@ -25,15 +23,10 @@ public class ExpensesDataContext : DbContext
         modelBuilder.Entity<Expense>(entity =>
         {
             entity.ToTable("Expenses", "Expenses");
-            entity.HasOne(e => e.UserCategory)
-                .WithMany(uc => uc.Expenses)
-                .HasForeignKey(e => e.UserCategoryId);
             entity.HasOne(e => e.UserProject)
                 .WithMany(uc => uc.Expenses)
                 .HasForeignKey(e => e.UserProjectId);
         });
-
-        modelBuilder.Entity<UserCategory>(entity => { entity.ToTable("UserCategories", "Categories"); });
 
         modelBuilder.Entity<UserProject>(entity => { entity.ToTable("UserProjects", "Projects"); });
 

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommonModule.Core.Mediatr;
 
 public class MediatrDictionaryBase<TRequest, TId, TEntity, TResponse, TDataContext>: IRequestHandler<TRequest, VersionedList<TResponse>>
-    where TRequest : IRequest<VersionedList<TResponse>>
+    where TRequest : IBaseVersionEntity, IRequest<VersionedList<TResponse>>
     where TEntity : class, IBaseIdEntity<TId>, IActivatable
     where TResponse : class, IBaseIdEntity<TId>
     where TDataContext : DbContext
@@ -21,6 +21,6 @@ public class MediatrDictionaryBase<TRequest, TId, TEntity, TResponse, TDataConte
     
     public async Task<VersionedList<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        return await this.dictionaryRepository.GetDictionaryAsync(cancellationToken);
+        return await this.dictionaryRepository.GetDictionaryAsync(request.Count, request.Version, cancellationToken);
     }
 }

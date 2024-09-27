@@ -14,16 +14,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Mediatr\Categories\Commands\" />
-      <Folder Include="Mediatr\Categories\Handlers\" />
-      <Folder Include="Mediatr\Categories\Requests\" />
-      <Folder Include="Mediatr\Expenses\Commands\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\..\AuthGateway\AuthGateway.Mediatr\AuthGateway.Mediatr.csproj" />
       <ProjectReference Include="..\..\CommonModule\CommonModule.Core\CommonModule.Core.csproj" />
       <ProjectReference Include="..\..\CommonModule\CommonModule.Interfaces\CommonModule.Interfaces.csproj" />
       <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
+      <ProjectReference Include="..\Expenses.Business\Expenses.Business.csproj" />
       <ProjectReference Include="..\Expenses.Domain\Expenses.Domain.csproj" />
     </ItemGroup>
 

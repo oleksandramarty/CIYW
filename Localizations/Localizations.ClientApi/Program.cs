@@ -2,7 +2,6 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommonModule.Facade;
 using FluentValidation;
-using Localizations.Business;
 using Localizations.Domain;
 using Localizations.Mediatr;
 

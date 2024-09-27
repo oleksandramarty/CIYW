@@ -27,11 +27,19 @@ public class EntityValidator<TDataContext> : IEntityValidator<TDataContext> wher
         }
     }
 
-    public void ValidateExist<T, TId>(T entity, TId? entityId) where T : class
+    public void ValidateExist<T, TId>(T entity, TId? entityId) where T : class?
     {
         if (entity == null)
         {
             throw new Exception(string.Format(ErrorMessages.EntityWithIdNotFound, typeof(T).Name, entityId));
+        }
+    }
+    
+    public void ValidateExist<T>(T? entity, string? message = null)
+    {
+        if (entity == null)
+        {
+            throw new Exception(message ?? ErrorMessages.NotFound);
         }
     }
 

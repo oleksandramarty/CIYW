@@ -7,73 +7,47 @@ using CommonModule.Shared.Common.BaseInterfaces;
 namespace CommonModule.Repositories;
 
 public class RedisCacheRepository<TId, TEntity> : ICacheRepository<TId, TEntity>
+    where TId : notnull
     where TEntity : class, IBaseIdEntity<TId>
 {
-    private readonly IConnectionMultiplexer connectionMultiplexer;
-    private readonly IDatabase database;
-    private readonly string instanceName;
+    private readonly ICacheBaseRepository<TId> cacheBaseRepository;
     private readonly string dictionaryName;
 
     public RedisCacheRepository(
-        IConnectionMultiplexer connectionMultiplexer,
-        IConfiguration configuration
+        ICacheBaseRepository<TId> cacheBaseRepository
         )
     {
-        this.connectionMultiplexer = connectionMultiplexer;
-        this.database = connectionMultiplexer.GetDatabase();
-        this.instanceName = configuration["Redis:InstanceNameDictionary"];
+        this.cacheBaseRepository = cacheBaseRepository;
         this.dictionaryName = typeof(TEntity).Name.ToLower();
     }
 
     public async Task<List<TEntity>> GetItemsFromCacheAsync()
     {
-        var keys = await GetAllKeysAsync();
-        var tasks = keys.Select(key => database.StringGetAsync(key)).ToList();
-        var results = await Task.WhenAll(tasks);
+        IEnumerable<string> items = await cacheBaseRepository.GetItemsFromCacheAsync(this.dictionaryName);
         
-        return results
-            .Where(result => !result.IsNullOrEmpty)
-            .Select(result => CacheExtension.FromCacheString<TEntity>(result))
+        return items?
+            .Select(result => JsonSerializerExtension.FromString<TEntity>(result))
             .Where(entity => entity != null)
-            .ToList();
+            .ToList() ?? new List<TEntity>();
     }
 
     private async Task<IEnumerable<RedisKey>> GetAllKeysAsync()
     {
-        var endpoints = connectionMultiplexer.GetEndPoints();
-        var keys = new List<RedisKey>();
-
-        foreach (var endpoint in endpoints)
-        {
-            var server = connectionMultiplexer.GetServer(endpoint);
-            keys.AddRange(server.Keys(database.Database, $"{instanceName}:{dictionaryName}:*"));
-        }
-
-        return keys;
+        return await this.cacheBaseRepository.GetAllKeysAsync(this.dictionaryName);
     }
 
     public async Task ReinitializeDictionaryAsync(List<TEntity> values)
     {
-        await database.KeyDeleteAsync($"{instanceName}:{dictionaryName}:*");
-
-        var tasks = values.Select(value =>
-        {
-            var redisKey = $"{instanceName}:{dictionaryName}:{value.Id}";
-            return database.StringSetAsync(redisKey, CacheExtension.ToCacheString(value));
-        });
-
-        await Task.WhenAll(tasks);
+        await this.cacheBaseRepository.ReinitializeDictionaryAsync(this.dictionaryName, values.ToDictionary(item => item.Id, item => JsonSerializerExtension.ToString(item)));
     }
 
-    public async Task<string> GetCacheVersionAsync()
+    public async Task<BaseVersionEntity> GetCacheVersionAsync()
     {
-        var redisKey = $"{instanceName}:version:{dictionaryName}";
-        return await database.StringGetAsync(redisKey);
+        return await this.cacheBaseRepository.GetCacheVersionAsync(this.dictionaryName);
     }
 
-    public async Task SetCacheVersionAsync()
+    public async Task SetCacheVersionAsync(BaseVersionEntity entity)
     {
-        var redisKey = $"{instanceName}:version:{dictionaryName}";
-        await database.StringSetAsync(redisKey, $"{DateTime.UtcNow:yyyyMMddHHmmss}");
+        await this.cacheBaseRepository.SetCacheVersionAsync(entity, this.dictionaryName);
     }
 }

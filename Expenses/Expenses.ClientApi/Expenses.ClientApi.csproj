@@ -11,6 +11,7 @@
       <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
       <ProjectReference Include="..\Expenses.Business\Expenses.Business.csproj" />
       <ProjectReference Include="..\Expenses.Domain\Expenses.Domain.csproj" />
+      <ProjectReference Include="..\Expenses.Mediatr\Expenses.Mediatr.csproj" />
     </ItemGroup>
 
     <ItemGroup>
