@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
 import {Store} from "@ngrx/store";
 import {clearAll} from "../../../../core/store/actions/auth.actions";
-import {environment} from "../../../../core/environments/environment";
 
 @Component({
   selector: 'app-footer',
@@ -16,7 +15,7 @@ export class FooterComponent {
   }
 
   get buildVersion(): string {
-    return environment.buildVersion ?? 'honk';
+    return 'honk';
   }
 
   public clearCache(): void {

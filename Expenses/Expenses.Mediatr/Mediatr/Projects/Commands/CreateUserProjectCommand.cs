@@ -6,5 +6,5 @@ public class CreateUserProjectCommand: IRequest
 {
     public string Title { get; set; }
     
-    public int CurrencyId { get; set; }
+    public List<int> CurrencyIds { get; set; }
 }

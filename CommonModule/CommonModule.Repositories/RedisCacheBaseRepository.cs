@@ -62,26 +62,18 @@ public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId>
         await Task.WhenAll(tasks);
     }
 
-    public async Task<BaseVersionEntity> GetCacheVersionAsync(string dictionaryName)
+    public async Task<string> GetCacheVersionAsync(string dictionaryName)
     {
-        var redisKey = $"{instanceName}:version:{dictionaryName}";
+        var redisKey = $"version:{dictionaryName}";
         string version = await database.StringGetAsync(redisKey);
-        redisKey = $"{instanceName}:count:{dictionaryName}";
-        string count = await database.StringGetAsync(redisKey);
 
-        return new BaseVersionEntity
-        {
-            Count = count,
-            Version = version
-        };
+        return version;
     }
 
-    public async Task SetCacheVersionAsync(BaseVersionEntity entity, string dictionaryName)
+    public async Task SetCacheVersionAsync(string dictionaryName)
     {
-        var redisKey = $"{instanceName}:version:{dictionaryName}";
-        await database.StringSetAsync(redisKey, entity.Version);
-        redisKey = $"{instanceName}:count:{dictionaryName}";
-        await database.StringSetAsync(redisKey, entity.Count);
+        var redisKey = $"version:{dictionaryName}";
+        await database.StringSetAsync(redisKey, Guid.NewGuid().ToString("N").ToUpper());
     }
 
     public async Task<string> GetItemFromCacheAsync(string dictionaryName, TId key)

@@ -1,3 +1,4 @@
+using AuthGateway.Mediatr;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommonModule.Facade;
@@ -5,6 +6,7 @@ using Expenses.Business;
 using Expenses.Domain;
 using Expenses.Mediatr;
 using Expenses.Mediatr.Validators.Expenses;
+using Expenses.Mediatr.Validators.Projects;
 using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,7 @@ builder.AddAuthorization();
 
 // validators
 builder.Services.AddValidatorsFromAssemblyContaining<CreateOrUpdateExpenseCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProjectCommandValidator>();
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
@@ -33,6 +36,7 @@ builder.Services.AddAutoMapper(config =>
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrExpensesModule()); });
+builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrCommonModule()); });
 
 var app = builder.Build();
 

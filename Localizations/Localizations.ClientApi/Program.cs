@@ -1,3 +1,4 @@
+using AuthGateway.Mediatr;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommonModule.Facade;
@@ -29,6 +30,7 @@ builder.Services.AddAutoMapper(config =>
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatorLocalizationsModule()); });
+builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrCommonModule()); });
 
 var app = builder.Build();
 

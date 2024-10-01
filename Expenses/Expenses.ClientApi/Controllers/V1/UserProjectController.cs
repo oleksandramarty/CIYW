@@ -10,12 +10,12 @@ namespace Expenses.ClientApi.Controllers.V1;
 
 [ApiController]
 [Authorize]
-[Route("api/v1/localizations")]
+[Route("api/v1/user-projects")]
 public class UserProjectController: BaseController
 {
     private readonly IMediator mediator;
 
-    public UserProjectController(IMediator mediator)
+    public UserProjectController(IMediator mediator) : base(mediator)
     {
         this.mediator = mediator;
     }

@@ -17,7 +17,7 @@ public class DictionaryController: BaseController
 {
     private readonly IMediator mediator;
     
-    public DictionaryController(IMediator mediator)
+    public DictionaryController(IMediator mediator) : base(mediator)
     {
         this.mediator = mediator;
     }

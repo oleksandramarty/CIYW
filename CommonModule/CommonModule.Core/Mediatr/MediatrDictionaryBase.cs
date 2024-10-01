@@ -21,6 +21,6 @@ public class MediatrDictionaryBase<TRequest, TId, TEntity, TResponse, TDataConte
     
     public async Task<VersionedList<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        return await this.dictionaryRepository.GetDictionaryAsync(request.Count, request.Version, cancellationToken);
+        return await this.dictionaryRepository.GetDictionaryAsync(request.Version, cancellationToken);
     }
 }

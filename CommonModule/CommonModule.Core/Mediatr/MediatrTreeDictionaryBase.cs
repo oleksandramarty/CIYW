@@ -21,6 +21,6 @@ public class MediatrTreeDictionaryBase<TRequest, TId, TParentId, TEntity, TRespo
     
     public async Task<VersionedList<TreeNodeResponse<TResponse>>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        return await this.treeDictionaryRepository.GetTreeDictionaryAsync(request.Count, request.Version, cancellationToken);
+        return await this.treeDictionaryRepository.GetTreeDictionaryAsync(request.Version, cancellationToken);
     }
 }

@@ -13,7 +13,7 @@ public class AuthController: BaseController
 {
     private readonly IMediator mediator;
     
-    public AuthController(IMediator mediator)
+    public AuthController(IMediator mediator) : base(mediator)
     {
         this.mediator = mediator;
     }

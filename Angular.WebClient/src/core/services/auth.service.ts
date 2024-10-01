@@ -64,7 +64,6 @@ export class AuthService {
       }),
       tap((user) => {
         this.store.dispatch(setUser({ user }));
-         this.localizationService.reinitialize();
       }),
       handleApiError(this.snackBar, this.localizationService)
     ).subscribe();

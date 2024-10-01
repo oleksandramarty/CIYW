@@ -5,6 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {AppCommonModule} from "../../common/common-app/app-common.module";
 import {ExpensesAreaComponent} from "./expenses-area/expenses-area.component";
 import {ExpensesDashboardComponent} from "./expenses-dashboard/expenses-dashboard.component";
+import {MatDividerModule} from "@angular/material/divider";
 
 const routes: Routes = [
     {
@@ -26,7 +27,9 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
 
-        AppCommonModule
+        AppCommonModule,
+
+        MatDividerModule
     ],
     exports: [
         RouterModule

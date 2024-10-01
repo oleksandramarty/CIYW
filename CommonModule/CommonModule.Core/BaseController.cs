@@ -1,4 +1,6 @@
 using CommonModule.Core.Exceptions.Errors;
+using CommonModule.Core.Mediatr.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +17,15 @@ namespace CommonModule.Core;
 [ProducesResponseType(typeof(ErrorMessageModel), StatusCodes.Status500InternalServerError)]
 public class BaseController : Controller
 {
-    public BaseController()
+    private readonly IMediator mediator;
+    
+    public BaseController(IMediator mediator)
     {
+        this.mediator = mediator;
+    }
+    
+    protected async Task<Guid?> GetCurrentUserIdAsync(CancellationToken cancellationToken)
+    {
+        return await this.mediator.Send(new GetUserIdRequest(), cancellationToken);
     }
 }

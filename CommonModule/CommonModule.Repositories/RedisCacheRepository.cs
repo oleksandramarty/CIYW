@@ -41,13 +41,13 @@ public class RedisCacheRepository<TId, TEntity> : ICacheRepository<TId, TEntity>
         await this.cacheBaseRepository.ReinitializeDictionaryAsync(this.dictionaryName, values.ToDictionary(item => item.Id, item => JsonSerializerExtension.ToString(item)));
     }
 
-    public async Task<BaseVersionEntity> GetCacheVersionAsync()
+    public async Task<string> GetCacheVersionAsync()
     {
         return await this.cacheBaseRepository.GetCacheVersionAsync(this.dictionaryName);
     }
 
-    public async Task SetCacheVersionAsync(BaseVersionEntity entity)
+    public async Task SetCacheVersionAsync()
     {
-        await this.cacheBaseRepository.SetCacheVersionAsync(entity, this.dictionaryName);
+        await this.cacheBaseRepository.SetCacheVersionAsync(this.dictionaryName);
     }
 }

@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
   }
 
   get locales(): LocaleResponse[] | undefined {
-    return this.dictionaryService.dictionaries?.locales;
+    return this.dictionaryService.dictionaries?.locales?.items ?? [];
   }
 
   get currentLocale(): LocaleResponse | undefined {

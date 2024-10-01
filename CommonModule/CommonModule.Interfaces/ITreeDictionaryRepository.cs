@@ -9,5 +9,5 @@ public interface ITreeDictionaryRepository<TId, TParentId, TEntity, TResponse, T
     where TResponse : class, ITreeChildren<TResponse>
     where TDataContext : DbContext
 {
-    Task<VersionedList<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(string? count, string? version, CancellationToken cancellationToken);
+    Task<VersionedList<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken);
 }

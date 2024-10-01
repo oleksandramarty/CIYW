@@ -215,9 +215,15 @@ mat-grid-tile {
 }
 
 .page-content-wrapper {
-  padding: 24px;
-  min-height: calc(100vh - 208px);
+  margin: 0rem 0.5rem;
+  min-height: calc(100vh - 12rem);
   position: relative;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: calc(100% - 2rem);
+  padding: 0.5rem;
 }
 
 .grid-container {

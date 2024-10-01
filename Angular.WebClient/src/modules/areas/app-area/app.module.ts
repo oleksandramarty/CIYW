@@ -34,7 +34,7 @@ import {BaseInitializationService} from "../../../core/services/base-initializat
 import {SiteSettingsService} from "../../../core/services/site-settings.service";
 import {DictionaryService} from "../../../core/services/dictionary.service";
 import {API_BASE_URL_AuditTrail} from "../../../core/api-clients/audit-trail-client";
-import {ExpensesAreaComponent} from "../expenses-area/expenses-area/expenses-area.component";
+import {NightSkyComponent} from "../../common/background/night-sky/night-sky.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -81,6 +81,9 @@ const routes: Routes = [
     BrowserAnimationsModule,
     CommonModule,
     FormsModule,
+
+    NightSkyComponent,
+
     HttpClientModule,
     AppCommonModule,
     InDevelopmentComponent,

@@ -220,7 +220,7 @@ export class ExpenseClient {
     }
 
     userProject_GetAllowedProjects(): Observable<UserAllowedProjectResponse[]> {
-        let url_ = this.baseUrl + "/api/v1/localizations/allowed";
+        let url_ = this.baseUrl + "/api/v1/user-projects/allowed";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -324,7 +324,7 @@ export class ExpenseClient {
     }
 
     userProject_GetProjects(): Observable<UserProjectResponse[]> {
-        let url_ = this.baseUrl + "/api/v1/localizations";
+        let url_ = this.baseUrl + "/api/v1/user-projects";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -428,7 +428,7 @@ export class ExpenseClient {
     }
 
     userProject_AddProject(request: CreateUserProjectCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/v1/localizations";
+        let url_ = this.baseUrl + "/api/v1/user-projects";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -986,7 +986,7 @@ export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
 
 export class CreateUserProjectCommand implements ICreateUserProjectCommand {
     title!: string;
-    currencyId!: number;
+    currencyIds!: number[];
 
     constructor(data?: ICreateUserProjectCommand) {
         if (data) {
@@ -995,12 +995,19 @@ export class CreateUserProjectCommand implements ICreateUserProjectCommand {
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.currencyIds = [];
+        }
     }
 
     init(_data?: any) {
         if (_data) {
             this.title = _data["title"];
-            this.currencyId = _data["currencyId"];
+            if (Array.isArray(_data["currencyIds"])) {
+                this.currencyIds = [] as any;
+                for (let item of _data["currencyIds"])
+                    this.currencyIds!.push(item);
+            }
         }
     }
 
@@ -1014,14 +1021,18 @@ export class CreateUserProjectCommand implements ICreateUserProjectCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["currencyId"] = this.currencyId;
+        if (Array.isArray(this.currencyIds)) {
+            data["currencyIds"] = [];
+            for (let item of this.currencyIds)
+                data["currencyIds"].push(item);
+        }
         return data;
     }
 }
 
 export interface ICreateUserProjectCommand {
     title: string;
-    currencyId: number;
+    currencyIds: number[];
 }
 
 export class ApiException extends Error {

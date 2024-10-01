@@ -13,7 +13,7 @@ public class ExpenseController: BaseController
 {
     private readonly IMediator mediator;
 
-    public ExpenseController(IMediator mediator)
+    public ExpenseController(IMediator mediator) : base(mediator)
     {
         this.mediator = mediator;
     }

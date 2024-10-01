@@ -14,7 +14,7 @@ public class UserController : BaseController
 {
     private readonly IMediator mediator;
 
-    public UserController(IMediator mediator)
+    public UserController(IMediator mediator) : base(mediator)
     {
         this.mediator = mediator;
     }

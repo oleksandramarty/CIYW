@@ -2,6 +2,8 @@ using System.Text;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using AuditTrail.Business;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using CommonModule.Core.Filters;
 using CommonModule.Core.Kafka;
 using CommonModule.Interfaces;

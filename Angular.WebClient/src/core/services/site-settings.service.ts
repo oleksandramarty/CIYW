@@ -1,10 +1,6 @@
 import {Injectable} from "@angular/core";
-import {DictionaryClient, SiteSettingsResponse} from "../api-clients/dictionaries-client";
+import {CacheVersionResponse, DictionaryClient, SiteSettingsResponse} from "../api-clients/dictionaries-client";
 import {LocalStorageService} from "./local-storage.service";
-import {environment} from "../environments/environment";
-import {take, tap} from "rxjs";
-import {handleApiError} from "../helpers/rxjs.helper";
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
     providedIn: "root"
@@ -19,32 +15,17 @@ export class SiteSettingsService {
         return this._siteSettings;
     }
 
+    get version(): CacheVersionResponse | undefined {
+        return this.siteSettings?.version;
+    }
+
     set siteSettings(value: SiteSettingsResponse | undefined) {
         this._siteSettings = value;
         this.localStorageService.setItem('settings', this._siteSettings);
     }
 
     constructor(
-        private readonly localStorageService: LocalStorageService,
-        private readonly dictionaryClient: DictionaryClient,
-        private readonly snackBar: MatSnackBar
+        private readonly localStorageService: LocalStorageService
     ) {
-    }
-
-    public initialize(): void {
-        if (!this.siteSettings?.locale ) {
-            this.reinitialize();
-        }
-    }
-
-    public reinitialize(): void {
-        this.dictionaryClient.siteSetting_GetSettings()
-            .pipe(
-                take(1),
-                tap((data) => {
-                    this.siteSettings = data;
-                }),
-                handleApiError(this.snackBar)
-            ).subscribe();
     }
 }

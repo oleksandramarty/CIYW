@@ -127,33 +127,37 @@ export class LocalizationClient {
         return _observableOf(null as any);
     }
 
-    localization_GetLocales(): Observable<LocaleResponse[]> {
-        let url_ = this.baseUrl + "/api/v1/localizations/locales";
+    localization_GetPublicLocalizations(request: GetLocalizationsRequest): Observable<LocalizationsResponse> {
+        let url_ = this.baseUrl + "/api/v1/localizations/public";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processLocalization_GetLocales(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLocalization_GetPublicLocalizations(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processLocalization_GetLocales(response_ as any);
+                    return this.processLocalization_GetPublicLocalizations(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<LocaleResponse[]>;
+                    return _observableThrow(e) as any as Observable<LocalizationsResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<LocaleResponse[]>;
+                return _observableThrow(response_) as any as Observable<LocalizationsResponse>;
         }));
     }
 
-    protected processLocalization_GetLocales(response: HttpResponseBase): Observable<LocaleResponse[]> {
+    protected processLocalization_GetPublicLocalizations(response: HttpResponseBase): Observable<LocalizationsResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -213,14 +217,108 @@ export class LocalizationClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(LocaleResponse.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = LocalizationsResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    localization_GetLocales(request: GetLocalesRequest): Observable<VersionedListOfLocaleResponse> {
+        let url_ = this.baseUrl + "/api/v1/localizations/locales";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLocalization_GetLocales(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLocalization_GetLocales(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<VersionedListOfLocaleResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<VersionedListOfLocaleResponse>;
+        }));
+    }
+
+    protected processLocalization_GetLocales(response: HttpResponseBase): Observable<VersionedListOfLocaleResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = VersionedListOfLocaleResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -332,7 +430,6 @@ export interface IInvalidFieldInfoModel {
 }
 
 export class BaseVersionEntity implements IBaseVersionEntity {
-    count?: string | undefined;
     version?: string | undefined;
 
     constructor(data?: IBaseVersionEntity) {
@@ -346,7 +443,6 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.count = _data["count"];
             this.version = _data["version"];
         }
     }
@@ -360,14 +456,12 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["count"] = this.count;
         data["version"] = this.version;
         return data;
     }
 }
 
 export interface IBaseVersionEntity {
-    count?: string | undefined;
     version?: string | undefined;
 }
 
@@ -420,6 +514,7 @@ export interface ILocalizationsResponse extends IBaseVersionEntity {
 }
 
 export class GetLocalizationsRequest extends BaseVersionEntity implements IGetLocalizationsRequest {
+    isPublic!: boolean;
 
     constructor(data?: IGetLocalizationsRequest) {
         super(data);
@@ -427,6 +522,9 @@ export class GetLocalizationsRequest extends BaseVersionEntity implements IGetLo
 
     override init(_data?: any) {
         super.init(_data);
+        if (_data) {
+            this.isPublic = _data["isPublic"];
+        }
     }
 
     static override fromJS(data: any): GetLocalizationsRequest {
@@ -438,12 +536,58 @@ export class GetLocalizationsRequest extends BaseVersionEntity implements IGetLo
 
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["isPublic"] = this.isPublic;
         super.toJSON(data);
         return data;
     }
 }
 
 export interface IGetLocalizationsRequest extends IBaseVersionEntity {
+    isPublic: boolean;
+}
+
+export class VersionedListOfLocaleResponse extends BaseVersionEntity implements IVersionedListOfLocaleResponse {
+    items!: LocaleResponse[];
+
+    constructor(data?: IVersionedListOfLocaleResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(LocaleResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListOfLocaleResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListOfLocaleResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListOfLocaleResponse extends IBaseVersionEntity {
+    items: LocaleResponse[];
 }
 
 export class BaseIdEntityOfInteger implements IBaseIdEntityOfInteger {
@@ -555,6 +699,33 @@ export enum LocaleEnum {
     Russian = 5,
     German = 6,
     Italian = 7,
+}
+
+export class GetLocalesRequest extends BaseVersionEntity implements IGetLocalesRequest {
+
+    constructor(data?: IGetLocalesRequest) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetLocalesRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetLocalesRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetLocalesRequest extends IBaseVersionEntity {
 }
 
 export class ApiException extends Error {

@@ -27,21 +27,18 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
         this.dictionaryRepository = dictionaryRepository;
     }
 
-    public async Task<VersionedList<TResponse>> GetDictionaryAsync(string? count, string? version, CancellationToken cancellationToken)
+    public async Task<VersionedList<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken)
     {
-        BaseVersionEntity baseVersionEntity = await this.cacheRepository.GetCacheVersionAsync();
+        string currencyVersion = await this.cacheRepository.GetCacheVersionAsync();
         
         if (
             !string.IsNullOrEmpty(version) && 
-            version.Equals(baseVersionEntity.Version) && 
-            !string.IsNullOrEmpty(count) && 
-            count.Equals(baseVersionEntity.Count))
+            version.Equals(currencyVersion))
         {
             return new VersionedList<TResponse>
             {
                 Items = new List<TResponse>(),
-                Version = baseVersionEntity.Version,
-                Count = baseVersionEntity.Count
+                Version = currencyVersion
             };
         }
         
@@ -51,18 +48,13 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
         {
             items = await dictionaryRepository.GetListAsync(null, cancellationToken);
             await this.cacheRepository.ReinitializeDictionaryAsync(items);
-            await this.cacheRepository.SetCacheVersionAsync(new BaseVersionEntity
-            {
-                Count = items.Count.ToString(),
-                Version = DateTime.UtcNow.ToString("yyyyMMddHHmmss")
-            });
+            await this.cacheRepository.SetCacheVersionAsync();
         }
     
         return new VersionedList<TResponse>
         {
             Items = items.Where(i => i.IsActive).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
-            Version = baseVersionEntity.Version,
-            Count = baseVersionEntity.Count
+            Version = currencyVersion
         };
     }
 }

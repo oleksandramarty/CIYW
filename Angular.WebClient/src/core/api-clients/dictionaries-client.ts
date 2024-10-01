@@ -527,7 +527,6 @@ export interface IInvalidFieldInfoModel {
 }
 
 export class BaseVersionEntity implements IBaseVersionEntity {
-    count?: string | undefined;
     version?: string | undefined;
 
     constructor(data?: IBaseVersionEntity) {
@@ -541,7 +540,6 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.count = _data["count"];
             this.version = _data["version"];
         }
     }
@@ -555,14 +553,12 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["count"] = this.count;
         data["version"] = this.version;
         return data;
     }
 }
 
 export interface IBaseVersionEntity {
-    count?: string | undefined;
     version?: string | undefined;
 }
 
@@ -1049,6 +1045,7 @@ export interface IGetCategoriesRequest extends IBaseVersionEntity {
 
 export class SiteSettingsResponse implements ISiteSettingsResponse {
     locale!: string;
+    version!: CacheVersionResponse;
 
     constructor(data?: ISiteSettingsResponse) {
         if (data) {
@@ -1057,11 +1054,15 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.version = new CacheVersionResponse();
+        }
     }
 
     init(_data?: any) {
         if (_data) {
             this.locale = _data["locale"];
+            this.version = _data["version"] ? CacheVersionResponse.fromJS(_data["version"]) : new CacheVersionResponse();
         }
     }
 
@@ -1075,11 +1076,69 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["locale"] = this.locale;
+        data["version"] = this.version ? this.version.toJSON() : <any>undefined;
         return data;
     }
 }
 
 export interface ISiteSettingsResponse {
+    locale: string;
+    version: CacheVersionResponse;
+}
+
+export class CacheVersionResponse implements ICacheVersionResponse {
+    localizationPublic!: string;
+    localization!: string;
+    category!: string;
+    currency!: string;
+    country!: string;
+    locale!: string;
+
+    constructor(data?: ICacheVersionResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.localizationPublic = _data["localizationPublic"];
+            this.localization = _data["localization"];
+            this.category = _data["category"];
+            this.currency = _data["currency"];
+            this.country = _data["country"];
+            this.locale = _data["locale"];
+        }
+    }
+
+    static fromJS(data: any): CacheVersionResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CacheVersionResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["localizationPublic"] = this.localizationPublic;
+        data["localization"] = this.localization;
+        data["category"] = this.category;
+        data["currency"] = this.currency;
+        data["country"] = this.country;
+        data["locale"] = this.locale;
+        return data;
+    }
+}
+
+export interface ICacheVersionResponse {
+    localizationPublic: string;
+    localization: string;
+    category: string;
+    currency: string;
+    country: string;
     locale: string;
 }
 

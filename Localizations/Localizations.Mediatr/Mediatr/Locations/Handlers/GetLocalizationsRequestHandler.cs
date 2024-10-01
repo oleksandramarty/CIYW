@@ -22,30 +22,21 @@ public class GetLocalizationsRequestHandler: IRequestHandler<GetLocalizationsReq
 
     public async Task<LocalizationsResponse> Handle(GetLocalizationsRequest request, CancellationToken cancellationToken)
     {
-        bool isAuthenticated = this.authRepository.IsAuthenticated();
-
-        BaseVersionEntity baseVersionEntity = await this.localizationRepository.GetLocalizationVersionAsync();
+        string currentVersion = await this.localizationRepository.GetLocalizationVersionAsync(request.IsPublic);
 
         LocalizationsResponse response = new LocalizationsResponse();
         
-        var currentCount = isAuthenticated ? 
-            baseVersionEntity.Count?.Split(":").Select(int.Parse).Max().ToString() :
-            baseVersionEntity.Count?.Split(":").Select(int.Parse).Min().ToString();
-        
-        response.Version = baseVersionEntity.Version;
-        response.Count = currentCount;
+        response.Version = currentVersion;
         
         if (
             !string.IsNullOrEmpty(request.Version) && 
-            request.Version.Equals(baseVersionEntity.Version) && 
-            !string.IsNullOrEmpty(request.Count) &&
-            request.Count.Equals(currentCount))
+            request.Version.Equals(currentVersion))
         {
             response.Data = new Dictionary<string, Dictionary<string, string>>();
         }
         else
         {
-            response.Data = await this.localizationRepository.GetLocalizationDataAllAsync(!isAuthenticated);
+            response.Data = await this.localizationRepository.GetLocalizationDataAllAsync(request.IsPublic);
         }
         
         return response;
