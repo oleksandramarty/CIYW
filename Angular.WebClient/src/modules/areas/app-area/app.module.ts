@@ -35,6 +35,7 @@ import {SiteSettingsService} from "../../../core/services/site-settings.service"
 import {DictionaryService} from "../../../core/services/dictionary.service";
 import {API_BASE_URL_AuditTrail} from "../../../core/api-clients/audit-trail-client";
 import {NightSkyComponent} from "../../common/background/night-sky/night-sky.component";
+import {UserProjectsAreaModule} from "../user-projects-area/user-projects-area.module";
 
 export const MY_FORMATS = {
   parse: {
@@ -55,6 +56,12 @@ const routes: Routes = [
   { path: 'profile', pathMatch: 'full', redirectTo: 'in-development' },
   { path: 'settings', pathMatch: 'full', redirectTo: 'in-development' },
   { path: 'notifications', pathMatch: 'full', redirectTo: 'in-development' },
+  {
+    path: '',
+    loadChildren: () => import('../user-projects-area/user-projects-area.module')
+      .then(m => m.UserProjectsAreaModule),
+    canActivate: [AuthGuard]
+  },
   {
     path: '',
     loadChildren: () => import('../expenses-area/expenses-area.module')

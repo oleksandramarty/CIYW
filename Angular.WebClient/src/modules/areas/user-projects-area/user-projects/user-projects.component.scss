@@ -1,0 +1,85 @@
+.dashboard-container {
+
+}
+
+.user-project-cards {
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 1rem 0rem;
+}
+
+.user-project-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 20px;
+  width: calc(33.333% - 20px);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.user-project-card:hover,
+.user-project-card:active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-project-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.user-project-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.balance {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+}
+
+.currency {
+  font-weight: bold;
+}
+
+.amount {
+  color: #4caf50;
+}
+
+@media (max-width: 768px) {
+  .user-project-card {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .user-project-card {
+    width: 100%;
+  }
+}
+.user-project-add {
+  background-color: #4b90e2;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  position: relative;
+}
+.user-project-add-container {
+  display: flex;
+  justify-content: center;
+}
+.user-project-add i {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

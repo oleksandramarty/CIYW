@@ -413,6 +413,103 @@ export class AuthClient {
         }
         return _observableOf(null as any);
     }
+
+    user_CreateOrUpdateUserSetting(command: CreateOrUpdateUserSettingCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/v1/users/settings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUser_CreateOrUpdateUserSetting(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUser_CreateOrUpdateUserSetting(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUser_CreateOrUpdateUserSetting(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export class ErrorMessageModel implements IErrorMessageModel {
@@ -774,11 +871,13 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
     lastForgotPassword?: Date | undefined;
     lastForgotPasswordRequest?: Date | undefined;
     roles!: RoleResponse[];
+    userSetting!: UserSettingResponse;
 
     constructor(data?: IUserResponse) {
         super(data);
         if (!data) {
             this.roles = [];
+            this.userSetting = new UserSettingResponse();
         }
     }
 
@@ -803,6 +902,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
                 for (let item of _data["roles"])
                     this.roles!.push(RoleResponse.fromJS(item));
             }
+            this.userSetting = _data["userSetting"] ? UserSettingResponse.fromJS(_data["userSetting"]) : new UserSettingResponse();
         }
     }
 
@@ -833,6 +933,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
+        data["userSetting"] = this.userSetting ? this.userSetting.toJSON() : <any>undefined;
         super.toJSON(data);
         return data;
     }
@@ -853,6 +954,7 @@ export interface IUserResponse extends IBaseDateTimeEntityOfGuid {
     lastForgotPassword?: Date | undefined;
     lastForgotPasswordRequest?: Date | undefined;
     roles: RoleResponse[];
+    userSetting: UserSettingResponse;
 }
 
 export enum UserAuthMethodEnum {
@@ -931,6 +1033,104 @@ export class RoleResponse extends BaseIdEntityOfInteger implements IRoleResponse
 export interface IRoleResponse extends IBaseIdEntityOfInteger {
     title: string;
     userRole: UserRoleEnum;
+}
+
+export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSettingResponse {
+    defaultLocale!: string;
+    defaultTimeZone!: number;
+    defaultCurrency!: number;
+    defaultUserProject!: string;
+    userId!: string;
+
+    constructor(data?: IUserSettingResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.defaultLocale = _data["defaultLocale"];
+            this.defaultTimeZone = _data["defaultTimeZone"];
+            this.defaultCurrency = _data["defaultCurrency"];
+            this.defaultUserProject = _data["defaultUserProject"];
+            this.userId = _data["userId"];
+        }
+    }
+
+    static override fromJS(data: any): UserSettingResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserSettingResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["defaultLocale"] = this.defaultLocale;
+        data["defaultTimeZone"] = this.defaultTimeZone;
+        data["defaultCurrency"] = this.defaultCurrency;
+        data["defaultUserProject"] = this.defaultUserProject;
+        data["userId"] = this.userId;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUserSettingResponse extends IBaseIdEntityOfGuid {
+    defaultLocale: string;
+    defaultTimeZone: number;
+    defaultCurrency: number;
+    defaultUserProject: string;
+    userId: string;
+}
+
+export class CreateOrUpdateUserSettingCommand extends BaseIdEntityOfNullableGuid implements ICreateOrUpdateUserSettingCommand {
+    defaultLocale!: string;
+    timeZone!: number;
+    currencyId!: number;
+    countryId!: number;
+    defaultUserProject!: string;
+
+    constructor(data?: ICreateOrUpdateUserSettingCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.defaultLocale = _data["defaultLocale"];
+            this.timeZone = _data["timeZone"];
+            this.currencyId = _data["currencyId"];
+            this.countryId = _data["countryId"];
+            this.defaultUserProject = _data["defaultUserProject"];
+        }
+    }
+
+    static override fromJS(data: any): CreateOrUpdateUserSettingCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrUpdateUserSettingCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["defaultLocale"] = this.defaultLocale;
+        data["timeZone"] = this.timeZone;
+        data["currencyId"] = this.currencyId;
+        data["countryId"] = this.countryId;
+        data["defaultUserProject"] = this.defaultUserProject;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateOrUpdateUserSettingCommand extends IBaseIdEntityOfNullableGuid {
+    defaultLocale: string;
+    timeZone: number;
+    currencyId: number;
+    countryId: number;
+    defaultUserProject: string;
 }
 
 export class ApiException extends Error {

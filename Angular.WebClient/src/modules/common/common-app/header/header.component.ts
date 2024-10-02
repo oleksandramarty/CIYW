@@ -23,10 +23,8 @@ export class HeaderComponent implements OnInit {
     ['it', '🇮🇹'],
   ]);
   public menuItems: { url: string, title: string }[] = [
-    {url: 'home', title: 'MENU.HOME'},
-    {url: 'vacancies', title: 'MENU.VACANCIES'},
-    {url: 'profile', title: 'MENU.PROFILE'},
-    {url: 'settings', title: 'MENU.SETTINGS'},
+    {url: 'projects', title: 'MENU.PROJECTS'},
+    {url: 'analytics', title: 'MENU.ANALYTICS'},
   ];
   public currentUser: UserResponse | undefined
 

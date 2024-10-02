@@ -21,18 +21,24 @@ public class GetUserProjectsRequestHandler: MediatrAuthBase, IRequestHandler<Get
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
         ) : base(authRepository)
     {
+        this.mapper = mapper;
         this.userProjectRepository = userProjectRepository;
     }
     
     public async Task<List<UserProjectResponse>> Handle(GetUserProjectsRequest request, CancellationToken cancellationToken)
     {
         Guid userId = await GetCurrentUserIdAsync();
-        
+
         var userProjects = await userProjectRepository
             .GetListAsync(
                 x => x.CreatedUserId == userId,
                 cancellationToken,
                 up => up.Include(b => b.Balances));
-        return userProjects.Select(up => this.mapper.Map<UserProject, UserProjectResponse>(up)).ToList();
+
+        List<UserProjectResponse> response = userProjects?
+            .Select(up => this.mapper.Map<UserProject, UserProjectResponse>(up))
+            .ToList() ?? new List<UserProjectResponse>();
+
+        return response;
     }
 }

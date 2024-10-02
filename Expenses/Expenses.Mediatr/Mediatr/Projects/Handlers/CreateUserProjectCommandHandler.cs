@@ -43,7 +43,7 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
         
-        UserProject userProject = this.mapper.Map<UserProject>(command);
+        UserProject userProject = this.mapper.Map<UserProject>(command, opts => opts.Items["IsUpdate"] = false);
         
         userProject.Id = Guid.NewGuid();
         userProject.CreatedUserId = userId;
@@ -54,7 +54,8 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
             Amount = 0,
             Created = DateTime.UtcNow,
             CurrencyId = c,
-            UserProjectId = userProject.Id
+            UserProjectId = userProject.Id,
+            UserId = userId
         }).ToList();
         
         await this.userProjectRepository.AddAsync(userProject, cancellationToken);

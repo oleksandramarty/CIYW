@@ -1,4 +1,5 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 
 namespace CommonModule.Shared.Responses.Expenses.Models.Balances;
 

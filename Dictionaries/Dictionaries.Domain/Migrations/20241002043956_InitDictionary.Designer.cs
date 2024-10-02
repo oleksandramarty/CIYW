@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dictionaries.Domain.Migrations
 {
     [DbContext(typeof(DictionariesDataContext))]
-    [Migration("20240927062717_InitDictionary")]
+    [Migration("20241002043956_InitDictionary")]
     partial class InitDictionary
     {
         /// <inheritdoc />

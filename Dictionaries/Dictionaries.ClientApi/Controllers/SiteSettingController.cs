@@ -10,7 +10,7 @@ namespace Dictionaries.ClientApi.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/v1/siteSettings")]
+[Route("api/v1/site-settings")]
 public class SiteSettingController : BaseController
 {
     private readonly IMediator mediator;

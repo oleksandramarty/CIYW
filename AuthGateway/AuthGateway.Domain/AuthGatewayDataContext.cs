@@ -9,6 +9,7 @@ public class AuthGatewayDataContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<UserSetting> UserSettings { get; set; }
 
     public AuthGatewayDataContext(DbContextOptions<AuthGatewayDataContext> options)
         : base(options)
@@ -23,6 +24,9 @@ public class AuthGatewayDataContext : DbContext
             entity.HasMany(u => u.Roles)
                 .WithOne(ur => ur.User)
                 .HasForeignKey(ur => ur.UserId);
+            entity.HasOne(u => u.UserSetting)
+                .WithOne(us => us.User)
+                .HasForeignKey<UserSetting>(us => us.UserId);
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -37,6 +41,11 @@ public class AuthGatewayDataContext : DbContext
         {
             entity.ToTable("UserRoles", "Users");
             entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+        });
+        
+        modelBuilder.Entity<UserSetting>(entity =>
+        {
+            entity.ToTable("UserSettings", "Users");
         });
 
         var cascadeFKs = modelBuilder.Model.GetEntityTypes()

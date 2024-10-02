@@ -1,6 +1,7 @@
 using AuthGateway.Domain.Models.Users;
 using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AutoMapper;
+using CommonModule.Core.Extensions;
 using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.AuthGateway.Users;
 
@@ -24,6 +25,7 @@ public class MappingAuthProfile: Profile
                                     UserRole = r.Role.UserRole
                                 }).ToList() : new List<RoleResponse>()));
         this.CreateMap<Role, RoleResponse>();
+        this.CreateMap<UserSetting, UserSettingResponse>();
         
         this.CreateMap<AuthSignUpCommand, User>()
             .AfterMap((src, dest) =>
@@ -36,5 +38,9 @@ public class MappingAuthProfile: Profile
                 dest.IsTemporaryPassword = true;
                 dest.AuthType = UserAuthMethodEnum.Base;
             });
+
+        this.CreateMap<CreateOrUpdateUserSettingCommand, UserSetting>()
+            .ConstructUsing((src, ctx) => 
+                this.CreateOrUpdateEntity<CreateOrUpdateUserSettingCommand, UserSetting>(src, ctx));
     }
 }

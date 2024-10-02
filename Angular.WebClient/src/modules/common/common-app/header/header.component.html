@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="app-header">
   <!-- Title on the left -->
-  <span class="app-title">Cash in your wallet</span>
+  <span class="app-title" (click)="goto('dashboard')">Cash in your wallet</span>
 
   <nav class="header-center" *ngIf="!!isAuthorized$ && (isAuthorized$ | async) && currentUser">
     <a

@@ -53,6 +53,9 @@ export class InputComponent implements OnInit, OnDestroy{
   internalFormGroup: FormGroup | undefined;
 
   constructor(private snackBar: MatSnackBar) {
+    if (this.dataItems) {
+      this.dataItems.sort((a, b) => (b.isImportant ? 1 : 0) - (a.isImportant ? 1 : 0));
+    }
   }
 
   public ngOnInit(): void {

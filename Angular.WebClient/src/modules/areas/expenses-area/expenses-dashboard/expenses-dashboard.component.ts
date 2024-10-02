@@ -8,6 +8,16 @@ import {
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 
+interface Balance {
+    currency: string;
+    amount: number;
+}
+
+interface Account {
+    name: string;
+    balances: Balance[];
+}
+
 @Component({
   selector: 'app-expenses-dashboard',
   templateUrl: './expenses-dashboard.component.html',
@@ -17,6 +27,24 @@ export class ExpensesDashboardComponent implements OnInit, OnDestroy {
   protected ngUnsubscribe: Subject<void> = new Subject<void>();
   userProjects: UserProjectResponse[] = [];
   allowedProjects: UserAllowedProjectResponse[] = [];
+
+    accounts: Account[] = [
+        {
+            name: 'Account 1',
+            balances: [
+                { currency: 'USD', amount: 1000 },
+                { currency: 'EUR', amount: 800 },
+                { currency: 'GBP', amount: 700 }
+            ]
+        },
+        {
+            name: 'Account 2',
+            balances: [
+                { currency: 'USD', amount: 500 },
+                { currency: 'JPY', amount: 50000 }
+            ]
+        }
+    ];
 
   constructor(
       private readonly expenseClient: ExpenseClient,

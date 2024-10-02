@@ -22,4 +22,6 @@ public class UserResponse: BaseDateTimeEntity<Guid>, IActivatable
     public DateTime? LastForgotPasswordRequest { get; set; }
     
     public ICollection<RoleResponse> Roles { get; set; }
+    
+    public UserSettingResponse UserSetting { get; set; }
 }

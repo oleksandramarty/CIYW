@@ -51,14 +51,8 @@ namespace AuthGateway.Domain.Migrations
                     b.Property<int>("AuthType")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("CountryId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("CurrencyId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -99,6 +93,9 @@ namespace AuthGateway.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("UserSettingId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", "Users");
@@ -122,6 +119,45 @@ namespace AuthGateway.Domain.Migrations
                     b.ToTable("UserRoles", "Users");
                 });
 
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("CurrencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DefaultLocale")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("DefaultUserProject")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TimeZone")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserSettings", "Users");
+                });
+
             modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserRole", b =>
                 {
                     b.HasOne("AuthGateway.Domain.Models.Users.Role", "Role")
@@ -141,6 +177,17 @@ namespace AuthGateway.Domain.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserSetting", b =>
+                {
+                    b.HasOne("AuthGateway.Domain.Models.Users.User", "User")
+                        .WithOne("UserSetting")
+                        .HasForeignKey("AuthGateway.Domain.Models.Users.UserSetting", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AuthGateway.Domain.Models.Users.Role", b =>
                 {
                     b.Navigation("Users");
@@ -149,6 +196,9 @@ namespace AuthGateway.Domain.Migrations
             modelBuilder.Entity("AuthGateway.Domain.Models.Users.User", b =>
                 {
                     b.Navigation("Roles");
+
+                    b.Navigation("UserSetting")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

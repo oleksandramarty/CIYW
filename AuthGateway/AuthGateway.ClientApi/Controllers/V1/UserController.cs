@@ -1,3 +1,4 @@
+using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using CommonModule.Core;
 using CommonModule.Shared.Responses.AuthGateway.Users;
@@ -25,5 +26,13 @@ public class UserController : BaseController
     {
         UserResponse response = await this.mediator.Send(new GetCurrentUserRequest());
         return Ok(response);
+    }
+    
+    [HttpPost("settings")]
+    [ProducesResponseType(typeof(void), 200)]
+    public async Task<IActionResult> CreateOrUpdateUserSettingAsync([FromBody] CreateOrUpdateUserSettingCommand command, CancellationToken cancellationToken)
+    {
+        await this.mediator.Send(command, cancellationToken);
+        return Ok();
     }
 }

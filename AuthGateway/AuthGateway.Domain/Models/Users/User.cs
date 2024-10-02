@@ -14,12 +14,14 @@ public class User: BaseDateTimeEntity<Guid>, IActivatable
     public string Salt { get; set; }
     public bool IsActive { get; set; }
     public bool IsTemporaryPassword { get; set; }
-    public int? CountryId { get; set; }
-    public int? CurrencyId { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
     
     public DateTime? LastForgotPassword { get; set; }
     public DateTime? LastForgotPasswordRequest { get; set; }
     
     public ICollection<UserRole> Roles { get; set; }
+    
+    // TODO make non nullable after migration
+    public Guid? UserSettingId { get; set; }
+    public UserSetting UserSetting { get; set; }
 }

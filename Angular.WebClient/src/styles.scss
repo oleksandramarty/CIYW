@@ -247,3 +247,13 @@ mat-grid-tile {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+.mat-dialog{
+  &-body-container {
+    padding: 1rem 0rem;
+  }
+  &-actions-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+}

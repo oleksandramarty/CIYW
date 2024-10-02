@@ -12,19 +12,32 @@ import {
     VersionedListOfTreeNodeResponseOfCategoryResponse
 } from "../../api-clients/dictionaries-client";
 
-export interface IKeyValue {
-    key: string | undefined;
-    value: string | undefined;
-}
+export class DictionaryMap<TKey, TValue> {
+  private items: Map<TKey, TValue>;
 
-export class KeyValue implements IKeyValue {
-    key: string | undefined;
-    value: string | undefined;
+  constructor() {
+    this.items = new Map<TKey, TValue>();
+  }
 
-    constructor(key: string | undefined, value: string | undefined) {
-        this.key = key;
-        this.value = value;
-    }
+  public set(key: TKey, value: TValue): void {
+    this.items.set(key, value);
+  }
+
+  public get(key: TKey): TValue | undefined {
+    return this.items.get(key);
+  }
+
+  public has(key: TKey): boolean {
+    return this.items.has(key);
+  }
+
+  public delete(key: TKey): void {
+    this.items.delete(key);
+  }
+
+  public clear(): void {
+    this.items.clear();
+  }
 }
 
 export interface IDictionaryDataItems {
@@ -46,8 +59,6 @@ export interface IDictionary {
     currencies: IVersionedListOfCurrencyResponse | undefined;
     categories: IVersionedListOfTreeNodeResponseOfCategoryResponse | undefined;
     locales: IVersionedListOfLocaleResponse | undefined;
-
-    dataItems: IDictionaryDataItems | undefined;
 }
 
 export class Dictionary implements IDictionary {
@@ -55,6 +66,4 @@ export class Dictionary implements IDictionary {
     currencies: VersionedListOfCurrencyResponse | undefined;
     categories: VersionedListOfTreeNodeResponseOfCategoryResponse | undefined;
     locales: VersionedListOfLocaleResponse | undefined;
-
-     dataItems: DictionaryDataItems | undefined;
 }

@@ -814,13 +814,11 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
     isActive!: boolean;
     createdUserId!: string;
     balances!: BalanceResponse[];
-    expenses!: ExpenseResponse[];
 
     constructor(data?: IUserProjectResponse) {
         super(data);
         if (!data) {
             this.balances = [];
-            this.expenses = [];
         }
     }
 
@@ -834,11 +832,6 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
                 this.balances = [] as any;
                 for (let item of _data["balances"])
                     this.balances!.push(BalanceResponse.fromJS(item));
-            }
-            if (Array.isArray(_data["expenses"])) {
-                this.expenses = [] as any;
-                for (let item of _data["expenses"])
-                    this.expenses!.push(ExpenseResponse.fromJS(item));
             }
         }
     }
@@ -860,11 +853,6 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
             for (let item of this.balances)
                 data["balances"].push(item.toJSON());
         }
-        if (Array.isArray(this.expenses)) {
-            data["expenses"] = [];
-            for (let item of this.expenses)
-                data["expenses"].push(item.toJSON());
-        }
         super.toJSON(data);
         return data;
     }
@@ -875,7 +863,6 @@ export interface IUserProjectResponse extends IBaseDateTimeEntityOfGuid {
     isActive: boolean;
     createdUserId: string;
     balances: BalanceResponse[];
-    expenses: ExpenseResponse[];
 }
 
 export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanceResponse {
@@ -923,69 +910,9 @@ export interface IBalanceResponse extends IBaseDateTimeEntityOfGuid {
     userProjectId: string;
 }
 
-export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpenseResponse {
-    title!: string;
-    description?: string | undefined;
-    amount!: number;
-    balanceId!: string;
-    date!: Date;
-    categoryId!: number;
-    userProjectId!: string;
-    createdUserId!: string;
-
-    constructor(data?: IExpenseResponse) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.amount = _data["amount"];
-            this.balanceId = _data["balanceId"];
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.categoryId = _data["categoryId"];
-            this.userProjectId = _data["userProjectId"];
-            this.createdUserId = _data["createdUserId"];
-        }
-    }
-
-    static override fromJS(data: any): ExpenseResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new ExpenseResponse();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["amount"] = this.amount;
-        data["balanceId"] = this.balanceId;
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["categoryId"] = this.categoryId;
-        data["userProjectId"] = this.userProjectId;
-        data["createdUserId"] = this.createdUserId;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
-    title: string;
-    description?: string | undefined;
-    amount: number;
-    balanceId: string;
-    date: Date;
-    categoryId: number;
-    userProjectId: string;
-    createdUserId: string;
-}
-
 export class CreateUserProjectCommand implements ICreateUserProjectCommand {
     title!: string;
+    isActive!: boolean;
     currencyIds!: number[];
 
     constructor(data?: ICreateUserProjectCommand) {
@@ -1003,6 +930,7 @@ export class CreateUserProjectCommand implements ICreateUserProjectCommand {
     init(_data?: any) {
         if (_data) {
             this.title = _data["title"];
+            this.isActive = _data["isActive"];
             if (Array.isArray(_data["currencyIds"])) {
                 this.currencyIds = [] as any;
                 for (let item of _data["currencyIds"])
@@ -1021,6 +949,7 @@ export class CreateUserProjectCommand implements ICreateUserProjectCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
+        data["isActive"] = this.isActive;
         if (Array.isArray(this.currencyIds)) {
             data["currencyIds"] = [];
             for (let item of this.currencyIds)
@@ -1032,6 +961,7 @@ export class CreateUserProjectCommand implements ICreateUserProjectCommand {
 
 export interface ICreateUserProjectCommand {
     title: string;
+    isActive: boolean;
     currencyIds: number[];
 }
 

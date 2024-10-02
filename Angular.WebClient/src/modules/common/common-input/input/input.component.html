@@ -33,7 +33,8 @@
         [multiple]="type === 'multiselect'"
         [formControlName]="controlName">
         <mat-option *ngFor="let item of dataItems; let i=index" [value]="item.id">
-          <span [translation]="item.name"></span>
+          <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant}"></span>
+          <span class="select-description-hint" [translation]="item.description"></span>
         </mat-option>
       </mat-select>
       <ng-container *ngIf="!!icon">

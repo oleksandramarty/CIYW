@@ -330,7 +330,7 @@ export class DictionaryClient {
     }
 
     siteSetting_GetSettings(): Observable<SiteSettingsResponse> {
-        let url_ = this.baseUrl + "/api/v1/siteSettings";
+        let url_ = this.baseUrl + "/api/v1/site-settings";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {

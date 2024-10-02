@@ -12,6 +12,4 @@ public class UserProjectResponse: BaseDateTimeEntity<Guid>, IActivatable
     public Guid CreatedUserId { get; set; }
     
     public ICollection<BalanceResponse> Balances { get; set; }
-    
-    public ICollection<ExpenseResponse> Expenses { get; set; }
 }

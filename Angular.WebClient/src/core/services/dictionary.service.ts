@@ -1,10 +1,15 @@
 import { Injectable } from "@angular/core";
 import {
+    CategoryResponse,
+    CountryResponse,
+    CurrencyResponse,
     DictionaryClient,
     GetCategoriesRequest,
     GetCountriesRequest,
     GetCurrenciesRequest,
-    TreeNodeResponseOfCategoryResponse
+    TreeNodeResponseOfCategoryResponse,
+    VersionedListOfCountryResponse, VersionedListOfCurrencyResponse,
+    VersionedListOfTreeNodeResponseOfCategoryResponse
 } from "../api-clients/dictionaries-client";
 import {catchError, forkJoin, take, tap} from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -12,9 +17,9 @@ import { handleApiError } from "../helpers/rxjs.helper";
 import {
     GetLocalesRequest,
     LocaleResponse,
-    LocalizationClient
+    LocalizationClient, VersionedListOfLocaleResponse
 } from "../api-clients/localizations-client";
-import {Dictionary, DictionaryDataItems} from "../models/common/dictionarie.model";
+import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionarie.model";
 import {LocalStorageService} from "./local-storage.service";
 import {SiteSettingsService} from "./site-settings.service";
 import {DataItem} from "../models/common/data-item.model";
@@ -25,8 +30,105 @@ import {DataItem} from "../models/common/data-item.model";
 export class DictionaryService {
     _dictionaries: Dictionary | undefined;
 
+    _dataItems: DictionaryDataItems | undefined;
+
+    _countriesMap: DictionaryMap<number, CountryResponse> | undefined;
+    _currenciesMap: DictionaryMap<number, CurrencyResponse> | undefined;
+    _categoriesMap: DictionaryMap<number, CategoryResponse> | undefined;
+    _localesMap: DictionaryMap<number, LocaleResponse> | undefined;
+
+    private readonly _importantCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'MDL', 'UAH']
+
     get dictionaries(): Dictionary | undefined {
         return this._dictionaries;
+    }
+
+    get dataItems(): DictionaryDataItems | undefined {
+        return this._dataItems;
+    }
+
+    get countriesMap(): DictionaryMap<number, CountryResponse> | undefined {
+        if (!this._countriesMap && this.dictionaries?.countries?.items) {
+            this._countriesMap = new DictionaryMap<number, CountryResponse>();
+
+            for (const country of this.dictionaries.countries.items) {
+                this._countriesMap.set(country.id, country);
+            }
+        }
+        return this._countriesMap;
+    }
+
+    set countriesMap(value: VersionedListOfCountryResponse | undefined) {
+        if (!!value) {
+            this._countriesMap = new DictionaryMap<number, CountryResponse>();
+
+            for (const country of value.items) {
+                this._countriesMap.set(country.id, country);
+            }
+        }
+    }
+
+    get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {
+        if (!this._currenciesMap && this.dictionaries?.currencies?.items) {
+            this._currenciesMap = new DictionaryMap<number, CurrencyResponse>();
+
+            for (const currency of this.dictionaries.currencies.items) {
+                this._currenciesMap.set(currency.id, currency);
+            }
+        }
+        return this._currenciesMap;
+    }
+
+    set currenciesMap(value: VersionedListOfCurrencyResponse | undefined) {
+        if (!!value) {
+            this._currenciesMap = new DictionaryMap<number, CurrencyResponse>();
+
+            for (const currency of value.items) {
+                this._currenciesMap.set(currency.id, currency);
+            }
+        }
+    }
+
+    get categoriesMap(): DictionaryMap<number, CategoryResponse> | undefined {
+        if (!this._categoriesMap && this.dictionaries?.categories?.items) {
+            this._categoriesMap = new DictionaryMap<number, CategoryResponse>();
+
+            for (const category of this.mapCategoriesToCountries(this.dictionaries.categories.items)) {
+                this._categoriesMap.set(category.id, category);
+            }
+        }
+        return this._categoriesMap;
+    }
+
+    set categoriesMap(value: VersionedListOfTreeNodeResponseOfCategoryResponse | undefined) {
+        if (!!value) {
+            this._categoriesMap = new DictionaryMap<number, CategoryResponse>();
+
+            for (const category of this.mapCategoriesToCountries(value.items)) {
+                this._categoriesMap.set(category.id, category);
+            }
+        }
+    }
+
+    get localesMap(): DictionaryMap<number, LocaleResponse> | undefined {
+        if (!this._localesMap && this.dictionaries?.locales?.items) {
+            this._localesMap = new DictionaryMap<number, LocaleResponse>();
+
+            for (const locale of this.dictionaries.locales.items) {
+                this._localesMap.set(locale.id, locale);
+            }
+        }
+        return this._localesMap;
+    }
+
+    set localesMap(value: VersionedListOfLocaleResponse | undefined) {
+        if (!!value) {
+            this._localesMap = new DictionaryMap<number, LocaleResponse>();
+
+            for (const locale of value.items) {
+                this._localesMap.set(locale.id, locale);
+            }
+        }
     }
 
     get currentLocale(): LocaleResponse | undefined {
@@ -58,12 +160,17 @@ export class DictionaryService {
                 tap(({ locales }) => {
                     if (this._dictionaries) {
                         this._dictionaries.locales = locales;
+
+                        this.localesMap = locales;
+
                         this.updateDateItems(true);
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
                     }
                 }),
                 catchError(handleApiError(this.snackBar))
             ).subscribe();
+        } else {
+            this.updateDateItems(true);
         }
     }
 
@@ -93,27 +200,55 @@ export class DictionaryService {
                         this._dictionaries.currencies = currencies;
                         this._dictionaries.categories = categories;
 
+                        this.countriesMap = countries;
+                        this.currenciesMap = currencies;
+                        this.categoriesMap = categories;
+
                         this.updateDateItems(false);
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
                     }
                 }),
                 catchError(handleApiError(this.snackBar))
             ).subscribe();
+        } else {
+            this.updateDateItems(false);
         }
     }
 
 
     private updateDateItems(isPublic: boolean): void {
-        if (this.dictionaries?.dataItems === undefined) {
-            this.dictionaries!.dataItems = new DictionaryDataItems();
+        if (this._dataItems === undefined) {
+            this._dataItems = new DictionaryDataItems();
         }
 
         if (isPublic) {
-            this.dictionaries!.dataItems.locales = this.dictionaries!.locales?.items.map(locale => new DataItem(String(locale.id), locale.title, locale.titleEn));
+            this._dataItems.locales = this._dictionaries?.locales?.items
+                .sort((a, b) => a.id - b.id)
+                .map(locale => new DataItem(String(locale.id), locale.title, locale.titleEn));
         } else {
-            this.dictionaries!.dataItems.countries = this.dictionaries!.countries?.items.map(country => new DataItem(String(country.id), country.titleEn, country.title));
-            this.dictionaries!.dataItems.currencies = this.dictionaries!.currencies?.items.map(currency => new DataItem(String(currency.id), currency.titleEn, `${currency.code} - ${currency.title}`));
-            this.dictionaries!.dataItems.categories = this.mapCategories(this.dictionaries!.categories?.items || []);
+            this._dataItems.countries = this.dictionaries?.countries?.items
+                .sort((a, b) => a.id - b.id)
+                .map(country => new DataItem(String(country.id), country.titleEn, country.title));
+            this._dataItems.currencies = this.dictionaries?.currencies?.items
+                .sort((a, b) => {
+                    const importantCurrencies = this._importantCurrencies;
+                    const aIsImportant = importantCurrencies.includes(a.code);
+                    const bIsImportant = importantCurrencies.includes(b.code);
+
+                    if (aIsImportant && !bIsImportant) return -1;
+                    if (!aIsImportant && bIsImportant) return 1;
+                    return a.id - b.id;
+                })
+                .map(currency =>
+                    new DataItem(
+                        String(currency.id),
+                        currency.titleEn,
+                        `${currency.code} - ${currency.title}`,
+                        true,
+                        this._importantCurrencies.includes(currency.code)
+                    )
+                );
+            this._dataItems.categories = this.mapCategories(this.dictionaries?.categories?.items || []);
         }
     }
 
@@ -131,5 +266,31 @@ export class DictionaryService {
             children: category.node?.children ? this.mapCategories(category.node.children) : []
         };
         return dataItem;
+    }
+
+    private mapCategoriesToCountries(categories: TreeNodeResponseOfCategoryResponse[]): CategoryResponse[] {
+        let categoriesArr: CategoryResponse[] = [];
+
+        categories.forEach(category => {
+            this.mapCategoryToCountry(category.node!, categoriesArr);
+        });
+
+        return categoriesArr;
+    }
+
+    private mapCategoryToCountry(category: CategoryResponse, categories: CategoryResponse[]): CategoryResponse[] {
+        if (!category) {
+            return categories;
+        }
+
+        categories.push(category);
+
+        if (category.children) {
+            category.children.forEach(child => {
+                this.mapCategoryToCountry(child.node!, categories);
+            });
+        }
+
+        return categories;
     }
 }

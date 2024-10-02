@@ -44,11 +44,10 @@ namespace AuthGateway.Domain.Migrations
                     Salt = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     IsTemporaryPassword = table.Column<bool>(type: "boolean", nullable: false),
-                    CountryId = table.Column<int>(type: "integer", nullable: true),
-                    CurrencyId = table.Column<int>(type: "integer", nullable: true),
                     AuthType = table.Column<int>(type: "integer", nullable: false),
                     LastForgotPassword = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastForgotPasswordRequest = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UserSettingId = table.Column<Guid>(type: "uuid", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -85,11 +84,45 @@ namespace AuthGateway.Domain.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserSettings",
+                schema: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DefaultLocale = table.Column<string>(type: "text", nullable: false),
+                    TimeZone = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: true),
+                    CountryId = table.Column<int>(type: "integer", nullable: true),
+                    DefaultUserProject = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSettings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserSettings_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "Users",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
                 schema: "Users",
                 table: "UserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSettings_UserId",
+                schema: "Users",
+                table: "UserSettings",
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -97,6 +130,10 @@ namespace AuthGateway.Domain.Migrations
         {
             migrationBuilder.DropTable(
                 name: "UserRoles",
+                schema: "Users");
+
+            migrationBuilder.DropTable(
+                name: "UserSettings",
                 schema: "Users");
 
             migrationBuilder.DropTable(

@@ -2,6 +2,7 @@ using AutoMapper;
 using CommonModule.Core.Extensions;
 using CommonModule.Shared.Responses.Expenses.Models.Balances;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
+using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
 using Expenses.Mediatr.Mediatr.Expenses.Commands;
@@ -9,7 +10,7 @@ using Expenses.Mediatr.Mediatr.Projects.Commands;
 
 namespace Expenses.Business;
 
-public class MappingExpensesProfile: Profile
+public class MappingExpensesProfile : Profile
 {
     public MappingExpensesProfile()
     {
@@ -33,7 +34,9 @@ public class MappingExpensesProfile: Profile
                         UserProjectId = b.UserProjectId,
                         CurrencyId = b.CurrencyId,
                         UserId = b.UserId
-                    }).ToList() : null));
+                    }).ToList() : new List<BalanceResponse>()));
+
+        this.CreateMap<Balance, BalanceResponse>();
 
         this.CreateMap<UserAllowedProject, UserAllowedProjectResponse>()
             .ForMember(dest => dest.UserProject, 
