@@ -43,4 +43,15 @@ public class UserProjectController: BaseController
         await mediator.Send(request, cancellationToken);
         return Ok();
     }
+    
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(UserProjectResponse), 200)]
+    public async Task<IActionResult> GetUserProjectAsync([FromRoute]Guid id, CancellationToken cancellationToken)
+    {
+        var response = await mediator.Send(new GetUserProjectByIdRequest
+        {
+            Id = id
+        }, cancellationToken);
+        return Ok(response);
+    }
 }

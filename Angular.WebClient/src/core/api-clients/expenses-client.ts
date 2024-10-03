@@ -219,6 +219,107 @@ export class ExpenseClient {
         return _observableOf(null as any);
     }
 
+    expense_GetFilteredExpenses(request: GetFilteredExpensesRequest): Observable<ListWithIncludeResponseOfExpenseResponse> {
+        let url_ = this.baseUrl + "/api/v1/expenses/filter";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processExpense_GetFilteredExpenses(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processExpense_GetFilteredExpenses(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ListWithIncludeResponseOfExpenseResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ListWithIncludeResponseOfExpenseResponse>;
+        }));
+    }
+
+    protected processExpense_GetFilteredExpenses(response: HttpResponseBase): Observable<ListWithIncludeResponseOfExpenseResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ListWithIncludeResponseOfExpenseResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     userProject_GetAllowedProjects(): Observable<UserAllowedProjectResponse[]> {
         let url_ = this.baseUrl + "/api/v1/user-projects/allowed";
         url_ = url_.replace(/[?&]$/, "");
@@ -523,6 +624,106 @@ export class ExpenseClient {
         }
         return _observableOf(null as any);
     }
+
+    userProject_GetUserProject(id: string): Observable<UserProjectResponse> {
+        let url_ = this.baseUrl + "/api/v1/user-projects/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUserProject_GetUserProject(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUserProject_GetUserProject(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UserProjectResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UserProjectResponse>;
+        }));
+    }
+
+    protected processUserProject_GetUserProject(response: HttpResponseBase): Observable<UserProjectResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserProjectResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export class ErrorMessageModel implements IErrorMessageModel {
@@ -688,6 +889,65 @@ export interface ICreateOrUpdateExpenseCommand {
     balanceId: string;
 }
 
+export class ListWithIncludeResponseOfExpenseResponse implements IListWithIncludeResponseOfExpenseResponse {
+    entities!: ExpenseResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount!: number;
+    totalCountWithoutFilter!: number;
+
+    constructor(data?: IListWithIncludeResponseOfExpenseResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.entities = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["entities"])) {
+                this.entities = [] as any;
+                for (let item of _data["entities"])
+                    this.entities!.push(ExpenseResponse.fromJS(item));
+            }
+            this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
+            this.totalCount = _data["totalCount"];
+            this.totalCountWithoutFilter = _data["totalCountWithoutFilter"];
+        }
+    }
+
+    static fromJS(data: any): ListWithIncludeResponseOfExpenseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListWithIncludeResponseOfExpenseResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.entities)) {
+            data["entities"] = [];
+            for (let item of this.entities)
+                data["entities"].push(item.toJSON());
+        }
+        data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
+        data["totalCount"] = this.totalCount;
+        data["totalCountWithoutFilter"] = this.totalCountWithoutFilter;
+        return data;
+    }
+}
+
+export interface IListWithIncludeResponseOfExpenseResponse {
+    entities: ExpenseResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount: number;
+    totalCountWithoutFilter: number;
+}
+
 export class BaseIdEntityOfGuid implements IBaseIdEntityOfGuid {
     id!: string;
 
@@ -722,6 +982,348 @@ export class BaseIdEntityOfGuid implements IBaseIdEntityOfGuid {
 
 export interface IBaseIdEntityOfGuid {
     id: string;
+}
+
+export class BaseDateTimeEntityOfGuid extends BaseIdEntityOfGuid implements IBaseDateTimeEntityOfGuid {
+    created!: Date;
+    modified?: Date | undefined;
+
+    constructor(data?: IBaseDateTimeEntityOfGuid) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.modified = _data["modified"] ? new Date(_data["modified"].toString()) : <any>undefined;
+        }
+    }
+
+    static override fromJS(data: any): BaseDateTimeEntityOfGuid {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseDateTimeEntityOfGuid();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["modified"] = this.modified ? this.modified.toISOString() : <any>undefined;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IBaseDateTimeEntityOfGuid extends IBaseIdEntityOfGuid {
+    created: Date;
+    modified?: Date | undefined;
+}
+
+export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpenseResponse {
+    title!: string;
+    description?: string | undefined;
+    amount!: number;
+    balanceId!: string;
+    date!: Date;
+    categoryId!: number;
+    categoryName!: string;
+    isIncome!: boolean;
+    userProjectId!: string;
+    createdUserId!: string;
+    version!: string;
+
+    constructor(data?: IExpenseResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.amount = _data["amount"];
+            this.balanceId = _data["balanceId"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.categoryId = _data["categoryId"];
+            this.categoryName = _data["categoryName"];
+            this.isIncome = _data["isIncome"];
+            this.userProjectId = _data["userProjectId"];
+            this.createdUserId = _data["createdUserId"];
+            this.version = _data["version"];
+        }
+    }
+
+    static override fromJS(data: any): ExpenseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ExpenseResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["amount"] = this.amount;
+        data["balanceId"] = this.balanceId;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["categoryId"] = this.categoryId;
+        data["categoryName"] = this.categoryName;
+        data["isIncome"] = this.isIncome;
+        data["userProjectId"] = this.userProjectId;
+        data["createdUserId"] = this.createdUserId;
+        data["version"] = this.version;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
+    title: string;
+    description?: string | undefined;
+    amount: number;
+    balanceId: string;
+    date: Date;
+    categoryId: number;
+    categoryName: string;
+    isIncome: boolean;
+    userProjectId: string;
+    createdUserId: string;
+    version: string;
+}
+
+export class PaginatorEntity implements IPaginatorEntity {
+    pageNumber!: number;
+    pageSize!: number;
+    isFull!: boolean;
+
+    constructor(data?: IPaginatorEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            this.isFull = _data["isFull"];
+        }
+    }
+
+    static fromJS(data: any): PaginatorEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatorEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["isFull"] = this.isFull;
+        return data;
+    }
+}
+
+export interface IPaginatorEntity {
+    pageNumber: number;
+    pageSize: number;
+    isFull: boolean;
+}
+
+export class BaseFilterRequestOfGuid implements IBaseFilterRequestOfGuid {
+    paginator?: PaginatorEntity | undefined;
+    sort?: BaseSortableRequest | undefined;
+    dateRange?: BaseDateRangeFilterRequest | undefined;
+    query?: string | undefined;
+    ids?: string[] | undefined;
+
+    constructor(data?: IBaseFilterRequestOfGuid) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
+            this.sort = _data["sort"] ? BaseSortableRequest.fromJS(_data["sort"]) : <any>undefined;
+            this.dateRange = _data["dateRange"] ? BaseDateRangeFilterRequest.fromJS(_data["dateRange"]) : <any>undefined;
+            this.query = _data["query"];
+            if (Array.isArray(_data["ids"])) {
+                this.ids = [] as any;
+                for (let item of _data["ids"])
+                    this.ids!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): BaseFilterRequestOfGuid {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseFilterRequestOfGuid();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
+        data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
+        data["dateRange"] = this.dateRange ? this.dateRange.toJSON() : <any>undefined;
+        data["query"] = this.query;
+        if (Array.isArray(this.ids)) {
+            data["ids"] = [];
+            for (let item of this.ids)
+                data["ids"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IBaseFilterRequestOfGuid {
+    paginator?: PaginatorEntity | undefined;
+    sort?: BaseSortableRequest | undefined;
+    dateRange?: BaseDateRangeFilterRequest | undefined;
+    query?: string | undefined;
+    ids?: string[] | undefined;
+}
+
+export class GetFilteredExpensesRequest extends BaseFilterRequestOfGuid implements IGetFilteredExpensesRequest {
+    userProjectId!: string;
+    categoryIds!: number[];
+
+    constructor(data?: IGetFilteredExpensesRequest) {
+        super(data);
+        if (!data) {
+            this.categoryIds = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.userProjectId = _data["userProjectId"];
+            if (Array.isArray(_data["categoryIds"])) {
+                this.categoryIds = [] as any;
+                for (let item of _data["categoryIds"])
+                    this.categoryIds!.push(item);
+            }
+        }
+    }
+
+    static override fromJS(data: any): GetFilteredExpensesRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFilteredExpensesRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userProjectId"] = this.userProjectId;
+        if (Array.isArray(this.categoryIds)) {
+            data["categoryIds"] = [];
+            for (let item of this.categoryIds)
+                data["categoryIds"].push(item);
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetFilteredExpensesRequest extends IBaseFilterRequestOfGuid {
+    userProjectId: string;
+    categoryIds: number[];
+}
+
+export class BaseSortableRequest implements IBaseSortableRequest {
+    column!: string;
+    direction!: string;
+
+    constructor(data?: IBaseSortableRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.column = _data["column"];
+            this.direction = _data["direction"];
+        }
+    }
+
+    static fromJS(data: any): BaseSortableRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseSortableRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["column"] = this.column;
+        data["direction"] = this.direction;
+        return data;
+    }
+}
+
+export interface IBaseSortableRequest {
+    column: string;
+    direction: string;
+}
+
+export class BaseDateRangeFilterRequest implements IBaseDateRangeFilterRequest {
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
+
+    constructor(data?: IBaseDateRangeFilterRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): BaseDateRangeFilterRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseDateRangeFilterRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IBaseDateRangeFilterRequest {
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
 }
 
 export class UserAllowedProjectResponse extends BaseIdEntityOfGuid implements IUserAllowedProjectResponse {
@@ -772,48 +1374,12 @@ export interface IUserAllowedProjectResponse extends IBaseIdEntityOfGuid {
     isReadOnly: boolean;
 }
 
-export class BaseDateTimeEntityOfGuid extends BaseIdEntityOfGuid implements IBaseDateTimeEntityOfGuid {
-    created!: Date;
-    modified?: Date | undefined;
-
-    constructor(data?: IBaseDateTimeEntityOfGuid) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
-            this.modified = _data["modified"] ? new Date(_data["modified"].toString()) : <any>undefined;
-        }
-    }
-
-    static override fromJS(data: any): BaseDateTimeEntityOfGuid {
-        data = typeof data === 'object' ? data : {};
-        let result = new BaseDateTimeEntityOfGuid();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["modified"] = this.modified ? this.modified.toISOString() : <any>undefined;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IBaseDateTimeEntityOfGuid extends IBaseIdEntityOfGuid {
-    created: Date;
-    modified?: Date | undefined;
-}
-
 export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUserProjectResponse {
     title!: string;
     isActive!: boolean;
     createdUserId!: string;
     balances!: BalanceResponse[];
+    version!: string;
 
     constructor(data?: IUserProjectResponse) {
         super(data);
@@ -833,6 +1399,7 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
                 for (let item of _data["balances"])
                     this.balances!.push(BalanceResponse.fromJS(item));
             }
+            this.version = _data["version"];
         }
     }
 
@@ -853,6 +1420,7 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
             for (let item of this.balances)
                 data["balances"].push(item.toJSON());
         }
+        data["version"] = this.version;
         super.toJSON(data);
         return data;
     }
@@ -863,6 +1431,7 @@ export interface IUserProjectResponse extends IBaseDateTimeEntityOfGuid {
     isActive: boolean;
     createdUserId: string;
     balances: BalanceResponse[];
+    version: string;
 }
 
 export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanceResponse {
@@ -870,6 +1439,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
     amount!: number;
     currencyId!: number;
     userProjectId!: string;
+    version!: string;
 
     constructor(data?: IBalanceResponse) {
         super(data);
@@ -882,6 +1452,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
             this.amount = _data["amount"];
             this.currencyId = _data["currencyId"];
             this.userProjectId = _data["userProjectId"];
+            this.version = _data["version"];
         }
     }
 
@@ -898,6 +1469,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
         data["amount"] = this.amount;
         data["currencyId"] = this.currencyId;
         data["userProjectId"] = this.userProjectId;
+        data["version"] = this.version;
         super.toJSON(data);
         return data;
     }
@@ -908,6 +1480,7 @@ export interface IBalanceResponse extends IBaseDateTimeEntityOfGuid {
     amount: number;
     currencyId: number;
     userProjectId: string;
+    version: string;
 }
 
 export class CreateUserProjectCommand implements ICreateUserProjectCommand {

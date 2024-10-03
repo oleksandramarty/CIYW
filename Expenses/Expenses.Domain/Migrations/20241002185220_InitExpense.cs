@@ -29,6 +29,7 @@ namespace Expenses.Domain.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -47,6 +48,7 @@ namespace Expenses.Domain.Migrations
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     CurrencyId = table.Column<int>(type: "integer", nullable: false),
                     UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -76,6 +78,7 @@ namespace Expenses.Domain.Migrations
                     CategoryId = table.Column<int>(type: "integer", nullable: false),
                     UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -99,7 +102,8 @@ namespace Expenses.Domain.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsReadOnly = table.Column<bool>(type: "boolean", nullable: false)
+                    IsReadOnly = table.Column<bool>(type: "boolean", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -51,7 +51,7 @@ public class RemoveExpenseCommandHandler: MediatrAuthBase, IRequestHandler<Remov
         if (userProject.CreatedUserId != userId ||
             userProject.AllowedUsers.All(au => au.UserId != userId))
         {
-            throw new BusinessException(ErrorMessages.Forbidden, 403);
+            throw new ForbiddenException();
         }
 
         await this.balanceRepository.RemoveExpenseAsync(expense, cancellationToken);

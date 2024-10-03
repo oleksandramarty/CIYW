@@ -36,7 +36,8 @@ public class CreateOrUpdateUserSettingCommandHandler: IRequestHandler<CreateOrUp
         {
             UserSetting userSetting = await userSettingRepository.GetByIdAsync(command.Id.Value, cancellationToken);
             this.entityValidator.ValidateExist<UserSetting, Guid>(userSetting, command.Id.Value);
-
+            userSetting.Version = Guid.NewGuid().ToString("N").ToUpper();
+            
             await this.userSettingRepository.UpdateAsync(
                 this.mapper.Map(command, userSetting),
                 cancellationToken
@@ -45,8 +46,11 @@ public class CreateOrUpdateUserSettingCommandHandler: IRequestHandler<CreateOrUp
             return;
         }
         
+        UserSetting toAdd = this.mapper.Map<UserSetting>(command);
+        toAdd.Version = Guid.NewGuid().ToString("N").ToUpper();
+        
         await this.userSettingRepository.AddAsync(
-            this.mapper.Map<UserSetting>(command),
+            toAdd,
             cancellationToken
         );
     }

@@ -41,8 +41,8 @@ do
 
       # Construct the SQL command
       sql1="INSERT INTO \"$db_name\".\"Users\".\"Users\" 
-      (\"Id\", \"Login\", \"LoginNormalized\", \"Email\", \"EmailNormalized\", \"PasswordHash\", \"Salt\", \"IsActive\", \"IsTemporaryPassword\", \"AuthType\", \"Created\") 
-      VALUES ('$id', '$login', '$login_normalized', '$email', '$email_normalized', '$temporary_pas', '$temporary_salt', true, true, $authType, CURRENT_TIMESTAMP);"
+      (\"Id\", \"Login\", \"LoginNormalized\", \"Email\", \"EmailNormalized\", \"PasswordHash\", \"Salt\", \"IsActive\", \"IsTemporaryPassword\", \"AuthType\", \"Created\", \"Version\") 
+      VALUES ('$id', '$login', '$login_normalized', '$email', '$email_normalized', '$temporary_pas', '$temporary_salt', true, true, $authType, CURRENT_TIMESTAMP, '$(uuidgen | tr -d '-')');"
           
       sql2="INSERT INTO \"$db_name\".\"Users\".\"UserRoles\" 
       (\"RoleId\", \"UserId\", \"Id\") 

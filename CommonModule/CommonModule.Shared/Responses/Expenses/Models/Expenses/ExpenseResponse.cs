@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace CommonModule.Shared.Responses.Expenses.Models.Expenses;
 
-public class ExpenseResponse: BaseDateTimeEntity<Guid>
+public class ExpenseResponse: BaseDateTimeEntity<Guid>, IBaseVersionEntity
 {
     [MaxLength(100)]
     public string Title { get; set; }
@@ -14,8 +15,11 @@ public class ExpenseResponse: BaseDateTimeEntity<Guid>
     public Guid BalanceId { get; set; }
     public DateTime Date { get; set; }
     public int CategoryId { get; set; }
+    public string CategoryName { get; set; }
+    public bool IsIncome { get; set; }
     
     public Guid UserProjectId { get; set; }
     
     public Guid CreatedUserId { get; set; }
+    public string Version { get; set; }
 }

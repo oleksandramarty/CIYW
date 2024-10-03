@@ -11,6 +11,7 @@ using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
 using Expenses.Mediatr.Mediatr.Expenses.Requests;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
@@ -36,14 +37,15 @@ public class GetFilteredExpensesRequestHandler: MediatrAuthBase, IRequestHandler
     {
         Guid userId = await this.GetCurrentUserIdAsync();
         
-        UserProject userProject = await this.userProjectRepository.GetAsync(
-            up => up.Id == request.UserProjectId,
-            cancellationToken);
-        
+        UserProject userProject =
+            await this.userProjectRepository.GetAsync(
+                up => up.Id == request.UserProjectId, 
+                cancellationToken,
+                up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
         this.entityValidator.ValidateExist<UserProject, Guid>(userProject, request.UserProjectId);
-
-
-        if (userProject.CreatedUserId != userId)
+        
+        if (userProject.CreatedUserId != userId ||
+            userProject.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
@@ -51,7 +53,8 @@ public class GetFilteredExpensesRequestHandler: MediatrAuthBase, IRequestHandler
         request.DateRange.CheckOrApplyDefaultExpenseFilter();
         
         return await this.expenseRepository.GetListWithIncludeAsync<ExpenseResponse>(
-            e => e.UserProjectId == request.UserProjectId,
+            e => e.UserProjectId == request.UserProjectId && 
+            (request.CategoryIds.Count == 0 || request.CategoryIds.Count != 0 && request.CategoryIds.Contains(e.CategoryId)),
             request,
             cancellationToken);
     }

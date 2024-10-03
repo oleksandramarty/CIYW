@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable, Subject, switchMap, take, takeUntil} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
-import { clearAll, setToken, setUser } from "../store/actions/auth.actions";
+import { auth_clearAll, auth_setToken, auth_setUser } from "../store/actions/auth.actions";
 import { LocalizationService } from "./localization.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -39,7 +39,7 @@ export class AuthService {
   public initialize(): void {
     const storedToken = this.getToken();
     if (storedToken) {
-      this.store.dispatch(setToken({ token: storedToken }));
+      this.store.dispatch(auth_setToken({ token: storedToken }));
     }
 
     if (this.isAuthorized) {
@@ -58,12 +58,12 @@ export class AuthService {
     })).pipe(
       takeUntil(ngUnsubscribe),
       switchMap((token) => {
-        this.setToken(token);
-        this.store.dispatch(setToken({ token }));
+        this.auth_setToken(token);
+        this.store.dispatch(auth_setToken({ token }));
         return this.authClient.user_GetCurrentUser();
       }),
       tap((user) => {
-        this.store.dispatch(setUser({ user }));
+        this.store.dispatch(auth_setUser({ user }));
 
         this.router.navigate(['/projects']);
       }),
@@ -87,7 +87,7 @@ export class AuthService {
     this.authClient.user_GetCurrentUser().pipe(
       take(1),
       tap((user) => {
-        this.store.dispatch(setUser({ user }));
+        this.store.dispatch(auth_setUser({ user }));
       }),
       handleApiError(this.snackBar, this.localizationService)
     ).subscribe();
@@ -101,9 +101,9 @@ export class AuthService {
     return token ?? undefined;
   }
 
-  private setToken(token: JwtTokenResponse): void {
+  private auth_setToken(token: JwtTokenResponse): void {
     localStorage.setItem(this._tokenKey, JSON.stringify(token));
-    this.store.dispatch(setToken({ token }));
+    this.store.dispatch(auth_setToken({ token }));
   }
 
   private getToken(): JwtTokenResponse | undefined {
@@ -113,6 +113,6 @@ export class AuthService {
 
   private clearAuthData(): void {
     localStorage.removeItem(this._tokenKey);
-    this.store.dispatch(clearAll());
+    this.store.dispatch(auth_clearAll());
   }
 }

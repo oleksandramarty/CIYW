@@ -1,3 +1,6 @@
+import {CategoryResponse, CountryResponse, CurrencyResponse} from "../../api-clients/dictionaries-client";
+import {LocaleResponse} from "../../api-clients/localizations-client";
+
 export interface IDataItem {
   id: string | undefined;
   name: string | undefined;
@@ -6,6 +9,10 @@ export interface IDataItem {
   isImportant: boolean | undefined;
 
   children: IDataItem[] | undefined;
+
+  filteredFields?: string[] | undefined;
+
+  originalValue: CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined;
 }
 
 export class DataItem implements IDataItem {
@@ -17,10 +24,16 @@ export class DataItem implements IDataItem {
 
   children: DataItem[] | undefined;
 
+  filteredFields?: string[] | undefined;
+
+  originalValue: CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined;
+
   constructor(
+    originalValue: CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined,
     id: string | undefined,
     name: string | undefined,
     description: string | undefined,
+    filteredFields: string[] | undefined = [],
     isActive: boolean | undefined = true,
     isImportant: boolean | undefined = false,
     children: DataItem[] | undefined = []
@@ -31,5 +44,7 @@ export class DataItem implements IDataItem {
     this.isActive = isActive;
     this.isImportant = isImportant;
     this.children = children;
+    this.originalValue = originalValue;
+    this.filteredFields = filteredFields;
   }
 }

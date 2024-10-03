@@ -5,7 +5,7 @@ using Expenses.Domain.Models.Expenses;
 
 namespace Expenses.Domain.Models.Projects;
 
-public class UserProject: BaseDateTimeEntity<Guid>, IActivatable
+public class UserProject: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionEntity
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }
@@ -16,4 +16,5 @@ public class UserProject: BaseDateTimeEntity<Guid>, IActivatable
     public ICollection<UserAllowedProject> AllowedUsers { get; set; }
     
     public ICollection<Expense> Expenses { get; set; }
+    public string Version { get; set; }
 }

@@ -1,0 +1,10 @@
+.user-project {
+  &-title {
+    margin: 1rem 0rem 0.5rem 0rem;
+  }
+  &-details {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+}

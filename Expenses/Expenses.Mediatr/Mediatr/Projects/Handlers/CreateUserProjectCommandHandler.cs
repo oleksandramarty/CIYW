@@ -47,6 +47,7 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         
         userProject.Id = Guid.NewGuid();
         userProject.CreatedUserId = userId;
+        userProject.Version = Guid.NewGuid().ToString("N").ToUpper();
 
         userProject.Balances = command.CurrencyIds.Select(c => new Balance
         {
@@ -55,7 +56,8 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
             Created = DateTime.UtcNow,
             CurrencyId = c,
             UserProjectId = userProject.Id,
-            UserId = userId
+            UserId = userId,
+            Version = Guid.NewGuid().ToString("N").ToUpper()
         }).ToList();
         
         await this.userProjectRepository.AddAsync(userProject, cancellationToken);

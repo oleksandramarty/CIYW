@@ -3,15 +3,18 @@
         <h1>USER_PROJECTS</h1>
         <mat-divider></mat-divider>
         <div class="user-project-cards">
-            <div class="user-project-card" *ngFor="let userProject of userProjects">
+            <div class="user-project-card" *ngFor="let userProject of userProjects" (click)="openUserProject(userProject.id)">
                 <div class="user-project-header">
                     <h3>{{ userProject.title }}</h3>
                 </div>
                 <div class="user-project-details">
-                    <div *ngFor="let balance of userProject.balances" class="balance">
-                        <span class="currency">{{ localesMap?.get(balance.currencyId)?.title }}</span>
-                        <span class="amount">{{ balance.amount | currency:localesMap?.get(balance.currencyId)?.isoCode }}</span>
-                    </div>
+                    <ng-container *ngFor="let balance of userProject.balances">
+                        <div class="balance">
+                            <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
+                            <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
+                        </div>
+                        <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
+                    </ng-container>
                 </div>
             </div>
             <div class="user-project-card" (click)="openCreateUserProjectDialog()">
@@ -27,23 +30,27 @@
         </div>
     </section>
 
-    <section *ngIf="allowedProjects">
+    <section *ngIf="userAllowedProjects">
         <h1>USER.USER_ALLOWED_PROJECTS</h1>
         <mat-divider></mat-divider>
-        <div *ngIf="allowedProjects.length === 0" class="no-user-projects">
+        <div *ngIf="userAllowedProjects.length === 0" class="no-user-projects">
             <h2>USER_PROJECT.NO_ALLOWED_PROJECTS</h2>
             <p>USER_PROJECT.CREATE_FIRST_ONE</p>
         </div>
-        <div *ngIf="allowedProjects.length > 0" class="user-project-cards">
-            <div class="user-project-card" *ngFor="let allowedProject of allowedProjects">
+        <div *ngIf="userAllowedProjects.length > 0" class="user-project-cards">
+            <div class="user-project-card" *ngFor="let allowedProject of userAllowedProjects" (click)="openUserProject(allowedProject.userProjectId)">
                 <div class="user-project-header">
                     <h3>{{ allowedProject.userProject.title }}</h3>
                 </div>
                 <div class="user-project-details">
-                    <div *ngFor="let balance of allowedProject.userProject.balances" class="balance">
-                        <span class="currency">{{ localesMap?.get(balance.currencyId)?.title }}</span>
-                        <span class="amount">{{ balance.amount | currency:localesMap?.get(balance.currencyId)?.isoCode }}</span>
-                    </div>
+                    <ng-container *ngFor="let balance of allowedProject.userProject.balances">
+                        <div class="balance">
+                            <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
+                            <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
+                        </div>
+                        <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
+                    </ng-container>
+
                 </div>
             </div>
         </div>

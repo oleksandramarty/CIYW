@@ -56,26 +56,28 @@ public class CreateOrUpdateExpenseCommandHandler: MediatrAuthBase, IRequestHandl
         if (userProject.CreatedUserId != userId ||
             userProject.AllowedUsers.All(au => au.UserId != userId))
         {
-            throw new BusinessException(ErrorMessages.Forbidden, 403);
+            throw new ForbiddenException();
         }
 
         if (!command.Id.HasValue)
         {
-            await this.balanceRepository.AddExpenseAsync(
-                this.mapper.Map<Expense>(command), cancellationToken);
+            Expense toAdd = this.mapper.Map<Expense>(command);
+            toAdd.Version = Guid.NewGuid().ToString("N").ToUpper();
+            await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
             return;
         }
         
-        Expense currentExponse = await this.expenseRepository.GetAsync(
+        Expense currentExpense = await this.expenseRepository.GetAsync(
             e => e.Id == command.Id.Value, cancellationToken);
-        this.entityValidator.ValidateExist(currentExponse, command.Id.Value);
+        this.entityValidator.ValidateExist(currentExpense, command.Id.Value);
         
-        if (currentExponse.UserProjectId != command.UserProjectId)
+        if (currentExpense.UserProjectId != command.UserProjectId)
         {
-            throw new BusinessException(ErrorMessages.Forbidden, 403);
+            throw new ForbiddenException();
         }
         
-        await this.balanceRepository.UpdateExpenseAsync(currentExponse,
+        currentExpense.Version = Guid.NewGuid().ToString("N").ToUpper();
+        await this.balanceRepository.UpdateExpenseAsync(currentExpense,
             this.mapper.Map<Expense>(command), cancellationToken);
     }
     

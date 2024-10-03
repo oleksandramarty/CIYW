@@ -36,21 +36,6 @@
 .user-project-details {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.balance {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.1em;
-}
-
-.currency {
-  font-weight: bold;
-}
-
-.amount {
-  color: #4caf50;
 }
 
 @media (max-width: 768px) {

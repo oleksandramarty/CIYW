@@ -224,11 +224,11 @@ export class DictionaryService {
         if (isPublic) {
             this._dataItems.locales = this._dictionaries?.locales?.items
                 .sort((a, b) => a.id - b.id)
-                .map(locale => new DataItem(String(locale.id), locale.title, locale.titleEn));
+                .map(locale => new DataItem(locale, String(locale.id), locale.title, locale.titleEn));
         } else {
             this._dataItems.countries = this.dictionaries?.countries?.items
                 .sort((a, b) => a.id - b.id)
-                .map(country => new DataItem(String(country.id), country.titleEn, country.title));
+                .map(country => new DataItem(country, String(country.id), country.titleEn, country.title));
             this._dataItems.currencies = this.dictionaries?.currencies?.items
                 .sort((a, b) => {
                     const importantCurrencies = this._importantCurrencies;
@@ -241,9 +241,11 @@ export class DictionaryService {
                 })
                 .map(currency =>
                     new DataItem(
+                        currency,
                         String(currency.id),
                         currency.titleEn,
                         `${currency.code} - ${currency.title}`,
+                        [currency.titleEn, currency.code, currency.title],
                         true,
                         this._importantCurrencies.includes(currency.code)
                     )
@@ -258,11 +260,12 @@ export class DictionaryService {
 
     private mapCategory(category: TreeNodeResponseOfCategoryResponse): DataItem {
         const dataItem: DataItem = {
+            originalValue: category.node,
             id: category.node?.id?.toString(),
             name: category.node?.title,
             description: category.node?.icon,
             isActive: category.node?.isActive,
-            isImportant: category.node?.isPositive,
+            isImportant: false,
             children: category.node?.children ? this.mapCategories(category.node.children) : []
         };
         return dataItem;

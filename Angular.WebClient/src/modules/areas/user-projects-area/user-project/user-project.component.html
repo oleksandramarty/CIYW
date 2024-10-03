@@ -1,0 +1,84 @@
+<section *ngIf="!!userProject" class="user-project-section">
+  <h1 class="user-project-title">{{ userProject?.title }}</h1>
+  <div class="user-project-details">
+    <div *ngFor="let balance of userProject?.balances">
+      <div class="balance">
+        <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
+        <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
+      </div>
+      <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
+    </div>
+  </div>
+</section>
+
+<app-common-loader *ngIf="isBusy"></app-common-loader>
+
+<div class="filter-container" [formGroup]="filterFormGroup">
+    <div class="filter-input-container">
+        <div class="filter-input-item">
+            <app-input
+                    type="input"
+                    [label]="'COMMON.SEARCH'"
+                    [formGroup]="filterFormGroup"
+                    controlName="query">
+            </app-input>
+        </div>
+        <div class="filter-input-item">
+            <app-input
+                    type="multiselect"
+                    [dataItems]="categoriesDataItems"
+                    [label]="'COMMON.CATEGORY'"
+                    [formGroup]="filterFormGroup"
+                    controlName="categoryIds">
+            </app-input>
+        </div>
+        <div class="filter-input-item">
+            <app-input
+                    type="rangedatapicker"
+                    [label]="'COMMON.DATES'"
+                    [formGroup]="filterFormGroup"
+                    controlName="dateRange">
+            </app-input>
+        </div>
+    </div>
+    <div class="filter-button-container">
+        <div>
+            <div class="filter-button-item">
+                <button mat-flat-button color="warn" translation="COMMON.ADD"></button>
+            </div>
+        </div>
+        <div>
+            <div class="filter-button-item">
+                <button mat-button color="warn" translation="FILTER.RESET"></button>
+                <button mat-flat-button color="primary" translation="FILTER.SEARCH"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="table-container">
+    <table class="mat-table">
+        <thead>
+        <tr class="mat-tr">
+            <th class="mat-th"></th>
+            <th class="mat-th"></th>
+            <th class="mat-th" translation="COMMON.DATE"></th>
+            <th class="mat-th" translation="COMMON.COMMENT"></th>
+            <th class="mat-th" translation="COMMON.AMOUNT"></th>
+            <th class="mat-th" translation="COMMON.CATEGORY"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-tr">
+            <td class="mat-td"><i class="fa-solid fa-pencil pointer"></i></td>
+            <td class="mat-td"><i class="fa-solid fa-trash pointer"></i></td>
+            <td class="mat-td"></td>
+            <td class="mat-td"></td>
+            <td class="mat-td"></td>
+            <td class="mat-td"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

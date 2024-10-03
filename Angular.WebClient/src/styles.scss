@@ -1,6 +1,7 @@
 @use 'sass:math';
 
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "styles/_table.scss";
 @import "styles/_filter.scss";
 @import "styles/_dialog.scss";
 
@@ -256,4 +257,25 @@ mat-grid-tile {
     width: 100%;
     justify-content: space-between;
   }
+}
+.currency {
+  margin-right: 0.5rem;
+  font-weight: bold;
+  &-title {
+    text-align: left;
+    font-size: 0.6rem;
+    opacity: 0.75;
+    margin-bottom: 1rem;
+  }
+}
+.amount {
+  color: #4caf50;
+}
+.balance {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+}
+.filter-input-item .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
 }

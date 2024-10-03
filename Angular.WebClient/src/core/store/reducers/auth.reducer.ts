@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { setToken, clearToken, setUser, clearUser, clearAll } from '../actions/auth.actions';
+import { auth_setToken, auth_clearToken, auth_setUser, auth_clearUser, auth_clearAll } from '../actions/auth.actions';
 import {JwtTokenResponse, UserResponse} from "../../api-clients/auth-client";
 
 export interface AuthState {
@@ -14,9 +14,9 @@ export const initialState: AuthState = {
 
 export const authReducer = createReducer(
   initialState,
-  on(setToken, (state, { token }) => ({ ...state, token })),
-  on(clearToken, state => ({ ...state, token: undefined })),
-  on(setUser, (state, { user }) => ({ ...state, user })),
-  on(clearUser, state => ({ ...state, user: undefined })),
-  on(clearAll, state => ({ ...state, token: undefined, user: undefined }))
+  on(auth_setToken, (state, { token }) => ({ ...state, token })),
+  on(auth_clearToken, state => ({ ...state, token: undefined })),
+  on(auth_setUser, (state, { user }) => ({ ...state, user })),
+  on(auth_clearUser, state => ({ ...state, user: undefined })),
+  on(auth_clearAll, state => ({ ...state, token: undefined, user: undefined }))
 );

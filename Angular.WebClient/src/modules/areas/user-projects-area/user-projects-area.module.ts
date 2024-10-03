@@ -7,13 +7,17 @@ import {MatDividerModule} from "@angular/material/divider";
 import {UserProjectsAreaComponent} from "./user-projects-area/user-projects-area.component";
 import {UserProjectsComponent} from "./user-projects/user-projects.component";
 import {CommonLoaderComponent} from "../../common/common-loader/common-loader.component";
+import {UserProjectComponent} from "./user-project/user-project.component";
+import {AppCommonInputModule} from "../../common/common-input/app-common-input.module";
+import {MatButton} from "@angular/material/button";
 
 const routes: Routes = [
     {
         path: '',
         component: UserProjectsAreaComponent,
         children: [
-            {path: 'projects', component: UserProjectsComponent}
+            {path: 'projects', component: UserProjectsComponent},
+            {path: 'projects/:id', component: UserProjectComponent}
         ]
     }
 ];
@@ -21,7 +25,8 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         UserProjectsAreaComponent,
-        UserProjectsComponent
+        UserProjectsComponent,
+        UserProjectComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -31,7 +36,9 @@ const routes: Routes = [
         AppCommonModule,
         CommonLoaderComponent,
 
-        MatDividerModule
+        MatDividerModule,
+        AppCommonInputModule,
+        MatButton
     ],
     exports: [
         RouterModule

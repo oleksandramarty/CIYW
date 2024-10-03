@@ -1,44 +1,52 @@
-.filter {
-  &-wrapper {}
-
-  &-item {
-    height: 3.5rem !important;
-    display: inline-block;
-
-    &.location {
-      width: 20%;
+@media (max-width: 768px) {
+  .filter-input-item {
+    display: block;
+    margin-bottom: 1rem;
+  }
+}
+@media (min-width: 769px) {
+  .filter-input {
+    &-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
     }
-    &.title {
-      width: 50%;
-    }
-    &.status {
-      width: 20%;
-    }
-    &.search {
-      width: 10%;
+    &-item {
+      flex-grow: 1;
     }
   }
 }
 
-button.filter-item.search,
-.mat-mdc-notch-piece.mdc-notched-outline__trailing,
-.mat-mdc-notch-piece.mdc-notched-outline__leading{
-  border-radius: 0rem;
+@media (max-width: 560px) {
+  .filter {
+    &-button {
+      &-container {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 1rem;
+      }
+      &-item {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column-reverse;
+      }
+    }
+    &-container {
+      margin-bottom: 1rem;
+    }
+  }
 }
-
-.filter {
-  &-wrapper {
-    display: flex;
-    align-items: flex-start;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  &-first {
-    margin: 2rem 0rem 0rem 0rem;
-  }
-  &-second {
-    margin: 0rem 0rem 2rem 0rem;
+@media (min-width: 561px) {
+  .filter-button {
+    &-container {
+      display: flex;
+      padding: 1rem 0rem 1rem 0rem;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+    &-item {
+      display: flex;
+      gap: 1rem;
+    }
   }
 }

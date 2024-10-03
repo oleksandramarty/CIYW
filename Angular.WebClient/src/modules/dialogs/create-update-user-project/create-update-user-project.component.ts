@@ -85,7 +85,7 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy{
 
     this.expenseClient.userProject_AddProject(new CreateUserProjectCommand({
         title: this.userProjectForm!.value.title,
-        currencyIds: this.userProjectForm!.value.currencyIds.map((id: string) => Number(id)),
+        currencyIds: this.userProjectForm!.value.currencyIds.split(',').map(Number),
         isActive: this.userProjectForm!.value.isActive
         }))
         .pipe(

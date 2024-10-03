@@ -96,6 +96,10 @@ namespace AuthGateway.Domain.Migrations
                     b.Property<Guid?>("UserSettingId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", "Users");
@@ -149,6 +153,10 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

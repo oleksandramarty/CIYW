@@ -48,6 +48,7 @@ namespace AuthGateway.Domain.Migrations
                     LastForgotPassword = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastForgotPasswordRequest = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserSettingId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Version = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -96,6 +97,7 @@ namespace AuthGateway.Domain.Migrations
                     CountryId = table.Column<int>(type: "integer", nullable: true),
                     DefaultUserProject = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },

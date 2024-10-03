@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums;
 
 namespace CommonModule.Shared.Responses.AuthGateway.Users;
 
-public class UserResponse: BaseDateTimeEntity<Guid>, IActivatable
+public class UserResponse: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionEntity
 {
     public string Login { get; set; }
     public string LoginNormalized { get; set; }
@@ -24,4 +24,5 @@ public class UserResponse: BaseDateTimeEntity<Guid>, IActivatable
     public ICollection<RoleResponse> Roles { get; set; }
     
     public UserSettingResponse UserSetting { get; set; }
+    public string Version { get; set; }
 }

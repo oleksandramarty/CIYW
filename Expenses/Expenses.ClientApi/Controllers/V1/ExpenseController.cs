@@ -1,5 +1,8 @@
 using CommonModule.Core;
+using CommonModule.Shared.Responses.Base;
+using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using Expenses.Mediatr.Mediatr.Expenses.Commands;
+using Expenses.Mediatr.Mediatr.Expenses.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,5 +35,13 @@ public class ExpenseController: BaseController
     {
         await mediator.Send(new RemoveExpenseCommand { Id = id }, cancellationToken);
         return Ok();
+    }
+    
+    [HttpPost("filter")]
+    [ProducesResponseType(typeof(ListWithIncludeResponse<ExpenseResponse>), 200)]
+    public async Task<IActionResult> GetFilteredExpensesAsync([FromBody]GetFilteredExpensesRequest request, CancellationToken cancellationToken)
+    {
+        var response = await mediator.Send(request, cancellationToken);
+        return Ok(response);
     }
 }

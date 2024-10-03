@@ -18,6 +18,7 @@ public class MediatrExpensesModule: Autofac.Module
         
         builder.RegisterAssemblyTypes(typeof(GetFilteredExpensesRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
         
+        builder.RegisterAssemblyTypes(typeof(GetUserProjectByIdRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
         builder.RegisterAssemblyTypes(typeof(GetUserProjectsRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
         builder.RegisterAssemblyTypes(typeof(GetUserAllowedProjectsRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
     }

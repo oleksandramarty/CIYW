@@ -5,13 +5,13 @@
             <ng-container *ngIf="!isBusy else loader">
                 <app-input type="input" [label]="'COMMON.TITLE'" [formGroup]="userProjectForm" controlName="title"></app-input>
                 <app-input
-                        type="multiselect"
+                        type="multiautocomplete"
                         [hint]="'COMMON.MAX_3_CURRENCIES'"
                         [label]="'COMMON.CURRENCY'"
+                        [multiMaxCount]="3"
                         [formGroup]="userProjectForm" controlName="currencyIds"
                         [dataItems]="currencies"></app-input>
                 <app-input type="checkbox" [label]="'COMMON.IS_ACTIVE'" [formGroup]="userProjectForm" controlName="isActive"></app-input>
-                <p>{{userProjectForm!.get('currencyIds')?.value}}</p>
             </ng-container>
             <ng-template #loader>
                 <app-common-loader></app-common-loader>

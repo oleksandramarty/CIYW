@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Expenses.Domain.Migrations
 {
     [DbContext(typeof(ExpensesDataContext))]
-    [Migration("20241002043948_InitExpense")]
+    [Migration("20241002185220_InitExpense")]
     partial class InitExpense
     {
         /// <inheritdoc />
@@ -48,6 +48,10 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -95,6 +99,10 @@ namespace Expenses.Domain.Migrations
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserProjectId");
@@ -116,6 +124,10 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -143,6 +155,10 @@ namespace Expenses.Domain.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
                         .IsRequired()
                         .HasColumnType("text");
 

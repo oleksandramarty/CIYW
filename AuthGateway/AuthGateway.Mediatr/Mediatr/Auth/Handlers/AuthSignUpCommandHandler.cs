@@ -43,6 +43,7 @@ public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
             cancellationToken);
 
         User user = this.mapper.Map<AuthSignUpCommand, User>(command);
+        user.Version = Guid.NewGuid().ToString("N").ToUpper();
         
         user.Salt = this.jwtTokenFactory.GenerateSalt();
         user.PasswordHash = this.jwtTokenFactory.HashPassword(command.Password, user.Salt);

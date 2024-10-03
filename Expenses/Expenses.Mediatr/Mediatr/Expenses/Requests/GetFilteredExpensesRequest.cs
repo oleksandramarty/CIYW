@@ -8,4 +8,5 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Requests;
 public class GetFilteredExpensesRequest: BaseFilterRequest<Guid>, IRequest<ListWithIncludeResponse<ExpenseResponse>>
 {
     public Guid UserProjectId { get; set; }
+    public List<int> CategoryIds { get; set; }
 }

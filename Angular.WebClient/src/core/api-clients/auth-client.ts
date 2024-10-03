@@ -872,6 +872,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
     lastForgotPasswordRequest?: Date | undefined;
     roles!: RoleResponse[];
     userSetting!: UserSettingResponse;
+    version!: string;
 
     constructor(data?: IUserResponse) {
         super(data);
@@ -903,6 +904,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
                     this.roles!.push(RoleResponse.fromJS(item));
             }
             this.userSetting = _data["userSetting"] ? UserSettingResponse.fromJS(_data["userSetting"]) : new UserSettingResponse();
+            this.version = _data["version"];
         }
     }
 
@@ -934,6 +936,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
                 data["roles"].push(item.toJSON());
         }
         data["userSetting"] = this.userSetting ? this.userSetting.toJSON() : <any>undefined;
+        data["version"] = this.version;
         super.toJSON(data);
         return data;
     }
@@ -955,6 +958,7 @@ export interface IUserResponse extends IBaseDateTimeEntityOfGuid {
     lastForgotPasswordRequest?: Date | undefined;
     roles: RoleResponse[];
     userSetting: UserSettingResponse;
+    version: string;
 }
 
 export enum UserAuthMethodEnum {
@@ -1041,6 +1045,7 @@ export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSett
     defaultCurrency!: number;
     defaultUserProject!: string;
     userId!: string;
+    version!: string;
 
     constructor(data?: IUserSettingResponse) {
         super(data);
@@ -1054,6 +1059,7 @@ export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSett
             this.defaultCurrency = _data["defaultCurrency"];
             this.defaultUserProject = _data["defaultUserProject"];
             this.userId = _data["userId"];
+            this.version = _data["version"];
         }
     }
 
@@ -1071,6 +1077,7 @@ export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSett
         data["defaultCurrency"] = this.defaultCurrency;
         data["defaultUserProject"] = this.defaultUserProject;
         data["userId"] = this.userId;
+        data["version"] = this.version;
         super.toJSON(data);
         return data;
     }
@@ -1082,6 +1089,7 @@ export interface IUserSettingResponse extends IBaseIdEntityOfGuid {
     defaultCurrency: number;
     defaultUserProject: string;
     userId: string;
+    version: string;
 }
 
 export class CreateOrUpdateUserSettingCommand extends BaseIdEntityOfNullableGuid implements ICreateOrUpdateUserSettingCommand {

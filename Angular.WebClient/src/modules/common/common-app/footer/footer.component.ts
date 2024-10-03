@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
 import {Store} from "@ngrx/store";
-import {clearAll} from "../../../../core/store/actions/auth.actions";
+import {auth_clearAll} from "../../../../core/store/actions/auth.actions";
 
 @Component({
   selector: 'app-footer',
@@ -23,7 +23,7 @@ export class FooterComponent {
   }
 
   public resetSite(): void {
-    this.store.dispatch(clearAll());
+    this.store.dispatch(auth_clearAll());
     this.localStorageService.clearLocalStorageAndRefresh(true);
   }
 }

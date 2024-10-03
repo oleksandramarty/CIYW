@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthGateway.Domain.Migrations
 {
     [DbContext(typeof(AuthGatewayDataContext))]
-    [Migration("20241002043953_InitUser")]
+    [Migration("20241002185223_InitUser")]
     partial class InitUser
     {
         /// <inheritdoc />
@@ -99,6 +99,10 @@ namespace AuthGateway.Domain.Migrations
                     b.Property<Guid?>("UserSettingId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", "Users");
@@ -152,6 +156,10 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
