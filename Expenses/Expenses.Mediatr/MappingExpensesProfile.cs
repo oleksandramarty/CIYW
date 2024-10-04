@@ -1,6 +1,7 @@
 using AutoMapper;
 using CommonModule.Core.Extensions;
 using CommonModule.Shared.Responses.Expenses.Models.Balances;
+using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Expenses;
@@ -14,6 +15,7 @@ public class MappingExpensesProfile : Profile
 {
     public MappingExpensesProfile()
     {
+        this.CreateMap<Expense, ExpenseResponse>();
         this.CreateMap<CreateUserProjectCommand, UserProject>()
             .ConstructUsing((src, ctx) => 
                 this.CreateOrUpdateEntity<CreateUserProjectCommand, UserProject>(src, ctx));

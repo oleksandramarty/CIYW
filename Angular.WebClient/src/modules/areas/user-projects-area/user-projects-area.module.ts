@@ -10,6 +10,8 @@ import {CommonLoaderComponent} from "../../common/common-loader/common-loader.co
 import {UserProjectComponent} from "./user-project/user-project.component";
 import {AppCommonInputModule} from "../../common/common-input/app-common-input.module";
 import {MatButton} from "@angular/material/button";
+import {ConfirmationMessageComponent} from "../../dialogs/confirmation-message/confirmation-message.component";
+import {SharedModule} from "../../../core/shared.module";
 
 const routes: Routes = [
     {
@@ -35,6 +37,9 @@ const routes: Routes = [
 
         AppCommonModule,
         CommonLoaderComponent,
+        ConfirmationMessageComponent,
+
+        SharedModule,
 
         MatDividerModule,
         AppCommonInputModule,

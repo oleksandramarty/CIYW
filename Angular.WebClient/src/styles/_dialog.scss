@@ -1,3 +1,11 @@
-.base-modal-wrapper {
-  padding: 0rem 1rem;
+.base-modal {
+  &-container {
+    padding: 0rem 1rem 1rem 1rem;
+  }
+  &-body-container {
+    padding: 0.5rem;
+  }
+  &-actions-container {
+    padding: 0.5rem;
+  }
 }

@@ -1,7 +1,7 @@
 <div *ngIf="!!formGroup"
      [ngClass]="className ? 'input-wrapper ' + className : 'input-wrapper'"
      [style]="'text-align: ' + align"
-     style="font-size: 12px"
+     (click)="showDebugInfo()"
      [formGroup]="formGroup">
     <ng-container *ngIf="type === 'input'">
         <mat-form-field [appearance]="appearance">
@@ -18,8 +18,8 @@
                 <i [class]="icon + ' input-icon'"></i>
             </ng-container>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
-            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currenValue?.length > maxLength}">
-                {{ currenValue?.length }}/{{ maxLength }}
+            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+                {{ currentValue?.length ?? 0 }}/{{ maxLength }}
             </mat-hint>
         </mat-form-field>
     </ng-container>
@@ -32,15 +32,15 @@
                     [required]="isRequired"
                     [multiple]="type === 'multiselect'"
                     [formControlName]="controlName">
-                <ng-container *ngTemplateOutlet="recursiveOptions; context: { $implicit: dataItems }"></ng-container>
-                <ng-template #recursiveOptions let-items>
-                    <div *ngFor="let item of items" style="padding-left: 0.5rem;">
+                <ng-container *ngTemplateOutlet="recursiveOptions; context: { $implicit: dataItems, isFirst: true }"></ng-container>
+                <ng-template #recursiveOptions let-items let-isFirst>
+                    <div *ngFor="let item of items" [ngStyle]="{'padding-left': isFirst ? '0rem' : '1rem'}">
                         <mat-option [value]="item.id" #matOption (click)="toggleChildrenSelection(item, matOption.selected)">
-                            <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant}"></span>
+                            <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant || item.children?.length > 0}"></span>
                         </mat-option>
                         <ng-container *ngIf="item.children?.length">
                             <ng-container
-                                    *ngTemplateOutlet="recursiveOptions; context: { $implicit: item.children }"></ng-container>
+                                    *ngTemplateOutlet="recursiveOptions; context: { $implicit: item.children, isFirst: false }"></ng-container>
                         </ng-container>
                     </div>
                 </ng-template>
@@ -69,8 +69,8 @@
                 <i [class]="icon + ' input-icon'"></i>
             </ng-container>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
-            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currenValue?.length > maxLength}">
-                {{ currenValue?.length }}/{{ maxLength }}
+            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+                {{ currentValue?.length ?? 0 }}/{{ maxLength }}
             </mat-hint>
         </mat-form-field>
     </ng-container>
@@ -85,8 +85,8 @@
                 <i [class.fa-eye]="!hide()" [class.fa-eye-slash]="hide()" class="fa-solid"></i>
             </button>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
-            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currenValue?.length > maxLength}">
-                {{ currenValue?.length }}/{{ maxLength }}
+            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+                {{ currentValue?.length ?? 0 }}/{{ maxLength }}
             </mat-hint>
         </mat-form-field>
     </ng-container>
@@ -185,8 +185,8 @@
                 <i class="fa fa-times" (click)="removeOnAutoComplete(item)"></i>
             </mat-chip>
         </mat-chip-set>
-        <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currenValue?.length > maxLength}">
-            {{ currenValue?.length }}/{{ maxLength }}
+        <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+            {{ currentValue?.length ?? 0 }}/{{ maxLength }}
         </mat-hint>
     </ng-container>
 </div>

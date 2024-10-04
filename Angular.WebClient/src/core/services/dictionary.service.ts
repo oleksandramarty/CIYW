@@ -23,6 +23,7 @@ import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/d
 import {LocalStorageService} from "./local-storage.service";
 import {SiteSettingsService} from "./site-settings.service";
 import {DataItem} from "../models/common/data-item.model";
+import {LocalizationService} from "./localization.service";
 
 @Injectable({
     providedIn: 'root'
@@ -93,7 +94,7 @@ export class DictionaryService {
         if (!this._categoriesMap && this.dictionaries?.categories?.items) {
             this._categoriesMap = new DictionaryMap<number, CategoryResponse>();
 
-            for (const category of this.mapCategoriesToCountries(this.dictionaries.categories.items)) {
+            for (const category of this.mapCategoriesToFlat(this.dictionaries.categories.items)) {
                 this._categoriesMap.set(category.id, category);
             }
         }
@@ -104,7 +105,7 @@ export class DictionaryService {
         if (!!value) {
             this._categoriesMap = new DictionaryMap<number, CategoryResponse>();
 
-            for (const category of this.mapCategoriesToCountries(value.items)) {
+            for (const category of this.mapCategoriesToFlat(value.items)) {
                 this._categoriesMap.set(category.id, category);
             }
         }
@@ -141,7 +142,8 @@ export class DictionaryService {
         private readonly localizationClient: LocalizationClient,
         private readonly dictionaryClient: DictionaryClient,
         private readonly localStorageService: LocalStorageService,
-        private readonly siteSettingsService: SiteSettingsService
+        private readonly siteSettingsService: SiteSettingsService,
+        private readonly localizationService: LocalizationService
     ) {
         this._dictionaries = this.localStorageService.getItem('dictionaries') as Dictionary || new Dictionary();
     }
@@ -226,6 +228,7 @@ export class DictionaryService {
                 .sort((a, b) => a.id - b.id)
                 .map(locale => new DataItem(locale, String(locale.id), locale.title, locale.titleEn));
         } else {
+            this._dataItems.categories = this.mapCategories(this.dictionaries?.categories?.items || []);
             this._dataItems.countries = this.dictionaries?.countries?.items
                 .sort((a, b) => a.id - b.id)
                 .map(country => new DataItem(country, String(country.id), country.titleEn, country.title));
@@ -250,7 +253,18 @@ export class DictionaryService {
                         this._importantCurrencies.includes(currency.code)
                     )
                 );
-            this._dataItems.categories = this.mapCategories(this.dictionaries?.categories?.items || []);
+
+            this._dataItems!.categoriesFlat = [];
+
+            this.categoriesMap?.items.forEach(category => {
+                this._dataItems!.categoriesFlat!.push(
+                    new DataItem(
+                        category,
+                        String(category.id),
+                        category.title,
+                        category.icon,
+                        this.localizationService.getAllTranslationsByKey(category.title) || []));
+            });
         }
     }
 
@@ -271,17 +285,17 @@ export class DictionaryService {
         return dataItem;
     }
 
-    private mapCategoriesToCountries(categories: TreeNodeResponseOfCategoryResponse[]): CategoryResponse[] {
+    private mapCategoriesToFlat(categories: TreeNodeResponseOfCategoryResponse[]): CategoryResponse[] {
         let categoriesArr: CategoryResponse[] = [];
 
         categories.forEach(category => {
-            this.mapCategoryToCountry(category.node!, categoriesArr);
+            this.mapCategoryToFlat(category.node!, categoriesArr);
         });
 
         return categoriesArr;
     }
 
-    private mapCategoryToCountry(category: CategoryResponse, categories: CategoryResponse[]): CategoryResponse[] {
+    private mapCategoryToFlat(category: CategoryResponse, categories: CategoryResponse[]): CategoryResponse[] {
         if (!category) {
             return categories;
         }
@@ -290,7 +304,7 @@ export class DictionaryService {
 
         if (category.children) {
             category.children.forEach(child => {
-                this.mapCategoryToCountry(child.node!, categories);
+                this.mapCategoryToFlat(child.node!, categories);
             });
         }
 

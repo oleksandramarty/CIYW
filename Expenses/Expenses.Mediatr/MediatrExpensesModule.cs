@@ -1,5 +1,6 @@
 using System.Reflection;
 using Autofac;
+using Expenses.Mediatr.Mediatr.Expenses.Commands;
 using Expenses.Mediatr.Mediatr.Expenses.Requests;
 using Expenses.Mediatr.Mediatr.Projects.Commands;
 using Expenses.Mediatr.Mediatr.Projects.Requests;
@@ -17,6 +18,7 @@ public class MediatrExpensesModule: Autofac.Module
         builder.RegisterAssemblyTypes(typeof(CreateUserProjectCommand).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<>));
         
         builder.RegisterAssemblyTypes(typeof(GetFilteredExpensesRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
+        builder.RegisterAssemblyTypes(typeof(RemoveExpenseCommand).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
         
         builder.RegisterAssemblyTypes(typeof(GetUserProjectByIdRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
         builder.RegisterAssemblyTypes(typeof(GetUserProjectsRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));

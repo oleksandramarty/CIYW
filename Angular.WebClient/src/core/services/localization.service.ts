@@ -136,6 +136,25 @@ export class LocalizationService {
         return this.getAllLocalizations?.data[locale];
     }
 
+    public getAllTranslationsByKey(key: string): string[] | undefined {
+        const translations: Set<string> = new Set();
+
+        Object.keys(this.publicLocalizations?.data ?? {}).forEach((locale) => {
+            const translation = this.publicLocalizations?.data[locale ?? 'en']?.[key];
+            if (translation) {
+                translations.add(translation);
+            }
+        });
+        Object.keys(this.nonPublicLocalizations?.data ?? {}).forEach((locale) => {
+            const translation = this.nonPublicLocalizations?.data[locale ?? 'en']?.[key];
+            if (translation) {
+                translations.add(translation);
+            }
+        });
+
+        return Array.from(translations);
+    }
+
     public localeChanged(code: string | undefined): void {
         const currentSettings = this.siteSettingsService.siteSettings;
         if (currentSettings) {

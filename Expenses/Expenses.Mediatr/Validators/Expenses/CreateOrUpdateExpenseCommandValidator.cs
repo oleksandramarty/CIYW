@@ -9,10 +9,10 @@ public class CreateOrUpdateExpenseCommandValidator : AbstractValidator<CreateOrU
     {
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("Title is required.")
-            .MaximumLength(100).WithMessage("Title must be at most 100 characters long.");
+            .MaximumLength(50).WithMessage("Title must be at most 50 characters long.");
 
         RuleFor(x => x.Description)
-            .MaximumLength(300).WithMessage("Description must be at most 300 characters long.");
+            .MaximumLength(100).WithMessage("Description must be at most 100 characters long.");
 
         RuleFor(x => x.Amount)
             .GreaterThan(0).WithMessage("Amount must be greater than 0.");

@@ -123,7 +123,7 @@ export class ExpenseClient {
         return _observableOf(null as any);
     }
 
-    expense_RemoveExpense(id: string): Observable<void> {
+    expense_RemoveExpense(id: string): Observable<boolean> {
         let url_ = this.baseUrl + "/api/v1/expenses/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -134,6 +134,7 @@ export class ExpenseClient {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/json"
             })
         };
 
@@ -144,14 +145,14 @@ export class ExpenseClient {
                 try {
                     return this.processExpense_RemoveExpense(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<boolean>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<boolean>;
         }));
     }
 
-    protected processExpense_RemoveExpense(response: HttpResponseBase): Observable<void> {
+    protected processExpense_RemoveExpense(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -209,7 +210,11 @@ export class ExpenseClient {
             }));
         } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {

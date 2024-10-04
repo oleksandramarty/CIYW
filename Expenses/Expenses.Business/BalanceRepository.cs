@@ -112,11 +112,11 @@ public class BalanceRepository: IBalanceRepository
         
         if (isRefund)
         {
-            balance.Amount = currentCategory.Contains("\"IsPositive\":1") ? balance.Amount - amount : balance.Amount + amount;
+            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount - amount : balance.Amount + amount;
         }
         else
         {
-            balance.Amount = currentCategory.Contains("\"IsPositive\":1") ? balance.Amount + amount : balance.Amount - amount;
+            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount + amount : balance.Amount - amount;
         }
         
         this.dataContext.Balances.Update(balance);

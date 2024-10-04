@@ -1,0 +1,40 @@
+<div class="base-modal-container" *ngIf="expenseFormGroup">
+    <h2 mat-dialog-title>{{ !!expense ? expense.title : 'Create expense' }}</h2>
+    <div class="balance-expense-hint">BALANCE.AFTER_TRANSACTION -
+        <span class="amount" [ngClass]="{'negative': predictedBalance < 0}">
+            <strong>
+                {{predictedBalance | currency: 'USD': 'symbol-narrow': '1.2-2'}}
+            </strong>
+        </span>
+    </div>
+    <div class="base-modal-body-container">
+        <ng-container *ngIf="!isBusy else loader">
+            <app-input className="grid-input-item" type="input" [label]="'COMMON.TITLE'"
+                       [formGroup]="expenseFormGroup" controlName="title" [maxLength]="50"></app-input>
+            <div class="grid-input-container">
+                <app-input className="grid-input-item" type="autocomplete" [dataItems]="dataItems?.categoriesFlat ?? []"
+                           [label]="'COMMON.CATEGORY'" [formGroup]="expenseFormGroup"
+                           controlName="categoryId"></app-input>
+                <app-input className="grid-input-item" type="datepicker" [label]="'COMMON.EXPENSE_DATE'"
+                           [formGroup]="expenseFormGroup" controlName="date"></app-input>
+                <app-input className="grid-input-item" type="input" [label]="'COMMON.AMOUNT'"
+                           [formGroup]="expenseFormGroup" controlName="amount"></app-input>
+                <app-input className="grid-input-item" type="select" [dataItems]="balancesDataItems ?? []" [label]="'COMMON.BALANCE'"
+                           [formGroup]="expenseFormGroup" controlName="balanceId"></app-input>
+            </div>
+            <app-input className="grid-input-item" type="textarea" [label]="'COMMON.DESCRIPTION'"
+                       [formGroup]="expenseFormGroup" controlName="description" [maxLength]="100"></app-input>
+        </ng-container>
+        <ng-template #loader>
+            <app-common-loader></app-common-loader>
+        </ng-template>
+    </div>
+    <div class="base-modal-actions-container">
+        <div class="mat-dialog-actions-container">
+            <button mat-button translation="COMMON.CLOSE" (click)="dialogRef.close(false)"></button>
+            <button mat-flat-button color="primary" (click)="createOrUpdateExpense()"
+                    [disabled]="expenseFormGroup?.invalid || isBusy">{{ !!expense ? 'Update' : 'Create' }}
+            </button>
+        </div>
+    </div>
+</div>

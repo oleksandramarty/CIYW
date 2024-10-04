@@ -5,8 +5,7 @@ import {debounceTime, Observable, startWith, Subject, takeUntil, tap} from "rxjs
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {map} from "rxjs/operators";
-import {CustomValidators} from "../../../../core/helpers/validator.helper";
-import {MatSelectChange} from "@angular/material/select";
+import {LocalizationService} from "../../../../core/services/localization.service";
 
 type InputType =
     'input' |
@@ -43,6 +42,8 @@ export class InputComponent implements OnInit, OnDestroy {
     @Input() rightLabel: string | undefined;
     @Input() rows: number | undefined;
     @Input() cols: number | undefined;
+    @Input() maxLength: number | undefined;
+    @Input() minLength: number | undefined;
     @Input() multiMaxCount: number | undefined;
     @Input() minDate: Date | undefined;
     @Input() maxDate: Date | undefined;
@@ -61,10 +62,15 @@ export class InputComponent implements OnInit, OnDestroy {
 
     internalFormGroup: FormGroup | undefined;
 
-    constructor(private snackBar: MatSnackBar) {
+    constructor(
+        private readonly localizationService: LocalizationService,
+        private snackBar: MatSnackBar
+    ) {
         if (this.dataItems) {
             this.dataItems.sort((a, b) => (b.isImportant ? 1 : 0) - (a.isImportant ? 1 : 0));
         }
+
+        this.displayFn = this.displayFn.bind(this);
     }
 
     public ngOnInit(): void {
@@ -76,7 +82,7 @@ export class InputComponent implements OnInit, OnDestroy {
 
         if (this.type === 'autocomplete' || this.type === 'multiautocomplete') {
             this.internalFormGroup = new FormGroup({
-                autocomplete: new FormControl(null)
+                autocomplete: new FormControl(this.dataItems?.find(x => x.id === this.currentValue))
             });
 
             this.filteredDataItems = this.internalFormGroup?.get('autocomplete')?.valueChanges.pipe(
@@ -115,22 +121,12 @@ export class InputComponent implements OnInit, OnDestroy {
         return this.formGroup?.get(this.controlName);
     }
 
-    get currenValue(): any {
+    get currentValue(): any {
         return this.formGroup?.get(this.controlName)?.value ?? undefined;
     }
 
     get isRequired(): boolean {
         return this.currentControl?.hasValidator(Validators.required) ?? false;
-    }
-
-    get maxLength(): number | null {
-        const maxLengthValidator = this.currentControl?.validator ? this.currentControl.validator({} as AbstractControl) : null;
-        return maxLengthValidator && maxLengthValidator.maxLength ? maxLengthValidator.maxLength : null;
-    }
-
-    get minLength(): number | null {
-        const minLengthValidator = this.currentControl?.validator ? this.currentControl.validator({} as AbstractControl) : null;
-        return minLengthValidator && minLengthValidator.minLength ? minLengthValidator.maxLength : null;
     }
 
     get isDisabled(): boolean {
@@ -157,7 +153,7 @@ export class InputComponent implements OnInit, OnDestroy {
     }
 
     displayFn(dataItem: DataItem): string {
-        return dataItem && dataItem.name ? dataItem.name : '';
+        return this.localizationService.getTranslation(dataItem?.name) ?? '';
     }
 
     private _filterAutoComplete(name: string): DataItem[] | undefined {
@@ -203,6 +199,9 @@ export class InputComponent implements OnInit, OnDestroy {
     }
 
     toggleChildrenSelection(item: DataItem, selected: boolean): void {
+        if (this.type !== 'multiselect') {
+            return;
+        }
         const index = this.selectedDataItems.findIndex(selectedItem => selectedItem.id === item.id);
         if (selected && index === -1) {
             this.selectedDataItems.push(item);
@@ -222,5 +221,12 @@ export class InputComponent implements OnInit, OnDestroy {
             });
         }
         this.formGroup?.get(this.controlName)?.setValue(this.selectedDataItems.map(x => x.id));
+    }
+
+    public showDebugInfo(): void {
+        console.log(this.formGroup);
+        console.log(this.currentControl);
+        console.log(this.currentValue);
+        console.log(this.dataItems)
     }
 }

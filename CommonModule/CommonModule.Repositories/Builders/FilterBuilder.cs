@@ -104,12 +104,12 @@ public class FilterBuilder<TId, T> where T : class
         {
             if (dateRangeRequest.StartDate.HasValue)
             {
-                query = query.Where(x => EF.Property<DateTime>(x, "Date") >= dateRangeRequest.StartDate.Value);
+                query = query.Where(x => EF.Property<DateTime>(x, "Date") >= dateRangeRequest.StartDate.Value.ToUniversalTime());
             }
 
             if (dateRangeRequest.EndDate.HasValue)
             {
-                query = query.Where(x => EF.Property<DateTime>(x, "Date") <= dateRangeRequest.EndDate.Value);
+                query = query.Where(x => EF.Property<DateTime>(x, "Date") <= dateRangeRequest.EndDate.Value.ToUniversalTime());
             }
         }
 

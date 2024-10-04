@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Expenses.Domain.Migrations
 {
     [DbContext(typeof(ExpensesDataContext))]
-    [Migration("20241002185220_InitExpense")]
+    [Migration("20241004020914_InitExpense")]
     partial class InitExpense
     {
         /// <inheritdoc />
@@ -85,16 +85,16 @@ namespace Expenses.Domain.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");

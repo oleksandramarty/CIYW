@@ -17,5 +17,8 @@ public static class FilterExtension
         {
             range.StartDate ??= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         }
+
+        range.StartDate.SetMidnight();
+        range.EndDate.SetMidnight();
     }
 }

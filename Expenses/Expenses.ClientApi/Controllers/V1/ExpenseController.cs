@@ -30,11 +30,11 @@ public class ExpenseController: BaseController
     }
     
     [HttpDelete("{id}")]
-    [ProducesResponseType(typeof(void), 200)]
+    [ProducesResponseType(typeof(bool), 200)]
     public async Task<IActionResult> RemoveExpenseAsync(Guid id, CancellationToken cancellationToken)
     {
-        await mediator.Send(new RemoveExpenseCommand { Id = id }, cancellationToken);
-        return Ok();
+        bool result = await mediator.Send(new RemoveExpenseCommand { Id = id }, cancellationToken);
+        return Ok(result);
     }
     
     [HttpPost("filter")]

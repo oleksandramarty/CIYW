@@ -1,0 +1,15 @@
+.grid-input {
+  &-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-input {
+    &-container {
+      grid-template-columns: 1fr;
+    }
+  }
+}

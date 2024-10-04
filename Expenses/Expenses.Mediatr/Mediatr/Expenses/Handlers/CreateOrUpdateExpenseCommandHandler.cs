@@ -53,15 +53,14 @@ public class CreateOrUpdateExpenseCommandHandler: MediatrAuthBase, IRequestHandl
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
         this.entityValidator.ValidateExist(userProject, command.UserProjectId);
         
-        if (userProject.CreatedUserId != userId ||
-            userProject.AllowedUsers.All(au => au.UserId != userId))
+        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
 
         if (!command.Id.HasValue)
         {
-            Expense toAdd = this.mapper.Map<Expense>(command);
+            Expense toAdd = this.mapper.Map<Expense>(command, opts => opts.Items["IsUpdate"] = false);
             toAdd.Version = Guid.NewGuid().ToString("N").ToUpper();
             await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
             return;
@@ -78,7 +77,7 @@ public class CreateOrUpdateExpenseCommandHandler: MediatrAuthBase, IRequestHandl
         
         currentExpense.Version = Guid.NewGuid().ToString("N").ToUpper();
         await this.balanceRepository.UpdateExpenseAsync(currentExpense,
-            this.mapper.Map<Expense>(command), cancellationToken);
+            this.mapper.Map<Expense>(command, opts => opts.Items["IsUpdate"] = true), cancellationToken);
     }
     
 }

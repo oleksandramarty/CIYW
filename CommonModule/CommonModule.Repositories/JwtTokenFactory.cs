@@ -84,7 +84,7 @@ public class JwtTokenFactory: IJwtTokenFactory
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = claimsIdentity,
-            Expires = rememberMe ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddMinutes(30),
+            Expires = rememberMe ? DateTime.UtcNow.AddMonths(1) : DateTime.UtcNow.AddDays(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 

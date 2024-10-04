@@ -44,4 +44,12 @@ public static class DateTimeExtension
     {
         return new DateTime(DateTime.Now.Year, 12, 31, 23, 59, 59);
     }
+
+    public static void SetMidnight(this DateTime? date)
+    {
+        if (date.HasValue)
+        {
+            date = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 0, 0, 0);
+        }
+    }
 }

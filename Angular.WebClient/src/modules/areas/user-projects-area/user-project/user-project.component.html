@@ -4,14 +4,12 @@
     <div *ngFor="let balance of userProject?.balances">
       <div class="balance">
         <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
-        <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
+        <span class="amount" [ngClass]="{'negative': balance.amount < 0}">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
       </div>
       <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
     </div>
   </div>
 </section>
-
-<app-common-loader *ngIf="isBusy"></app-common-loader>
 
 <div class="filter-container" [formGroup]="filterFormGroup">
     <div class="filter-input-container">
@@ -44,41 +42,45 @@
     <div class="filter-button-container">
         <div>
             <div class="filter-button-item">
-                <button mat-flat-button color="warn" translation="COMMON.ADD"></button>
+                <button mat-flat-button color="warn" translation="COMMON.ADD" (click)="openCreateUpdateExpenseDialog(undefined)"></button>
             </div>
         </div>
         <div>
             <div class="filter-button-item">
-                <button mat-button color="warn" translation="FILTER.RESET"></button>
-                <button mat-flat-button color="primary" translation="FILTER.SEARCH"></button>
+                <button mat-button color="warn" translation="FILTER.RESET" (click)="resetFilter()"></button>
+                <button mat-flat-button color="primary" translation="FILTER.SEARCH" (click)="getExpenses()"></button>
             </div>
         </div>
     </div>
 </div>
 
-
-
-<div class="table-container">
+<div class="table-container" *ngIf="!!expenses">
     <table class="mat-table">
         <thead>
-        <tr class="mat-tr">
-            <th class="mat-th"></th>
-            <th class="mat-th"></th>
-            <th class="mat-th" translation="COMMON.DATE"></th>
-            <th class="mat-th" translation="COMMON.COMMENT"></th>
-            <th class="mat-th" translation="COMMON.AMOUNT"></th>
-            <th class="mat-th" translation="COMMON.CATEGORY"></th>
-        </tr>
+            <tr class="mat-tr">
+                <th class="mat-th"></th>
+                <th class="mat-th"></th>
+                <th class="mat-th" translation="COMMON.DATE"></th>
+                <th class="mat-th" translation="COMMON.COMMENT"></th>
+                <th class="mat-th" translation="COMMON.AMOUNT"></th>
+                <th class="mat-th" translation="COMMON.CATEGORY"></th>
+            </tr>
         </thead>
         <tbody>
-        <tr class="mat-tr">
-            <td class="mat-td"><i class="fa-solid fa-pencil pointer"></i></td>
-            <td class="mat-td"><i class="fa-solid fa-trash pointer"></i></td>
-            <td class="mat-td"></td>
-            <td class="mat-td"></td>
-            <td class="mat-td"></td>
-            <td class="mat-td"></td>
+        <tr class="mat-tr" *ngFor="let expense of expenses.entities; let i=index">
+            <td class="mat-td"><i class="fa-solid fa-pencil pointer" (click)="openCreateUpdateExpenseDialog(expense)"></i></td>
+            <td class="mat-td"><i class="fa-solid fa-trash pointer" (click)="removeExpense(expense)"></i></td>
+            <td class="mat-td">
+                <span class="utc-time-container">
+                    {{ expense.date | localDate:'MMMM dd, yyyy HH:mm' }} <span class="utc-container">{{utcTimeShift}}</span>
+                </span>
+            </td>
+            <td class="mat-td">{{ expense.title }}</td>
+            <td class="mat-td amount" [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive ?? false}">{{ expense.amount | currency:currenciesMap?.get(4)?.code }}</td>
+            <td class="mat-td"><span [translation]="categoriesMap?.get(expense.categoryId)?.title"></span></td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<app-common-loader *ngIf="isBusy"></app-common-loader>

@@ -4,6 +4,7 @@
 @import "styles/_table.scss";
 @import "styles/_filter.scss";
 @import "styles/_dialog.scss";
+@import "styles/_grid.scss";
 
 html, body {
   font-size: 16px;
@@ -149,6 +150,9 @@ mat-form-field {
 .d-flex {
   display: flex;
 }
+.p-relative {
+  position: relative;
+}
 .success-message {
   color: #4caf50;
 }
@@ -270,6 +274,9 @@ mat-grid-tile {
 }
 .amount {
   color: #4caf50;
+  &.negative {
+    color: #f44336;
+  }
 }
 .balance {
   display: flex;
@@ -278,4 +285,17 @@ mat-grid-tile {
 }
 .filter-input-item .mat-mdc-form-field-subscript-wrapper {
   display: none !important;
+}
+.utc {
+  &-container {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    font-size: 0.6rem;
+    opacity: 0.75;
+  }
+  &-time-container {
+    position: relative;
+    padding-bottom: 0.6rem;
+  }
 }

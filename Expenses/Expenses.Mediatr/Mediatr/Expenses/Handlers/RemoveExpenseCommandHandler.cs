@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class RemoveExpenseCommandHandler: MediatrAuthBase, IRequestHandler<RemoveExpenseCommand>
+public class RemoveExpenseCommandHandler: MediatrAuthBase, IRequestHandler<RemoveExpenseCommand, bool>
 {
     private readonly IBalanceRepository balanceRepository;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
@@ -34,7 +34,7 @@ public class RemoveExpenseCommandHandler: MediatrAuthBase, IRequestHandler<Remov
         this.userProjectRepository = userProjectRepository;
     }
     
-    public async Task Handle(RemoveExpenseCommand command, CancellationToken cancellationToken)
+    public async Task<bool> Handle(RemoveExpenseCommand command, CancellationToken cancellationToken)
     {
         Expense expense = await this.expenseRepository.GetByIdAsync(command.Id, cancellationToken);
         this.entityValidator.ValidateExist(expense, command.Id);
@@ -48,12 +48,13 @@ public class RemoveExpenseCommandHandler: MediatrAuthBase, IRequestHandler<Remov
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
         this.entityValidator.ValidateExist(userProject, expense.UserProjectId);
         
-        if (userProject.CreatedUserId != userId ||
-            userProject.AllowedUsers.All(au => au.UserId != userId))
+        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
 
         await this.balanceRepository.RemoveExpenseAsync(expense, cancellationToken);
+
+        return true;
     }
 }

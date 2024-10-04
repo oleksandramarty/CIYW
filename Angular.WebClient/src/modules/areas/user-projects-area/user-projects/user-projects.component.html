@@ -46,7 +46,7 @@
                     <ng-container *ngFor="let balance of allowedProject.userProject.balances">
                         <div class="balance">
                             <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
-                            <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
+                            <span class="amount" [ngClass]="{'negative': balance.amount < 0}">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
                         </div>
                         <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
                     </ng-container>

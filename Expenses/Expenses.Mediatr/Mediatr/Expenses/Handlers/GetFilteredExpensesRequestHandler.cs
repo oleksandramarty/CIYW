@@ -44,8 +44,7 @@ public class GetFilteredExpensesRequestHandler: MediatrAuthBase, IRequestHandler
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
         this.entityValidator.ValidateExist<UserProject, Guid>(userProject, request.UserProjectId);
         
-        if (userProject.CreatedUserId != userId ||
-            userProject.AllowedUsers.All(au => au.UserId != userId))
+        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
@@ -54,6 +53,10 @@ public class GetFilteredExpensesRequestHandler: MediatrAuthBase, IRequestHandler
         
         return await this.expenseRepository.GetListWithIncludeAsync<ExpenseResponse>(
             e => e.UserProjectId == request.UserProjectId && 
+                 (string.IsNullOrEmpty(request.Query) || 
+                  !string.IsNullOrEmpty(request.Query) && EF.Functions.Like(e.Title, $"%{request.Query}%") ||
+                    !string.IsNullOrEmpty(request.Query) && EF.Functions.Like(e.Description, $"%{request.Query}%")
+                  ) &&
             (request.CategoryIds.Count == 0 || request.CategoryIds.Count != 0 && request.CategoryIds.Contains(e.CategoryId)),
             request,
             cancellationToken);

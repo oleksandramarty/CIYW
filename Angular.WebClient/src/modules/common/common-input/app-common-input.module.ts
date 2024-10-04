@@ -11,7 +11,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import {provideNativeDateAdapter} from "@angular/material/core";
+import {MatNativeDateModule, provideNativeDateAdapter} from "@angular/material/core";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
@@ -19,6 +19,7 @@ import {MatSliderModule} from "@angular/material/slider";
 import {AppCommonModule} from "../common-app/app-common.module";
 import {MatAutocomplete, MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatChipsModule} from "@angular/material/chips";
+import {SharedModule} from "../../../core/shared.module";
 
 @NgModule({
     declarations: [
@@ -44,7 +45,10 @@ import {MatChipsModule} from "@angular/material/chips";
         AppCommonModule,
         MatAutocomplete,
         MatAutocompleteModule,
-        MatChipsModule
+        MatChipsModule,
+        MatNativeDateModule,
+
+        SharedModule
     ],
     providers: [provideNativeDateAdapter()],
     exports: [

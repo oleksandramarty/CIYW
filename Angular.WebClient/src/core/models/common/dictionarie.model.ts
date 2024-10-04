@@ -13,30 +13,34 @@ import {
 } from "../../api-clients/dictionaries-client";
 
 export class DictionaryMap<TKey, TValue> {
-  private items: Map<TKey, TValue>;
+  private _items: Map<TKey, TValue>;
+
+  get items(): Map<TKey, TValue> {
+    return this._items;
+  }
 
   constructor() {
-    this.items = new Map<TKey, TValue>();
+    this._items = new Map<TKey, TValue>();
   }
 
   public set(key: TKey, value: TValue): void {
-    this.items.set(key, value);
+    this._items.set(key, value);
   }
 
   public get(key: TKey): TValue | undefined {
-    return this.items.get(key);
+    return this._items.get(key);
   }
 
   public has(key: TKey): boolean {
-    return this.items.has(key);
+    return this._items.has(key);
   }
 
   public delete(key: TKey): void {
-    this.items.delete(key);
+    this._items.delete(key);
   }
 
   public clear(): void {
-    this.items.clear();
+    this._items.clear();
   }
 }
 
@@ -45,6 +49,8 @@ export interface IDictionaryDataItems {
     countries: IDataItem[] | undefined;
     currencies: IDataItem[] | undefined;
     categories: IDataItem[] | undefined;
+
+    categoriesFlat: IDataItem[] | undefined;
 }
 
 export class DictionaryDataItems implements IDictionaryDataItems {
@@ -52,6 +58,8 @@ export class DictionaryDataItems implements IDictionaryDataItems {
     countries: DataItem[] | undefined;
     currencies: DataItem[] | undefined;
     categories: DataItem[] | undefined;
+
+    categoriesFlat: DataItem[] | undefined;
 }
 
 export interface IDictionary {

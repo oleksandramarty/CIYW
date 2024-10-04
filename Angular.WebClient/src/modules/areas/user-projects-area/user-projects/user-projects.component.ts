@@ -75,11 +75,16 @@ export class UserProjectsComponent implements OnInit, OnDestroy {
             data: {}
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (!!result) {
-                this.getUserProjects();
-            }
-        });
+        dialogRef.afterClosed()
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                tap((result) => {
+                    if (!!result) {
+                        this.getUserProjects();
+                    }
+                })
+            )
+            .subscribe();
     }
 
     public openUserProject(id: string | undefined): void {

@@ -35,7 +35,8 @@ import {SiteSettingsService} from "../../../core/services/site-settings.service"
 import {DictionaryService} from "../../../core/services/dictionary.service";
 import {API_BASE_URL_AuditTrail} from "../../../core/api-clients/audit-trail-client";
 import {NightSkyComponent} from "../../common/background/night-sky/night-sky.component";
-import {UserProjectsAreaModule} from "../user-projects-area/user-projects-area.module";
+import {LocalDatePipe} from "../../../core/pipes/local-date.pipe";
+import {SharedModule} from "../../../core/shared.module";
 
 export const MY_FORMATS = {
   parse: {
@@ -90,6 +91,8 @@ const routes: Routes = [
     FormsModule,
 
     NightSkyComponent,
+
+    SharedModule,
 
     HttpClientModule,
     AppCommonModule,
@@ -152,6 +155,6 @@ const routes: Routes = [
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
   bootstrap: [AppComponent],
-  exports: [RouterModule, RouterOutlet]
+  exports: [RouterModule, RouterOutlet, LocalDatePipe]
 })
 export class AppModule {}

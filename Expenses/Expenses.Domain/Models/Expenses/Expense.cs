@@ -7,9 +7,9 @@ namespace Expenses.Domain.Models.Expenses;
 
 public class Expense: BaseDateTimeEntity<Guid>, IBaseVersionEntity
 {
-    [MaxLength(100)]
+    [MaxLength(50)]
     public string Title { get; set; }
-    [MaxLength(300)]
+    [MaxLength(100)]
     public string? Description { get; set; }
     [Range(0.01, double.MaxValue)]
     public decimal Amount { get; set; }

@@ -1,0 +1,13 @@
+<div class="base-modal-container">
+    <h2 mat-dialog-title [translation]="title"></h2>
+    <div class="base-modal-body-container">
+        <i class="fa-solid fa-triangle-exclamation warn-icon"></i>
+        <p [translation]="description"></p>
+    </div>
+    <div class="base-modal-actions-container">
+        <div class="mat-dialog-actions-container">
+            <button mat-button [translation]="noBtn" (click)="dialogRef.close(false)"></button>
+            <button mat-flat-button [translation]="yesBtn" color="primary" (click)="dialogRef.close(true)"></button>
+        </div>
+    </div>
+</div>

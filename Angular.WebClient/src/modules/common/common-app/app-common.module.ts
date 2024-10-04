@@ -9,16 +9,13 @@ import { HeaderComponent } from "./header/header.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { FooterComponent } from "./footer/footer.component";
-import { TranslateDirective } from "../../../core/directives/translation.directive";
-import {CopyToClipboardDirective} from "../../../core/directives/copy-to-clipboard.directive";
+import {SharedModule} from "../../../core/shared.module";
 
 @NgModule({
   declarations: [
     NotFoundComponent,
     HeaderComponent,
-    FooterComponent,
-    TranslateDirective,
-    CopyToClipboardDirective,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -27,14 +24,14 @@ import {CopyToClipboardDirective} from "../../../core/directives/copy-to-clipboa
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+
+    SharedModule
   ],
   exports: [
     NotFoundComponent,
     HeaderComponent,
-    FooterComponent,
-    TranslateDirective,
-    CopyToClipboardDirective,
+    FooterComponent
   ]
 })
 export class AppCommonModule {}
