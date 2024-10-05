@@ -9,7 +9,7 @@ import { HeaderComponent } from "./header/header.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { FooterComponent } from "./footer/footer.component";
-import {SharedModule} from "../../../core/shared.module";
+import { SharedModule } from "../../../core/shared.module";
 
 @NgModule({
   declarations: [
@@ -25,7 +25,6 @@ import {SharedModule} from "../../../core/shared.module";
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-
     SharedModule
   ],
   exports: [

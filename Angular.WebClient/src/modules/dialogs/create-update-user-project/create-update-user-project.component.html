@@ -1,25 +1,22 @@
 <div class="base-modal-container" *ngIf="userProjectForm">
-    <h2 mat-dialog-title>{{ !!userProject ? userProject.title : 'Create user project' }}</h2>
+    <h2 mat-dialog-title *ngIf="userProject">{{ userProject.title }}</h2>
+    <h2 mat-dialog-title *ngIf="!userProject" [translation]="'USER_PROJECTS.CREATE_NEW'"></h2>
     <div class="base-modal-body-container">
-        <ng-container *ngIf="!isBusy else loader">
             <app-input type="input" [label]="'COMMON.TITLE'" [formGroup]="userProjectForm" controlName="title"></app-input>
             <app-input
                     type="multiautocomplete"
-                    [hint]="'COMMON.MAX_3_CURRENCIES'"
                     [label]="'COMMON.CURRENCY'"
                     [multiMaxCount]="3"
                     [formGroup]="userProjectForm" controlName="currencyIds"
                     [dataItems]="currencies"></app-input>
             <app-input type="checkbox" [label]="'COMMON.IS_ACTIVE'" [formGroup]="userProjectForm" controlName="isActive"></app-input>
-        </ng-container>
-        <ng-template #loader>
-            <app-common-loader></app-common-loader>
-        </ng-template>
     </div>
     <mat-dialog-actions>
         <div class="mat-dialog-actions-container">
-            <button mat-button translation="COMMON.CLOSE" (click)="dialogRef.close(false)"></button>
-            <button mat-flat-button color="primary" (click)="createOrUpdateUserProject()">{{!!userProject ? 'Update' : 'Create'}}</button>
+            <button mat-button [translation]="'COMMON.CLOSE'" (click)="dialogRef.close(false)"></button>
+            <button mat-flat-button color="primary"
+                    [translation]="!!userProject ? 'COMMON.UPDATE' : 'COMMON.CREATE'"
+                    (click)="createOrUpdateUserProject()"></button>
         </div>
     </mat-dialog-actions>
 </div>

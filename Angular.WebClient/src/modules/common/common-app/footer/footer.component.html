@@ -1,28 +1,33 @@
 <footer class="footer">
-  <div class="t-align-center pt-20p pb-10p">
-    <span class="opacity-07" translation="FOOTER.HONKING_SINCE"></span>
-  </div>
-  <div class="social-links pb-20p">
-    <a href="https://www.linkedin.com/in/oleksandr-martynin/" target="_blank" rel="noopener noreferrer">
-      <i class="fab fa-linkedin"></i> LinkedIn
-    </a>
-    <a href="https://github.com/oleksandramarty/" target="_blank" rel="noopener noreferrer">
-      <i class="fab fa-github"></i> GitHub
-    </a>
-    <a href="https://leetcode.com/u/oleksandramartycv/" target="_blank" rel="noopener noreferrer">
-      <i class="fas fa-code"></i> LeetCode
-    </a>
-    <a href="https://www.npmjs.com/~amarty/" target="_blank" rel="noopener noreferrer">
-      <i class="fa-brands fa-npm"></i> NPM
-    </a>
-    <div class="version-wrapper">
-      <span class="opacity-07" style="color: #f44336">[<strong>DO NOT STORE ANY SENSITIVE DATA HERE</strong>]</span>
-      <span class="opacity-07"> | </span>
-      <span class="opacity-07">[build: <strong>{{buildVersion}}</strong>]</span>
-      <span class="opacity-07"> | </span>
-      <span class="opacity-07 pointer" (click)="clearCache()">[<strong>$</strong>]</span>
-      <span class="opacity-07"> | </span>
-      <span class="opacity-07 pointer" (click)="resetSite()">[<strong>R</strong>]</span>
+    <div class="t-align-center pt-20p pb-10p">
+        <span class="opacity-07" [translation]="'FOOTER.HONKING_SINCE'"></span>
     </div>
-  </div>
+    <div class="social-links pb-20p">
+        <a href="https://www.linkedin.com/in/oleksandr-martynin/" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://github.com/oleksandramarty/" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-github"></i> GitHub
+        </a>
+        <a href="https://leetcode.com/u/oleksandramartycv/" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-code"></i> LeetCode
+        </a>
+        <a href="https://www.npmjs.com/~amarty/" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-npm"></i> NPM
+        </a>
+        <div class="version-wrapper">
+            <span
+                    class="opacity-07"
+                    style="color: #f44336;
+                    text-transform: uppercase;">
+                [<strong [translation]="'COMMON.DO_NOT_STORE_ANY_SENSITIVE_DATA_HERE'"></strong>]
+            </span>
+            <span class="opacity-07"> | </span>
+            <span class="opacity-07">[build: <strong>{{ buildVersion }}</strong>]</span>
+            <span class="opacity-07"> | </span>
+            <span class="opacity-07 pointer" (click)="clearCache()">[<strong>$</strong>]</span>
+            <span class="opacity-07"> | </span>
+            <span class="opacity-07 pointer" (click)="resetSite()">[<strong>R</strong>]</span>
+        </div>
+    </div>
 </footer>

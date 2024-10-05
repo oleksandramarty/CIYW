@@ -2,7 +2,11 @@
     <h2 mat-dialog-title [translation]="title"></h2>
     <div class="base-modal-body-container">
         <i class="fa-solid fa-triangle-exclamation warn-icon"></i>
-        <p [translation]="description"></p>
+        <ng-container *ngIf="descriptions">
+            <p *ngFor="let description of descriptions"
+                    [translation]="description"></p>
+        </ng-container>
+        <div *ngIf="htmlBlock" [innerHTML]="htmlBlock | sanitizeHtml"></div>
     </div>
     <div class="base-modal-actions-container">
         <div class="mat-dialog-actions-container">

@@ -15,7 +15,6 @@ public class ExpenseResponse: BaseDateTimeEntity<Guid>, IBaseVersionEntity
     public Guid BalanceId { get; set; }
     public DateTime Date { get; set; }
     public int CategoryId { get; set; }
-    public string CategoryName { get; set; }
     public bool IsIncome { get; set; }
     
     public Guid UserProjectId { get; set; }

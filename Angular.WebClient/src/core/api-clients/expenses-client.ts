@@ -325,6 +325,305 @@ export class ExpenseClient {
         return _observableOf(null as any);
     }
 
+    plannedExpense_CreateOrUpdatePlannedExpense(request: CreateOrUpdatePlannedExpenseCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/v1/planned-expenses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPlannedExpense_CreateOrUpdatePlannedExpense(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPlannedExpense_CreateOrUpdatePlannedExpense(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processPlannedExpense_CreateOrUpdatePlannedExpense(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    plannedExpense_RemovePlannedExpense(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/v1/planned-expenses/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPlannedExpense_RemovePlannedExpense(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPlannedExpense_RemovePlannedExpense(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processPlannedExpense_RemovePlannedExpense(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    plannedExpense_GetFilteredPlannedExpenses(request: GetFilteredPlannedExpensesRequest): Observable<ListWithIncludeResponseOfPlannedExpenseResponse> {
+        let url_ = this.baseUrl + "/api/v1/planned-expenses/filter";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPlannedExpense_GetFilteredPlannedExpenses(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPlannedExpense_GetFilteredPlannedExpenses(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ListWithIncludeResponseOfPlannedExpenseResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ListWithIncludeResponseOfPlannedExpenseResponse>;
+        }));
+    }
+
+    protected processPlannedExpense_GetFilteredPlannedExpenses(response: HttpResponseBase): Observable<ListWithIncludeResponseOfPlannedExpenseResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ListWithIncludeResponseOfPlannedExpenseResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     userProject_GetAllowedProjects(): Observable<UserAllowedProjectResponse[]> {
         let url_ = this.baseUrl + "/api/v1/user-projects/allowed";
         url_ = url_.replace(/[?&]$/, "");
@@ -1033,7 +1332,6 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
     balanceId!: string;
     date!: Date;
     categoryId!: number;
-    categoryName!: string;
     isIncome!: boolean;
     userProjectId!: string;
     createdUserId!: string;
@@ -1052,7 +1350,6 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
             this.balanceId = _data["balanceId"];
             this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
             this.categoryId = _data["categoryId"];
-            this.categoryName = _data["categoryName"];
             this.isIncome = _data["isIncome"];
             this.userProjectId = _data["userProjectId"];
             this.createdUserId = _data["createdUserId"];
@@ -1075,7 +1372,6 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
         data["balanceId"] = this.balanceId;
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["categoryId"] = this.categoryId;
-        data["categoryName"] = this.categoryName;
         data["isIncome"] = this.isIncome;
         data["userProjectId"] = this.userProjectId;
         data["createdUserId"] = this.createdUserId;
@@ -1092,7 +1388,6 @@ export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
     balanceId: string;
     date: Date;
     categoryId: number;
-    categoryName: string;
     isIncome: boolean;
     userProjectId: string;
     createdUserId: string;
@@ -1329,6 +1624,251 @@ export class BaseDateRangeFilterRequest implements IBaseDateRangeFilterRequest {
 export interface IBaseDateRangeFilterRequest {
     startDate?: Date | undefined;
     endDate?: Date | undefined;
+}
+
+export class CreateOrUpdatePlannedExpenseCommand implements ICreateOrUpdatePlannedExpenseCommand {
+    id?: string | undefined;
+    title!: string;
+    description?: string | undefined;
+    amount!: number;
+    categoryId!: number;
+    balanceId!: string;
+    startDate!: Date;
+    endDate?: Date | undefined;
+    userProjectId!: string;
+    frequencyId!: number;
+    isActive!: boolean;
+
+    constructor(data?: ICreateOrUpdatePlannedExpenseCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.amount = _data["amount"];
+            this.categoryId = _data["categoryId"];
+            this.balanceId = _data["balanceId"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.userProjectId = _data["userProjectId"];
+            this.frequencyId = _data["frequencyId"];
+            this.isActive = _data["isActive"];
+        }
+    }
+
+    static fromJS(data: any): CreateOrUpdatePlannedExpenseCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrUpdatePlannedExpenseCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["amount"] = this.amount;
+        data["categoryId"] = this.categoryId;
+        data["balanceId"] = this.balanceId;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["userProjectId"] = this.userProjectId;
+        data["frequencyId"] = this.frequencyId;
+        data["isActive"] = this.isActive;
+        return data;
+    }
+}
+
+export interface ICreateOrUpdatePlannedExpenseCommand {
+    id?: string | undefined;
+    title: string;
+    description?: string | undefined;
+    amount: number;
+    categoryId: number;
+    balanceId: string;
+    startDate: Date;
+    endDate?: Date | undefined;
+    userProjectId: string;
+    frequencyId: number;
+    isActive: boolean;
+}
+
+export class ListWithIncludeResponseOfPlannedExpenseResponse implements IListWithIncludeResponseOfPlannedExpenseResponse {
+    entities!: PlannedExpenseResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount!: number;
+    totalCountWithoutFilter!: number;
+
+    constructor(data?: IListWithIncludeResponseOfPlannedExpenseResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.entities = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["entities"])) {
+                this.entities = [] as any;
+                for (let item of _data["entities"])
+                    this.entities!.push(PlannedExpenseResponse.fromJS(item));
+            }
+            this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
+            this.totalCount = _data["totalCount"];
+            this.totalCountWithoutFilter = _data["totalCountWithoutFilter"];
+        }
+    }
+
+    static fromJS(data: any): ListWithIncludeResponseOfPlannedExpenseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListWithIncludeResponseOfPlannedExpenseResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.entities)) {
+            data["entities"] = [];
+            for (let item of this.entities)
+                data["entities"].push(item.toJSON());
+        }
+        data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
+        data["totalCount"] = this.totalCount;
+        data["totalCountWithoutFilter"] = this.totalCountWithoutFilter;
+        return data;
+    }
+}
+
+export interface IListWithIncludeResponseOfPlannedExpenseResponse {
+    entities: PlannedExpenseResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount: number;
+    totalCountWithoutFilter: number;
+}
+
+export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements IPlannedExpenseResponse {
+    title!: string;
+    description?: string | undefined;
+    amount!: number;
+    categoryId!: number;
+    balanceId!: string;
+    startDate!: Date;
+    endDate?: Date | undefined;
+    userId!: string;
+    userProjectId!: string;
+    frequencyId!: number;
+    isActive!: boolean;
+    version!: string;
+
+    constructor(data?: IPlannedExpenseResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.amount = _data["amount"];
+            this.categoryId = _data["categoryId"];
+            this.balanceId = _data["balanceId"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.userId = _data["userId"];
+            this.userProjectId = _data["userProjectId"];
+            this.frequencyId = _data["frequencyId"];
+            this.isActive = _data["isActive"];
+            this.version = _data["version"];
+        }
+    }
+
+    static override fromJS(data: any): PlannedExpenseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PlannedExpenseResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["amount"] = this.amount;
+        data["categoryId"] = this.categoryId;
+        data["balanceId"] = this.balanceId;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["userId"] = this.userId;
+        data["userProjectId"] = this.userProjectId;
+        data["frequencyId"] = this.frequencyId;
+        data["isActive"] = this.isActive;
+        data["version"] = this.version;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IPlannedExpenseResponse extends IBaseDateTimeEntityOfGuid {
+    title: string;
+    description?: string | undefined;
+    amount: number;
+    categoryId: number;
+    balanceId: string;
+    startDate: Date;
+    endDate?: Date | undefined;
+    userId: string;
+    userProjectId: string;
+    frequencyId: number;
+    isActive: boolean;
+    version: string;
+}
+
+export class GetFilteredPlannedExpensesRequest extends BaseFilterRequestOfGuid implements IGetFilteredPlannedExpensesRequest {
+    userProjectId!: string;
+
+    constructor(data?: IGetFilteredPlannedExpensesRequest) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.userProjectId = _data["userProjectId"];
+        }
+    }
+
+    static override fromJS(data: any): GetFilteredPlannedExpensesRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFilteredPlannedExpensesRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userProjectId"] = this.userProjectId;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetFilteredPlannedExpensesRequest extends IBaseFilterRequestOfGuid {
+    userProjectId: string;
 }
 
 export class UserAllowedProjectResponse extends BaseIdEntityOfGuid implements IUserAllowedProjectResponse {

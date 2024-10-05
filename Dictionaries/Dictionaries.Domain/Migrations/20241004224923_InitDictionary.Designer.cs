@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dictionaries.Domain.Migrations
 {
     [DbContext(typeof(DictionariesDataContext))]
-    [Migration("20241004020924_InitDictionary")]
+    [Migration("20241004224923_InitDictionary")]
     partial class InitDictionary
     {
         /// <inheritdoc />
@@ -139,6 +139,33 @@ namespace Dictionaries.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currencies", "Dictionaries");
+                });
+
+            modelBuilder.Entity("Dictionaries.Domain.Models.Expenses.Frequency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("FrequencyEnum")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Frequencies", "Dictionaries");
                 });
 
             modelBuilder.Entity("Dictionaries.Domain.Models.Categories.Category", b =>

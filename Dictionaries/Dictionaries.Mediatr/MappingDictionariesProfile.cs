@@ -2,9 +2,11 @@ using AutoMapper;
 using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
+using CommonModule.Shared.Responses.Dictionaries.Models.Expenses;
 using Dictionaries.Domain.Models.Categories;
 using Dictionaries.Domain.Models.Countries;
 using Dictionaries.Domain.Models.Currencies;
+using Dictionaries.Domain.Models.Expenses;
 
 namespace Dictionaries.Mediatr;
 
@@ -15,6 +17,8 @@ public class MappingDictionariesProfile : Profile
         CreateCategoryMappings();
         CreateCountryMappings();
         CreateCurrencyMappings();
+
+        CreateMap<Frequency, FrequencyResponse>();
     }
 
     private void CreateCategoryMappings()

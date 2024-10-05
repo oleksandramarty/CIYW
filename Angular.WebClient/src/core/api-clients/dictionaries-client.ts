@@ -329,6 +329,107 @@ export class DictionaryClient {
         return _observableOf(null as any);
     }
 
+    dictionary_GetFrequencies(request: GetFrequenciesRequest): Observable<VersionedListOfFrequencyResponse> {
+        let url_ = this.baseUrl + "/api/v1/dictionaries/frequencies";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDictionary_GetFrequencies(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDictionary_GetFrequencies(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<VersionedListOfFrequencyResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<VersionedListOfFrequencyResponse>;
+        }));
+    }
+
+    protected processDictionary_GetFrequencies(response: HttpResponseBase): Observable<VersionedListOfFrequencyResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ErrorMessageModel.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ErrorMessageModel.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = ErrorMessageModel.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ErrorMessageModel.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ErrorMessageModel.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            }));
+        } else if (status === 417) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result417: any = null;
+            let resultData417 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result417 = ErrorMessageModel.fromJS(resultData417);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result417);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ErrorMessageModel.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = VersionedListOfFrequencyResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     siteSetting_GetSettings(): Observable<SiteSettingsResponse> {
         let url_ = this.baseUrl + "/api/v1/site-settings";
         url_ = url_.replace(/[?&]$/, "");
@@ -1043,6 +1144,134 @@ export class GetCategoriesRequest extends BaseVersionEntity implements IGetCateg
 export interface IGetCategoriesRequest extends IBaseVersionEntity {
 }
 
+export class VersionedListOfFrequencyResponse extends BaseVersionEntity implements IVersionedListOfFrequencyResponse {
+    items!: FrequencyResponse[];
+
+    constructor(data?: IVersionedListOfFrequencyResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(FrequencyResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListOfFrequencyResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListOfFrequencyResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListOfFrequencyResponse extends IBaseVersionEntity {
+    items: FrequencyResponse[];
+}
+
+export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequencyResponse {
+    title!: string;
+    description!: string;
+    isActive!: boolean;
+    frequencyEnum!: FrequencyEnum;
+
+    constructor(data?: IFrequencyResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.isActive = _data["isActive"];
+            this.frequencyEnum = _data["frequencyEnum"];
+        }
+    }
+
+    static override fromJS(data: any): FrequencyResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new FrequencyResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["isActive"] = this.isActive;
+        data["frequencyEnum"] = this.frequencyEnum;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IFrequencyResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    description: string;
+    isActive: boolean;
+    frequencyEnum: FrequencyEnum;
+}
+
+export enum FrequencyEnum {
+    Daily = 1,
+    Weekly = 2,
+    BeWeekly = 3,
+    Monthly = 4,
+    Quarterly = 5,
+    SemiAnnual = 6,
+    Annual = 7,
+    OneTime = 8,
+    Custom = 9,
+}
+
+export class GetFrequenciesRequest extends BaseVersionEntity implements IGetFrequenciesRequest {
+
+    constructor(data?: IGetFrequenciesRequest) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetFrequenciesRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFrequenciesRequest();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetFrequenciesRequest extends IBaseVersionEntity {
+}
+
 export class SiteSettingsResponse implements ISiteSettingsResponse {
     locale!: string;
     version!: CacheVersionResponse;
@@ -1093,6 +1322,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
     currency!: string;
     country!: string;
     locale!: string;
+    frequency!: string;
 
     constructor(data?: ICacheVersionResponse) {
         if (data) {
@@ -1111,6 +1341,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
             this.currency = _data["currency"];
             this.country = _data["country"];
             this.locale = _data["locale"];
+            this.frequency = _data["frequency"];
         }
     }
 
@@ -1129,6 +1360,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
         data["currency"] = this.currency;
         data["country"] = this.country;
         data["locale"] = this.locale;
+        data["frequency"] = this.frequency;
         return data;
     }
 }
@@ -1140,6 +1372,7 @@ export interface ICacheVersionResponse {
     currency: string;
     country: string;
     locale: string;
+    frequency: string;
 }
 
 export class ApiException extends Error {

@@ -17,7 +17,6 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {AppCommonInputModule} from "../../common/common-input/app-common-input.module";
 import {MatDividerModule} from "@angular/material/divider";
 import {AuthForgotComponent} from "./auth-forgot/auth-forgot.component";
-import {AppCommonModule} from "../../common/common-app/app-common.module";
 import {RouterModule, Routes} from "@angular/router";
 import {AuthSignInComponent} from "./auth-sign-in/auth-sign-in.component";
 import {AuthSignUpComponent} from "./auth-sign-up/auth-sign-up.component";
@@ -50,7 +49,6 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         CommonModule,
         ReactiveFormsModule,
-        AppCommonModule,
         MatInputModule,
         MatDatepickerModule,
         MatIconModule,
@@ -65,7 +63,6 @@ const routes: Routes = [
         MatGridListModule,
         AppCommonInputModule,
         MatDividerModule,
-
         SharedModule,
     ],
     exports: [

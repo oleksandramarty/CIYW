@@ -75,6 +75,23 @@ namespace Dictionaries.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Frequencies",
+                schema: "Dictionaries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    FrequencyEnum = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Frequencies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CountryCurrencies",
                 schema: "Dictionaries",
                 columns: table => new
@@ -130,6 +147,10 @@ namespace Dictionaries.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "CountryCurrencies",
+                schema: "Dictionaries");
+
+            migrationBuilder.DropTable(
+                name: "Frequencies",
                 schema: "Dictionaries");
 
             migrationBuilder.DropTable(

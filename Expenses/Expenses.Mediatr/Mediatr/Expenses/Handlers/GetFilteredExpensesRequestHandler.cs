@@ -15,39 +15,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class GetFilteredExpensesRequestHandler: MediatrAuthBase, IRequestHandler<GetFilteredExpensesRequest, ListWithIncludeResponse<ExpenseResponse>>
+public class GetFilteredExpensesRequestHandler: MediatrExpensesBase, IRequestHandler<GetFilteredExpensesRequest, ListWithIncludeResponse<ExpenseResponse>>
 {
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
     private readonly IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository;
-    private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
 
     public GetFilteredExpensesRequestHandler(
         IAuthRepository authRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ): base(authRepository)
+        ): base(authRepository, entityValidator, userProjectRepository)
     {
-        this.entityValidator = entityValidator;
         this.expenseRepository = expenseRepository;
-        this.userProjectRepository = userProjectRepository;
     }
 
     public async Task<ListWithIncludeResponse<ExpenseResponse>> Handle(GetFilteredExpensesRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetCurrentUserIdAsync();
-        
-        UserProject userProject =
-            await this.userProjectRepository.GetAsync(
-                up => up.Id == request.UserProjectId, 
-                cancellationToken,
-                up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.ValidateExist<UserProject, Guid>(userProject, request.UserProjectId);
-        
-        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
-        {
-            throw new ForbiddenException();
-        }
+        await this.CheckUserProjectByIdAsync(request.UserProjectId, cancellationToken);
         
         request.DateRange.CheckOrApplyDefaultExpenseFilter();
         

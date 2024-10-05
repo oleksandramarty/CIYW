@@ -41,6 +41,6 @@ public class MappingAuthProfile: Profile
 
         this.CreateMap<CreateOrUpdateUserSettingCommand, UserSetting>()
             .ConstructUsing((src, ctx) => 
-                this.CreateOrUpdateEntity<CreateOrUpdateUserSettingCommand, UserSetting>(src, ctx));
+                this.CreateOrUpdateEntity<CreateOrUpdateUserSettingCommand, UserSetting, Guid>(src, ctx));
     }
 }

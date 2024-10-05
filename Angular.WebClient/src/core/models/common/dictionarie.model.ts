@@ -5,7 +5,7 @@ import {
 } from "../../api-clients/localizations-client";
 import {
     IVersionedListOfCountryResponse,
-    IVersionedListOfCurrencyResponse,
+    IVersionedListOfCurrencyResponse, IVersionedListOfFrequencyResponse,
     IVersionedListOfTreeNodeResponseOfCategoryResponse,
     VersionedListOfCountryResponse,
     VersionedListOfCurrencyResponse,
@@ -49,6 +49,7 @@ export interface IDictionaryDataItems {
     countries: IDataItem[] | undefined;
     currencies: IDataItem[] | undefined;
     categories: IDataItem[] | undefined;
+    frequencies: IDataItem[] | undefined;
 
     categoriesFlat: IDataItem[] | undefined;
 }
@@ -58,6 +59,7 @@ export class DictionaryDataItems implements IDictionaryDataItems {
     countries: DataItem[] | undefined;
     currencies: DataItem[] | undefined;
     categories: DataItem[] | undefined;
+    frequencies: DataItem[] | undefined;
 
     categoriesFlat: DataItem[] | undefined;
 }
@@ -67,6 +69,7 @@ export interface IDictionary {
     currencies: IVersionedListOfCurrencyResponse | undefined;
     categories: IVersionedListOfTreeNodeResponseOfCategoryResponse | undefined;
     locales: IVersionedListOfLocaleResponse | undefined;
+    frequencies: IVersionedListOfFrequencyResponse | undefined;
 }
 
 export class Dictionary implements IDictionary {
@@ -74,4 +77,5 @@ export class Dictionary implements IDictionary {
     currencies: VersionedListOfCurrencyResponse | undefined;
     categories: VersionedListOfTreeNodeResponseOfCategoryResponse | undefined;
     locales: VersionedListOfLocaleResponse | undefined;
+    frequencies: IVersionedListOfFrequencyResponse | undefined;
 }

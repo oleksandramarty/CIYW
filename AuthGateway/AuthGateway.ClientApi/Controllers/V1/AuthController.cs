@@ -18,7 +18,7 @@ public class AuthController: BaseController
         this.mediator = mediator;
     }
     
-    [HttpPost("signIn")]
+    [HttpPost("sign-in")]
     [ProducesResponseType(typeof(JwtTokenResponse), 200)]
     public async Task<IActionResult> SignInAsync([FromBody]AuthSignInRequest request, CancellationToken cancellationToken)
     {
@@ -26,7 +26,7 @@ public class AuthController: BaseController
         return Ok(response);
     }
     
-    [HttpPost("signOut")]
+    [HttpPost("sign-out")]
     [ProducesResponseType(typeof(void), 200)]
     public async Task<IActionResult> SignOutAsync(CancellationToken cancellationToken)
     {
@@ -34,7 +34,7 @@ public class AuthController: BaseController
         return Ok();
     }
     
-    [HttpPost("signUp")]
+    [HttpPost("sign-up")]
     [ProducesResponseType(typeof(void), 200)]
     public async Task<IActionResult> SignUpAsync([FromBody]AuthSignUpCommand command, CancellationToken cancellationToken)
     {

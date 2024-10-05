@@ -16,13 +16,17 @@ public class MappingExpensesProfile : Profile
     public MappingExpensesProfile()
     {
         this.CreateMap<Expense, ExpenseResponse>();
+        this.CreateMap<PlannedExpense, PlannedExpenseResponse>();
         this.CreateMap<CreateUserProjectCommand, UserProject>()
             .ConstructUsing((src, ctx) => 
-                this.CreateOrUpdateEntity<CreateUserProjectCommand, UserProject>(src, ctx));
+                this.CreateOrUpdateEntity<CreateUserProjectCommand, UserProject, Guid>(src, ctx));
         
         this.CreateMap<CreateOrUpdateExpenseCommand, Expense>()
             .ConstructUsing((src, ctx) => 
-                this.CreateOrUpdateEntity<CreateOrUpdateExpenseCommand, Expense>(src, ctx));
+                this.CreateOrUpdateEntity<CreateOrUpdateExpenseCommand, Expense, Guid>(src, ctx));
+        this.CreateMap<CreateOrUpdatePlannedExpenseCommand, PlannedExpense>()
+            .ConstructUsing((src, ctx) => 
+                this.CreateOrUpdateEntity<CreateOrUpdatePlannedExpenseCommand, PlannedExpense, Guid>(src, ctx));
 
         this.CreateMap<UserProject, UserProjectResponse>()
             .ForMember(dest => dest.Balances, 

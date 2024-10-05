@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class CreateOrUpdateExpenseCommandHandler: MediatrAuthBase, IRequestHandler<CreateOrUpdateExpenseCommand>
+public class CreateOrUpdateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreateOrUpdateExpenseCommand>
 {
     private readonly IMapper mapper;
     private readonly IBalanceRepository balanceRepository;
@@ -31,7 +31,7 @@ public class CreateOrUpdateExpenseCommandHandler: MediatrAuthBase, IRequestHandl
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ) : base(authRepository)
+        ) : base(authRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
         this.balanceRepository = balanceRepository;
@@ -44,19 +44,7 @@ public class CreateOrUpdateExpenseCommandHandler: MediatrAuthBase, IRequestHandl
     {        
         this.entityValidator.ValidateVoidRequest<CreateOrUpdateExpenseCommand>(command, () => new CreateOrUpdateExpenseCommandValidator());
 
-        Guid userId = await this.GetCurrentUserIdAsync();
-
-        UserProject userProject =
-            await this.userProjectRepository.GetAsync(
-                up => up.Id == command.UserProjectId, 
-                cancellationToken,
-                up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.ValidateExist(userProject, command.UserProjectId);
-        
-        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
-        {
-            throw new ForbiddenException();
-        }
+        await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
         if (!command.Id.HasValue)
         {
@@ -79,5 +67,4 @@ public class CreateOrUpdateExpenseCommandHandler: MediatrAuthBase, IRequestHandl
         await this.balanceRepository.UpdateExpenseAsync(currentExpense,
             this.mapper.Map<Expense>(command, opts => opts.Items["IsUpdate"] = true), cancellationToken);
     }
-    
 }

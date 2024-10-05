@@ -1,11 +1,13 @@
 using Dictionaries.Domain.Models.Categories;
 using Dictionaries.Domain.Models.Countries;
+using Dictionaries.Domain.Models.Expenses;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dictionaries.Domain
 {
     public class DictionariesDataContext : DbContext
     {
+        public DbSet<Frequency> Frequencies { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Models.Currencies.Currency> Currencies { get; set; }
         public DbSet<CountryCurrency> CountryCurrencies { get; set; }
@@ -41,6 +43,11 @@ namespace Dictionaries.Domain
             {
                 entity.ToTable("CountryCurrencies", "Dictionaries");
                 entity.HasKey(cc => new { cc.CountryId, cc.CurrencyId });
+            });
+            
+            modelBuilder.Entity<Frequency>(entity =>
+            {
+                entity.ToTable("Frequencies", "Dictionaries");
             });
 
             modelBuilder.Entity<Category>(entity =>

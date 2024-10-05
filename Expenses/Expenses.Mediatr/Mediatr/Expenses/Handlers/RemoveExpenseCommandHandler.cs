@@ -13,12 +13,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class RemoveExpenseCommandHandler: MediatrAuthBase, IRequestHandler<RemoveExpenseCommand, bool>
+public class RemoveExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemoveExpenseCommand, bool>
 {
     private readonly IBalanceRepository balanceRepository;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
     private readonly IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository;
-    private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
 
     public RemoveExpenseCommandHandler(
         IAuthRepository authRepository,
@@ -26,32 +25,19 @@ public class RemoveExpenseCommandHandler: MediatrAuthBase, IRequestHandler<Remov
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-    ) : base(authRepository)
+    ) : base(authRepository, entityValidator, userProjectRepository)
     {
         this.balanceRepository = balanceRepository;
         this.entityValidator = entityValidator;
         this.expenseRepository = expenseRepository;
-        this.userProjectRepository = userProjectRepository;
     }
     
     public async Task<bool> Handle(RemoveExpenseCommand command, CancellationToken cancellationToken)
     {
         Expense expense = await this.expenseRepository.GetByIdAsync(command.Id, cancellationToken);
         this.entityValidator.ValidateExist(expense, command.Id);
-        
-        Guid userId = await this.GetCurrentUserIdAsync();
-        
-        UserProject userProject =
-            await this.userProjectRepository.GetAsync(
-                up => up.Id == expense.UserProjectId, 
-                cancellationToken,
-                up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.ValidateExist(userProject, expense.UserProjectId);
-        
-        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
-        {
-            throw new ForbiddenException();
-        }
+
+        await this.CheckUserProjectByIdAsync(expense.UserProjectId, cancellationToken);
 
         await this.balanceRepository.RemoveExpenseAsync(expense, cancellationToken);
 

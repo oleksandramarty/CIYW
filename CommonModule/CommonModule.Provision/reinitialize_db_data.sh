@@ -18,6 +18,9 @@ chmod +x "$SCRIPT_DIR/init_users.sh"
 chmod +x "$SCRIPT_DIR/init_categories.sh"
 "$SCRIPT_DIR/init_categories.sh" $isBulkUpdate
 
+chmod +x "$SCRIPT_DIR/init_frequencies.sh"
+"$SCRIPT_DIR/init_frequencies.sh"
+
 chmod +x "$SCRIPT_DIR/init_countries.sh"
 "$SCRIPT_DIR/init_countries.sh" $isBulkUpdate
 

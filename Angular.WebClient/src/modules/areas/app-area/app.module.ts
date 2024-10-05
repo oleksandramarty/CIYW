@@ -22,21 +22,23 @@ import { reducers } from "../../../core/store/reducers";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { AuthService } from "../../../core/services/auth.service";
-import {PreloadAllModules, RouterModule, RouterOutlet, Routes} from "@angular/router";
-import {AuthGuard} from "../../../core/auth-guard";
-import {NotFoundComponent} from "../../common/common-app/not-found/not-found.component";
-import {InDevelopmentComponent} from "../../common/common-in-development/in-development/in-development.component";
-import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/auth-client";
-import {API_BASE_URL_Localizations, LocalizationClient} from "../../../core/api-clients/localizations-client";
-import {API_BASE_URL_Expenses, ExpenseClient} from "../../../core/api-clients/expenses-client";
-import {API_BASE_URL_Dictionaries, DictionaryClient} from "../../../core/api-clients/dictionaries-client";
-import {BaseInitializationService} from "../../../core/services/base-initialization.service";
-import {SiteSettingsService} from "../../../core/services/site-settings.service";
-import {DictionaryService} from "../../../core/services/dictionary.service";
-import {API_BASE_URL_AuditTrail} from "../../../core/api-clients/audit-trail-client";
+import { PreloadAllModules, RouterModule, RouterOutlet, Routes } from "@angular/router";
+import { AuthGuard } from "../../../core/auth-guard";
+import { NotFoundComponent } from "../../common/common-app/not-found/not-found.component";
+import { InDevelopmentComponent } from "../../common/common-in-development/in-development/in-development.component";
+import { API_BASE_URL_AuthGateway, AuthClient } from "../../../core/api-clients/auth-client";
+import { API_BASE_URL_Localizations, LocalizationClient } from "../../../core/api-clients/localizations-client";
+import { API_BASE_URL_Expenses, ExpenseClient } from "../../../core/api-clients/expenses-client";
+import { API_BASE_URL_Dictionaries, DictionaryClient } from "../../../core/api-clients/dictionaries-client";
+import { BaseInitializationService } from "../../../core/services/base-initialization.service";
+import { SiteSettingsService } from "../../../core/services/site-settings.service";
+import { DictionaryService } from "../../../core/services/dictionary.service";
+import { API_BASE_URL_AuditTrail } from "../../../core/api-clients/audit-trail-client";
+import { LocalDatePipe } from "../../../core/pipes/local-date.pipe";
+import { SharedModule } from "../../../core/shared.module";
 import {NightSkyComponent} from "../../common/background/night-sky/night-sky.component";
-import {LocalDatePipe} from "../../../core/pipes/local-date.pipe";
-import {SharedModule} from "../../../core/shared.module";
+import {CommonLoaderComponent} from "../../common/common-loader/common-loader.component";
+import {LoaderService} from "../../../core/services/loader.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -84,23 +86,21 @@ const routes: Routes = [
     AppComponent
   ],
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules}),
     BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
     FormsModule,
-
-    NightSkyComponent,
-
     SharedModule,
-
     HttpClientModule,
     AppCommonModule,
+    NightSkyComponent,
     InDevelopmentComponent,
     ApolloModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+    CommonLoaderComponent
   ],
   providers: [
     AuthService,
@@ -108,6 +108,7 @@ const routes: Routes = [
     BaseInitializationService,
     SiteSettingsService,
     DictionaryService,
+    LoaderService,
     LocalizationService,
     LocalStorageService,
     AuthClient,
@@ -115,11 +116,11 @@ const routes: Routes = [
     ExpenseClient,
     DictionaryClient,
     // AuditTrailClient,
-    {provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl},
-    {provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl},
-    {provide: API_BASE_URL_Expenses, useValue: environment.apiExpensesUrl},
-    {provide: API_BASE_URL_Dictionaries, useValue: environment.apiDictionariesUrl},
-    {provide: API_BASE_URL_AuditTrail, useValue: environment.apiAuditTrailUrl},
+    { provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl },
+    { provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl },
+    { provide: API_BASE_URL_Expenses, useValue: environment.apiExpensesUrl },
+    { provide: API_BASE_URL_Dictionaries, useValue: environment.apiDictionariesUrl },
+    { provide: API_BASE_URL_AuditTrail, useValue: environment.apiAuditTrailUrl },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

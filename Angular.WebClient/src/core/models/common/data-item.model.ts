@@ -1,8 +1,8 @@
 import {
   CategoryResponse,
   CountryResponse,
-  CurrencyResponse, ICategoryResponse, ICountryResponse,
-  ICurrencyResponse
+  CurrencyResponse, FrequencyResponse, ICategoryResponse, ICountryResponse,
+  ICurrencyResponse, IFrequencyResponse
 } from "../../api-clients/dictionaries-client";
 import {ILocaleResponse, LocaleResponse} from "../../api-clients/localizations-client";
 import {BalanceResponse, IBalanceResponse} from "../../api-clients/expenses-client";
@@ -18,7 +18,7 @@ export interface IDataItem {
 
   filteredFields?: string[] | undefined;
 
-  originalValue: IBalanceResponse | ICurrencyResponse | ICategoryResponse | ICountryResponse | ILocaleResponse | undefined;
+  originalValue: IFrequencyResponse | IBalanceResponse | ICurrencyResponse | ICategoryResponse | ICountryResponse | ILocaleResponse | undefined;
 }
 
 export class DataItem implements IDataItem {
@@ -32,10 +32,10 @@ export class DataItem implements IDataItem {
 
   filteredFields?: string[] | undefined;
 
-  originalValue: BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined;
+  originalValue: FrequencyResponse | BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined;
 
   constructor(
-    originalValue: BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined,
+    originalValue: FrequencyResponse | BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined,
     id: string | undefined,
     name: string | undefined,
     description: string | undefined,

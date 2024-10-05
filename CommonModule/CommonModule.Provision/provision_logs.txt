@@ -20,6 +20,13 @@ Errors encountered             : 0
 =================================================
 
 =================================================
+Title                          : FREQUENCIES
+Total records processed        : 9
+Records already exist          : 0
+Errors encountered             : 0
+=================================================
+
+=================================================
 Title                          : COUNTRIES
 Total records processed        : 249
 Records already exist          : 0
@@ -49,7 +56,7 @@ Errors encountered             : 0
 
 =================================================
 Title                          : LOCALIZATIONS
-Total records processed        : 1281
+Total records processed        : 1512
 Records already exist          : 0
 Errors encountered             : 0
 =================================================
@@ -70,7 +77,7 @@ Errors encountered             : 0
 
 =================================================
 Title                          : CACHE LOCALIZATIONS
-Total records processed        : 1281
+Total records processed        : 1512
 Records already exist          : 0
 Errors encountered             : 0
 =================================================
@@ -99,6 +106,6 @@ Records already exist          : 0
 Errors encountered             : 0
 =================================================
 
-Provision Start Date           : 2024-10-03 22:08:56
-Provision End Date             : 2024-10-03 22:11:52
-Duration:                      : 176 second(s)
+Provision Start Date           : 2024-10-04 22:08:43
+Provision End Date             : 2024-10-04 22:11:14
+Duration:                      : 151 second(s)

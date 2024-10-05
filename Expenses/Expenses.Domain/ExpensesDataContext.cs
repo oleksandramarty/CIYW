@@ -8,6 +8,7 @@ namespace Expenses.Domain;
 public class ExpensesDataContext : DbContext
 {
     public DbSet<Expense> Expenses { get; set; }
+    public DbSet<PlannedExpense> PlannedExpenses { get; set; }
 
     public DbSet<UserProject> UserProjects { get; set; }
     public DbSet<UserAllowedProject> UserAllowedProjects { get; set; }
@@ -26,8 +27,20 @@ public class ExpensesDataContext : DbContext
             entity.HasOne(e => e.UserProject)
                 .WithMany(uc => uc.Expenses)
                 .HasForeignKey(e => e.UserProjectId);
+            entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
+            entity.Property(c => c.Description).HasMaxLength(100);
+            entity.Property(c => c.Amount).IsRequired();
         });
-
+        modelBuilder.Entity<PlannedExpense>(entity =>
+        {
+            entity.ToTable("PlannedExpenses", "Expenses");
+            entity.HasOne(e => e.UserProject)
+                .WithMany(uc => uc.PlannedExpenses)
+                .HasForeignKey(e => e.UserProjectId);
+            entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
+            entity.Property(c => c.Description).HasMaxLength(100);
+            entity.Property(c => c.Amount).IsRequired();
+        });
         modelBuilder.Entity<UserProject>(entity => { entity.ToTable("UserProjects", "Projects"); });
 
         modelBuilder.Entity<UserAllowedProject>(entity =>

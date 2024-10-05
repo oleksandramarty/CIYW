@@ -1,6 +1,6 @@
 <div class="dashboard-container">
     <section *ngIf="userProjects">
-        <h1>USER_PROJECTS</h1>
+        <h1 [translation]="'USER_PROJECTS'"></h1>
         <mat-divider></mat-divider>
         <div class="user-project-cards">
             <div class="user-project-card" *ngFor="let userProject of userProjects" (click)="openUserProject(userProject.id)">
@@ -24,18 +24,17 @@
                     </div>
                 </div>
                 <div class="user-project-details">
-                    USER_PROJECT.ADD.NEW_PROJECT
+                    <span [translation]="'USER_PROJECTS.ADD'"></span>
                 </div>
             </div>
         </div>
     </section>
 
     <section *ngIf="userAllowedProjects">
-        <h1>USER.USER_ALLOWED_PROJECTS</h1>
+        <h1 [translation]="'USER_PROJECTS.USER_ALLOWED_PROJECTS'"></h1>
         <mat-divider></mat-divider>
         <div *ngIf="userAllowedProjects.length === 0" class="no-user-projects">
-            <h2>USER_PROJECT.NO_ALLOWED_PROJECTS</h2>
-            <p>USER_PROJECT.CREATE_FIRST_ONE</p>
+            <p [translation]="'USER_PROJECTS.NO_USER_ALLOWED_PROJECTS'"></p>
         </div>
         <div *ngIf="userAllowedProjects.length > 0" class="user-project-cards">
             <div class="user-project-card" *ngFor="let allowedProject of userAllowedProjects" (click)="openUserProject(allowedProject.userProjectId)">
@@ -56,5 +55,3 @@
         </div>
     </section>
 </div>
-
-<app-common-loader *ngIf="isBusy"></app-common-loader>

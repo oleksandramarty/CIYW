@@ -21,6 +21,7 @@ import {DataItem} from "../../../../core/models/common/data-item.model";
 import {CreateUpdateExpenseComponent} from "../../../dialogs/create-update-expense/create-update-expense.component";
 import {ConfirmationMessageComponent} from "../../../dialogs/confirmation-message/confirmation-message.component";
 import {getUTCString, handleBaseDateRangeFilter} from "../../../../core/helpers/date-time.helper";
+import {LoaderService} from "../../../../core/services/loader.service";
 
 @Component({
     selector: 'app-user-project',
@@ -29,7 +30,6 @@ import {getUTCString, handleBaseDateRangeFilter} from "../../../../core/helpers/
 })
 export class UserProjectComponent implements OnInit, OnDestroy {
     protected ngUnsubscribe: Subject<void> = new Subject<void>();
-    isBusy: boolean = false;
     userProjectId: string | undefined;
     userProject: UserProjectResponse | undefined;
     expenses: ListWithIncludeResponseOfExpenseResponse | undefined;
@@ -63,7 +63,8 @@ export class UserProjectComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private route: ActivatedRoute,
         private router: Router,
-        private readonly store: Store
+        private readonly store: Store,
+        private readonly loaderService: LoaderService
     ) {
         this.route.paramMap
             .pipe(
@@ -121,7 +122,7 @@ export class UserProjectComponent implements OnInit, OnDestroy {
                 yesBtn: 'COMMON.YES',
                 noBtn: 'COMMON.NO',
                 title: 'EXPENSES.DELETE_EXPENSE',
-                description: 'EXPENSES.DELETE_EXPENSE_CONFIRMATION'
+                descriptions: ['EXPENSES.DELETE_EXPENSE_CONFIRMATION']
             }
         });
 
@@ -165,17 +166,17 @@ export class UserProjectComponent implements OnInit, OnDestroy {
     }
 
     private getUserProjectFromApi(): void {
-        this.isBusy = true;
+        this.loaderService.isBusy = true;
         this.expenseClient.userProject_GetUserProject(this.userProjectId!)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap(userProject => {
                     this.userProject = userProject;
                     this.getExpenses();
-                    this.isBusy = false;
+                    this.loaderService.isBusy = false;
                 }),
                 handleApiError(this.snackBar),
-                finalize(() => this.isBusy = false)
+                finalize(() => this.loaderService.isBusy = false)
             )
             .subscribe();
     }
@@ -186,7 +187,7 @@ export class UserProjectComponent implements OnInit, OnDestroy {
     }
 
     public getExpenses(): void {
-        this.isBusy = true;
+        this.loaderService.isBusy = true;
 
         this.expenseClient.expense_GetFilteredExpenses(new GetFilteredExpensesRequest({
             userProjectId: this.userProjectId!,
@@ -199,10 +200,10 @@ export class UserProjectComponent implements OnInit, OnDestroy {
             takeUntil(this.ngUnsubscribe),
             tap(expenses => {
                 this.expenses = expenses;
-                this.isBusy = false;
+                this.loaderService.isBusy = false;
             }),
             handleApiError(this.snackBar),
-            finalize(() => this.isBusy = false)
+            finalize(() => this.loaderService.isBusy = false)
         ).subscribe();
     }
 }

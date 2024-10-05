@@ -3,12 +3,12 @@ import {
     CategoryResponse,
     CountryResponse,
     CurrencyResponse,
-    DictionaryClient,
+    DictionaryClient, FrequencyResponse,
     GetCategoriesRequest,
     GetCountriesRequest,
     GetCurrenciesRequest,
     TreeNodeResponseOfCategoryResponse,
-    VersionedListOfCountryResponse, VersionedListOfCurrencyResponse,
+    VersionedListOfCountryResponse, VersionedListOfCurrencyResponse, VersionedListOfFrequencyResponse,
     VersionedListOfTreeNodeResponseOfCategoryResponse
 } from "../api-clients/dictionaries-client";
 import {catchError, forkJoin, take, tap} from "rxjs";
@@ -37,6 +37,7 @@ export class DictionaryService {
     _currenciesMap: DictionaryMap<number, CurrencyResponse> | undefined;
     _categoriesMap: DictionaryMap<number, CategoryResponse> | undefined;
     _localesMap: DictionaryMap<number, LocaleResponse> | undefined;
+    _frequenciesMap: DictionaryMap<number, FrequencyResponse> | undefined;
 
     private readonly _importantCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'MDL', 'UAH']
 
@@ -132,6 +133,28 @@ export class DictionaryService {
         }
     }
 
+    get frequenciesMap(): DictionaryMap<number, FrequencyResponse> | undefined {
+        if (!this._frequenciesMap && this.dictionaries?.frequencies?.items) {
+            this._frequenciesMap = new DictionaryMap<number, FrequencyResponse>();
+
+            for (const frequency of this.dictionaries.frequencies.items) {
+                this._frequenciesMap.set(frequency.id, frequency)
+            }
+        }
+
+        return this._frequenciesMap;
+    }
+
+    set frequenciesMap(value: VersionedListOfFrequencyResponse | undefined) {
+        if (!!value) {
+            this._frequenciesMap = new DictionaryMap<number, FrequencyResponse>();
+
+            for (const frequency of value.items) {
+                this._frequenciesMap.set(frequency.id, frequency);
+            }
+        }
+    }
+
     get currentLocale(): LocaleResponse | undefined {
         return this?.dictionaries?.locales?.items?.
         find(locale => locale.isoCode === this.siteSettingsService?.siteSettings?.locale);
@@ -180,7 +203,8 @@ export class DictionaryService {
         if (!this.siteSettingsService.version ||
             this.siteSettingsService.version.country !== this.dictionaries?.countries?.version ||
             this.siteSettingsService.version.currency !== this.dictionaries?.currencies?.version ||
-            this.siteSettingsService.version.category !== this.dictionaries?.categories?.version
+            this.siteSettingsService.version.category !== this.dictionaries?.categories?.version ||
+            this.siteSettingsService.version.frequency !== this.dictionaries?.frequencies?.version
         ) {
             forkJoin({
                 countries: this.dictionaryClient.dictionary_GetCountries(
@@ -194,17 +218,23 @@ export class DictionaryService {
                 categories: this.dictionaryClient.dictionary_GetCategories(
                     new GetCategoriesRequest({
                         version: this.dictionaries?.countries?.version
+                    })).pipe(take(1)),
+                frequencies: this.dictionaryClient.dictionary_GetFrequencies(
+                    new GetCategoriesRequest({
+                        version: this.dictionaries?.countries?.version
                     })).pipe(take(1))
             }).pipe(
-                tap(({ countries, currencies, categories }) => {
+                tap(({ countries, currencies, categories, frequencies }) => {
                     if (this._dictionaries) {
                         this._dictionaries.countries = countries;
                         this._dictionaries.currencies = currencies;
                         this._dictionaries.categories = categories;
+                        this._dictionaries.frequencies = frequencies;
 
                         this.countriesMap = countries;
                         this.currenciesMap = currencies;
                         this.categoriesMap = categories;
+                        this.frequenciesMap = frequencies;
 
                         this.updateDateItems(false);
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
@@ -253,6 +283,9 @@ export class DictionaryService {
                         this._importantCurrencies.includes(currency.code)
                     )
                 );
+            this._dataItems.frequencies = this.dictionaries?.frequencies?.items
+                .sort((a, b) => a.id - b.id)
+                .map(frequency => new DataItem(frequency, String(frequency.id), frequency.title, frequency.description));
 
             this._dataItems!.categoriesFlat = [];
 

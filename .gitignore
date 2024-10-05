@@ -37,4 +37,5 @@
 Angular.WebClient/.DS_Store
 /Angular.WebClient/node_modules
 Angular.WebClient/src/.DS_Store
-/Angular.WebClient/.angular
+/Angular.WebClient/.angular/
+/Angular.WebClient/dist/

@@ -16,5 +16,6 @@ public class UserProject: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionEn
     public ICollection<UserAllowedProject> AllowedUsers { get; set; }
     
     public ICollection<Expense> Expenses { get; set; }
+    public ICollection<PlannedExpense> PlannedExpenses { get; set; }
     public string Version { get; set; }
 }

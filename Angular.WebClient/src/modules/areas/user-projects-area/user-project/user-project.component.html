@@ -1,7 +1,7 @@
 <section *ngIf="!!userProject" class="user-project-section">
-  <h1 class="user-project-title">{{ userProject?.title }}</h1>
+  <h1 class="user-project-title">{{ userProject.title }}</h1>
   <div class="user-project-details">
-    <div *ngFor="let balance of userProject?.balances">
+    <div *ngFor="let balance of userProject.balances">
       <div class="balance">
         <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
         <span class="amount" [ngClass]="{'negative': balance.amount < 0}">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
@@ -9,7 +9,6 @@
       <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
     </div>
   </div>
-</section>
 
 <div class="filter-container" [formGroup]="filterFormGroup">
     <div class="filter-input-container">
@@ -42,13 +41,13 @@
     <div class="filter-button-container">
         <div>
             <div class="filter-button-item">
-                <button mat-flat-button color="warn" translation="COMMON.ADD" (click)="openCreateUpdateExpenseDialog(undefined)"></button>
+                <button mat-flat-button color="warn" [translation]="'EXPENSES.ADD'" (click)="openCreateUpdateExpenseDialog(undefined)"></button>
             </div>
         </div>
         <div>
             <div class="filter-button-item">
-                <button mat-button color="warn" translation="FILTER.RESET" (click)="resetFilter()"></button>
-                <button mat-flat-button color="primary" translation="FILTER.SEARCH" (click)="getExpenses()"></button>
+                <button mat-button color="warn" [translation]="'FILTER.RESET'" (click)="resetFilter()"></button>
+                <button mat-flat-button color="primary" [translation]="'COMMON.FILTER.SEARCH'" (click)="getExpenses()"></button>
             </div>
         </div>
     </div>
@@ -76,11 +75,11 @@
                 </span>
             </td>
             <td class="mat-td">{{ expense.title }}</td>
-            <td class="mat-td amount" [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive ?? false}">{{ expense.amount | currency:currenciesMap?.get(4)?.code }}</td>
+            <td class="mat-td amount" [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive}">{{ expense.amount | currency:currenciesMap?.get(4)?.code }}</td>
             <td class="mat-td"><span [translation]="categoriesMap?.get(expense.categoryId)?.title"></span></td>
         </tr>
         </tbody>
     </table>
 </div>
+</section>
 
-<app-common-loader *ngIf="isBusy"></app-common-loader>

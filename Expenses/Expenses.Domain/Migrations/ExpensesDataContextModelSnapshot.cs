@@ -107,6 +107,68 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("Expenses", "Expenses");
                 });
 
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("BalanceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("FrequencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("NextDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserProjectId");
+
+                    b.ToTable("PlannedExpenses", "Expenses");
+                });
+
             modelBuilder.Entity("Expenses.Domain.Models.Projects.UserAllowedProject", b =>
                 {
                     b.Property<Guid>("Id")
@@ -186,6 +248,17 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("UserProject");
                 });
 
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpense", b =>
+                {
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                        .WithMany("PlannedExpenses")
+                        .HasForeignKey("UserProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UserProject");
+                });
+
             modelBuilder.Entity("Expenses.Domain.Models.Projects.UserAllowedProject", b =>
                 {
                     b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
@@ -204,6 +277,8 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("Balances");
 
                     b.Navigation("Expenses");
+
+                    b.Navigation("PlannedExpenses");
                 });
 #pragma warning restore 612, 618
         }

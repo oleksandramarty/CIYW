@@ -1,30 +1,25 @@
-import {Component, OnInit, Renderer2} from '@angular/core';
-import {AuthService} from "../../../../core/services/auth.service";
-import {BaseInitializationService} from "../../../../core/services/base-initialization.service";
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-night-sky',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './night-sky.component.html',
-  styleUrl: './night-sky.component.scss'
+  styleUrls: ['./night-sky.component.scss']
 })
-export class NightSkyComponent implements OnInit{
-  constructor(
-      private renderer: Renderer2
-  ) {
-  }
+export class NightSkyComponent implements OnInit {
+  constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
     this.generateStars();
   }
 
   private generateStars(): void {
-    const starsContainer = document.querySelector('.stars');
+    const starsContainer = this.renderer.selectRootElement('.stars', true);
     if (!starsContainer) {
-      return
+      return;
     }
-    const nightsky = ["#280F36", "#632B6C", "#BE6590", "#FFC1A0", "#FE9C7F"];
 
     for (let i = 0; i < 500; i++) {
       this.createStar(starsContainer, 'star-1', this.getRandomInt(0, 40), this.getRandomInt(0, 100), this.getRandomInt(2, 5));
@@ -65,6 +60,6 @@ export class NightSkyComponent implements OnInit{
   }
 
   private getRandomInt(min: number, max: number): number {
-    return Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min) + min);
   }
 }

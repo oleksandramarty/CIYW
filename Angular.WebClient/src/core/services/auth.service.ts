@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable, Subject, switchMap, take, takeUntil} from 'rxjs';
+import {Observable, of, Subject, switchMap, take, takeUntil} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import { auth_clearAll, auth_setToken, auth_setUser } from "../store/actions/auth.actions";
 import { LocalizationService } from "./localization.service";
@@ -10,6 +10,8 @@ import { handleApiError } from "../helpers/rxjs.helper";
 import {selectToken} from "../store/selectors/auth.selectors";
 import {AuthClient, AuthSignInRequest, JwtTokenResponse} from "../api-clients/auth-client";
 import {LocalizationClient} from "../api-clients/localizations-client";
+import {ConfirmationMessageComponent} from "../../modules/dialogs/confirmation-message/confirmation-message.component";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +33,8 @@ export class AuthService {
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly authClient: AuthClient,
-    private readonly store: Store
+    private readonly store: Store,
+    private dialog: MatDialog,
   ) {
     this._token$ = this.store.select(selectToken);
   }
@@ -51,36 +54,60 @@ export class AuthService {
   }
 
   public login(login: string, password: string, rememberMe: boolean, ngUnsubscribe: Subject<void>): void {
-    this.authClient.auth_SignIn(new AuthSignInRequest({
+    const loginActon = () => {
+      this.authClient.auth_SignIn(new AuthSignInRequest({
         login,
         password,
         rememberMe
-    })).pipe(
-      takeUntil(ngUnsubscribe),
-      switchMap((token) => {
-        this.auth_setToken(token);
-        this.store.dispatch(auth_setToken({ token }));
-        return this.authClient.user_GetCurrentUser();
-      }),
-      tap((user) => {
-        this.store.dispatch(auth_setUser({ user }));
+      })).pipe(
+          takeUntil(ngUnsubscribe),
+          switchMap((token) => {
+            this.auth_setToken(token);
+            this.store.dispatch(auth_setToken({ token }));
+            return this.authClient.user_GetCurrentUser();
+          }),
+          tap((user) => {
+            this.store.dispatch(auth_setUser({ user }));
 
-        this.router.navigate(['/projects']);
-      }),
-      handleApiError(this.snackBar, this.localizationService)
-    ).subscribe();
+            this.router.navigate(['/projects']);
+          }),
+          handleApiError(this.snackBar, this.localizationService)
+      ).subscribe();
+    }
+
+    this.showNoComplaintModal(loginActon);
   }
 
   public logout(): void {
-    this.authClient.auth_SignOut()
-      .pipe(
-        take(1),
-        tap(() => {
-          this.clearAuthData();
-          this.router.navigate(['/auth/sign-in']);
-        }),
-        handleApiError(this.snackBar, this.localizationService)
-      ).subscribe();
+    const logoutAction = () => {
+      this.authClient.auth_SignOut()
+          .pipe(
+              take(1),
+              tap(() => {
+                this.clearAuthData();
+                this.router.navigate(['/auth/sign-in']);
+              }),
+              handleApiError(this.snackBar, this.localizationService)
+          ).subscribe();
+    }
+
+    this.showNoComplaintModal(logoutAction);
+  }
+
+  private showNoComplaintModal(authAction: () => void): void {
+    let dialogRef = this.getNoComplaintModal();
+
+    dialogRef.afterClosed()
+        .pipe(
+            take(1),
+            tap((result) => {
+              if (result) {
+                authAction();
+              }
+            }),
+            handleApiError(this.snackBar)
+        )
+        .subscribe();
   }
 
   private getCurrentUser(): void {
@@ -115,4 +142,22 @@ export class AuthService {
     localStorage.removeItem(this._tokenKey);
     this.store.dispatch(auth_clearAll());
   }
+
+  private getNoComplaintModal(): MatDialogRef<ConfirmationMessageComponent, any> {
+    return this.dialog.open(ConfirmationMessageComponent, {
+      width: '400px',
+      maxWidth: '80vw',
+      data: {
+        yesBtn: 'COMMON.PROCEED',
+        noBtn: 'COMMON.CANCEL',
+        title: 'COMMON.WARNING',
+        htmlBlock: `
+        <h2 style="color: #dc3545; text-align: center;">${this.localizationService.getTranslation('COMMON.DO_NOT_STORE_ANY_SENSITIVE_DATA_HERE')}</h2>
+        <p style="text-align: center"><u>${this.localizationService.getTranslation('AUTH.NO_COMPLAINTS')}</u></p>
+        `
+      }
+    });
+  }
 }
+
+

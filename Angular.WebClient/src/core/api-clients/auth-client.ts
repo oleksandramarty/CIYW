@@ -27,7 +27,7 @@ export class AuthClient {
     }
 
     auth_SignIn(request: AuthSignInRequest): Observable<JwtTokenResponse> {
-        let url_ = this.baseUrl + "/api/v1/auth/signIn";
+        let url_ = this.baseUrl + "/api/v1/auth/sign-in";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -128,7 +128,7 @@ export class AuthClient {
     }
 
     auth_SignOut(): Observable<void> {
-        let url_ = this.baseUrl + "/api/v1/auth/signOut";
+        let url_ = this.baseUrl + "/api/v1/auth/sign-out";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -221,7 +221,7 @@ export class AuthClient {
     }
 
     auth_SignUp(command: AuthSignUpCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/v1/auth/signUp";
+        let url_ = this.baseUrl + "/api/v1/auth/sign-up";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);

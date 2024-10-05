@@ -12,35 +12,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
-public class GetUserProjectByIdRequestHandler: MediatrAuthBase, IRequestHandler<GetUserProjectByIdRequest, UserProjectResponse>
+public class GetUserProjectByIdRequestHandler: MediatrExpensesBase, IRequestHandler<GetUserProjectByIdRequest, UserProjectResponse>
 {
     private readonly IMapper mapper;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
     
     public GetUserProjectByIdRequestHandler(
         IAuthRepository authRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ): base(authRepository)
+        ): base(authRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.userProjectRepository = userProjectRepository;
     }
     
     public async Task<UserProjectResponse> Handle(GetUserProjectByIdRequest command, CancellationToken cancellationToken)
     {
-        Guid? userId = await this.GetCurrentUserIdAsync();
-        this.entityValidator.ValidateExist(userId);
-        
-        UserProject userProject = await this.userProjectRepository
-            .GetAsync(
-                up => up.Id == command.Id, 
-                cancellationToken, 
-                up => up.Include(up => up.AllowedUsers).Include(up => up.Balances));
-        this.entityValidator.ValidateExist<UserProject, Guid>(userProject, command.Id);
+        Guid userId = await this.GetCurrentUserIdAsync();
+        UserProject userProject = await this.GetUserProjectByIdAsync(command.Id, cancellationToken);
         
         if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {

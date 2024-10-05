@@ -14,6 +14,7 @@ chmod +x "$INSERT_CACHE_VALUE_SCRIPT"
 # Execute the script with the correct path
 "$INSERT_CACHE_VALUE_SCRIPT" "version:localization_public" $(uuidgen | tr -d '-')
 "$INSERT_CACHE_VALUE_SCRIPT" "version:localization" $(uuidgen | tr -d '-')
+"$INSERT_CACHE_VALUE_SCRIPT" "version:frequency" $(uuidgen | tr -d '-')
 "$INSERT_CACHE_VALUE_SCRIPT" "version:category" $(uuidgen | tr -d '-')
 "$INSERT_CACHE_VALUE_SCRIPT" "version:currency" $(uuidgen | tr -d '-')
 "$INSERT_CACHE_VALUE_SCRIPT" "version:country" $(uuidgen | tr -d '-')

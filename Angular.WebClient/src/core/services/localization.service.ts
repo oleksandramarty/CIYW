@@ -10,7 +10,6 @@ import {
 } from "../api-clients/localizations-client";
 import {SiteSettingsResponse} from "../api-clients/dictionaries-client";
 import {SiteSettingsService} from "./site-settings.service";
-import {environment} from "../environments/environment";
 
 @Injectable({
     providedIn: 'root'
@@ -117,6 +116,8 @@ export class LocalizationService {
                     handleApiError(this.snackBar)
                 ).subscribe();
         }
+
+        this.localeChangedSub.next(true);
     }
 
     public getTranslation(key: string | undefined): string | undefined {

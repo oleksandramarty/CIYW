@@ -1,6 +1,8 @@
 <div class="base-modal-container" *ngIf="expenseFormGroup">
-    <h2 mat-dialog-title>{{ !!expense ? expense.title : 'Create expense' }}</h2>
-    <div class="balance-expense-hint">BALANCE.AFTER_TRANSACTION -
+    <h2 mat-dialog-title *ngIf="expense">{{ expense.title }}</h2>
+    <h2 mat-dialog-title *ngIf="!expense" [translation]="'EXPENSES.CREATE_NEW'"></h2>
+    <div class="balance-expense-hint">
+        <span [translation]="'BALANCE.BALANCE_AFTER_TRANSACTION'"></span> -
         <span class="amount" [ngClass]="{'negative': predictedBalance < 0}">
             <strong>
                 {{predictedBalance | currency: 'USD': 'symbol-narrow': '1.2-2'}}
@@ -8,7 +10,6 @@
         </span>
     </div>
     <div class="base-modal-body-container">
-        <ng-container *ngIf="!isBusy else loader">
             <app-input className="grid-input-item" type="input" [label]="'COMMON.TITLE'"
                        [formGroup]="expenseFormGroup" controlName="title" [maxLength]="50"></app-input>
             <div class="grid-input-container">
@@ -22,19 +23,16 @@
                 <app-input className="grid-input-item" type="select" [dataItems]="balancesDataItems ?? []" [label]="'COMMON.BALANCE'"
                            [formGroup]="expenseFormGroup" controlName="balanceId"></app-input>
             </div>
-            <app-input className="grid-input-item" type="textarea" [label]="'COMMON.DESCRIPTION'"
+            <app-input className="grid-input-item" type="textarea" [label]="'COMMON.COMMENT'"
                        [formGroup]="expenseFormGroup" controlName="description" [maxLength]="100"></app-input>
-        </ng-container>
-        <ng-template #loader>
-            <app-common-loader></app-common-loader>
-        </ng-template>
     </div>
     <div class="base-modal-actions-container">
         <div class="mat-dialog-actions-container">
             <button mat-button translation="COMMON.CLOSE" (click)="dialogRef.close(false)"></button>
             <button mat-flat-button color="primary" (click)="createOrUpdateExpense()"
-                    [disabled]="expenseFormGroup?.invalid || isBusy">{{ !!expense ? 'Update' : 'Create' }}
-            </button>
+                    [disabled]="expenseFormGroup.invalid"
+                    [translation]="!!expense ? 'COMMON.UPDATE' : 'COMMON.CREATE'"
+            ></button>
         </div>
     </div>
 </div>

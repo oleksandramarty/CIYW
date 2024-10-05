@@ -21,6 +21,7 @@ import {
     expenses_setUserAllowedProjects,
     expenses_setUserProjects
 } from "../../../../core/store/actions/expenses.actions";
+import {LoaderService} from "../../../../core/services/loader.service";
 
 @Component({
     selector: 'app-user-projects',
@@ -31,7 +32,6 @@ export class UserProjectsComponent implements OnInit, OnDestroy {
     protected ngUnsubscribe: Subject<void> = new Subject<void>();
     userProjects: UserProjectResponse[] | undefined;
     userAllowedProjects: UserAllowedProjectResponse[] | undefined;
-    isBusy: boolean = false;
 
     get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {
         return this.dictionaryService.currenciesMap;
@@ -43,7 +43,8 @@ export class UserProjectsComponent implements OnInit, OnDestroy {
         private snackBar: MatSnackBar,
         private dialog: MatDialog,
         private router: Router,
-        private readonly store: Store
+        private readonly store: Store,
+        private readonly loaderService: LoaderService
     ) {
     }
 
@@ -96,7 +97,7 @@ export class UserProjectsComponent implements OnInit, OnDestroy {
     }
 
     private getUserProjects(): void {
-        this.isBusy = true;
+        this.loaderService.isBusy = true;
         this.expenseClient.userProject_GetProjects()
             .pipe(
                 takeUntil(this.ngUnsubscribe),
@@ -110,7 +111,7 @@ export class UserProjectsComponent implements OnInit, OnDestroy {
                     this.store.dispatch(expenses_setUserAllowedProjects({ userAllowedProjects }));
                 }),
                 handleApiError(this.snackBar),
-                finalize(() => this.isBusy = false)
+                finalize(() => this.loaderService.isBusy = false)
             ).subscribe();
     }
 }

@@ -1,27 +1,28 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule, CurrencyPipe} from "@angular/common";
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {MatButtonModule} from "@angular/material/button";
-import {CommonLoaderComponent} from "../../common/common-loader/common-loader.component";
-import {AppCommonInputModule} from "../../common/common-input/app-common-input.module";
-import {AppCommonModule} from "../../common/common-app/app-common.module";
-import {RouterLink} from "@angular/router";
-import {finalize, Subject, takeUntil, tap} from "rxjs";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DictionaryService} from "../../../core/services/dictionary.service";
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule, CurrencyPipe } from "@angular/common";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
+import { CommonLoaderComponent } from "../../common/common-loader/common-loader.component";
+import { AppCommonInputModule } from "../../common/common-input/app-common-input.module";
+import { RouterLink } from "@angular/router";
+import { finalize, Subject, takeUntil, tap } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DictionaryService } from "../../../core/services/dictionary.service";
 import {
     BalanceResponse, CreateOrUpdateExpenseCommand,
     ExpenseClient,
     ExpenseResponse,
     UserProjectResponse
 } from "../../../core/api-clients/expenses-client";
-import {DictionaryDataItems, DictionaryMap} from "../../../core/models/common/dictionarie.model";
-import {DataItem} from "../../../core/models/common/data-item.model";
-import {CategoryResponse, CurrencyResponse} from "../../../core/api-clients/dictionaries-client";
-import {LocalizationService} from "../../../core/services/localization.service";
-import {provideNativeDateAdapter} from "@angular/material/core";
-import {handleApiError} from "../../../core/helpers/rxjs.helper";
+import { DictionaryDataItems, DictionaryMap } from "../../../core/models/common/dictionarie.model";
+import { DataItem } from "../../../core/models/common/data-item.model";
+import { CategoryResponse, CurrencyResponse } from "../../../core/api-clients/dictionaries-client";
+import { LocalizationService } from "../../../core/services/localization.service";
+import { provideNativeDateAdapter } from "@angular/material/core";
+import { handleApiError } from "../../../core/helpers/rxjs.helper";
+import { SharedModule } from "../../../core/shared.module";
+import {LoaderService} from "../../../core/services/loader.service";
 
 @Component({
     selector: 'app-create-update-expense',
@@ -32,20 +33,19 @@ import {handleApiError} from "../../../core/helpers/rxjs.helper";
         MatButtonModule,
         CommonLoaderComponent,
         AppCommonInputModule,
-        AppCommonModule,
         RouterLink,
+        SharedModule,
     ],
-    providers:[
+    providers: [
         CurrencyPipe,
         provideNativeDateAdapter()
     ],
     templateUrl: './create-update-expense.component.html',
-    styleUrl: './create-update-expense.component.scss'
+    styleUrls: ['./create-update-expense.component.scss'] // Corrected property name
 })
 export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
     protected ngUnsubscribe: Subject<void> = new Subject<void>();
     public expenseFormGroup: FormGroup | undefined;
-    public isBusy: boolean | null = false;
 
     public expense: ExpenseResponse | undefined;
     public userProject: UserProjectResponse | undefined;
@@ -88,7 +88,8 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
         private readonly dictionaryService: DictionaryService,
         private readonly localizationService: LocalizationService,
         private readonly expenseClient: ExpenseClient,
-        private readonly currencyPipe: CurrencyPipe
+        private readonly currencyPipe: CurrencyPipe,
+        private readonly loaderService: LoaderService
     ) {
         this.expense = data?.expense;
         this.userProject = data?.userProject;
@@ -123,9 +124,9 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
     }
 
     public createOrUpdateExpense(): void {
-        if (!this.expenseFormGroup!.valid) {
-            Object.keys(this.expenseFormGroup!.controls).forEach(key => {
-                const control = this.expenseFormGroup!.get(key);
+        if (!this.expenseFormGroup?.valid) {
+            Object.keys(this.expenseFormGroup?.controls ?? {}).forEach(key => {
+                const control = this.expenseFormGroup?.get(key);
                 if (control) {
                     control.markAsTouched();
                 }
@@ -134,7 +135,7 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.isBusy = true;
+        this.loaderService.isBusy = true;
 
         this.expenseClient.expense_CreateOrUpdateExpense(new CreateOrUpdateExpenseCommand({
             id: this.expense?.id,
@@ -149,7 +150,7 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
             takeUntil(this.ngUnsubscribe),
             tap(() => {
                 this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', { duration: 3000 });
-                this.isBusy = false
+                this.loaderService.isBusy = false;
                 this.dialogRef.close(true);
             }),
             handleApiError(this.snackBar, this.localizationService)

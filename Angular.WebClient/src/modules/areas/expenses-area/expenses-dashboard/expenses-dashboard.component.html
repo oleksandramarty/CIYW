@@ -1,45 +1,4 @@
 <div class="dashboard-container">
   <section>
-    <h1>USER_PROJECTS</h1>
-    <mat-divider></mat-divider>
-    <div *ngIf="accounts.length === 0" class="no-user-projects">
-      <h2>No accounts found</h2>
-      <p>USER_PROJECT.CREATE_FIRST_ONE</p>
-    </div>
-    <div *ngIf="accounts.length > 0" class="user-project-cards">
-      <div class="user-project-card" *ngFor="let account of accounts">
-        <div class="user-project-header">
-          <h3>{{ account.name }}</h3>
-        </div>
-        <div class="user-project-details">
-          <div *ngFor="let balance of account.balances" class="balance">
-            <span class="currency">{{ balance.currency }}</span>
-            <span class="amount">{{ balance.amount | currency:balance.currency }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
-
-    <section>
-        <h1>USER.USER_ALLOWED_PROJECTS</h1>
-        <mat-divider></mat-divider>
-        <div *ngIf="accounts.length === 0" class="no-user-projects">
-            <h2>No accounts found</h2>
-            <p>USER_PROJECT.CREATE_FIRST_ONE</p>
-        </div>
-        <div *ngIf="accounts.length > 0" class="user-project-cards">
-            <div class="user-project-card" *ngFor="let account of accounts">
-                <div class="user-project-header">
-                    <h3>{{ account.name }}</h3>
-                </div>
-                <div class="user-project-details">
-                    <div *ngFor="let balance of account.balances" class="balance">
-                        <span class="currency">{{ balance.currency }}</span>
-                        <span class="amount">{{ balance.amount | currency:balance.currency }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 </div>
