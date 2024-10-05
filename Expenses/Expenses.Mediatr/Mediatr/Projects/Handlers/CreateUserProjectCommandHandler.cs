@@ -38,7 +38,7 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         int count = await this.userProjectRepository.GetQueryable(
             p => p.CreatedUserId == userId).CountAsync(cancellationToken);
 
-        if (count > 0)
+        if (count > 5)
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }

@@ -6,6 +6,9 @@ import { ExpensesAreaComponent } from "./expenses-area/expenses-area.component";
 import { ExpensesDashboardComponent } from "./expenses-dashboard/expenses-dashboard.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { SharedModule } from "../../../core/shared.module";
+import {
+    ExpenseDashboardProjectsComponent
+} from "./expenses-dashboard/expense-dashboard-projects/expense-dashboard-projects.component";
 
 const routes: Routes = [
     {
@@ -20,7 +23,8 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         ExpensesAreaComponent,
-        ExpensesDashboardComponent
+        ExpensesDashboardComponent,
+        ExpenseDashboardProjectsComponent
     ],
     imports: [
         RouterModule.forChild(routes),

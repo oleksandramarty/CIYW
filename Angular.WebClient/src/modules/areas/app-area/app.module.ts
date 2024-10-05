@@ -39,6 +39,7 @@ import { SharedModule } from "../../../core/shared.module";
 import {NightSkyComponent} from "../../common/background/night-sky/night-sky.component";
 import {CommonLoaderComponent} from "../../common/common-loader/common-loader.component";
 import {LoaderService} from "../../../core/services/loader.service";
+import {UserProjectsService} from "../../../core/services/entity-services/user-projects.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -115,6 +116,7 @@ const routes: Routes = [
     LocalizationClient,
     ExpenseClient,
     DictionaryClient,
+    UserProjectsService,
     // AuditTrailClient,
     { provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl },
     { provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl },
