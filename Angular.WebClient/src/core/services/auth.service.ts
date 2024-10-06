@@ -14,6 +14,7 @@ import {GraphQlAuthService} from "../graph-ql/graph-ql-auth.service";
 import {JwtTokenResponse, UserResponse} from "../api-clients/common-module.client";
 import {LoaderService} from "./loader.service";
 import {AuthClient} from "../api-clients/auth-client";
+import {NoComplaintService} from "./no-complaint.service";
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +37,9 @@ export class AuthService {
     private readonly snackBar: MatSnackBar,
     private readonly authClient: AuthClient,
     private readonly store: Store,
-    private dialog: MatDialog,
     private readonly graphQlAuthService: GraphQlAuthService,
-    private readonly loaderService: LoaderService
+    private readonly loaderService: LoaderService,
+    private readonly noComplaintService: NoComplaintService
   ) {
     this._token$ = this.store.select(selectToken);
   }
@@ -80,7 +81,7 @@ export class AuthService {
       ).subscribe();
     }
 
-    this.showNoComplaintModal(loginActon);
+    this.noComplaintService.showNoComplaintModal(loginActon);
   }
 
   public logout(): void {
@@ -96,23 +97,7 @@ export class AuthService {
           ).subscribe();
     }
 
-    this.showNoComplaintModal(logoutAction);
-  }
-
-  private showNoComplaintModal(authAction: () => void): void {
-    let dialogRef = this.getNoComplaintModal();
-
-    dialogRef.afterClosed()
-        .pipe(
-            take(1),
-            tap((result) => {
-              if (result) {
-                authAction();
-              }
-            }),
-            handleApiError(this.snackBar)
-        )
-        .subscribe();
+    this.noComplaintService.showNoComplaintModal(logoutAction);
   }
 
   private getCurrentUser(): void {
@@ -147,22 +132,6 @@ export class AuthService {
   private clearAuthData(): void {
     localStorage.removeItem(this._tokenKey);
     this.store.dispatch(auth_clearAll());
-  }
-
-  private getNoComplaintModal(): MatDialogRef<ConfirmationMessageComponent, any> {
-    return this.dialog.open(ConfirmationMessageComponent, {
-      width: '400px',
-      maxWidth: '80vw',
-      data: {
-        yesBtn: 'COMMON.PROCEED',
-        noBtn: 'COMMON.CANCEL',
-        title: 'COMMON.WARNING',
-        htmlBlock: `
-        <h2 style="color: #dc3545; text-align: center;">${this.localizationService.getTranslation('COMMON.DO_NOT_STORE_ANY_SENSITIVE_DATA_HERE')}</h2>
-        <p style="text-align: center"><u>${this.localizationService.getTranslation('AUTH.NO_COMPLAINTS')}</u></p>
-        `
-      }
-    });
   }
 }
 

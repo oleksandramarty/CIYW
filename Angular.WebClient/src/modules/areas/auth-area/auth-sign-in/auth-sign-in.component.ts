@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -10,7 +10,7 @@ import { AuthService } from "../../../../core/services/auth.service";
   templateUrl: './auth-sign-in.component.html',
   styleUrl: '../auth-area/auth-area.component.scss',
 })
-export class AuthSignInComponent implements OnInit {
+export class AuthSignInComponent implements OnInit, OnDestroy {
   protected ngUnsubscribe: Subject<void> = new Subject<void>();
   loginForm: FormGroup | undefined;
 
@@ -27,6 +27,11 @@ export class AuthSignInComponent implements OnInit {
       password: ['', [Validators.required]],
       rememberMe: [false]
     });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   public login(): void {

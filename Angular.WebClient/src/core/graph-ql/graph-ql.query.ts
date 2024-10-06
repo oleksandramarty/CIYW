@@ -33,8 +33,6 @@ export const AUTH_GATEWAY_CURRENT_USER = gql`
             email
             isActive
             isTemporaryPassword
-            countryId
-            currencyId
             authType
             lastForgotPassword
             lastForgotPasswordRequest
@@ -46,8 +44,9 @@ export const AUTH_GATEWAY_CURRENT_USER = gql`
             userSetting {
                 id
                 defaultLocale
-                defaultTimeZone
-                defaultCurrency
+                timeZone
+                countryId
+                currencyId
                 defaultUserProject
                 userId
                 version

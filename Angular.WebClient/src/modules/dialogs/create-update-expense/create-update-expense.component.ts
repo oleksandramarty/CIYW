@@ -5,7 +5,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { CommonLoaderComponent } from "../../common/common-loader/common-loader.component";
 import { AppCommonInputModule } from "../../common/common-input/app-common-input.module";
 import { RouterLink } from "@angular/router";
-import { finalize, Subject, takeUntil, tap } from "rxjs";
+import { Subject, takeUntil, tap } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DictionaryService } from "../../../core/services/dictionary.service";
@@ -23,6 +23,7 @@ import { handleApiError } from "../../../core/helpers/rxjs.helper";
 import { SharedModule } from "../../../core/shared.module";
 import {LoaderService} from "../../../core/services/loader.service";
 import {CategoryResponse, CurrencyResponse} from "../../../core/api-clients/dictionaries-client";
+import {NoComplaintService} from "../../../core/services/no-complaint.service";
 
 @Component({
     selector: 'app-create-update-expense',
@@ -89,7 +90,8 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
         private readonly localizationService: LocalizationService,
         private readonly expenseClient: ExpenseClient,
         private readonly currencyPipe: CurrencyPipe,
-        private readonly loaderService: LoaderService
+        private readonly loaderService: LoaderService,
+        private readonly noComplaintService: NoComplaintService,
     ) {
         this.expense = data?.expense;
         this.userProject = data?.userProject;
@@ -135,25 +137,34 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.loaderService.isBusy = true;
+        const createExpenseAction = () => {
+            if (!this.expenseFormGroup) {
+                return;
+            }
 
-        this.expenseClient.expense_CreateOrUpdateExpense(new CreateOrUpdateExpenseCommand({
-            id: this.expense?.id,
-            title: this.expenseFormGroup?.value.title,
-            description: this.expenseFormGroup?.value.description,
-            amount: Number(this.expenseFormGroup?.value.amount),
-            date: this.expenseFormGroup?.value.date,
-            categoryId: this.expenseFormGroup?.value.categoryId,
-            userProjectId: this.userProject?.id!,
-            balanceId: this.expenseFormGroup?.value.balanceId
-        })).pipe(
-            takeUntil(this.ngUnsubscribe),
-            tap(() => {
-                this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', { duration: 3000 });
-                this.loaderService.isBusy = false;
-                this.dialogRef.close(true);
-            }),
-            handleApiError(this.snackBar, this.localizationService)
-        ).subscribe();
+            this.loaderService.isBusy = true;
+
+            this.expenseClient.expense_CreateOrUpdateExpense(new CreateOrUpdateExpenseCommand({
+                id: this.expense?.id,
+                title: this.expenseFormGroup.value.title,
+                description: this.expenseFormGroup.value.description,
+                amount: Number(this.expenseFormGroup.value.amount),
+                date: this.expenseFormGroup.value.date,
+                categoryId: this.expenseFormGroup.value.categoryId,
+                userProjectId: this.userProject?.id!,
+                balanceId: this.expenseFormGroup.value.balanceId
+            })).pipe(
+                takeUntil(this.ngUnsubscribe),
+                tap(() => {
+                    this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', { duration: 3000 });
+                    this.loaderService.isBusy = false;
+                    this.dialogRef.close(true);
+                }),
+                handleApiError(this.snackBar, this.localizationService)
+            ).subscribe();
+        }
+
+        this.noComplaintService.showNoComplaintModal(createExpenseAction);
+
     }
 }

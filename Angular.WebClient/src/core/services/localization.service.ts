@@ -159,11 +159,10 @@ export class LocalizationService {
     public localeChanged(code: string | undefined): void {
         const currentSettings = this.siteSettingsService.siteSettings;
         if (currentSettings) {
-            this.siteSettingsService.siteSettings =
-                new SiteSettingsResponse({
-                    ...currentSettings,
-                    locale: code ?? 'en'
-                });
+            this.siteSettingsService.siteSettings = {
+                ...currentSettings,
+                locale: code ?? 'en'
+            } as SiteSettingsResponse
 
             this.localeChangedSub.next(true);
         }

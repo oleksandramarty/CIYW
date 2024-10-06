@@ -237,8 +237,6 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
     salt!: string;
     isActive!: boolean;
     isTemporaryPassword!: boolean;
-    countryId?: number | undefined;
-    currencyId?: number | undefined;
     authType!: UserAuthMethodEnum;
     lastForgotPassword?: Date | undefined;
     lastForgotPasswordRequest?: Date | undefined;
@@ -265,8 +263,6 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
             this.salt = _data["salt"];
             this.isActive = _data["isActive"];
             this.isTemporaryPassword = _data["isTemporaryPassword"];
-            this.countryId = _data["countryId"];
-            this.currencyId = _data["currencyId"];
             this.authType = _data["authType"];
             this.lastForgotPassword = _data["lastForgotPassword"] ? new Date(_data["lastForgotPassword"].toString()) : <any>undefined;
             this.lastForgotPasswordRequest = _data["lastForgotPasswordRequest"] ? new Date(_data["lastForgotPasswordRequest"].toString()) : <any>undefined;
@@ -297,8 +293,6 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
         data["salt"] = this.salt;
         data["isActive"] = this.isActive;
         data["isTemporaryPassword"] = this.isTemporaryPassword;
-        data["countryId"] = this.countryId;
-        data["currencyId"] = this.currencyId;
         data["authType"] = this.authType;
         data["lastForgotPassword"] = this.lastForgotPassword ? this.lastForgotPassword.toISOString() : <any>undefined;
         data["lastForgotPasswordRequest"] = this.lastForgotPasswordRequest ? this.lastForgotPasswordRequest.toISOString() : <any>undefined;
@@ -323,8 +317,6 @@ export interface IUserResponse extends IBaseDateTimeEntityOfGuid {
     salt: string;
     isActive: boolean;
     isTemporaryPassword: boolean;
-    countryId?: number | undefined;
-    currencyId?: number | undefined;
     authType: UserAuthMethodEnum;
     lastForgotPassword?: Date | undefined;
     lastForgotPasswordRequest?: Date | undefined;
@@ -420,8 +412,9 @@ export enum UserRoleEnum {
 
 export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSettingResponse {
     defaultLocale!: string;
-    defaultTimeZone!: number;
-    defaultCurrency!: number;
+    timeZone!: number;
+    currencyId?: number | undefined;
+    countryId?: number | undefined;
     defaultUserProject!: string;
     userId!: string;
     version!: string;
@@ -434,8 +427,9 @@ export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSett
         super.init(_data);
         if (_data) {
             this.defaultLocale = _data["defaultLocale"];
-            this.defaultTimeZone = _data["defaultTimeZone"];
-            this.defaultCurrency = _data["defaultCurrency"];
+            this.timeZone = _data["timeZone"];
+            this.currencyId = _data["currencyId"];
+            this.countryId = _data["countryId"];
             this.defaultUserProject = _data["defaultUserProject"];
             this.userId = _data["userId"];
             this.version = _data["version"];
@@ -452,8 +446,9 @@ export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSett
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["defaultLocale"] = this.defaultLocale;
-        data["defaultTimeZone"] = this.defaultTimeZone;
-        data["defaultCurrency"] = this.defaultCurrency;
+        data["timeZone"] = this.timeZone;
+        data["currencyId"] = this.currencyId;
+        data["countryId"] = this.countryId;
         data["defaultUserProject"] = this.defaultUserProject;
         data["userId"] = this.userId;
         data["version"] = this.version;
@@ -464,8 +459,9 @@ export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSett
 
 export interface IUserSettingResponse extends IBaseIdEntityOfGuid {
     defaultLocale: string;
-    defaultTimeZone: number;
-    defaultCurrency: number;
+    timeZone: number;
+    currencyId?: number | undefined;
+    countryId?: number | undefined;
     defaultUserProject: string;
     userId: string;
     version: string;

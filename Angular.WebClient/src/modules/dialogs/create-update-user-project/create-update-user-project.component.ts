@@ -16,6 +16,7 @@ import { LocalizationService } from "../../../core/services/localization.service
 import { handleApiError } from "../../../core/helpers/rxjs.helper";
 import { SharedModule } from "../../../core/shared.module";
 import {LoaderService} from "../../../core/services/loader.service";
+import {NoComplaintService} from "../../../core/services/no-complaint.service";
 
 @Component({
   selector: 'app-create-update-user-project',
@@ -50,7 +51,8 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
     private readonly dictionaryService: DictionaryService,
     private readonly localizationService: LocalizationService,
     private readonly expenseClient: ExpenseClient,
-    private readonly loaderService: LoaderService
+    private readonly loaderService: LoaderService,
+    private readonly noComplaintService: NoComplaintService,
   ) { }
 
   ngOnInit(): void {
@@ -83,21 +85,29 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loaderService.isBusy = true;
+    const createUserProjectAction = () => {
+      if (!this.userProjectForm) {
+        return;
+      }
 
-    this.expenseClient.userProject_AddProject(new CreateUserProjectCommand({
-      title: this.userProjectForm.value.title,
-      currencyIds: this.userProjectForm.value.currencyIds.split(',').map(Number),
-      isActive: this.userProjectForm.value.isActive
-    }))
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(() => {
-          this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', { duration: 3000 });
-          this.loaderService.isBusy = false;
-          this.dialogRef.close(true);
-        }),
-        handleApiError(this.snackBar)
-      ).subscribe();
+      this.loaderService.isBusy = true;
+
+      this.expenseClient.userProject_AddProject(new CreateUserProjectCommand({
+        title: this.userProjectForm.value.title,
+        currencyIds: this.userProjectForm.value.currencyIds.split(',').map(Number),
+        isActive: this.userProjectForm.value.isActive
+      }))
+          .pipe(
+              takeUntil(this.ngUnsubscribe),
+              tap(() => {
+                this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', { duration: 3000 });
+                this.loaderService.isBusy = false;
+                this.dialogRef.close(true);
+              }),
+              handleApiError(this.snackBar)
+          ).subscribe();
+    }
+
+    this.noComplaintService.showNoComplaintModal(createUserProjectAction)
   }
 }

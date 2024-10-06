@@ -9,8 +9,9 @@ public class UserSettingResponseType : ObjectGraphType<UserSettingResponse>
     {
         Field(x => x.Id);
         Field(x => x.DefaultLocale);
-        Field(x => x.DefaultTimeZone);
-        Field(x => x.DefaultCurrency);
+        Field(x => x.TimeZone);
+        Field(x => x.CurrencyId, nullable: true);
+        Field(x => x.CountryId, nullable: true);
         Field(x => x.DefaultUserProject);
         Field(x => x.UserId);
         Field(x => x.Version);

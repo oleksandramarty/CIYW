@@ -18,8 +18,8 @@
                 <i [class]="icon + ' input-icon'"></i>
             </ng-container>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
-            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue.length > maxLength}">
-                {{ currentValue.length ?? 0 }}/{{ maxLength }}
+            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+                {{ currentValue?.length ?? 0 }}/{{ maxLength }}
             </mat-hint>
         </mat-form-field>
     </ng-container>
@@ -69,8 +69,8 @@
                 <i [class]="icon + ' input-icon'"></i>
             </ng-container>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
-            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue.length > maxLength}">
-                {{ currentValue.length ?? 0 }}/{{ maxLength }}
+            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+                {{ currentValue?.length ?? 0 }}/{{ maxLength }}
             </mat-hint>
         </mat-form-field>
     </ng-container>
@@ -85,8 +85,8 @@
                 <i [class.fa-eye]="!hide()" [class.fa-eye-slash]="hide()" class="fa-solid"></i>
             </button>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
-            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue.length > maxLength}">
-                {{ currentValue.length ?? 0 }}/{{ maxLength }}
+            <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+                {{ currentValue?.length ?? 0 }}/{{ maxLength }}
             </mat-hint>
         </mat-form-field>
     </ng-container>
@@ -185,8 +185,8 @@
                 <i class="fa fa-times" (click)="removeOnAutoComplete(item)"></i>
             </mat-chip>
         </mat-chip-set>
-        <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue.length > maxLength}">
-            {{ currentValue.length ?? 0 }}/{{ maxLength }}
+        <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
+            {{ currentValue?.length ?? 0 }}/{{ maxLength }}
         </mat-hint>
     </ng-container>
 </div>

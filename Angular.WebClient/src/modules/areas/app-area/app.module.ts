@@ -42,6 +42,8 @@ import {GraphQlDictionariesService} from "../../../core/graph-ql/graph-ql-dictio
 import {GraphQlService} from "../../../core/graph-ql/graph-ql.service";
 import {GraphQlAuthService} from "../../../core/graph-ql/graph-ql-auth.service";
 import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/auth-client";
+import {NoComplaintService} from "../../../core/services/no-complaint.service";
+import {UserAreaModule} from "../user-area/user-area.module";
 
 export const MY_FORMATS = {
   parse: {
@@ -79,6 +81,11 @@ export const routes: Routes = [
     loadChildren: () => import('../auth-area/auth-area.module')
       .then(m => m.AuthAreaModule)
   },
+  {
+    path: 'users',
+    loadChildren: () => import('../user-area/user-area.module')
+      .then(m => m.UserAreaModule)
+  },
   { path: 'in-development', component: InDevelopmentComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'not-found' },
@@ -106,6 +113,7 @@ export const routes: Routes = [
     CommonLoaderComponent
   ],
   providers: [
+    NoComplaintService,
     AuthService,
     BaseHttpService,
     BaseInitializationService,

@@ -13,8 +13,6 @@ public class UserResponseType : ObjectGraphType<UserResponse>
         Field(x => x.Email);
         Field(x => x.IsActive);
         Field(x => x.IsTemporaryPassword);
-        Field(x => x.CountryId, nullable: true);
-        Field(x => x.CurrencyId, nullable: true);
         Field(x => x.AuthType, type: typeof(EnumerationGraphType<UserAuthMethodEnum>));
         Field(x => x.LastForgotPassword, nullable: true);
         Field(x => x.LastForgotPasswordRequest, nullable: true);

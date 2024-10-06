@@ -1,4 +1,4 @@
-import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
 
 export class CustomValidators {
     static MaxMultiSelectedValues(maxLength: number): ValidatorFn {
@@ -14,5 +14,11 @@ export class CustomValidators {
             }
             return null;
         };
+    }
+
+    static PasswordMatchValidator(form: FormGroup): null | { mismatch: true } {
+        const newPassword = form.get('newPassword')?.value;
+        const confirmNewPassword = form.get('confirmNewPassword')?.value;
+        return newPassword === confirmNewPassword ? null : {mismatch: true};
     }
 }

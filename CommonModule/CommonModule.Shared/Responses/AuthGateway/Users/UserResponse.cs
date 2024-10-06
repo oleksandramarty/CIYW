@@ -14,8 +14,6 @@ public class UserResponse: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionE
     public string Salt { get; set; }
     public bool IsActive { get; set; }
     public bool IsTemporaryPassword { get; set; }
-    public int? CountryId { get; set; }
-    public int? CurrencyId { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
     
     public DateTime? LastForgotPassword { get; set; }

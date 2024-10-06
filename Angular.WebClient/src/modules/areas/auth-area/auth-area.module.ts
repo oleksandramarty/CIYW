@@ -66,11 +66,6 @@ const routes: Routes = [
         SharedModule,
     ],
     exports: [
-        AuthAreaComponent,
-        AuthSignInComponent,
-        AuthSignUpComponent,
-        AuthForgotComponent,
-        AuthRestoreComponent,
         RouterModule
     ]
 })

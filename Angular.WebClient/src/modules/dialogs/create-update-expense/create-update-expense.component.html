@@ -12,7 +12,7 @@
     <div class="base-modal-body-container">
             <app-input className="grid-input-item" type="input" [label]="'COMMON.TITLE'"
                        [formGroup]="expenseFormGroup" controlName="title" [maxLength]="50"></app-input>
-            <div class="grid-input-container">
+            <div class="grid-input-container-two">
                 <app-input className="grid-input-item" type="autocomplete" [dataItems]="dataItems?.categoriesFlat ?? []"
                            [label]="'COMMON.CATEGORY'" [formGroup]="expenseFormGroup"
                            controlName="categoryId"></app-input>

@@ -36,11 +36,11 @@
         <span class="user-full-name">{{ currentUser.login }}</span>
       </div>
       <mat-menu #menu="matMenu" class="custom-menu-header-position">
-        <button mat-menu-item (click)="goto('notifications')">
+        <button mat-menu-item (click)="goto('users/notifications')">
           <i class="fa-regular fa-bell mr-5p"></i>
           <span translation="USER.MENU.NOTIFICATIONS"></span>
         </button>
-        <button mat-menu-item (click)="goto('settings')">
+        <button mat-menu-item (click)="goto('users/settings')">
           <i class="fa-solid fa-gears mr-5p"></i>
           <span translation="USER.MENU.SETTINGS"></span>
         </button>

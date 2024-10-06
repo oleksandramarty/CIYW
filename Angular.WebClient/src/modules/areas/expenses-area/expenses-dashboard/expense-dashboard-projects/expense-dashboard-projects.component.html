@@ -9,7 +9,7 @@
         </thead>
         <tbody>
         <tr class="mat-tr" *ngFor="let userProject of userProjects; let i=index;">
-            <td class="mat-td"><i class="fa-solid fa-eye pointer"></i></td>
+            <td class="mat-td"><i class="fa-solid fa-eye pointer" (click)="openUserProject(userProject.id)"></i></td>
             <td class="mat-td">{{ userProject.title }}</td>
             <td class="mat-td">
                 <ng-container *ngFor="let balance of userProject.balances; let j=index">
