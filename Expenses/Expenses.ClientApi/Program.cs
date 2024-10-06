@@ -8,6 +8,8 @@ using Expenses.Mediatr;
 using Expenses.Mediatr.Validators.Expenses;
 using Expenses.Mediatr.Validators.Projects;
 using FluentValidation;
+using GraphQL.MicrosoftDI;
+using GraphQL.Types;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateOrUpdateExpenseComman
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProjectCommandValidator>();
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
+
+//GraphQL
+//builder.Services.AddSingleton<ISchema, AuthGatewayGraphQLSchema>(services => new AuthGatewayGraphQLSchema(new SelfActivatingServiceProvider(services)));
+builder.AddGraphQL();
+
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddAutoMapper(config =>
 {
@@ -44,6 +51,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUI(builder);
+    app.UseGraphQLPlayground("/graphql/playground");
 }
 
 app.UseCors("AllowSpecificOrigins");
@@ -54,4 +62,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseTokenValidator();
 app.MapControllers();
+app.UseGraphQL();
+
 app.Run();

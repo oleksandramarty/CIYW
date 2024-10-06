@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CommonModule.Core.JsonConverter;
+using CommonModule.Core.Utils;
 
 namespace CommonModule.Core.Exceptions;
 

@@ -20,14 +20,6 @@ public class UserController : BaseController
         this.mediator = mediator;
     }
     
-    [HttpGet("current")]
-    [ProducesResponseType(typeof(UserResponse), 200)]
-    public async Task<IActionResult> GetCurrentUserAsync()
-    {
-        UserResponse response = await this.mediator.Send(new GetCurrentUserRequest());
-        return Ok(response);
-    }
-    
     [HttpPost("settings")]
     [ProducesResponseType(typeof(void), 200)]
     public async Task<IActionResult> CreateOrUpdateUserSettingAsync([FromBody] CreateOrUpdateUserSettingCommand command, CancellationToken cancellationToken)

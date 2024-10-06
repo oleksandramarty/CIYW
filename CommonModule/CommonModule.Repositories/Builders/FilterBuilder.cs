@@ -88,16 +88,6 @@ public class FilterBuilder<TId, T> where T : class
         return this;
     }
 
-    public FilterBuilder<TId, T> ApplyIdsFilter(IEnumerable<TId>? ids)
-    {
-        if (ids != null && ids.Any())
-        {
-            query = query.Where(x => ids.Contains(EF.Property<TId>(x, "Id")));
-        }
-
-        return this;
-    }
-
     public FilterBuilder<TId, T> ApplyDateRangeFilter(BaseDateRangeFilterRequest? dateRangeRequest)
     {
         if (dateRangeRequest != null)

@@ -1438,14 +1438,14 @@ export interface IPaginatorEntity {
     isFull: boolean;
 }
 
-export class BaseFilterRequestOfGuid implements IBaseFilterRequestOfGuid {
+export class BaseFilterRequest implements IBaseFilterRequest {
     paginator?: PaginatorEntity | undefined;
     sort?: BaseSortableRequest | undefined;
     dateRange?: BaseDateRangeFilterRequest | undefined;
+    amountRange?: BaseAmountRangeFilterRequest | undefined;
     query?: string | undefined;
-    ids?: string[] | undefined;
 
-    constructor(data?: IBaseFilterRequestOfGuid) {
+    constructor(data?: IBaseFilterRequest) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1459,18 +1459,14 @@ export class BaseFilterRequestOfGuid implements IBaseFilterRequestOfGuid {
             this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
             this.sort = _data["sort"] ? BaseSortableRequest.fromJS(_data["sort"]) : <any>undefined;
             this.dateRange = _data["dateRange"] ? BaseDateRangeFilterRequest.fromJS(_data["dateRange"]) : <any>undefined;
+            this.amountRange = _data["amountRange"] ? BaseAmountRangeFilterRequest.fromJS(_data["amountRange"]) : <any>undefined;
             this.query = _data["query"];
-            if (Array.isArray(_data["ids"])) {
-                this.ids = [] as any;
-                for (let item of _data["ids"])
-                    this.ids!.push(item);
-            }
         }
     }
 
-    static fromJS(data: any): BaseFilterRequestOfGuid {
+    static fromJS(data: any): BaseFilterRequest {
         data = typeof data === 'object' ? data : {};
-        let result = new BaseFilterRequestOfGuid();
+        let result = new BaseFilterRequest();
         result.init(data);
         return result;
     }
@@ -1480,25 +1476,21 @@ export class BaseFilterRequestOfGuid implements IBaseFilterRequestOfGuid {
         data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
         data["dateRange"] = this.dateRange ? this.dateRange.toJSON() : <any>undefined;
+        data["amountRange"] = this.amountRange ? this.amountRange.toJSON() : <any>undefined;
         data["query"] = this.query;
-        if (Array.isArray(this.ids)) {
-            data["ids"] = [];
-            for (let item of this.ids)
-                data["ids"].push(item);
-        }
         return data;
     }
 }
 
-export interface IBaseFilterRequestOfGuid {
+export interface IBaseFilterRequest {
     paginator?: PaginatorEntity | undefined;
     sort?: BaseSortableRequest | undefined;
     dateRange?: BaseDateRangeFilterRequest | undefined;
+    amountRange?: BaseAmountRangeFilterRequest | undefined;
     query?: string | undefined;
-    ids?: string[] | undefined;
 }
 
-export class GetFilteredExpensesRequest extends BaseFilterRequestOfGuid implements IGetFilteredExpensesRequest {
+export class GetFilteredExpensesRequest extends BaseFilterRequest implements IGetFilteredExpensesRequest {
     userProjectId!: string;
     categoryIds!: number[];
 
@@ -1541,7 +1533,7 @@ export class GetFilteredExpensesRequest extends BaseFilterRequestOfGuid implemen
     }
 }
 
-export interface IGetFilteredExpensesRequest extends IBaseFilterRequestOfGuid {
+export interface IGetFilteredExpensesRequest extends IBaseFilterRequest {
     userProjectId: string;
     categoryIds: number[];
 }
@@ -1624,6 +1616,46 @@ export class BaseDateRangeFilterRequest implements IBaseDateRangeFilterRequest {
 export interface IBaseDateRangeFilterRequest {
     startDate?: Date | undefined;
     endDate?: Date | undefined;
+}
+
+export class BaseAmountRangeFilterRequest implements IBaseAmountRangeFilterRequest {
+    amountFrom?: number | undefined;
+    amountTo?: number | undefined;
+
+    constructor(data?: IBaseAmountRangeFilterRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amountFrom = _data["amountFrom"];
+            this.amountTo = _data["amountTo"];
+        }
+    }
+
+    static fromJS(data: any): BaseAmountRangeFilterRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseAmountRangeFilterRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amountFrom"] = this.amountFrom;
+        data["amountTo"] = this.amountTo;
+        return data;
+    }
+}
+
+export interface IBaseAmountRangeFilterRequest {
+    amountFrom?: number | undefined;
+    amountTo?: number | undefined;
 }
 
 export class CreateOrUpdatePlannedExpenseCommand implements ICreateOrUpdatePlannedExpenseCommand {
@@ -1838,17 +1870,26 @@ export interface IPlannedExpenseResponse extends IBaseDateTimeEntityOfGuid {
     version: string;
 }
 
-export class GetFilteredPlannedExpensesRequest extends BaseFilterRequestOfGuid implements IGetFilteredPlannedExpensesRequest {
+export class GetFilteredPlannedExpensesRequest extends BaseFilterRequest implements IGetFilteredPlannedExpensesRequest {
     userProjectId!: string;
+    categoryIds!: number[];
 
     constructor(data?: IGetFilteredPlannedExpensesRequest) {
         super(data);
+        if (!data) {
+            this.categoryIds = [];
+        }
     }
 
     override init(_data?: any) {
         super.init(_data);
         if (_data) {
             this.userProjectId = _data["userProjectId"];
+            if (Array.isArray(_data["categoryIds"])) {
+                this.categoryIds = [] as any;
+                for (let item of _data["categoryIds"])
+                    this.categoryIds!.push(item);
+            }
         }
     }
 
@@ -1862,13 +1903,19 @@ export class GetFilteredPlannedExpensesRequest extends BaseFilterRequestOfGuid i
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["userProjectId"] = this.userProjectId;
+        if (Array.isArray(this.categoryIds)) {
+            data["categoryIds"] = [];
+            for (let item of this.categoryIds)
+                data["categoryIds"].push(item);
+        }
         super.toJSON(data);
         return data;
     }
 }
 
-export interface IGetFilteredPlannedExpensesRequest extends IBaseFilterRequestOfGuid {
+export interface IGetFilteredPlannedExpensesRequest extends IBaseFilterRequest {
     userProjectId: string;
+    categoryIds: number[];
 }
 
 export class UserAllowedProjectResponse extends BaseIdEntityOfGuid implements IUserAllowedProjectResponse {

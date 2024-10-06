@@ -8,9 +8,9 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BaseUrlInterceptor } from "../../../core/api.interceptor";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { environment } from "../../../core/environments/environment";
-import { APOLLO_OPTIONS, ApolloModule } from "apollo-angular";
+import {APOLLO_NAMED_OPTIONS, APOLLO_OPTIONS, ApolloModule} from "apollo-angular";
 import { HttpLink } from 'apollo-angular/http';
-import { InMemoryCache } from '@apollo/client/core';
+import {ApolloLink, InMemoryCache} from '@apollo/client/core';
 import { AppComponent } from "./app/app.component";
 import { AppCommonModule } from "../../common/common-app/app-common.module";
 import { GoogleLoginProvider, SocialAuthServiceConfig } from "@abacritt/angularx-social-login";
@@ -26,20 +26,22 @@ import { PreloadAllModules, RouterModule, RouterOutlet, Routes } from "@angular/
 import { AuthGuard } from "../../../core/auth-guard";
 import { NotFoundComponent } from "../../common/common-app/not-found/not-found.component";
 import { InDevelopmentComponent } from "../../common/common-in-development/in-development/in-development.component";
-import { API_BASE_URL_AuthGateway, AuthClient } from "../../../core/api-clients/auth-client";
 import { API_BASE_URL_Localizations, LocalizationClient } from "../../../core/api-clients/localizations-client";
 import { API_BASE_URL_Expenses, ExpenseClient } from "../../../core/api-clients/expenses-client";
 import { API_BASE_URL_Dictionaries, DictionaryClient } from "../../../core/api-clients/dictionaries-client";
 import { BaseInitializationService } from "../../../core/services/base-initialization.service";
 import { SiteSettingsService } from "../../../core/services/site-settings.service";
 import { DictionaryService } from "../../../core/services/dictionary.service";
-import { API_BASE_URL_AuditTrail } from "../../../core/api-clients/audit-trail-client";
 import { LocalDatePipe } from "../../../core/pipes/local-date.pipe";
 import { SharedModule } from "../../../core/shared.module";
 import {NightSkyComponent} from "../../common/background/night-sky/night-sky.component";
 import {CommonLoaderComponent} from "../../common/common-loader/common-loader.component";
 import {LoaderService} from "../../../core/services/loader.service";
 import {UserProjectsService} from "../../../core/services/entity-services/user-projects.service";
+import {GraphQlDictionariesService} from "../../../core/graph-ql/graph-ql-dictionaries.service";
+import {GraphQlService} from "../../../core/graph-ql/graph-ql.service";
+import {GraphQlAuthService} from "../../../core/graph-ql/graph-ql-auth.service";
+import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/auth-client";
 
 export const MY_FORMATS = {
   parse: {
@@ -55,7 +57,7 @@ export const MY_FORMATS = {
 
 registerLocaleData(localeEN, 'en');
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth/sign-in' },
   { path: 'profile', pathMatch: 'full', redirectTo: 'in-development' },
   { path: 'settings', pathMatch: 'full', redirectTo: 'in-development' },
@@ -122,7 +124,23 @@ const routes: Routes = [
     { provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl },
     { provide: API_BASE_URL_Expenses, useValue: environment.apiExpensesUrl },
     { provide: API_BASE_URL_Dictionaries, useValue: environment.apiDictionariesUrl },
-    { provide: API_BASE_URL_AuditTrail, useValue: environment.apiAuditTrailUrl },
+    //{ provide: API_BASE_URL_AuditTrail, useValue: environment.apiAuditTrailUrl },
+    {
+      provide: APOLLO_NAMED_OPTIONS,
+      useFactory: (httpLink: HttpLink) => {
+        return {
+          authGateway: {cache: new InMemoryCache(), link: httpLink.create({ uri: `${environment.apiAuthGatewayUrl}/graphql` }),},
+          localizations: {cache: new InMemoryCache(), link: httpLink.create({ uri: `${environment.apiLocalizationsUrl}/graphql` }),},
+          expenses: {cache: new InMemoryCache(), link: httpLink.create({ uri: `${environment.apiExpensesUrl}/graphql` }),},
+          dictionaries: {cache: new InMemoryCache(), link: httpLink.create({ uri: `${environment.apiDictionariesUrl}/graphql` }),},
+          auditTrail: {cache: new InMemoryCache(), link: httpLink.create({ uri: `${environment.apiAuditTrailUrl}/graphql` }),},
+        };
+      },
+      deps: [HttpLink],
+    },
+    GraphQlService,
+    GraphQlDictionariesService,
+    GraphQlAuthService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

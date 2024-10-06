@@ -3,6 +3,8 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommonModule.Facade;
 using FluentValidation;
+using GraphQL.MicrosoftDI;
+using GraphQL.Types;
 using Localizations.Domain;
 using Localizations.Mediatr;
 
@@ -23,6 +25,11 @@ builder.AddAuthorization();
 // validators
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
+
+//GraphQL
+// builder.Services.AddSingleton<ISchema, AuthGatewayGraphQLSchema>(services => new AuthGatewayGraphQLSchema(new SelfActivatingServiceProvider(services)));
+builder.AddGraphQL();
+
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile(new MappingLocalizationsProfile());
@@ -38,6 +45,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUI(builder);
+    app.UseGraphQLPlayground("/graphql/playground");
 }
 
 app.UseCors("AllowSpecificOrigins");
@@ -48,4 +56,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseTokenValidator();
 app.MapControllers();
+app.UseGraphQL();
+
 app.Run();

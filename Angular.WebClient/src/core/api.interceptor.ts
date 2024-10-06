@@ -7,6 +7,7 @@ import {selectToken} from "./store/selectors/auth.selectors";
 import {environment} from "./environments/environment";
 import {auth_clearAll} from "./store/actions/auth.actions";
 import {LocalStorageService} from "./services/local-storage.service";
+import {JwtTokenResponse} from "./api-clients/common-module.client";
 
 export const HTTP_METHODS = {
   GET: 'GET',
@@ -37,6 +38,10 @@ export class BaseUrlInterceptor implements HttpInterceptor {
       .pipe(
         take(1),
         switchMap((token) => {
+          if (!token) {
+            const localToken = localStorage.getItem('honk-token');
+            token = localToken ? JSON.parse(localToken) : undefined;
+          }
           if (token?.token) {
             request = request.clone({
               setHeaders: {

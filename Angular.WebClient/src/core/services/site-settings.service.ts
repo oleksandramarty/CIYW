@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {CacheVersionResponse, DictionaryClient, SiteSettingsResponse} from "../api-clients/dictionaries-client";
 import {LocalStorageService} from "./local-storage.service";
+import {CacheVersionResponse, SiteSettingsResponse} from "../api-clients/common-module.client";
 
 @Injectable({
     providedIn: "root"

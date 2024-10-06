@@ -13,6 +13,11 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
+        <PackageReference Include="GraphQL" Version="8.1.0" />
+        <PackageReference Include="GraphQL.MicrosoftDI" Version="8.1.0" />
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="8.0.3" />
+        <PackageReference Include="GraphQL.Server.Transports.WebSockets" Version="4.4.1" />
+        <PackageReference Include="GraphQL.Server.Ui.Playground" Version="8.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,6 +25,7 @@
       <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
       <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
       <ProjectReference Include="..\Dictionaries.Business\Dictionaries.Business.csproj" />
+      <ProjectReference Include="..\Dictionaries.GraphQL\Dictionaries.GraphQL.csproj" />
       <ProjectReference Include="..\Dictionaries.Mediatr\Dictionaries.Mediatr.csproj" />
     </ItemGroup>
 

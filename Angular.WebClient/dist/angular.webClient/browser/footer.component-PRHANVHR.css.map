@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/modules/common/common-app/footer/footer.component.scss"],
-  "sourcesContent": [".footer {\n  text-align: center;\n  font-size: 1.2em;\n  color: #555;\n  background-color: #f5f5f5;\n\n  .hint {\n    display: block;\n    margin-bottom: 10px;\n  }\n\n  .social-links {\n    a {\n      margin: 0 10px;\n      text-decoration: none;\n      color: #0073b1; /* LinkedIn color */\n\n      &:hover {\n        text-decoration: underline;\n      }\n    }\n  }\n}\n\n.version-wrapper {\n  position: fixed;\n  bottom: 0;\n  background-color: rgba(0, 0, 0, 0.54);\n  width: 100%;\n  text-align: center;\n  font-size: 0.8rem;\n  padding: 0.2rem;\n  color: white;\n}\n"],
-  "mappings": "AAAA,CAAA,OACE,WAAA,OACA,UAAA,MACA,MAAA,KACA,iBAAA,QAEA,CANF,OAME,CAAA,KACE,QAAA,MACA,cAAA,KAIA,CAZJ,OAYI,CAAA,aAAA,EAZJ,OAaM,EAAA,KACA,gBAAA,KACA,MAAA,QAEA,CAjBN,OAiBM,CALF,aAKE,CAAA,OACE,gBAAA,UAMR,CAAA,gBACE,SAAA,MACA,OAAA,EACA,iBAAA,UACA,MAAA,KACA,WAAA,OACA,UAAA,MA9BF,QA+BE,MACA,MAAA",
-  "names": []
-}

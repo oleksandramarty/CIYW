@@ -22,7 +22,7 @@ public interface IReadGenericRepository<TId, T, TDataContext>
         Expression<Func<T, bool>>? condition,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
     Task<ListWithIncludeResponse<TResponse>> GetListWithIncludeAsync<TResponse>(Expression<Func<T, bool>>? condition,
-        BaseFilterRequest<TId> filter,
+        BaseFilterRequest filter,
         CancellationToken cancellationToken,
         params Func<IQueryable<T>, IQueryable<T>>[]? includeFuncs);
 

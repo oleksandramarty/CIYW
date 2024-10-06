@@ -4,7 +4,6 @@ import { AuthService } from "./services/auth.service";
 import { Store } from "@ngrx/store";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {AuthState} from "./store/reducers/auth.reducer";
 import {selectToken} from "./store/selectors/auth.selectors";
 
 @Injectable({

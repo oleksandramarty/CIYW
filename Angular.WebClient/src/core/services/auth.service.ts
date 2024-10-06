@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable, of, Subject, switchMap, take, takeUntil} from 'rxjs';
+import {finalize, Observable, of, Subject, switchMap, take, takeUntil} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import { auth_clearAll, auth_setToken, auth_setUser } from "../store/actions/auth.actions";
 import { LocalizationService } from "./localization.service";
@@ -8,10 +8,12 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { handleApiError } from "../helpers/rxjs.helper";
 import {selectToken} from "../store/selectors/auth.selectors";
-import {AuthClient, AuthSignInRequest, JwtTokenResponse} from "../api-clients/auth-client";
-import {LocalizationClient} from "../api-clients/localizations-client";
 import {ConfirmationMessageComponent} from "../../modules/dialogs/confirmation-message/confirmation-message.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {GraphQlAuthService} from "../graph-ql/graph-ql-auth.service";
+import {JwtTokenResponse, UserResponse} from "../api-clients/common-module.client";
+import {LoaderService} from "./loader.service";
+import {AuthClient} from "../api-clients/auth-client";
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +37,8 @@ export class AuthService {
     private readonly authClient: AuthClient,
     private readonly store: Store,
     private dialog: MatDialog,
+    private readonly graphQlAuthService: GraphQlAuthService,
+    private readonly loaderService: LoaderService
   ) {
     this._token$ = this.store.select(selectToken);
   }
@@ -55,23 +59,24 @@ export class AuthService {
 
   public login(login: string, password: string, rememberMe: boolean, ngUnsubscribe: Subject<void>): void {
     const loginActon = () => {
-      this.authClient.auth_SignIn(new AuthSignInRequest({
-        login,
-        password,
-        rememberMe
-      })).pipe(
+      this.loaderService.isBusy = true;
+      this.graphQlAuthService.signIn(login, password, rememberMe).pipe(
           takeUntil(ngUnsubscribe),
-          switchMap((token) => {
+          switchMap((result) => {
+            const token = result?.data?.auth_gateway_sign_in as JwtTokenResponse;
             this.auth_setToken(token);
-            this.store.dispatch(auth_setToken({ token }));
-            return this.authClient.user_GetCurrentUser();
+            return this.graphQlAuthService.getCurrentUser();
           }),
-          tap((user) => {
+          tap((result) => {
+            const user = result?.data?.auth_gateway_current_user as UserResponse;
             this.store.dispatch(auth_setUser({ user }));
 
             this.router.navigate(['/dashboard']);
           }),
-          handleApiError(this.snackBar, this.localizationService)
+          handleApiError(this.snackBar, this.localizationService),
+          finalize(() => {
+            this.loaderService.isBusy = false;
+          })
       ).subscribe();
     }
 
@@ -111,9 +116,10 @@ export class AuthService {
   }
 
   private getCurrentUser(): void {
-    this.authClient.user_GetCurrentUser().pipe(
+    this.graphQlAuthService.getCurrentUser().pipe(
       take(1),
-      tap((user) => {
+      tap((result) => {
+        const user = result?.data?.auth_gateway_current_user as UserResponse;
         this.store.dispatch(auth_setUser({ user }));
       }),
       handleApiError(this.snackBar, this.localizationService)

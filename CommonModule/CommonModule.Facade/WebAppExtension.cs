@@ -1,15 +1,17 @@
 using System.Text;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using AuditTrail.Business;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using CommonModule.Core.Filters;
 using CommonModule.Core.Kafka;
 using CommonModule.Interfaces;
 using CommonModule.Repositories;
 using CommonModule.Repositories.Builders;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Responses;
+using CommonModule.Shared.Responses.Auth;
+using CommonModule.Shared.Responses.AuthGateway.Users;
+using CommonModule.Shared.Responses.Dictionaries;
+using GraphQL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +20,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Namotion.Reflection;
+using NJsonSchema;
+using NSwag.Generation.Processors;
+using NSwag.Generation.Processors.Contexts;
 using StackExchange.Redis;
 
 namespace CommonModule.Facade
@@ -28,9 +34,13 @@ namespace CommonModule.Facade
 
         public static void AddAuthorization(this WebApplicationBuilder builder)
         {
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AuthorizedPolicy", policy =>
+                    policy.RequireAuthenticatedUser());
+            });
         }
-        
+
         public static void AddJwtAuthentication(this WebApplicationBuilder builder)
         {
             byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Jwt:SecretKey"]);
@@ -62,8 +72,8 @@ namespace CommonModule.Facade
                 {
                     var tokenService = context.RequestServices.GetRequiredService<ITokenRepository>();
                     var token = context.Request.Headers["Authorization"].ToString().Split(' ').Last();
-                    
-                    if (!string.IsNullOrEmpty(token) && 
+
+                    if (!string.IsNullOrEmpty(token) &&
                         !await tokenService.IsTokenValidAsync(token))
                     {
                         var tokenFactory = context.RequestServices.GetRequiredService<IJwtTokenFactory>();
@@ -116,7 +126,8 @@ namespace CommonModule.Facade
 
         #region Databases
 
-        public static void AddDatabaseContext<TDataContext>(this WebApplicationBuilder builder, string dbName = "Database")
+        public static void AddDatabaseContext<TDataContext>(this WebApplicationBuilder builder,
+            string dbName = "Database")
             where TDataContext : DbContext
         {
             builder.Services.AddDbContext<TDataContext>(options =>
@@ -153,11 +164,11 @@ namespace CommonModule.Facade
 
             var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];
             builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
-            
+
             // Register Kafka services
             builder.Services.AddScoped<KafkaProducer>();
             builder.Services.AddScoped<IKafkaMessageService, KafkaMessageService>();
-            
+
             // Redis
             builder.Services.AddScoped<ITokenRepository, RedisTokenRepository>();
             builder.Services.AddScoped<ILocalizationRepository, RedisLocalizationRepository>();
@@ -172,11 +183,21 @@ namespace CommonModule.Facade
 
         #region Swagger
 
-        public static void AddSwagger(this WebApplicationBuilder builder)
+        public static void AddSwagger(this WebApplicationBuilder builder, bool addAdditionalTypes = false)
         {
             builder.Services.AddOpenApiDocument();
 
-            builder.Services.AddSwaggerDocument(config => { config.DocumentName = "swagger"; });
+            builder.Services.AddSwaggerDocument(
+                config =>
+                {
+                    config.DocumentName = "swagger";
+                    if (addAdditionalTypes)
+                    {
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<SiteSettingsResponse>());
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<JwtTokenResponse>());
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<UserResponse>());
+                    }
+                });
 
             string version = builder.Configuration.GetVersion();
             builder.Services.AddEndpointsApiExplorer();
@@ -220,7 +241,7 @@ namespace CommonModule.Facade
         public static void UseSwaggerUI(this IApplicationBuilder app, WebApplicationBuilder builder)
         {
             string version = builder.Configuration.GetVersion();
-            
+
             app.UseDeveloperExceptionPage();
             app.UseSwagger(options => options.SerializeAsV2 = true);
             app.UseSwaggerUI(c =>
@@ -228,12 +249,36 @@ namespace CommonModule.Facade
                     $"/swagger/{version}/swagger.json",
                     $"{builder.Configuration["Microservice:Title"]} v{version}"));
         }
-        
+
         private static string GetVersion(this IConfiguration configuration)
         {
             return configuration["Microservice:Version"];
         }
 
         #endregion
+
+        #region GraphQL
+
+        public static void AddGraphQL(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddGraphQL(options =>
+                options.ConfigureExecution((opt, next) =>
+                {
+                    opt.EnableMetrics = true;
+                    opt.ThrowOnUnhandledException = true;
+                    return next(opt);
+                }).AddSystemTextJson()
+            );
+        }
+
+        #endregion
+    }
+
+    public sealed class AddAdditionalTypeProcessor<T> : IDocumentProcessor where T : class
+    {
+        public void Process(DocumentProcessorContext context)
+        {
+            context.SchemaGenerator.Generate(typeof(T).ToContextualType(), context.SchemaResolver);
+        }
     }
 }

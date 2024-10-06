@@ -7,9 +7,9 @@ import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
-import {UserResponse} from "../../../../core/api-clients/auth-client";
 import {LocaleResponse} from "../../../../core/api-clients/localizations-client";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
+import {UserResponse} from "../../../../core/api-clients/common-module.client";
 
 @Component({
   selector: 'app-header',

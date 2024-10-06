@@ -18,14 +18,6 @@ public class AuthController: BaseController
         this.mediator = mediator;
     }
     
-    [HttpPost("sign-in")]
-    [ProducesResponseType(typeof(JwtTokenResponse), 200)]
-    public async Task<IActionResult> SignInAsync([FromBody]AuthSignInRequest request, CancellationToken cancellationToken)
-    {
-        JwtTokenResponse response = await this.mediator.Send(request, cancellationToken);
-        return Ok(response);
-    }
-    
     [HttpPost("sign-out")]
     [ProducesResponseType(typeof(void), 200)]
     public async Task<IActionResult> SignOutAsync(CancellationToken cancellationToken)

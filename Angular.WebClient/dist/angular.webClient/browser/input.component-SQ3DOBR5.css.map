@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/modules/common/common-input/input/input.component.scss"],
-  "sourcesContent": [".input-wrapper {\n}\n\nmat-hint {\n  opacity: 0.5;\n}\n\n.input-icon {\n  height: 1rem;\n  position: absolute;\n  right: 0rem;\n  top: 50%;\n  transform: translate(0rem, -50%);\n}\n\n.input-icon-wrapper {\n  position: relative;\n}\n"],
-  "mappings": "AAGA,SACE,QAAA,GAGF,CAAA,WACE,OAAA,KACA,SAAA,SACA,MAAA,KACA,IAAA,IACA,UAAA,WAAA,MAGF,CAAA,mBACE,SAAA",
-  "names": []
-}

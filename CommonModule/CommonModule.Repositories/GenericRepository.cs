@@ -97,7 +97,7 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
     
     public async Task<ListWithIncludeResponse<TResponse>> GetListWithIncludeAsync<TResponse>(
         Expression<Func<T, bool>>? condition,
-        BaseFilterRequest<TId> filter,
+        BaseFilterRequest filter,
         CancellationToken cancellationToken,
         params Func<IQueryable<T>, IQueryable<T>>[]? includeFuncs)
     {
@@ -119,7 +119,6 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
             .ApplyCondition(condition)
             .ApplySort(filter.Sort)
             .ApplyPagination(filter.Paginator)
-            .ApplyIdsFilter(filter.Ids)
             .ApplyDateRangeFilter(filter.DateRange)
             .Build();
 

@@ -8,8 +8,8 @@ import {
     LocalizationClient,
     LocalizationsResponse
 } from "../api-clients/localizations-client";
-import {SiteSettingsResponse} from "../api-clients/dictionaries-client";
 import {SiteSettingsService} from "./site-settings.service";
+import {SiteSettingsResponse} from "../api-clients/common-module.client";
 
 @Injectable({
     providedIn: 'root'
