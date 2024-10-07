@@ -1,0 +1,13 @@
+.loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffffa8;
+  z-index: 99999;
+}

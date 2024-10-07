@@ -1,0 +1,22 @@
+<div class="base-modal-container" *ngIf="userProjectForm">
+    <h2 mat-dialog-title *ngIf="userProject">{{ userProject.title }}</h2>
+    <h2 mat-dialog-title *ngIf="!userProject" [translation]="'USER_PROJECTS.CREATE_NEW'"></h2>
+    <div class="base-modal-body-container">
+            <app-input type="input" [label]="'COMMON.TITLE'" [formGroup]="userProjectForm" controlName="title"></app-input>
+            <app-input
+                    type="multiautocomplete"
+                    [label]="'COMMON.CURRENCY'"
+                    [multiMaxCount]="3"
+                    [formGroup]="userProjectForm" controlName="currencyIds"
+                    [dataItems]="currencies"></app-input>
+            <app-input type="checkbox" [label]="'COMMON.IS_ACTIVE'" [formGroup]="userProjectForm" controlName="isActive"></app-input>
+    </div>
+    <mat-dialog-actions>
+        <div class="mat-dialog-actions-container">
+            <button mat-button [translation]="'COMMON.CLOSE'" (click)="dialogRef.close(false)"></button>
+            <button mat-flat-button color="primary"
+                    [translation]="!!userProject ? 'COMMON.UPDATE' : 'COMMON.CREATE'"
+                    (click)="createOrUpdateUserProject()"></button>
+        </div>
+    </mat-dialog-actions>
+</div>

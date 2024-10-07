@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+      <UserSecretsId>177634ae-91c1-4f3e-b70f-4974fa2302f8</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.1.24451.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="GraphQL" Version="8.1.0" />
+        <PackageReference Include="GraphQL.MicrosoftDI" Version="8.1.0" />
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="8.0.3" />
+        <PackageReference Include="GraphQL.Server.Transports.WebSockets" Version="4.4.1" />
+        <PackageReference Include="GraphQL.Server.Ui.Playground" Version="8.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\AuthGateway\AuthGateway.Domain\AuthGateway.Domain.csproj" />
+      <ProjectReference Include="..\..\AuthGateway\AuthGateway.GraphQL\AuthGateway.GraphQL.csproj" />
+      <ProjectReference Include="..\..\AuthGateway\AuthGateway.Mediatr\AuthGateway.Mediatr.csproj" />
+    </ItemGroup>
+
+</Project>

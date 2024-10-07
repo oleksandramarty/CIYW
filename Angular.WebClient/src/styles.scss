@@ -1,0 +1,304 @@
+@use 'sass:math';
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "styles/_table.scss";
+@import "styles/_filter.scss";
+@import "styles/_dialog.scss";
+@import "styles/_grid.scss";
+
+html, body {
+  font-size: 16px;
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.flex-item {
+  display: inline;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.t-align-center {
+  text-align: center;
+}
+.t-align-left {
+  text-align: left;
+}
+.t-align-right {
+  text-align: right;
+}
+
+@for $i from 0 through 500 {
+  $formatted-i: if($i < 10, '00' + $i, if($i < 100, '0' + $i, $i));
+  $font-size: calc($i / 100);
+  .f-#{$formatted-i} {
+    font-size: #{$font-size}rem;
+  }
+}
+@for $i from 1 through 100 {
+  .ml-#{$i}per {
+    margin-left: #{$i}#{'%'} !important;
+  }
+}
+@for $i from 1 through 100 {
+  .mr-#{$i}per {
+    margin-right: #{$i}#{'%'} !important;
+  }
+}
+@for $i from 0 through 500 {
+  .ml-#{$i}p {
+    margin-left: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .mr-#{$i}p {
+    margin-right: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .mb-#{$i}p {
+    margin-bottom: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .mt-#{$i}p {
+    margin-top: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .m-#{$i}p {
+    margin: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .pl-#{$i}p {
+    padding-left: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .pr-#{$i}p {
+    padding-right: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .pb-#{$i}p {
+    padding-bottom: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .pt-#{$i}p {
+    padding-top: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  .p-#{$i}p {
+    padding: #{$i}px !important;
+  }
+}
+@for $i from 0 through 500 {
+  $formatted-i: if($i < 10, '00' + $i, if($i < 100, '0' + $i, $i));
+  .h-#{$formatted-i}p {
+    height: #{$i}px;
+  }
+}
+
+@for $i from 1 through 10 {
+  $opacity: math.div($i, 10);
+  $formatted-opacity: if($i < 10, '0' + $i, $i);
+
+  .opacity-#{$formatted-opacity} {
+    opacity: $opacity;
+  }
+}
+@for $i from 1 through 100 {
+  .w-#{$i} {
+    width: #{$i}#{'%'};
+  }
+}
+.f-bold {
+  font-weight: bold;
+}
+.d-inline {
+  display: inline;
+}
+.d-inline-block {
+  display: inline-block;
+}
+.d-block {
+  display: block;
+}
+.mat-datepicker-input {
+  width: calc(100% - 48px) !important;
+}
+mat-form-field {
+  min-width: 100px;
+  width: 100%;
+}
+.mdc-dialog__actions {
+  padding: 20px !important;
+}
+.d-flex {
+  display: flex;
+}
+.p-relative {
+  position: relative;
+}
+.success-message {
+  color: #4caf50;
+}
+.error-message {
+  color: #f44336;
+}
+.avatar {
+  border-radius: 50%;
+  width: 3rem;
+}
+.content-wrapper {
+  padding: 24px;
+  min-height: calc(100vh - 192px);
+}
+
+.custom-menu-header-position {
+  margin-top: 5px !important;
+}
+
+/* styles.css */
+
+.success {
+  color: #28a745; /* Green */
+}
+
+.warning {
+  color: #ffc107; /* Yellow */
+}
+
+.error {
+  color: #dc3545; /* Red */
+}
+
+.info {
+  color: #17a2b8; /* Blue */
+}
+
+mat-grid-tile {
+  background: lightblue;
+}
+
+.d-flex {
+  display: flex;
+  &-jc {
+    &-space-between {
+      justify-content: space-between;
+    }
+    &-space-around {
+      justify-content: space-around;
+    }
+    &-start {
+      justify-content: flex-start;
+    }
+    &-end {
+      justify-content: flex-end;
+    }
+  }
+}
+
+.hint {
+  font-size: 0.5em;
+  opacity: 0.75;
+  padding: 0px;
+  margin: 0px;
+}
+
+.page-content-wrapper {
+  margin: 0rem 0.5rem;
+  min-height: calc(100vh - 12rem);
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: calc(100% - 2rem);
+  padding: 0.5rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 10px;
+}
+@media (min-width: 600px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.mat-dialog{
+  &-body-container {
+    padding: 1rem 0rem;
+  }
+  &-actions-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+.currency {
+  margin-right: 0.5rem;
+  font-weight: bold;
+  &-title {
+    text-align: left;
+    font-size: 0.6rem;
+    opacity: 0.75;
+    margin-bottom: 1rem;
+  }
+}
+.amount {
+  color: #4caf50;
+  &.negative {
+    color: #f44336;
+  }
+  &.changed {
+    color: #ffc107;
+  }
+}
+.balance {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+}
+.filter-input-item .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+.row {
+  &-subitem{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    font-size: 0.6rem;
+    opacity: 0.75;
+  }
+  &-item-container {
+    position: relative;
+    padding-bottom: 0.6rem;
+  }
+}

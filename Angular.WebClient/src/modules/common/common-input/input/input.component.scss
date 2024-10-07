@@ -1,0 +1,34 @@
+.input-wrapper {
+}
+
+mat-hint {
+  opacity: 0.5;
+}
+
+.input-icon {
+  height: 1rem;
+  position: absolute;
+  right: 0rem;
+  top: 50%;
+  transform: translate(0rem, -50%);
+}
+
+.input-icon-wrapper {
+  position: relative;
+}
+span.select-description-hint {
+  display: block;
+  font-size: 0.6rem;
+  opacity: 0.5;
+  line-height: 0.6rem;
+}
+.autocomplete-item {
+  width: 0.2rem;
+  height: 1.5rem;
+  position: absolute;
+  left: 0.5rem;
+
+  &-container i {
+    margin-right: 0.5rem;
+  }
+}

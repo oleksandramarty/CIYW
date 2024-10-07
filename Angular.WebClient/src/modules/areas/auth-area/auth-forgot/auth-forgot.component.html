@@ -1,0 +1,24 @@
+<div class="auth-container">
+  <div class="auth-box auth-box-login">
+
+    <h2 class="mb-0p">Cash in your wallet</h2>
+    <span class="hint" translation="AUTH.BROKEN_HONKLER"></span>
+
+    <div class="p-10p">
+      <app-input type="input" [label]="'AUTH.LOGIN'"></app-input>
+      <app-input type="input" [label]="'AUTH.EMAIL'"></app-input>
+    </div>
+
+    <div class="d-flex d-flex-jc-end mb-30p mt-10p">
+      <button mat-flat-button color="primary" translation="AUTH.LETS_HONK"></button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="mt-30p">
+      <button mat-button routerLink="/auth/sign-in" translation="AUTH.BACK_TO_LOGIN"></button>
+    </div>
+  </div>
+</div>
+
+

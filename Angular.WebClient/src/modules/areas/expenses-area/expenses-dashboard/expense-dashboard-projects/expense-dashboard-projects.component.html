@@ -1,0 +1,32 @@
+<div class="table-container" *ngIf="userProjects">
+    <table class="mat-table">
+        <thead>
+        <tr class="mat-tr">
+            <th class="mat-th"></th>
+            <th class="mat-th" translation="COMMON.TITLE"></th>
+            <th class="mat-th" translation="COMMON.BALANCE"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-tr" *ngFor="let userProject of userProjects; let i=index;">
+            <td class="mat-td"><i class="fa-solid fa-eye pointer" (click)="openUserProject(userProject.id)"></i></td>
+            <td class="mat-td">{{ userProject.title }}</td>
+            <td class="mat-td">
+                <ng-container *ngFor="let balance of userProject.balances; let j=index">
+                    <span
+                            class="amount"
+                            style="margin-right: 0.5rem;"
+                            [ngClass]="{'negative': balance.amount < 0}">
+                        {{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}
+                    </span>
+                </ng-container>
+            </td>
+<!--            <td class="mat-td">-->
+<!--                <span class="utc-time-container">-->
+<!--                    123-->
+<!--                </span>-->
+<!--            </td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>

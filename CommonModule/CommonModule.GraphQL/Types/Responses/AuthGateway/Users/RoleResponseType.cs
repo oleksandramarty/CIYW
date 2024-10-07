@@ -1,0 +1,15 @@
+using CommonModule.Shared.Enums;
+using CommonModule.Shared.Responses.AuthGateway.Users;
+using GraphQL.Types;
+
+namespace CommonModule.GraphQL.Types.Responses.AuthGateway.Users;
+
+public class RoleResponseType : ObjectGraphType<RoleResponse>
+{
+    public RoleResponseType()
+    {
+        Field(x => x.Id);
+        Field(x => x.Title);
+        Field(x => x.UserRole, type: typeof(EnumerationGraphType<UserRoleEnum>));
+    }
+}
