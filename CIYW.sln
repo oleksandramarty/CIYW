@@ -80,6 +80,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionaries.GraphQL", "Dic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonModule.ModelGenerator", "CommonModule\CommonModule.ModelGenerator\CommonModule.ModelGenerator.csproj", "{3D81E867-A8C6-4CAE-AC16-2CD84E79942F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses.GraphQL", "Expenses\Expenses.GraphQL\Expenses.GraphQL.csproj", "{01D9A1CA-D4CB-4ACE-B9E2-962B99F19198}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +122,7 @@ Global
 		{181D64BF-75D3-4139-8F1B-20E8F97E0604} = {3CCA8818-CDBA-41D1-B1C2-8BB26E854E12}
 		{3F2888E6-B87A-47C4-97F2-72D0E4362EFF} = {34F63CC4-C57F-4B13-9873-A4C027215A46}
 		{3D81E867-A8C6-4CAE-AC16-2CD84E79942F} = {6FA52701-60FE-407F-BC12-67DE1B851940}
+		{01D9A1CA-D4CB-4ACE-B9E2-962B99F19198} = {64DB626E-A13D-4435-9416-36B795D47220}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3CBEF98E-1366-4763-8AAB-955A2DA5E201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -238,5 +241,9 @@ Global
 		{3D81E867-A8C6-4CAE-AC16-2CD84E79942F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D81E867-A8C6-4CAE-AC16-2CD84E79942F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D81E867-A8C6-4CAE-AC16-2CD84E79942F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01D9A1CA-D4CB-4ACE-B9E2-962B99F19198}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01D9A1CA-D4CB-4ACE-B9E2-962B99F19198}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01D9A1CA-D4CB-4ACE-B9E2-962B99F19198}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01D9A1CA-D4CB-4ACE-B9E2-962B99F19198}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

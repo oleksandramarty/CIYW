@@ -27,7 +27,6 @@ import { AuthGuard } from "../../../core/auth-guard";
 import { NotFoundComponent } from "../../common/common-app/not-found/not-found.component";
 import { InDevelopmentComponent } from "../../common/common-in-development/in-development/in-development.component";
 import { API_BASE_URL_Localizations, LocalizationClient } from "../../../core/api-clients/localizations-client";
-import { API_BASE_URL_Expenses, ExpenseClient } from "../../../core/api-clients/expenses-client";
 import { API_BASE_URL_Dictionaries, DictionaryClient } from "../../../core/api-clients/dictionaries-client";
 import { BaseInitializationService } from "../../../core/services/base-initialization.service";
 import { SiteSettingsService } from "../../../core/services/site-settings.service";
@@ -38,12 +37,13 @@ import {NightSkyComponent} from "../../common/background/night-sky/night-sky.com
 import {CommonLoaderComponent} from "../../common/common-loader/common-loader.component";
 import {LoaderService} from "../../../core/services/loader.service";
 import {UserProjectsService} from "../../../core/services/entity-services/user-projects.service";
-import {GraphQlDictionariesService} from "../../../core/graph-ql/graph-ql-dictionaries.service";
+import {GraphQlDictionariesService} from "../../../core/graph-ql/services/graph-ql-dictionaries.service";
 import {GraphQlService} from "../../../core/graph-ql/graph-ql.service";
-import {GraphQlAuthService} from "../../../core/graph-ql/graph-ql-auth.service";
+import {GraphQlAuthService} from "../../../core/graph-ql/services/graph-ql-auth.service";
 import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/auth-client";
-import {NoComplaintService} from "../../../core/services/no-complaint.service";
+import {CommonDialogService} from "../../../core/services/common-dialog.service";
 import {UserAreaModule} from "../user-area/user-area.module";
+import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -113,7 +113,7 @@ export const routes: Routes = [
     CommonLoaderComponent
   ],
   providers: [
-    NoComplaintService,
+    CommonDialogService,
     AuthService,
     BaseHttpService,
     BaseInitializationService,
@@ -124,15 +124,11 @@ export const routes: Routes = [
     LocalStorageService,
     AuthClient,
     LocalizationClient,
-    ExpenseClient,
     DictionaryClient,
     UserProjectsService,
-    // AuditTrailClient,
     { provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl },
     { provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl },
-    { provide: API_BASE_URL_Expenses, useValue: environment.apiExpensesUrl },
     { provide: API_BASE_URL_Dictionaries, useValue: environment.apiDictionariesUrl },
-    //{ provide: API_BASE_URL_AuditTrail, useValue: environment.apiAuditTrailUrl },
     {
       provide: APOLLO_NAMED_OPTIONS,
       useFactory: (httpLink: HttpLink) => {
@@ -149,6 +145,7 @@ export const routes: Routes = [
     GraphQlService,
     GraphQlDictionariesService,
     GraphQlAuthService,
+    GraphQlExpensesService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

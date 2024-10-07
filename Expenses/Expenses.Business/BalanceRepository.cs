@@ -33,7 +33,7 @@ public class BalanceRepository: IBalanceRepository
         using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(expense.BalanceId, expense.CategoryId, expense.Amount, false, cancellationToken);
+            await this.UpdateBalanceAsync(expense, false, cancellationToken);
             
             await this.dataContext.Expenses.AddAsync(expense, cancellationToken);
             await this.dataContext.SaveChangesAsync(cancellationToken);
@@ -55,8 +55,8 @@ public class BalanceRepository: IBalanceRepository
         using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(currentExpense.BalanceId, currentExpense.CategoryId, currentExpense.Amount, true, cancellationToken);
-            await this.UpdateBalanceAsync(newExpense.BalanceId, newExpense.CategoryId, newExpense.Amount, false, cancellationToken);
+            await this.UpdateBalanceAsync(currentExpense, true, cancellationToken);
+            await this.UpdateBalanceAsync(newExpense, false, cancellationToken);
             
             currentExpense.Title = newExpense.Title;
             currentExpense.CategoryId = newExpense.CategoryId;
@@ -84,7 +84,7 @@ public class BalanceRepository: IBalanceRepository
         using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(expense.BalanceId, expense.CategoryId, expense.Amount, true, cancellationToken);
+            await this.UpdateBalanceAsync(expense, true, cancellationToken);
             
             this.dataContext.Expenses.Remove(expense);
             await this.dataContext.SaveChangesAsync(cancellationToken);
@@ -99,25 +99,29 @@ public class BalanceRepository: IBalanceRepository
     }
 
     private async Task UpdateBalanceAsync(
-        Guid balanceId,
-        int categoryId,
-        decimal amount,
+        Expense expense,
         bool isRefund,
         CancellationToken cancellationToken)
     {
-        Balance? balance = await this.dataContext.Balances.FirstOrDefaultAsync(b => b.Id == balanceId, cancellationToken);
-        this.entityValidator.ValidateExist(balance, balanceId);
-        string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, categoryId);
+        Balance? balance = await this.dataContext.Balances.FirstOrDefaultAsync(b => b.Id == expense.BalanceId, cancellationToken);
+        this.entityValidator.ValidateExist(balance, expense.BalanceId);
+        string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, expense.CategoryId);
         this.entityValidator.ValidateExist(currentCategory);
+        
+        expense.BalanceBefore = balance.Amount;
+        decimal balanceAfter = 0.0m;
         
         if (isRefund)
         {
-            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount - amount : balance.Amount + amount;
+            balanceAfter = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount - expense.Amount : balance.Amount + expense.Amount;
         }
         else
         {
-            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount + amount : balance.Amount - amount;
+            balanceAfter = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
         }
+        
+        balance.Amount = balanceAfter;
+        expense.BalanceAfter = balanceAfter;
         
         this.dataContext.Balances.Update(balance);
     }

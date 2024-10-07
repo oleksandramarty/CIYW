@@ -1,5 +1,5 @@
 import {createAction, props} from "@ngrx/store";
-import {UserAllowedProjectResponse, UserProjectResponse} from "../../api-clients/expenses-client";
+import {UserAllowedProjectResponse, UserProjectResponse} from "../../api-clients/common-module.client";
 
 export const expenses_setUserProject = createAction('[Expenses] Set UserProject', props<{ userProject: UserProjectResponse }>());
 export const expenses_setUserProjects = createAction('[Expenses] Set UserProjects', props<{ userProjects: UserProjectResponse[] }>());

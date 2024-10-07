@@ -59,10 +59,11 @@
             <tr class="mat-tr">
                 <th class="mat-th"></th>
                 <th class="mat-th"></th>
-                <th class="mat-th" translation="COMMON.DATE"></th>
-                <th class="mat-th" translation="COMMON.COMMENT"></th>
-                <th class="mat-th" translation="COMMON.AMOUNT"></th>
-                <th class="mat-th" translation="COMMON.CATEGORY"></th>
+                <th class="mat-th" [translation]="'COMMON.DATE'"></th>
+                <th class="mat-th" [translation]="'COMMON.COMMENT'"></th>
+                <th class="mat-th" [translation]="'COMMON.AMOUNT'"></th>
+                <th class="mat-th"></th>
+                <th class="mat-th" [translation]="'COMMON.CATEGORY'"></th>
             </tr>
         </thead>
         <tbody>
@@ -70,12 +71,26 @@
             <td class="mat-td"><i class="fa-solid fa-pencil pointer" (click)="openCreateUpdateExpenseDialog(expense)"></i></td>
             <td class="mat-td"><i class="fa-solid fa-trash pointer" (click)="removeExpense(expense)"></i></td>
             <td class="mat-td">
-                <span class="utc-time-container">
-                    {{ expense.date | localDate:'MMMM dd, yyyy HH:mm' }} <span class="utc-container">{{utcTimeShift}}</span>
+                <span class="row-item-container">
+                    {{ expense.date | localDate:'MMMM dd, yyyy HH:mm' }} <span class="row-subitem">{{utcTimeShift}}</span>
                 </span>
             </td>
             <td class="mat-td">{{ expense.title }}</td>
-            <td class="mat-td amount" [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive}">{{ expense.amount | currency:currenciesMap?.get(4)?.code }}</td>
+            <td class="mat-td amount" [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive}">
+                {{ expense.amount | currency:currenciesMap?.get(Number(expense.balanceId))?.code }}
+            </td>
+
+            <td class="mat-td">
+                <span class="row-item-container">
+                    <span class="amount"
+                          [ngClass]="{'negative': expense.balanceBefore > expense.balanceAfter}"
+                    >{{ expense.balanceAfter | currency:currenciesMap?.get(Number(expense.balanceId))?.code }} </span>
+                    <span class="row-subitem amount"
+                          [ngClass]="{'negative': expense.balanceBefore < expense.balanceAfter}"
+                    >{{ expense.balanceBefore | currency:currenciesMap?.get(Number(expense.balanceId))?.code }}</span>
+                </span>
+
+            </td>
             <td class="mat-td"><span [translation]="categoriesMap?.get(expense.categoryId)?.title"></span></td>
         </tr>
         </tbody>

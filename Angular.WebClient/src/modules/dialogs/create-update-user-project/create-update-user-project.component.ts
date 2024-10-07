@@ -2,7 +2,6 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 import { Subject, takeUntil, tap } from "rxjs";
-import { CreateUserProjectCommand, ExpenseClient, UserProjectResponse } from "../../../core/api-clients/expenses-client";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CommonLoaderComponent } from "../../common/common-loader/common-loader.component";
@@ -16,7 +15,9 @@ import { LocalizationService } from "../../../core/services/localization.service
 import { handleApiError } from "../../../core/helpers/rxjs.helper";
 import { SharedModule } from "../../../core/shared.module";
 import {LoaderService} from "../../../core/services/loader.service";
-import {NoComplaintService} from "../../../core/services/no-complaint.service";
+import {CommonDialogService} from "../../../core/services/common-dialog.service";
+import {UserProjectResponse} from "../../../core/api-clients/common-module.client";
+import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
 
 @Component({
   selector: 'app-create-update-user-project',
@@ -50,9 +51,9 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly dictionaryService: DictionaryService,
     private readonly localizationService: LocalizationService,
-    private readonly expenseClient: ExpenseClient,
+    private readonly graphQlExpensesService: GraphQlExpensesService,
     private readonly loaderService: LoaderService,
-    private readonly noComplaintService: NoComplaintService,
+    private readonly commonDialogService: CommonDialogService,
   ) { }
 
   ngOnInit(): void {
@@ -92,11 +93,10 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
 
       this.loaderService.isBusy = true;
 
-      this.expenseClient.userProject_AddProject(new CreateUserProjectCommand({
-        title: this.userProjectForm.value.title,
-        currencyIds: this.userProjectForm.value.currencyIds.split(',').map(Number),
-        isActive: this.userProjectForm.value.isActive
-      }))
+      this.graphQlExpensesService.createUserProject(
+          this.userProjectForm.value.title,
+          this.userProjectForm.value.currencyIds.split(',').map(Number),
+          this.userProjectForm.value.isActive)
           .pipe(
               takeUntil(this.ngUnsubscribe),
               tap(() => {
@@ -108,6 +108,6 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
           ).subscribe();
     }
 
-    this.noComplaintService.showNoComplaintModal(createUserProjectAction)
+    this.commonDialogService.showNoComplaintModal(createUserProjectAction)
   }
 }

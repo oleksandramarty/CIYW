@@ -1,20 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {finalize, of, Subject, switchMap, take, takeUntil, tap} from "rxjs";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
-import {
-    BaseDateRangeFilterRequest,
-    BaseSortableRequest,
-    ExpenseClient, ExpenseResponse,
-    GetFilteredExpensesRequest, ListWithIncludeResponseOfExpenseResponse, PaginatorEntity,
-    UserProjectResponse
-} from "../../../../core/api-clients/expenses-client";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {selectExpensesState} from "../../../../core/store/selectors/expenses.selectors";
 import {Store} from "@ngrx/store";
-import {CategoryResponse, CurrencyResponse} from "../../../../core/api-clients/dictionaries-client";
 import {DictionaryMap} from "../../../../core/models/common/dictionarie.model";
 import {FormControl, FormGroup} from "@angular/forms";
 import {DataItem} from "../../../../core/models/common/data-item.model";
@@ -22,6 +14,14 @@ import {CreateUpdateExpenseComponent} from "../../../dialogs/create-update-expen
 import {ConfirmationMessageComponent} from "../../../dialogs/confirmation-message/confirmation-message.component";
 import {getUTCString, handleBaseDateRangeFilter} from "../../../../core/helpers/date-time.helper";
 import {LoaderService} from "../../../../core/services/loader.service";
+import {GraphQlExpensesService} from "../../../../core/graph-ql/services/graph-ql-expenses.service";
+import {CategoryResponse, CurrencyResponse} from "../../../../core/api-clients/dictionaries-client";
+import {
+    BaseSortableRequest, ColumnEnum, ExpenseResponse,
+    ListWithIncludeResponseOfExpenseResponse, OrderDirectionEnum,
+    PaginatorEntity, UserProjectResponse
+} from "../../../../core/api-clients/common-module.client";
+import {CommonDialogService} from "../../../../core/services/common-dialog.service";
 
 @Component({
     selector: 'app-user-project',
@@ -34,7 +34,7 @@ export class UserProjectComponent implements OnInit, OnDestroy {
     userProject: UserProjectResponse | undefined;
     expenses: ListWithIncludeResponseOfExpenseResponse | undefined;
     pagination: PaginatorEntity = new PaginatorEntity({pageSize: 10, pageNumber: 0, isFull: false});
-    sort: BaseSortableRequest = new BaseSortableRequest({column: 'Date', direction: 'desc'});
+    sort: BaseSortableRequest = new BaseSortableRequest({column: ColumnEnum.Date, direction: OrderDirectionEnum.Desc});
 
     public utcTimeShift: string = getUTCString();
 
@@ -58,13 +58,14 @@ export class UserProjectComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly dictionaryService: DictionaryService,
-        private readonly expenseClient: ExpenseClient,
         private snackBar: MatSnackBar,
         private dialog: MatDialog,
         private route: ActivatedRoute,
         private router: Router,
         private readonly store: Store,
-        private readonly loaderService: LoaderService
+        private readonly loaderService: LoaderService,
+        private readonly graphQlExpensesService: GraphQlExpensesService,
+        private readonly commonDialogService: CommonDialogService
     ) {
         this.route.paramMap
             .pipe(
@@ -126,21 +127,20 @@ export class UserProjectComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed()
-            .pipe(
-                takeUntil(this.ngUnsubscribe),
-                switchMap((result) => {
-                    return result ? this.expenseClient.expense_RemoveExpense(expense.id!) : of(false);
-                }),
-                tap((result) => {
-                    if (result) {
+        const removeExpenseAction = () => {
+            this.graphQlExpensesService.removeExpense(expense.id!)
+                .pipe(
+                    takeUntil(this.ngUnsubscribe),
+                    tap((result) => {
                         this.getExpenses();
                         this.getUserProjectFromApi();
-                    }
-                }),
-                handleApiError(this.snackBar)
-            )
-            .subscribe();
+                    }),
+                    handleApiError(this.snackBar)
+                )
+                .subscribe();
+        }
+
+        this.commonDialogService.showNoComplaintModal(removeExpenseAction);
     }
 
     private getUserProject(): void {
@@ -167,10 +167,11 @@ export class UserProjectComponent implements OnInit, OnDestroy {
 
     private getUserProjectFromApi(): void {
         this.loaderService.isBusy = true;
-        this.expenseClient.userProject_GetUserProject(this.userProjectId!)
+        this.graphQlExpensesService.getUserProjectById(this.userProjectId!)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
-                tap(userProject => {
+                tap(result => {
+                    const userProject = result?.data?.expenses_get_user_project_by_id as UserProjectResponse;
                     this.userProject = userProject;
                     this.getExpenses();
                     this.loaderService.isBusy = false;
@@ -189,16 +190,25 @@ export class UserProjectComponent implements OnInit, OnDestroy {
     public getExpenses(): void {
         this.loaderService.isBusy = true;
 
-        this.expenseClient.expense_GetFilteredExpenses(new GetFilteredExpensesRequest({
-            userProjectId: this.userProjectId!,
-            paginator: this.pagination,
-            sort: this.sort,
-            dateRange: handleBaseDateRangeFilter(this.filterFormGroup!.value?.dateRange),
-            query: this.filterFormGroup!.value?.query ?? '',
-            categoryIds: this.filterFormGroup!.value.categoryIds?.split(',').map(Number) ?? [],
-        })).pipe(
+        const dateRange = handleBaseDateRangeFilter(this.filterFormGroup!.value?.dateRange);
+
+        this.graphQlExpensesService.getFilteredExpenses(
+            dateRange?.startDate,
+            dateRange?.endDate,
+            undefined,
+            undefined,
+            this.pagination?.isFull ?? false,
+            this.pagination?.pageNumber ?? 1,
+            this.pagination?.pageSize ?? 10,
+            this.sort?.column ?? ColumnEnum.Date,
+            this.sort?.direction ?? OrderDirectionEnum.Desc,
+            this.filterFormGroup?.value?.query ?? '',
+            this.userProjectId!,
+            this.filterFormGroup?.value.categoryIds?.split(',').map(Number) ?? []
+        ).pipe(
             takeUntil(this.ngUnsubscribe),
-            tap(expenses => {
+            tap((result) => {
+                const expenses = result?.data?.expenses_get_filtered_expenses as ListWithIncludeResponseOfExpenseResponse;
                 this.expenses = expenses;
                 this.loaderService.isBusy = false;
             }),
@@ -206,4 +216,6 @@ export class UserProjectComponent implements OnInit, OnDestroy {
             finalize(() => this.loaderService.isBusy = false)
         ).subscribe();
     }
+
+    protected readonly Number = Number;
 }

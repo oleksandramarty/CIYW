@@ -1,10 +1,6 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using CommonModule.Interfaces;
-using CommonModule.Repositories.Builders;
-using CommonModule.Shared.Common;
-using CommonModule.Shared.Requests.Base;
-using CommonModule.Shared.Responses.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Repositories;
@@ -93,46 +89,6 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
         }
         
         return condition == null ? query : query.Where(condition);
-    }
-    
-    public async Task<ListWithIncludeResponse<TResponse>> GetListWithIncludeAsync<TResponse>(
-        Expression<Func<T, bool>>? condition,
-        BaseFilterRequest filter,
-        CancellationToken cancellationToken,
-        params Func<IQueryable<T>, IQueryable<T>>[]? includeFuncs)
-    {
-        IQueryable<T> query = dbSet;
-
-        if (includeFuncs != null)
-        {
-            foreach (var includeFunc in includeFuncs)
-            {
-                query = includeFunc(query);
-            }            
-        }
-        
-        long totalCountWithoutFilter = await query.LongCountAsync(cancellationToken);
-
-        var filterBuilder = new FilterBuilder<TId, T>(query);
-
-        IQueryable<T> queryResult = filterBuilder
-            .ApplyCondition(condition)
-            .ApplySort(filter.Sort)
-            .ApplyPagination(filter.Paginator)
-            .ApplyDateRangeFilter(filter.DateRange)
-            .Build();
-
-        long total = filterBuilder.GetTotalCount();
-
-        List<T> entities = await queryResult.ToListAsync(cancellationToken);
-
-        return new ListWithIncludeResponse<TResponse>
-        {
-            Entities = entities.Select(x => this.mapper.Map<T, TResponse>(x)).ToList(),
-            Paginator = filter?.Paginator,
-            TotalCount = total,
-            TotalCountWithoutFilter = totalCountWithoutFilter
-        };
     }
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken)

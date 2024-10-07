@@ -225,3 +225,7 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-400000000225;ua;USER_SETTINGS.NEW_CONFIRM_PASSWORD;Confirm new password;Підтвердити новий пароль;
 550e8400-e29b-41d4-a716-400000000226;ua;USER.MENU.SETTINGS.CHANGE_PASSWORD;Change password;Змінити пароль;
 550e8400-e29b-41d4-a716-400000000227;ua;USER_SETTINGS.ENTER_PASSWORD_TO_UPDATE;Enter password to update;Введіть пароль для оновлення;
+550e8400-e29b-41d4-a716-400000000228;ua;EXPENSES.TOTAL_EXPENSE;Total Expense;Загальна сума витрат;
+550e8400-e29b-41d4-a716-400000000229;ua;EXPENSES.MONTHLY_EXPENSE;Monthly Expense;Щомісячні витрати;
+550e8400-e29b-41d4-a716-400000000230;ua;EXPENSES.EXPENSE;Expense;Витрати;
+550e8400-e29b-41d4-a716-400000000231;ua;EXPENSES.INCOME;Income;Дохід;

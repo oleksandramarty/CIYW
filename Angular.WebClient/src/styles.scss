@@ -277,6 +277,9 @@ mat-grid-tile {
   &.negative {
     color: #f44336;
   }
+  &.changed {
+    color: #ffc107;
+  }
 }
 .balance {
   display: flex;
@@ -286,15 +289,15 @@ mat-grid-tile {
 .filter-input-item .mat-mdc-form-field-subscript-wrapper {
   display: none !important;
 }
-.utc {
-  &-container {
+.row {
+  &-subitem{
     position: absolute;
     bottom: 0px;
     right: 0px;
     font-size: 0.6rem;
     opacity: 0.75;
   }
-  &-time-container {
+  &-item-container {
     position: relative;
     padding-bottom: 0.6rem;
   }

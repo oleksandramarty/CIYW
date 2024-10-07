@@ -13,7 +13,6 @@ namespace CommonModule.GraphQL.Types.Responses.ListWithInclude
             Field<ListGraphType<PlannedExpenseResponseType>>("entities", resolve: context => context.Source.Entities);
             Field<PaginatorEntityType>("paginator", resolve: context => context.Source.Paginator);
             Field(x => x.TotalCount);
-            Field(x => x.TotalCountWithoutFilter);
         }
     }
 }

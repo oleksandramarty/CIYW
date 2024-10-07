@@ -2,9 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {DictionaryMap} from "../../../../../core/models/common/dictionarie.model";
 import {CurrencyResponse} from "../../../../../core/api-clients/dictionaries-client";
-import {UserAllowedProjectResponse, UserProjectResponse} from "../../../../../core/api-clients/expenses-client";
 import {DictionaryService} from "../../../../../core/services/dictionary.service";
 import {UserProjectsService} from "../../../../../core/services/entity-services/user-projects.service";
+import {UserAllowedProjectResponse, UserProjectResponse} from "../../../../../core/api-clients/common-module.client";
 
 @Component({
   selector: 'app-expense-dashboard-projects',

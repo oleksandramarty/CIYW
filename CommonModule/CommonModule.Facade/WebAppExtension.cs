@@ -5,12 +5,14 @@ using CommonModule.Core.Filters;
 using CommonModule.Core.Kafka;
 using CommonModule.Interfaces;
 using CommonModule.Repositories;
-using CommonModule.Repositories.Builders;
 using CommonModule.Shared.Constants;
-using CommonModule.Shared.Responses;
+using CommonModule.Shared.Requests.Base;
 using CommonModule.Shared.Responses.Auth;
 using CommonModule.Shared.Responses.AuthGateway.Users;
+using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Dictionaries;
+using CommonModule.Shared.Responses.Expenses.Models.Expenses;
+using CommonModule.Shared.Responses.Expenses.Models.Projects;
 using GraphQL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -153,7 +155,6 @@ namespace CommonModule.Facade
         {
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddScoped(typeof(FilterBuilder<,>));
             builder.Services.AddScoped(typeof(IEntityValidator<>), typeof(EntityValidator<>));
 
             builder.Services.AddScoped(typeof(IReadGenericRepository<,,>), typeof(GenericRepository<,,>));
@@ -196,6 +197,11 @@ namespace CommonModule.Facade
                         config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<SiteSettingsResponse>());
                         config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<JwtTokenResponse>());
                         config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<UserResponse>());
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<ListWithIncludeResponse<ExpenseResponse>>());
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<ListWithIncludeResponse<PlannedExpenseResponse>>());
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<BaseFilterRequest>());
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<UserAllowedProjectResponse>());
+                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<UserProjectResponse>());
                     }
                 });
 

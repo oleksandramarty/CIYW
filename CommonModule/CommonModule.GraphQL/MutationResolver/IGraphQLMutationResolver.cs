@@ -5,18 +5,16 @@ namespace CommonModule.GraphQL.MutationResolver;
 
 public interface IGraphQLMutationResolver
 {
-    void CreateEntity<TType, TInputType, TCommand, TEntity>(string name)
+    void CreateEntity<TInputType, TCommand>(GraphQLEndpoint endpoint)
+        where TCommand : IRequest
+        where TInputType : InputObjectGraphType;
+
+    void UpdateEntity<TInputType, TCommand, TId>(GraphQLEndpoint endpoint)
         where TCommand : IRequest
         where TInputType : InputObjectGraphType
-        where TType : ObjectGraphType;
+        where TId : ScalarGraphType;
 
-    void UpdateEntity<TType, TInputType, TCommand, TMapped, TEntity, TId>(string name)
-        where TCommand : IRequest
-        where TInputType : InputObjectGraphType
-        where TId : ScalarGraphType
-        where TType : ObjectGraphType<TMapped>;
-
-    void DeleteEntity<TCommand, TId>(string name)
-        where TCommand : IRequest
+    void DeleteEntity<TCommand, TId>(GraphQLEndpoint endpoint)
+        where TCommand : IRequest<bool>
         where TId : ScalarGraphType;
 }

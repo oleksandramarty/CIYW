@@ -21,10 +21,6 @@ public interface IReadGenericRepository<TId, T, TDataContext>
     IQueryable<T> GetQueryable(
         Expression<Func<T, bool>>? condition,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
-    Task<ListWithIncludeResponse<TResponse>> GetListWithIncludeAsync<TResponse>(Expression<Func<T, bool>>? condition,
-        BaseFilterRequest filter,
-        CancellationToken cancellationToken,
-        params Func<IQueryable<T>, IQueryable<T>>[]? includeFuncs);
 
     Task RemoveByIdAsync(TId id, CancellationToken cancellationToken);
 }

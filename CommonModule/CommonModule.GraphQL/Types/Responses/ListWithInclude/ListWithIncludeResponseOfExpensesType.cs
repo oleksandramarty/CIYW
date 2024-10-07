@@ -13,6 +13,5 @@ public class ListWithIncludeResponseOfExpensesType : ObjectGraphType<ListWithInc
         Field<ListGraphType<ExpenseResponseType>>("entities", resolve: context => context.Source.Entities);
         Field<PaginatorEntityType>("paginator", resolve: context => context.Source.Paginator);
         Field(x => x.TotalCount);
-        Field(x => x.TotalCountWithoutFilter);
     }
 }

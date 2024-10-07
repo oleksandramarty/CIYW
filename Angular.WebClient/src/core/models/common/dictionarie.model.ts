@@ -5,10 +5,11 @@ import {
 } from "../../api-clients/localizations-client";
 import {
     IVersionedListOfCountryResponse,
-    IVersionedListOfCurrencyResponse, IVersionedListOfFrequencyResponse,
+    IVersionedListOfCurrencyResponse,
+    IVersionedListOfFrequencyResponse,
     IVersionedListOfTreeNodeResponseOfCategoryResponse,
     VersionedListOfCountryResponse,
-    VersionedListOfCurrencyResponse,
+    VersionedListOfCurrencyResponse, VersionedListOfFrequencyResponse,
     VersionedListOfTreeNodeResponseOfCategoryResponse
 } from "../../api-clients/dictionaries-client";
 
@@ -77,5 +78,5 @@ export class Dictionary implements IDictionary {
     currencies: VersionedListOfCurrencyResponse | undefined;
     categories: VersionedListOfTreeNodeResponseOfCategoryResponse | undefined;
     locales: VersionedListOfLocaleResponse | undefined;
-    frequencies: IVersionedListOfFrequencyResponse | undefined;
+    frequencies: VersionedListOfFrequencyResponse | undefined;
 }

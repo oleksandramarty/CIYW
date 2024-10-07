@@ -1,4 +1,4 @@
-import {BaseDateRangeFilterRequest} from "../api-clients/expenses-client";
+import {BaseDateRangeFilterRequest} from "../api-clients/common-module.client";
 
 const getUserTimeShift = (): number => {
     const date = new Date();

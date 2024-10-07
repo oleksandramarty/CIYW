@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {ExpenseClient, UserAllowedProjectResponse, UserProjectResponse} from "../../api-clients/expenses-client";
 import {DictionaryService} from "../dictionary.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
@@ -13,6 +12,8 @@ import {
     CreateUpdateUserProjectComponent
 } from "../../../modules/dialogs/create-update-user-project/create-update-user-project.component";
 import {expenses_setUserAllowedProjects, expenses_setUserProjects} from "../../store/actions/expenses.actions";
+import {UserAllowedProjectResponse, UserProjectResponse} from "../../api-clients/common-module.client";
+import {GraphQlExpensesService} from "../../graph-ql/services/graph-ql-expenses.service";
 
 @Injectable({
     providedIn: "root"
@@ -22,12 +23,12 @@ export class UserProjectsService {
     private _userAllowedProjects: UserAllowedProjectResponse[] | undefined;
 
     constructor(
-        private readonly expenseClient: ExpenseClient,
         private snackBar: MatSnackBar,
         private dialog: MatDialog,
         private router: Router,
         private readonly store: Store,
-        private readonly loaderService: LoaderService
+        private readonly loaderService: LoaderService,
+        private readonly graphQlExpensesService: GraphQlExpensesService
     ) {
     }
 
@@ -84,15 +85,17 @@ export class UserProjectsService {
 
     private getUserProjects(ngUnsubscribe: Subject<void>): void {
         this.loaderService.isBusy = true;
-        this.expenseClient.userProject_GetProjects()
+        this.graphQlExpensesService.getUSerProjects()
             .pipe(
                 takeUntil(ngUnsubscribe),
-                switchMap(userProjects => {
+                switchMap((result) => {
+                    const userProjects = result?.data?.expenses_get_user_projects as UserProjectResponse[];
                     this._userProjects = userProjects;
                     this.store.dispatch(expenses_setUserProjects({ userProjects }));
-                    return this.expenseClient.userProject_GetAllowedProjects();
+                    return this.graphQlExpensesService.getUserAllowedProjects();
                 }),
-                tap(userAllowedProjects => {
+                tap((result) => {
+                    const userAllowedProjects = result?.data?.expenses_get_user_allowed_projects as UserAllowedProjectResponse[];
                     this._userAllowedProjects = userAllowedProjects;
                     this.store.dispatch(expenses_setUserAllowedProjects({ userAllowedProjects }));
                 }),

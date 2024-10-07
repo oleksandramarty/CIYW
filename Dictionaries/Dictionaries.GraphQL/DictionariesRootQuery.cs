@@ -6,14 +6,15 @@ using Dictionaries.Mediatr.Mediatr.Requests;
 
 namespace Dictionaries.GraphQL;
 
-public class DictionariesRootQuery: GraphQLQueryResolver
+public class DictionariesRootQuery : GraphQLQueryResolver
 {
     public DictionariesRootQuery()
     {
         this.GetResultForEmptyCommand<
-            SiteSettingsResponseType, 
-            GetSiteSettingsRequest, 
+            SiteSettingsResponseType,
+            SiteSettingsResponse,
+            GetSiteSettingsRequest,
             SiteSettingsResponse
         >(GraphQLEndpoints.SiteSettings);
     }
-}  
+}

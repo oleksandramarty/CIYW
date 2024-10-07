@@ -278,6 +278,8 @@ export class DictionaryService {
                         String(currency.id),
                         currency.titleEn,
                         `${currency.code} - ${currency.title}`,
+                        undefined,
+                        undefined,
                         [currency.titleEn, currency.code, currency.title],
                         true,
                         this._importantCurrencies.includes(currency.code)
@@ -295,7 +297,9 @@ export class DictionaryService {
                         category,
                         String(category.id),
                         category.title,
+                        category.isPositive ? 'EXPENSES.INCOME' : 'EXPENSES.EXPENSE',
                         category.icon,
+                        category.color,
                         this.localizationService.getAllTranslationsByKey(category.title) || []));
             });
         }
@@ -310,7 +314,9 @@ export class DictionaryService {
             originalValue: category.node,
             id: category.node?.id?.toString(),
             name: category.node?.title,
-            description: category.node?.icon,
+            description: category.node?.isPositive ? 'EXPENSES.INCOME' : 'EXPENSES.EXPENSE',
+            icon: category.node?.icon,
+            color: category.node?.color,
             isActive: category.node?.isActive,
             isImportant: false,
             children: category.node?.children ? this.mapCategories(category.node.children) : []

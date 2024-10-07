@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Expenses\Expenses.Mediatr\Expenses.Mediatr.csproj" />
         <ProjectReference Include="..\CommonModule.Core\CommonModule.Core.csproj"/>
     </ItemGroup>
 

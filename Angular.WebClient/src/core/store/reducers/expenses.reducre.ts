@@ -1,11 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
-import {UserAllowedProjectResponse, UserProjectResponse} from "../../api-clients/expenses-client";
 import {
     expenses_clearAll,
     expenses_clearUserAllowedProjects, expenses_clearUserProjects,
     expenses_setUserAllowedProjects, expenses_setUserProject,
     expenses_setUserProjects
 } from "../actions/expenses.actions";
+import {UserAllowedProjectResponse, UserProjectResponse} from "../../api-clients/common-module.client";
 
 export interface ExpensesState {
     userProjects: UserProjectResponse[] | undefined;

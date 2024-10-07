@@ -225,3 +225,7 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-200000000225;es;USER_SETTINGS.NEW_CONFIRM_PASSWORD;Confirm new password;Confirmar nueva contraseña;
 550e8400-e29b-41d4-a716-200000000226;es;USER.MENU.SETTINGS.CHANGE_PASSWORD;Change password;Cambiar contraseña;
 550e8400-e29b-41d4-a716-200000000227;es;USER_SETTINGS.ENTER_PASSWORD_TO_UPDATE;Enter password to update;Ingrese la contraseña para actualizar;
+550e8400-e29b-41d4-a716-200000000228;es;EXPENSES.TOTAL_EXPENSE;Total Expense;Gasto Total;
+550e8400-e29b-41d4-a716-200000000229;es;EXPENSES.MONTHLY_EXPENSE;Monthly Expense;Gasto Mensual;
+550e8400-e29b-41d4-a716-200000000230;es;EXPENSES.EXPENSE;Expense;Gasto;
+550e8400-e29b-41d4-a716-200000000231;es;EXPENSES.INCOME;Income;Ingreso;

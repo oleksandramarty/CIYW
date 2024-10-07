@@ -9,12 +9,6 @@ import { Subject, takeUntil, tap } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DictionaryService } from "../../../core/services/dictionary.service";
-import {
-    BalanceResponse, CreateOrUpdateExpenseCommand,
-    ExpenseClient,
-    ExpenseResponse,
-    UserProjectResponse
-} from "../../../core/api-clients/expenses-client";
 import { DictionaryDataItems, DictionaryMap } from "../../../core/models/common/dictionarie.model";
 import { DataItem } from "../../../core/models/common/data-item.model";
 import { LocalizationService } from "../../../core/services/localization.service";
@@ -22,8 +16,10 @@ import { provideNativeDateAdapter } from "@angular/material/core";
 import { handleApiError } from "../../../core/helpers/rxjs.helper";
 import { SharedModule } from "../../../core/shared.module";
 import {LoaderService} from "../../../core/services/loader.service";
+import {CommonDialogService} from "../../../core/services/common-dialog.service";
+import {BalanceResponse, ExpenseResponse, UserProjectResponse} from "../../../core/api-clients/common-module.client";
 import {CategoryResponse, CurrencyResponse} from "../../../core/api-clients/dictionaries-client";
-import {NoComplaintService} from "../../../core/services/no-complaint.service";
+import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
 
 @Component({
     selector: 'app-create-update-expense',
@@ -88,10 +84,10 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
         private readonly fb: FormBuilder,
         private readonly dictionaryService: DictionaryService,
         private readonly localizationService: LocalizationService,
-        private readonly expenseClient: ExpenseClient,
         private readonly currencyPipe: CurrencyPipe,
         private readonly loaderService: LoaderService,
-        private readonly noComplaintService: NoComplaintService,
+        private readonly commonDialogService: CommonDialogService,
+        private readonly graphQlExpensesService: GraphQlExpensesService
     ) {
         this.expense = data?.expense;
         this.userProject = data?.userProject;
@@ -137,23 +133,23 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const createExpenseAction = () => {
+        const createOrUpdateExpenseAction = () => {
             if (!this.expenseFormGroup) {
                 return;
             }
 
             this.loaderService.isBusy = true;
 
-            this.expenseClient.expense_CreateOrUpdateExpense(new CreateOrUpdateExpenseCommand({
-                id: this.expense?.id,
-                title: this.expenseFormGroup.value.title,
-                description: this.expenseFormGroup.value.description,
-                amount: Number(this.expenseFormGroup.value.amount),
-                date: this.expenseFormGroup.value.date,
-                categoryId: this.expenseFormGroup.value.categoryId,
-                userProjectId: this.userProject?.id!,
-                balanceId: this.expenseFormGroup.value.balanceId
-            })).pipe(
+            this.graphQlExpensesService.createOrUpdateExpense(
+                this.expense?.id,
+                this.expenseFormGroup.value.title,
+                this.expenseFormGroup.value.description,
+                Number(this.expenseFormGroup.value.amount),
+                this.expenseFormGroup.value.balanceId,
+                this.expenseFormGroup.value.date,
+                Number(this.expenseFormGroup.value.categoryId),
+                this.userProject?.id
+            ).pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap(() => {
                     this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', { duration: 3000 });
@@ -164,7 +160,7 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
             ).subscribe();
         }
 
-        this.noComplaintService.showNoComplaintModal(createExpenseAction);
+        this.commonDialogService.showNoComplaintModal(createOrUpdateExpenseAction);
 
     }
 }

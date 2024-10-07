@@ -10,16 +10,17 @@ using CommonModule.Shared.Responses.AuthGateway.Users;
 
 namespace AuthGateway.GraphQL;
 
-public class AuthGatewayRootQuery: GraphQLQueryResolver
+public class AuthGatewayRootQuery : GraphQLQueryResolver
 {
     public AuthGatewayRootQuery()
     {
         this.GetResultForEmptyCommand<
-            UserResponseType, 
-            GetCurrentUserRequest, 
+            UserResponseType,
+            UserResponse,
+            GetCurrentUserRequest,
             UserResponse
         >(GraphQLEndpoints.CurrentUser);
-        
+
         this.GetResultForNonEmptyCommand<
             AuthSignInRequestInputType,
             JwtTokenResponseType,

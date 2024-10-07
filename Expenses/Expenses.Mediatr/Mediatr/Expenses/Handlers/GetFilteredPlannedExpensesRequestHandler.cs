@@ -1,4 +1,5 @@
 using CommonModule.Core.Extensions;
+using CommonModule.Core.Strategies.GetFilteredResult;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
@@ -13,31 +14,25 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class GetFilteredPlannedExpensesRequestHandler: MediatrExpensesBase, IRequestHandler<GetFilteredPlannedExpensesRequest, ListWithIncludeResponse<PlannedExpenseResponse>>
 {
-    private readonly IReadGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository;
+    private readonly IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse> strategy;
 
     public GetFilteredPlannedExpensesRequestHandler(
         IAuthRepository authRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
+        IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse> strategy
     ): base(authRepository, entityValidator, userProjectRepository)
     {
-        this.plannedExpenseRepository = plannedExpenseRepository;
+        this.strategy = strategy;
     }
 
     public async Task<ListWithIncludeResponse<PlannedExpenseResponse>> Handle(GetFilteredPlannedExpensesRequest request, CancellationToken cancellationToken)
     {
         await this.CheckUserProjectByIdAsync(request.UserProjectId, cancellationToken);
         
-        request.DateRange.CheckOrApplyDefaultExpenseFilter();
+        request.CheckBaseFilter();
+        request.CategoryIds.CheckIds();
         
-        return await this.plannedExpenseRepository.GetListWithIncludeAsync<PlannedExpenseResponse>(
-            e => e.UserProjectId == request.UserProjectId && 
-                 (string.IsNullOrEmpty(request.Query) || 
-                  !string.IsNullOrEmpty(request.Query) && EF.Functions.Like(e.Title, $"%{request.Query}%") ||
-                  !string.IsNullOrEmpty(request.Query) && EF.Functions.Like(e.Description, $"%{request.Query}%")
-                 ),
-            request,
-            cancellationToken);
+        return await this.strategy.GetFilteredResultAsync(request, cancellationToken);
     }
 }

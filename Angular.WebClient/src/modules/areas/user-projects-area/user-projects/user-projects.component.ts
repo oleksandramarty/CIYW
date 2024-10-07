@@ -3,8 +3,8 @@ import {DictionaryService} from "../../../../core/services/dictionary.service";
 import {DictionaryMap} from "../../../../core/models/common/dictionarie.model";
 import {UserProjectsService} from "../../../../core/services/entity-services/user-projects.service";
 import {Subject} from "rxjs";
-import {UserAllowedProjectResponse, UserProjectResponse} from "../../../../core/api-clients/expenses-client";
 import {CurrencyResponse} from "../../../../core/api-clients/dictionaries-client";
+import {UserAllowedProjectResponse, UserProjectResponse} from "../../../../core/api-clients/common-module.client";
 
 @Component({
     selector: 'app-user-projects',

@@ -1,12 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject, switchMap, takeUntil, tap} from "rxjs";
-import {
-    ExpenseClient,
-    UserAllowedProjectResponse,
-    UserProjectResponse
-} from "../../../../core/api-clients/expenses-client";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {handleApiError} from "../../../../core/helpers/rxjs.helper";
+import {Component} from '@angular/core';
 
 interface Balance {
     currency: string;

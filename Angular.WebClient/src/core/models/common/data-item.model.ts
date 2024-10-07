@@ -5,12 +5,14 @@ import {
   ICurrencyResponse, IFrequencyResponse
 } from "../../api-clients/dictionaries-client";
 import {ILocaleResponse, LocaleResponse} from "../../api-clients/localizations-client";
-import {BalanceResponse, IBalanceResponse} from "../../api-clients/expenses-client";
+import {BalanceResponse, IBalanceResponse} from "../../api-clients/common-module.client";
 
 export interface IDataItem {
   id: string | undefined;
   name: string | undefined;
   description: string | undefined;
+  icon: string | undefined;
+  color: string | undefined;
   isActive: boolean | undefined;
   isImportant: boolean | undefined;
 
@@ -25,6 +27,8 @@ export class DataItem implements IDataItem {
   id: string | undefined;
   name: string | undefined;
   description: string | undefined;
+  icon: string | undefined;
+  color: string | undefined;
   isActive: boolean | undefined;
   isImportant: boolean | undefined;
 
@@ -39,6 +43,8 @@ export class DataItem implements IDataItem {
     id: string | undefined,
     name: string | undefined,
     description: string | undefined,
+    icon?: string | undefined,
+    color?: string | undefined,
     filteredFields: string[] | undefined = [],
     isActive: boolean | undefined = true,
     isImportant: boolean | undefined = false,
@@ -47,6 +53,8 @@ export class DataItem implements IDataItem {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.icon = icon;
+    this.color = color;
     this.isActive = isActive;
     this.isImportant = isImportant;
     this.children = children;

@@ -7,7 +7,7 @@ import {AuthService} from "./auth.service";
 import {take, tap} from "rxjs";
 import {handleApiError} from "../helpers/rxjs.helper";
 import {DictionaryClient} from "../api-clients/dictionaries-client";
-import {GraphQlDictionariesService} from "../graph-ql/graph-ql-dictionaries.service";
+import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
 import {SiteSettingsResponse} from "../api-clients/common-module.client";
 
 @Injectable({

@@ -11,6 +11,7 @@ microserviceClientApiClassName="CommonModuleClient"
 # Set the output directory and file name
 outputDir="$BASE_DIR/$microserviceName/$microserviceName.ModelGenerator"
 outputFileName="nswagconfig.nswag"
+outputClientFile="$BASE_DIR/Angular.WebClient/src/core/api-clients/$microserviceClientApiName"
 
 # Create the directory if it doesn't exist
 mkdir -p "$outputDir"
@@ -133,17 +134,24 @@ cat <<EOL > "$outputDir/$outputFileName"
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "$BASE_DIR/Angular.WebClient/src/core/api-clients/$microserviceClientApiName",
+      "output": "$outputClientFile",
       "newLineBehavior": "Auto"
     }
   }
 }
 EOL
 
+# Check if the client API file exists and remove it
+if [ -f "$outputClientFile" ]; then
+  rm "$outputClientFile"
+fi
+
 # Run nswag run in the output directory
 cd "$outputDir" && nswag run
 
-# Delete the output file
-rm "$outputFileName"
+# Check if the output file exists and remove it
+if [ -f "$outputFileName" ]; then
+  rm "$outputFileName"
+fi
 
-echo "Client API configuration for $microservice generated successfully."
+echo "Client API configuration for $microserviceName generated successfully."

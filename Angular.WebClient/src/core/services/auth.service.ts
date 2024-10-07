@@ -10,11 +10,11 @@ import { handleApiError } from "../helpers/rxjs.helper";
 import {selectToken} from "../store/selectors/auth.selectors";
 import {ConfirmationMessageComponent} from "../../modules/dialogs/confirmation-message/confirmation-message.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {GraphQlAuthService} from "../graph-ql/graph-ql-auth.service";
+import {GraphQlAuthService} from "../graph-ql/services/graph-ql-auth.service";
 import {JwtTokenResponse, UserResponse} from "../api-clients/common-module.client";
 import {LoaderService} from "./loader.service";
 import {AuthClient} from "../api-clients/auth-client";
-import {NoComplaintService} from "./no-complaint.service";
+import {CommonDialogService} from "./common-dialog.service";
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +39,7 @@ export class AuthService {
     private readonly store: Store,
     private readonly graphQlAuthService: GraphQlAuthService,
     private readonly loaderService: LoaderService,
-    private readonly noComplaintService: NoComplaintService
+    private readonly commonDialogService: CommonDialogService
   ) {
     this._token$ = this.store.select(selectToken);
   }
@@ -81,7 +81,7 @@ export class AuthService {
       ).subscribe();
     }
 
-    this.noComplaintService.showNoComplaintModal(loginActon);
+    this.commonDialogService.showNoComplaintModal(loginActon);
   }
 
   public logout(): void {
@@ -97,7 +97,7 @@ export class AuthService {
           ).subscribe();
     }
 
-    this.noComplaintService.showNoComplaintModal(logoutAction);
+    this.commonDialogService.showNoComplaintModal(logoutAction);
   }
 
   private getCurrentUser(): void {

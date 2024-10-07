@@ -225,3 +225,7 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-500000000225;ru;USER_SETTINGS.NEW_CONFIRM_PASSWORD;Confirm new password;Подтвердите новый пароль;
 550e8400-e29b-41d4-a716-500000000226;ru;USER.MENU.SETTINGS.CHANGE_PASSWORD;Change password;Изменить пароль;
 550e8400-e29b-41d4-a716-500000000227;ru;USER_SETTINGS.ENTER_PASSWORD_TO_UPDATE;Enter password to update;Введите пароль для обновления;
+550e8400-e29b-41d4-a716-500000000228;ru;EXPENSES.TOTAL_EXPENSE;Total Expense;Общие расходы;
+550e8400-e29b-41d4-a716-500000000229;ru;EXPENSES.MONTHLY_EXPENSE;Monthly Expense;Общие расходы;
+550e8400-e29b-41d4-a716-500000000230;ru;EXPENSES.EXPENSE;Expense;Расход;
+550e8400-e29b-41d4-a716-500000000231;ru;EXPENSES.INCOME;Income;Доход;

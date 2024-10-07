@@ -169,8 +169,12 @@
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                               (optionSelected)="onAutoCompleteChecked();">
                 <mat-option *ngFor="let item of filteredDataItems | async" [value]="item">
-                    <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant}"></span>
-                    <span class="select-description-hint" [translation]="item.description"></span>
+                    <div class="autocomplete-item-container">
+                        <i *ngIf="item.icon" [class]="item.icon"></i>
+                        <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant}"></span>
+                        <span class="autocomplete-item" *ngIf="item.color" [style]="'background-color: ' + item.color + ';'"></span>
+                        <span class="select-description-hint" [translation]="item.description"></span>
+                    </div>
                 </mat-option>
             </mat-autocomplete>
             <mat-hint align="end" *ngIf="!!multiMaxCount && type === 'multiautocomplete'"
