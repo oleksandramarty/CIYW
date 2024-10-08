@@ -1,3 +1,4 @@
+using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Requests.Base;
 using CommonModule.Shared.Responses.Base;
 using GraphQL.Types;
@@ -7,21 +8,21 @@ namespace CommonModule.GraphQL.QueryResolver;
 
 public interface IGraphQLQueryResolver
 {
-    void GetEntityById<TEntityTypeId, TEntityType, TEntityId, TCommand, TEntityResponse>(GraphQLEndpoint endpoint)
+    void GetEntityById<TEntityTypeId, TEntityType, TEntityId, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
         where TEntityType : ObjectGraphType<TEntityResponse>
         where TEntityTypeId : ScalarGraphType
-        where TCommand : IRequest<TEntityResponse>, new();
+        where TCommand : IBaseIdEntity<TEntityId>, IRequest<TCommandResponse>, new();
 
-    void GetResultForNonEmptyCommand<TInputType, TEntityResponseType, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
-        where TInputType: InputObjectGraphType
-        where TEntityResponseType: ObjectGraphType<TEntityResponse>
-        where TCommand: IRequest<TCommandResponse>, new();
-    
-    void GetFilteredEntities<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
-        where TEntityType : ObjectGraphType<ListWithIncludeResponse<TEntityResponse>>
-        where TCommand : IBaseFilterRequest, IRequest<ListWithIncludeResponse<TEntityResponse>>, new();
+    void GetResultForNonEmptyCommand<TEntityInputType, TEntityResponseType, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
+        where TEntityInputType : InputObjectGraphType
+        where TEntityResponseType : ObjectGraphType<TEntityResponse>
+        where TCommand : IRequest<TCommandResponse>, new();
 
-    void GetResultsForEmptyCommand<TEntityType, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
+    void GetResultForEmptyCommand<TEntityType, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
         where TEntityType : ObjectGraphType<TEntityResponse>
         where TCommand : IRequest<TCommandResponse>, new();
+
+    void GetFilteredEntities<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
+        where TEntityType : ObjectGraphType<FilteredListResponse<TEntityResponse>>
+        where TCommand : IBaseFilterRequest, IRequest<FilteredListResponse<TEntityResponse>>, new();
 }

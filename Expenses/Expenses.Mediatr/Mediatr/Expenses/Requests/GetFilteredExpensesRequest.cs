@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Requests;
 
-public class GetFilteredExpensesRequest: BaseFilterRequest, IRequest<ListWithIncludeResponse<ExpenseResponse>>
+public class GetFilteredExpensesRequest: BaseFilterRequest, IRequest<FilteredListResponse<ExpenseResponse>>
 {
     public Guid UserProjectId { get; set; }
     public BaseFilterIdsRequest<int> CategoryIds { get; set; }

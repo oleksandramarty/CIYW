@@ -23,11 +23,19 @@
                 [<strong [translation]="'COMMON.DO_NOT_STORE_ANY_SENSITIVE_DATA_HERE'"></strong>]
             </span>
             <span class="opacity-07"> | </span>
+            <span class="opacity-07 pointer"
+                  style="color: #ffc107;"
+                  (click)="turnOffLoader()">[<strong>Turn off loader</strong>]</span>
+            <span class="opacity-07"> | </span>
             <span class="opacity-07">[build: <strong>{{ buildVersion }}</strong>]</span>
             <span class="opacity-07"> | </span>
-            <span class="opacity-07 pointer" (click)="clearCache()">[<strong>Clear Cache</strong>]</span>
+            <span class="opacity-07 pointer"
+                  style="color: #ffc107;"
+                  (click)="clearCache()">[<strong>Clear Cache</strong>]</span>
             <span class="opacity-07"> | </span>
-            <span class="opacity-07 pointer" (click)="resetSite()">[<strong>Hard reset</strong>]</span>
+            <span class="opacity-07 pointer"
+                  style="color: #f44336;"
+                  (click)="resetSite()">[<strong>Hard reset</strong>]</span>
         </div>
     </div>
 </footer>

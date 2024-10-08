@@ -14,6 +14,7 @@ using CommonModule.Shared.Responses.Dictionaries;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
 using GraphQL;
+using GraphQL.Types;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -192,17 +193,7 @@ namespace CommonModule.Facade
                 config =>
                 {
                     config.DocumentName = "swagger";
-                    if (addAdditionalTypes)
-                    {
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<SiteSettingsResponse>());
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<JwtTokenResponse>());
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<UserResponse>());
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<ListWithIncludeResponse<ExpenseResponse>>());
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<ListWithIncludeResponse<PlannedExpenseResponse>>());
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<BaseFilterRequest>());
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<UserAllowedProjectResponse>());
-                        config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<UserProjectResponse>());
-                    }
+                    config.AddGraphQLModels(addAdditionalTypes);
                 });
 
             string version = builder.Configuration.GetVersion();
@@ -278,13 +269,5 @@ namespace CommonModule.Facade
         }
 
         #endregion
-    }
-
-    public sealed class AddAdditionalTypeProcessor<T> : IDocumentProcessor where T : class
-    {
-        public void Process(DocumentProcessorContext context)
-        {
-            context.SchemaGenerator.Generate(typeof(T).ToContextualType(), context.SchemaResolver);
-        }
     }
 }

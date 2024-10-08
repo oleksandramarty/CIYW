@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Dictionaries.Mediatr.Mediatr.Requests;
 
-public class GetCurrenciesRequest: BaseVersionEntity, IRequest<VersionedList<CurrencyResponse>>
+public class GetCurrenciesRequest: BaseVersionEntity, IRequest<VersionedListResponse<CurrencyResponse>>
 {
     
 }

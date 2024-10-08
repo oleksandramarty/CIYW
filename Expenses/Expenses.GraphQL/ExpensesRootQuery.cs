@@ -1,5 +1,6 @@
 using CommonModule.GraphQL;
 using CommonModule.GraphQL.QueryResolver;
+using CommonModule.GraphQL.Types.Responses.Expenses.Models.Expenses;
 using CommonModule.GraphQL.Types.Responses.Expenses.Models.Projects;
 using CommonModule.GraphQL.Types.Responses.ListWithInclude;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
@@ -16,12 +17,11 @@ public class ExpensesRootQuery: GraphQLQueryResolver
 {
     public ExpensesRootQuery()
     {
-        this.GetFilteredEntities<ListWithIncludeResponseOfExpensesType, ExpenseResponse, GetFilteredExpensesRequest>(GraphQLEndpoints.GetFilteredExpenses);
-        this.GetFilteredEntities<ListWithIncludeResponseOfPlannedExpensesType, PlannedExpenseResponse, GetFilteredPlannedExpensesRequest>(GraphQLEndpoints.GetFilteredPlannedExpenses);
+        this.GetFilteredEntities<FilteredListResponseOfGenericType<ExpenseResponse, ExpenseResponseType>, ExpenseResponse, GetFilteredExpensesRequest>(GraphQLEndpoints.GetFilteredExpenses);
+        this.GetFilteredEntities<FilteredListResponseOfGenericType<PlannedExpenseResponse, PlannedExpenseResponseType>, PlannedExpenseResponse, GetFilteredPlannedExpensesRequest>(GraphQLEndpoints.GetFilteredPlannedExpenses);
+        this.GetFilteredEntities<FilteredListResponseOfGenericType<UserProjectResponse, UserProjectResponseType>, UserProjectResponse, GetFilteredUserProjectsRequest>(GraphQLEndpoints.GetFilteredUserProjects);
+        this.GetFilteredEntities<FilteredListResponseOfGenericType<UserAllowedProjectResponse, UserAllowedProjectResponseType>, UserAllowedProjectResponse, GetFilteredUserAllowedProjectsRequest>(GraphQLEndpoints.GetFilteredUserAllowedProjects);
         
-        this.GetEntityById<ScalarGraphType, UserProjectResponseType, Guid, GetUserProjectByIdRequest, UserProjectResponse>(GraphQLEndpoints.GetUserProjectById);
-
-        this.GetResultsForEmptyCommand<UserProjectResponseType, UserProjectResponse, GetUserProjectsRequest, List<UserProjectResponse>>(GraphQLEndpoints.GetUserProjects);
-        this.GetResultsForEmptyCommand<UserAllowedProjectResponseType, UserAllowedProjectResponse, GetUserAllowedProjectsRequest, List<UserAllowedProjectResponse>>(GraphQLEndpoints.GetUserAllowedProjects);
+        this.GetEntityById<GuidGraphType, UserProjectResponseType, Guid, UserProjectResponse, GetUserProjectByIdRequest, UserProjectResponse>(GraphQLEndpoints.GetUserProjectById);
     }
 }  

@@ -12,4 +12,4 @@ namespace Dictionaries.Mediatr.Mediatr.Handlers;
 public class GetFrequenciesRequestHandler(
     IDictionaryRepository<int, Frequency, FrequencyResponse, DictionariesDataContext> dictionaryRepository)
     : MediatrDictionaryBase<GetFrequenciesRequest, int, Frequency, FrequencyResponse, DictionariesDataContext>(
-        dictionaryRepository), IRequestHandler<GetFrequenciesRequest, VersionedList<FrequencyResponse>>;
+        dictionaryRepository), IRequestHandler<GetFrequenciesRequest, VersionedListResponse<FrequencyResponse>>;

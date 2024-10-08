@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
 import {Store} from "@ngrx/store";
 import {auth_clearAll} from "../../../../core/store/actions/auth.actions";
+import {LoaderService} from "../../../../core/services/loader.service";
 
 @Component({
   selector: 'app-footer',
@@ -11,6 +12,7 @@ import {auth_clearAll} from "../../../../core/store/actions/auth.actions";
 export class FooterComponent {
   constructor(
       private readonly store: Store,
+      private readonly loaderService: LoaderService,
       private readonly localStorageService: LocalStorageService) {
   }
 
@@ -25,5 +27,9 @@ export class FooterComponent {
   public resetSite(): void {
     this.store.dispatch(auth_clearAll());
     this.localStorageService.clearLocalStorageAndRefresh(true);
+  }
+
+  public turnOffLoader(): void {
+    this.loaderService.isBusy = false;
   }
 }

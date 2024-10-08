@@ -13,8 +13,6 @@ public class ExpenseResponseType : ObjectGraphType<ExpenseResponse>
         Field(x => x.Title);
         Field(x => x.Description, nullable: true);
         Field(x => x.Amount);
-        Field(x => x.BalanceBefore);
-        Field(x => x.BalanceAfter);
         Field(x => x.BalanceId);
         Field(x => x.Date);
         Field(x => x.CategoryId);

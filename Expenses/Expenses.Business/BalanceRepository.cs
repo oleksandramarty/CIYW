@@ -64,6 +64,7 @@ public class BalanceRepository: IBalanceRepository
             currentExpense.Description = newExpense.Description;
             currentExpense.Amount = newExpense.Amount;
             currentExpense.Modified = DateTime.UtcNow;
+            currentExpense.BalanceId = newExpense.BalanceId;
             
             this.dataContext.Expenses.Update(currentExpense);
             await this.dataContext.SaveChangesAsync(cancellationToken);
@@ -108,20 +109,14 @@ public class BalanceRepository: IBalanceRepository
         string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, expense.CategoryId);
         this.entityValidator.ValidateExist(currentCategory);
         
-        expense.BalanceBefore = balance.Amount;
-        decimal balanceAfter = 0.0m;
-        
         if (isRefund)
         {
-            balanceAfter = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount - expense.Amount : balance.Amount + expense.Amount;
+            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount - expense.Amount : balance.Amount + expense.Amount;
         }
         else
         {
-            balanceAfter = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
+            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
         }
-        
-        balance.Amount = balanceAfter;
-        expense.BalanceAfter = balanceAfter;
         
         this.dataContext.Balances.Update(balance);
     }

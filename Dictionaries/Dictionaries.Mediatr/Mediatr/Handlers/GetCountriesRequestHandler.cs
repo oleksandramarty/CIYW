@@ -13,4 +13,4 @@ namespace Dictionaries.Mediatr.Mediatr.Handlers;
 public class GetCountriesRequestHandler(
     IDictionaryRepository<int, Country, CountryResponse, DictionariesDataContext> dictionaryRepository)
     : MediatrDictionaryBase<GetCountriesRequest, int, Country, CountryResponse, DictionariesDataContext>(
-        dictionaryRepository), IRequestHandler<GetCountriesRequest, VersionedList<CountryResponse>>;
+        dictionaryRepository), IRequestHandler<GetCountriesRequest, VersionedListResponse<CountryResponse>>;

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Dictionaries.Mediatr.Mediatr.Requests;
 
-public class GetFrequenciesRequest: BaseVersionEntity, IRequest<VersionedList<FrequencyResponse>>
+public class GetFrequenciesRequest: BaseVersionEntity, IRequest<VersionedListResponse<FrequencyResponse>>
 {
     
 }

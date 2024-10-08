@@ -45,10 +45,10 @@ public class LocalizationController : BaseController
     }
 
     [HttpPost("locales")]
-    [ProducesResponseType(typeof(VersionedList<LocaleResponse>), 200)]
+    [ProducesResponseType(typeof(VersionedListResponse<LocaleResponse>), 200)]
     public async Task<IActionResult> GetLocalesAsync([FromBody]GetLocalesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<LocaleResponse> response = await this.mediator.Send(request, cancellationToken);
+        VersionedListResponse<LocaleResponse> response = await this.mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }

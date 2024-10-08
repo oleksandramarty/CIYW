@@ -15,4 +15,4 @@ namespace Localizations.Mediatr.Mediatr.Locations.Handlers;
 public class GetLocalesRequestHandler(
     IDictionaryRepository<int, Locale, LocaleResponse, LocalizationsDataContext> dictionaryRepository)
     : MediatrDictionaryBase<GetLocalesRequest, int, Locale, LocaleResponse, LocalizationsDataContext>(
-        dictionaryRepository), IRequestHandler<GetLocalesRequest, VersionedList<LocaleResponse>>;
+        dictionaryRepository), IRequestHandler<GetLocalesRequest, VersionedListResponse<LocaleResponse>>;

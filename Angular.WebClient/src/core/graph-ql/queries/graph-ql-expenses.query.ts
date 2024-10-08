@@ -36,8 +36,6 @@ export const GET_FILTERED_EXPENSES = gql`
                 title
                 description
                 amount
-                balanceBefore
-                balanceAfter
                 balanceId
                 date
                 categoryId
@@ -91,8 +89,6 @@ export const GET_FILTERED_PLANNED_EXPENSES = gql`
                 title
                 description
                 amount
-                balanceBefore
-                balanceAfter
                 categoryId
                 balanceId
                 startDate
@@ -137,15 +133,44 @@ export const CREATE_EXPENSE = gql`
     }
 `;
 
+export const CREATE_PLANNED_EXPENSE = gql`
+    mutation CreatePlannedExpense(
+        $title: String!,
+        $description: String,
+        $amount: Decimal!,
+        $categoryId: Int!,
+        $balanceId: ID!,
+        $startDate: DateTime!,
+        $endDate: DateTime,
+        $userProjectId: ID!,
+        $frequencyId: Int!,
+        $isActive: Boolean!
+    ) {
+        expenses_create_planned_expense(
+            input: {
+                title: $title,
+                description: $description,
+                amount: $amount,
+                categoryId: $categoryId,
+                balanceId: $balanceId,
+                startDate: $startDate,
+                endDate: $endDate,
+                userProjectId: $userProjectId,
+                frequencyId: $frequencyId,
+                isActive: $isActive
+            }
+        )
+    }
+`;
+
 export const UPDATE_EXPENSE = gql`
     mutation CreateOrUpdateExpenseInput(
-        $id: ID!,
+        $id: Guid!,
         $title: String!,
         $description: String,
         $amount: Decimal!,
         $date: DateTime!,
         $categoryId: Int!,
-        $userProjectId: ID!,
         $balanceId: ID!
     ) {
         expenses_update_expense(
@@ -156,35 +181,62 @@ export const UPDATE_EXPENSE = gql`
                 amount: $amount,
                 date: $date,
                 categoryId: $categoryId,
-                userProjectId: $userProjectId,
                 balanceId: $balanceId
             }
         )
     }
 `;
 
+export const UPDATE_PLANNED_EXPENSE = gql`
+    mutation UpdatePlannedExpense(
+        $id: Guid!,
+        $title: String!,
+        $description: String,
+        $amount: Decimal!,
+        $categoryId: Int!,
+        $balanceId: ID!,
+        $startDate: DateTime!,
+        $endDate: DateTime,
+        $frequencyId: Int!,
+        $isActive: Boolean!
+    ) {
+        expenses_update_planned_expense(
+            id: $id,
+            input: {
+                title: $title,
+                description: $description,
+                amount: $amount,
+                categoryId: $categoryId,
+                balanceId: $balanceId,
+                startDate: $startDate,
+                endDate: $endDate,
+                frequencyId: $frequencyId,
+                isActive: $isActive
+            }
+        )
+    }
+`;
+
 export const REMOVE_EXPENSE = gql`
-    mutation RemoveExpense($id: ID!) {
+    mutation RemoveExpense($id: Guid!) {
         expenses_remove_expense(id: $id)
-        {
-            success
-        }
+    }
+`;
+
+export const REMOVE_PLANNED_EXPENSE = gql`
+    mutation RemovePlannedExpense($id: Guid!) {
+        expenses_remove_planned_expense(id: $id)
     }
 `;
 
 export const CREATE_USER_PROJECT = gql`
     mutation CreateUserProjectInput($title: String!, $isActive: Boolean!, $currencyIds: [Int!]!) {
-        expenses_create_user_project(input: { title: $title, isActive: $isActive, currencyIds: $currencyIds }) {
-            id
-            title
-            isActive
-            currencyIds
-        }
+        expenses_create_user_project(input: { title: $title, isActive: $isActive, currencyIds: $currencyIds })
     }
 `;
 
 export const GET_USER_PROJECT_BY_ID = gql`
-    query GetUserProjectById($id: ID!) {
+    query GetUserProjectById($id: Guid) {
         expenses_get_user_project_by_id(id: $id) {
             id
             title
@@ -193,7 +245,7 @@ export const GET_USER_PROJECT_BY_ID = gql`
             balances {
                 id
                 amount
-                currency
+                currencyId
                 created
                 modified
             }
@@ -204,33 +256,32 @@ export const GET_USER_PROJECT_BY_ID = gql`
     }
 `;
 
-export const GET_USER_PROJECTS = gql`
-    query GetUserProjects {
-        expenses_get_user_projects {
-            id
-            title
-            isActive
-            createdUserId
-            balances {
-                id
-                amount
-                currency
-                created
-                modified
-            }
-            version
-            created
-            modified
-        }
-    }
-`;
-
-export const GET_USER_ALLOWED_PROJECTS = gql`
-    query GetUserAllowedProjects {
-        expenses_get_user_allowed_projects {
-            id
-            userProjectId
-            userProject {
+export const GET_FILTERED_USER_PROJECTS = gql`
+    query GetFilteredUserProjects(
+        $isFull: Boolean,
+        $pageNumber: Int,
+        $pageSize: Int,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
+        $column: String,
+        $direction: String,
+        $query: String,
+        $amountFrom: Decimal,
+        $amountTo: Decimal
+    ) {
+        expenses_get_filtered_user_projects(
+            isFull: $isFull,
+            pageNumber: $pageNumber,
+            pageSize: $pageSize,
+            dateFrom: $dateFrom,
+            dateTo: $dateTo,
+            column: $column,
+            direction: $direction,
+            query: $query,
+            amountFrom: $amountFrom,
+            amountTo: $amountTo
+        ) {
+            entities {
                 id
                 title
                 isActive
@@ -238,7 +289,7 @@ export const GET_USER_ALLOWED_PROJECTS = gql`
                 balances {
                     id
                     amount
-                    currency
+                    currencyId
                     created
                     modified
                 }
@@ -246,9 +297,69 @@ export const GET_USER_ALLOWED_PROJECTS = gql`
                 created
                 modified
             }
-            userId
-            isReadOnly
+            paginator {
+                pageNumber
+                pageSize
+                isFull
+            }
+            totalCount
         }
     }
 `;
 
+export const GET_FILTERED_USER_ALLOWED_PROJECTS = gql`
+    query GetFilteredUserAllowedProjects(
+        $isFull: Boolean,
+        $pageNumber: Int,
+        $pageSize: Int,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
+        $column: String,
+        $direction: String,
+        $query: String,
+        $amountFrom: Decimal,
+        $amountTo: Decimal
+    ) {
+        expenses_get_filtered_user_allowed_projects(
+            isFull: $isFull,
+            pageNumber: $pageNumber,
+            pageSize: $pageSize,
+            dateFrom: $dateFrom,
+            dateTo: $dateTo,
+            column: $column,
+            direction: $direction,
+            query: $query,
+            amountFrom: $amountFrom,
+            amountTo: $amountTo
+        ) {
+            entities {
+                id
+                userProjectId
+                userProject {
+                    id
+                    title
+                    isActive
+                    createdUserId
+                    balances {
+                        id
+                        amount
+                        currencyId
+                        created
+                        modified
+                    }
+                    version
+                    created
+                    modified
+                }
+                userId
+                isReadOnly
+            }
+            paginator {
+                pageNumber
+                pageSize
+                isFull
+            }
+            totalCount
+        }
+    }
+`;

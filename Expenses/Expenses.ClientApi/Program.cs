@@ -4,11 +4,13 @@ using Autofac.Extensions.DependencyInjection;
 using CommonModule.Core.Strategies.GetFilteredResult;
 using CommonModule.Facade;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
+using CommonModule.Shared.Responses.Expenses.Models.Projects;
 using Expenses.Business;
 using Expenses.Domain;
 using Expenses.GraphQL;
 using Expenses.Mediatr;
 using Expenses.Mediatr.Mediatr.Expenses.Requests;
+using Expenses.Mediatr.Mediatr.Projects.Requests;
 using Expenses.Mediatr.Strategies.GetFilteredResult;
 using Expenses.Mediatr.Validators.Expenses;
 using Expenses.Mediatr.Validators.Projects;
@@ -31,7 +33,10 @@ builder.Services.AddControllers();
 builder.AddAuthorization();
 
 // validators
-builder.Services.AddValidatorsFromAssemblyContaining<CreateOrUpdateExpenseCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateExpenseCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreatePlannedExpenseCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdatePlannedExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProjectCommandValidator>();
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
@@ -49,6 +54,8 @@ builder.Services.AddAutoMapper(config =>
 // Strategies
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>, GetFilteredResultOfExpenseStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse>, GetFilteredResultOfPlannedExpenseStrategy>();
+builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>, GetFilteredResultOfUserProjectStrategy>();
+builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>, GetFilteredResultOfUserAllowedProjectStrategy>();
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));

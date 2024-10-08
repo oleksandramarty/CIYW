@@ -8,7 +8,6 @@ import {selectUser} from "../../../../core/store/selectors/auth.selectors";
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {Store} from "@ngrx/store";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
-import {VersionedListOfLocaleResponse} from "../../../../core/api-clients/localizations-client";
 import {DataItem} from "../../../../core/models/common/data-item.model";
 
 @Component({

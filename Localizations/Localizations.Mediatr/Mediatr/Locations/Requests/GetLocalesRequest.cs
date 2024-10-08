@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Localizations.Mediatr.Mediatr.Locations.Requests;
 
-public class GetLocalesRequest: BaseVersionEntity, IRequest<VersionedList<LocaleResponse>>
+public class GetLocalesRequest: BaseVersionEntity, IRequest<VersionedListResponse<LocaleResponse>>
 {
     
 }

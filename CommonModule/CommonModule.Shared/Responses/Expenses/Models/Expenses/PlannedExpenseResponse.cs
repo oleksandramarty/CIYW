@@ -11,6 +11,7 @@ public class PlannedExpenseResponse: BaseDateTimeEntity<Guid>, IActivatable, IBa
     public int CategoryId { get; set; }
     public Guid BalanceId { get; set; }
     public DateTime StartDate { get; set; }
+    public DateTime NextDate { get; set; }
     public DateTime? EndDate { get; set; }
     
     public Guid UserId { get; set; }

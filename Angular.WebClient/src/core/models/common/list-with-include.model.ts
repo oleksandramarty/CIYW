@@ -1,12 +1,12 @@
 import { IPaginatorModel, PaginatorModel } from "./paginator.model";
 
-export interface IListWithIncludeModel<T> {
+export interface IFilteredListModel<T> {
   entities: T[] | undefined;
   paginator: IPaginatorModel | undefined;
   totalCount: number | undefined;
 }
 
-export class ListWithIncludeModel<T> implements IListWithIncludeModel<T> {
+export class FilteredListModel<T> implements IFilteredListModel<T> {
   entities: T[] | undefined;
   paginator: PaginatorModel | undefined;
   totalCount: number | undefined;

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class GetFilteredPlannedExpensesRequestHandler: MediatrExpensesBase, IRequestHandler<GetFilteredPlannedExpensesRequest, ListWithIncludeResponse<PlannedExpenseResponse>>
+public class GetFilteredPlannedExpensesRequestHandler: MediatrExpensesBase, IRequestHandler<GetFilteredPlannedExpensesRequest, FilteredListResponse<PlannedExpenseResponse>>
 {
     private readonly IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse> strategy;
 
@@ -26,7 +26,7 @@ public class GetFilteredPlannedExpensesRequestHandler: MediatrExpensesBase, IReq
         this.strategy = strategy;
     }
 
-    public async Task<ListWithIncludeResponse<PlannedExpenseResponse>> Handle(GetFilteredPlannedExpensesRequest request, CancellationToken cancellationToken)
+    public async Task<FilteredListResponse<PlannedExpenseResponse>> Handle(GetFilteredPlannedExpensesRequest request, CancellationToken cancellationToken)
     {
         await this.CheckUserProjectByIdAsync(request.UserProjectId, cancellationToken);
         

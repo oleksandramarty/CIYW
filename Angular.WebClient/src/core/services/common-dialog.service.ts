@@ -1,11 +1,18 @@
 import {Injectable} from "@angular/core";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ConfirmationMessageComponent} from "../../modules/dialogs/confirmation-message/confirmation-message.component";
-import {take} from "rxjs";
+import {take, takeUntil} from "rxjs";
 import {tap} from "rxjs/operators";
 import {handleApiError} from "../helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LocalizationService} from "./localization.service";
+import {
+    CreateUpdateExpenseComponent
+} from "../../modules/dialogs/create-update-expense/create-update-expense.component";
+import {ExpenseResponse, PlannedExpenseResponse, UserProjectResponse} from "../api-clients/common-module.client";
+import {
+    CreateUpdatePlannedExpenseComponent
+} from "../../modules/dialogs/create-update-planned-expense/create-update-planned-expense.component";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +26,7 @@ export class CommonDialogService {
     }
 
     public showNoComplaintModal(executableAction: () => void): void {
-        this._handeExecutableAction(this._getNoComplaintModal(), executableAction);
+        this._handeExecutableAction<ConfirmationMessageComponent>(this._getNoComplaintModal(), executableAction);
     }
 
     private _getNoComplaintModal(): MatDialogRef<ConfirmationMessageComponent, any> {
@@ -39,16 +46,16 @@ export class CommonDialogService {
     }
 
     public showRemoveExpenseConfirmationModal(executableAction: () => void): void {
-        this._handeExecutableAction(this._getRemoveExpenseConfirmationModal(), executableAction);
+        this._handeExecutableAction<ConfirmationMessageComponent>(this._getRemoveExpenseConfirmationModal(), executableAction);
     }
 
     private _getRemoveExpenseConfirmationModal(): MatDialogRef<ConfirmationMessageComponent, any> {
-        return this._getConfirmationModal('EXPENSES.DELETE_EXPENSE', ['EXPENSES.DELETE_EXPENSE_CONFIRMATION']);
+        return this._getConfirmationModal();
     }
 
     private _getConfirmationModal(
-        title: string,
-        descriptions: string[],
+        title: string = 'DIALOG.DELETE_TITLE',
+        descriptions: string[] = ['DIALOG.DELETE_DESCRIPTION;'],
         yesBtn: string = 'COMMON.YES',
         noBtn: string = 'COMMON.NO'): MatDialogRef<ConfirmationMessageComponent, any> {
         return this.dialog.open(ConfirmationMessageComponent, {
@@ -63,7 +70,7 @@ export class CommonDialogService {
         });
     }
 
-    private _handeExecutableAction(dialogRef: MatDialogRef<ConfirmationMessageComponent, any>, executableAction: () => void): void {
+    private _handeExecutableAction<TDialogRef>(dialogRef: MatDialogRef<TDialogRef, any>, executableAction: () => void): void {
         dialogRef.afterClosed()
             .pipe(
                 take(1),
@@ -75,5 +82,34 @@ export class CommonDialogService {
                 handleApiError(this.snackBar)
             )
             .subscribe();
+    }
+
+    public showCreateOrUpdateExpenseModal(executableAction: () => void, expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateExpenseComponent>(this._getCreateUpdateExpenseModal(expense, userProject), executableAction);
+    }
+
+    public showCreateOrUpdatePlannedExpenseModal(executableAction: () => void, plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdatePlannedExpenseComponent>(this._getCreateUpdatePlannedExpenseModal(plannedExpense, userProject), executableAction);
+    }
+
+    private _getCreateUpdateExpenseModal(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
+        return this.dialog.open(CreateUpdateExpenseComponent, {
+            width: '600px',
+            maxWidth: '80vw',
+            data: {
+                expense,
+                userProject
+            }
+        });
+    }
+    private _getCreateUpdatePlannedExpenseModal(plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdatePlannedExpenseComponent, any> {
+        return this.dialog.open(CreateUpdatePlannedExpenseComponent, {
+            width: '600px',
+            maxWidth: '80vw',
+            data: {
+                plannedExpense,
+                userProject
+            }
+        });
     }
 }

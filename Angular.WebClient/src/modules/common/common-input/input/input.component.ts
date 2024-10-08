@@ -183,7 +183,6 @@ export class InputComponent implements OnInit, OnDestroy {
             this.internalFormGroup?.get('autocomplete')?.setErrors(this.formGroup?.get(this.controlName)?.errors ?? null);
         }
 
-        //TODO check it
         if (this.type === 'autocomplete') {
             this.formGroup?.get(this.controlName)?.setValue(this.internalFormGroup?.get('autocomplete')?.value?.id);
         }

@@ -1,0 +1,36 @@
+<div class="base-modal-container" *ngIf="plannedExpenseFormGroup">
+    <h2 mat-dialog-title *ngIf="plannedExpense">{{ plannedExpense.title }}</h2>
+    <h2 mat-dialog-title *ngIf="!plannedExpense" [translation]="'PLANNED_EXPENSES.CREATE_NEW'"></h2>
+    <div class="base-modal-body-container">
+        <app-input className="grid-input-item" type="input" [label]="'COMMON.TITLE'"
+                   [formGroup]="plannedExpenseFormGroup" controlName="title" [maxLength]="50"></app-input>
+        <div class="grid-input-container-two">
+            <app-input className="grid-input-item" type="autocomplete" [dataItems]="dataItems?.categoriesFlat ?? []"
+                       [label]="'COMMON.CATEGORY'" [formGroup]="plannedExpenseFormGroup"
+                       controlName="categoryId"></app-input>
+            <app-input className="grid-input-item" type="select" [dataItems]="dataItems?.frequencies ?? []"
+                       [label]="'COMMON.FREQUENCIES'" [formGroup]="plannedExpenseFormGroup"
+                       controlName="frequencyId"></app-input>
+            <app-input className="grid-input-item" type="datepicker" [label]="'COMMON.START_DATE'"
+                       [formGroup]="plannedExpenseFormGroup" controlName="startDate"></app-input>
+            <app-input className="grid-input-item" type="datepicker" [label]="'COMMON.END_DATE'"
+                       [formGroup]="plannedExpenseFormGroup" controlName="endDate"></app-input>
+            <app-input className="grid-input-item" type="input" [label]="'COMMON.AMOUNT'"
+                       [formGroup]="plannedExpenseFormGroup" controlName="amount"></app-input>
+            <app-input className="grid-input-item" type="select" [dataItems]="balancesDataItems ?? []" [label]="'COMMON.BALANCE'"
+                       [formGroup]="plannedExpenseFormGroup" controlName="balanceId"></app-input>
+        </div>
+        <app-input className="grid-input-item" type="textarea" [label]="'COMMON.COMMENT'"
+                   [formGroup]="plannedExpenseFormGroup" controlName="description" [maxLength]="100"></app-input>
+        <app-input type="checkbox" [label]="'COMMON.IS_ACTIVE'" [formGroup]="plannedExpenseFormGroup" controlName="isActive"></app-input>
+    </div>
+    <div class="base-modal-actions-container">
+        <div class="mat-dialog-actions-container">
+            <button mat-button translation="COMMON.CLOSE" (click)="dialogRef.close(false)"></button>
+            <button mat-flat-button color="primary" (click)="createOrUpdateExpense()"
+                    [disabled]="plannedExpenseFormGroup.invalid"
+                    [translation]="!!plannedExpense ? 'COMMON.UPDATE' : 'COMMON.CREATE'"
+            ></button>
+        </div>
+    </div>
+</div>

@@ -27,7 +27,7 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
         this.dictionaryRepository = dictionaryRepository;
     }
 
-    public async Task<VersionedList<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken)
+    public async Task<VersionedListResponse<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken)
     {
         string currencyVersion = await this.cacheRepository.GetCacheVersionAsync();
         
@@ -35,7 +35,7 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
             !string.IsNullOrEmpty(version) && 
             version.Equals(currencyVersion))
         {
-            return new VersionedList<TResponse>
+            return new VersionedListResponse<TResponse>
             {
                 Items = new List<TResponse>(),
                 Version = currencyVersion
@@ -51,7 +51,7 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
             await this.cacheRepository.SetCacheVersionAsync();
         }
     
-        return new VersionedList<TResponse>
+        return new VersionedListResponse<TResponse>
         {
             Items = items.Where(i => i.IsActive).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
             Version = currencyVersion

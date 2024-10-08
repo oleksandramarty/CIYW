@@ -24,34 +24,34 @@ public class DictionaryController: BaseController
     }
     
     [HttpPost("countries")]
-    [ProducesResponseType(typeof(VersionedList<CountryResponse>), 200)]
+    [ProducesResponseType(typeof(VersionedListResponse<CountryResponse>), 200)]
     public async Task<IActionResult> GetCountriesAsync([FromBody]GetCountriesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<CountryResponse> response = await mediator.Send(request, cancellationToken);
+        VersionedListResponse<CountryResponse> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
     
     [HttpPost("currencies")]
-    [ProducesResponseType(typeof(VersionedList<CurrencyResponse>), 200)]
+    [ProducesResponseType(typeof(VersionedListResponse<CurrencyResponse>), 200)]
     public async Task<IActionResult> GetCurrenciesAsync([FromBody]GetCurrenciesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<CurrencyResponse> response = await mediator.Send(request, cancellationToken);
+        VersionedListResponse<CurrencyResponse> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
     
     [HttpPost("categories")]
-    [ProducesResponseType(typeof(VersionedList<TreeNodeResponse<CategoryResponse>>), 200)]
+    [ProducesResponseType(typeof(VersionedListResponse<TreeNodeResponse<CategoryResponse>>), 200)]
     public async Task<IActionResult> GetCategoriesAsync([FromBody]GetCategoriesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<TreeNodeResponse<CategoryResponse>> response = await mediator.Send(request, cancellationToken);
+        VersionedListResponse<TreeNodeResponse<CategoryResponse>> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
     
     [HttpPost("frequencies")]
-    [ProducesResponseType(typeof(VersionedList<FrequencyResponse>), 200)]
+    [ProducesResponseType(typeof(VersionedListResponse<FrequencyResponse>), 200)]
     public async Task<IActionResult> GetFrequenciesAsync([FromBody]GetFrequenciesRequest request, CancellationToken cancellationToken)
     {
-        VersionedList<FrequencyResponse> response = await mediator.Send(request, cancellationToken);
+        VersionedListResponse<FrequencyResponse> response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }

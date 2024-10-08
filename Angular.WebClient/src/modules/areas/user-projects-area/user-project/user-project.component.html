@@ -1,100 +1,169 @@
 <section *ngIf="!!userProject" class="user-project-section">
-  <h1 class="user-project-title">{{ userProject.title }}</h1>
-  <div class="user-project-details">
-    <div *ngFor="let balance of userProject.balances">
-      <div class="balance">
-        <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
-        <span class="amount" [ngClass]="{'negative': balance.amount < 0}">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
-      </div>
-      <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
+    <h1 class="user-project-title">{{ userProject.title }}</h1>
+    <div class="user-project-details">
+        <div *ngFor="let balance of userProject.balances">
+            <div class="balance">
+                <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
+                <span class="amount"
+                      [ngClass]="{'negative': balance.amount < 0}">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
+            </div>
+            <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
+        </div>
     </div>
-  </div>
 
-<div class="filter-container" [formGroup]="filterFormGroup">
-    <div class="filter-input-container">
-        <div class="filter-input-item">
-            <app-input
-                    type="input"
-                    [label]="'COMMON.SEARCH'"
-                    [formGroup]="filterFormGroup"
-                    controlName="query">
-            </app-input>
-        </div>
-        <div class="filter-input-item">
-            <app-input
-                    type="multiselect"
-                    [dataItems]="categoriesDataItems"
-                    [label]="'COMMON.CATEGORY'"
-                    [formGroup]="filterFormGroup"
-                    controlName="categoryIds">
-            </app-input>
-        </div>
-        <div class="filter-input-item">
-            <app-input
-                    type="rangedatapicker"
-                    [label]="'COMMON.DATES'"
-                    [formGroup]="filterFormGroup"
-                    controlName="dateRange">
-            </app-input>
-        </div>
-    </div>
-    <div class="filter-button-container">
-        <div>
-            <div class="filter-button-item">
-                <button mat-flat-button color="warn" [translation]="'EXPENSES.ADD'" (click)="openCreateUpdateExpenseDialog(undefined)"></button>
+    <div class="filter-container" [formGroup]="filterFormGroup">
+        <div class="filter-input-container">
+            <div class="filter-input-item">
+                <app-input
+                        type="input"
+                        [label]="'COMMON.SEARCH'"
+                        [formGroup]="filterFormGroup"
+                        controlName="query">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input
+                        type="multiselect"
+                        [dataItems]="categoriesDataItems"
+                        [label]="'COMMON.CATEGORY'"
+                        [formGroup]="filterFormGroup"
+                        controlName="categoryIds">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input
+                        type="rangedatapicker"
+                        [label]="'COMMON.DATES'"
+                        [formGroup]="filterFormGroup"
+                        controlName="dateRange">
+                </app-input>
             </div>
         </div>
-        <div>
-            <div class="filter-button-item">
-                <button mat-button color="warn" [translation]="'FILTER.RESET'" (click)="resetFilter()"></button>
-                <button mat-flat-button color="primary" [translation]="'COMMON.FILTER.SEARCH'" (click)="getExpenses()"></button>
+        <div class="filter-button-container">
+            <div>
+                <div class="filter-button-item">
+                    <button *ngIf="activeTab === 0" mat-flat-button color="warn" [translation]="'EXPENSES.ADD'"
+                            (click)="openCreateUpdateExpenseDialog(undefined)"></button>
+
+                    <button *ngIf="activeTab === 1" mat-flat-button color="warn" [translation]="'PLANNED_EXPENSES.ADD'"
+                            (click)="openCreateUpdatePlannedExpenseDialog(undefined)"></button>
+                </div>
+            </div>
+            <div>
+                <div class="filter-button-item">
+                    <button mat-button color="warn" [translation]="'FILTER.RESET'" (click)="resetFilter()"></button>
+                    <button mat-flat-button color="primary" [translation]="'COMMON.FILTER.SEARCH'"
+                            (click)="getFilteredItems()"></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <mat-divider></mat-divider>
 
-<div class="table-container" *ngIf="!!expenses">
-    <table class="mat-table">
-        <thead>
-            <tr class="mat-tr">
-                <th class="mat-th"></th>
-                <th class="mat-th"></th>
-                <th class="mat-th" [translation]="'COMMON.DATE'"></th>
-                <th class="mat-th" [translation]="'COMMON.COMMENT'"></th>
-                <th class="mat-th" [translation]="'COMMON.AMOUNT'"></th>
-                <th class="mat-th"></th>
-                <th class="mat-th" [translation]="'COMMON.CATEGORY'"></th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-tr" *ngFor="let expense of expenses.entities; let i=index">
-            <td class="mat-td"><i class="fa-solid fa-pencil pointer" (click)="openCreateUpdateExpenseDialog(expense)"></i></td>
-            <td class="mat-td"><i class="fa-solid fa-trash pointer" (click)="removeExpense(expense)"></i></td>
-            <td class="mat-td">
+    <div class="grid-input-container-two">
+        <div class="tab-item">
+            <button class="w-100" mat-button [color]="activeTab === 0 ? 'primary' : 'secondary'"
+                    [translation]="'MENU.EXPENSES'" (click)="tabChanged(0)"></button>
+        </div>
+        <div class="tab-item">
+            <button class="w-100" mat-button [color]="activeTab === 1 ? 'primary' : 'secondary'"
+                    [translation]="'MENU.PLANNED_EXPENSES'" (click)="tabChanged(1)"></button>
+        </div>
+    </div>
+
+    <ng-container *ngIf="activeTab === 0">
+        <div class="table-container" *ngIf="!!expenses">
+            <table class="mat-table">
+                <thead>
+                <tr class="mat-tr">
+                    <th class="mat-th"></th>
+                    <th class="mat-th"></th>
+                    <th class="mat-th" [translation]="'COMMON.DATE'"></th>
+                    <th class="mat-th" [translation]="'COMMON.COMMENT'"></th>
+                    <th class="mat-th" [translation]="'COMMON.AMOUNT'"></th>
+                    <th class="mat-th" [translation]="'COMMON.CATEGORY'"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="mat-tr" *ngFor="let expense of expenses.entities; let i=index">
+                    <td class="mat-td"><i class="fa-solid fa-pencil pointer"
+                                          (click)="openCreateUpdateExpenseDialog(expense)"></i></td>
+                    <td class="mat-td"><i class="fa-solid fa-trash pointer" (click)="removeExpense(expense)"></i></td>
+                    <td class="mat-td">
                 <span class="row-item-container">
-                    {{ expense.date | localDate:'MMMM dd, yyyy HH:mm' }} <span class="row-subitem">{{utcTimeShift}}</span>
+                    {{ expense.date | localDate:'MMMM dd, yyyy HH:mm' }} <span
+                        class="row-subitem">{{ utcTimeShift }}</span>
                 </span>
-            </td>
-            <td class="mat-td">{{ expense.title }}</td>
-            <td class="mat-td amount" [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive}">
-                {{ expense.amount | currency:currenciesMap?.get(Number(expense.balanceId))?.code }}
-            </td>
+                    </td>
+                    <td class="mat-td">{{ expense.title }}</td>
+                    <td class="mat-td amount"
+                        [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive}">
+                        {{ expense.amount | currency:getCurrencyCode(expense.balanceId) }}
+                    </td>
+                    <td class="mat-td"><span [translation]="categoriesMap?.get(expense.categoryId)?.title"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
 
-            <td class="mat-td">
+
+    <ng-container *ngIf="activeTab === 1">
+        <div class="table-container" *ngIf="!!plannedExpenses">
+            <table class="mat-table">
+                <thead>
+                <tr class="mat-tr">
+                    <th class="mat-th"></th>
+                    <th class="mat-th"></th>
+                    <th class="mat-th"></th>
+                    <th class="mat-th" [translation]="'COMMON.START_DATE'"></th>
+                    <th class="mat-th" [translation]="'COMMON.TITLE'"></th>
+                    <th class="mat-th" [translation]="'COMMON.AMOUNT'"></th>
+                    <th class="mat-th" [translation]="'COMMON.CATEGORY'"></th>
+                    <th class="mat-th" [translation]="'COMMON.NEXT_DATE'"></th>
+                    <th class="mat-th" [translation]="'COMMON.FREQUENCY'"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="mat-tr" *ngFor="let plannedExpense of plannedExpenses?.entities; let i=index">
+                    <td class="mat-td"><i class="fa-solid fa-pencil pointer"
+                                          (click)="openCreateUpdatePlannedExpenseDialog(plannedExpense)"></i></td>
+                    <td class="mat-td"><i class="fa-solid fa-trash pointer"
+                                          (click)="removePlannedExpense(plannedExpense)"></i></td>
+                    <td class="mat-td"></td>
+                    <td class="mat-td">
                 <span class="row-item-container">
-                    <span class="amount"
-                          [ngClass]="{'negative': expense.balanceBefore > expense.balanceAfter}"
-                    >{{ expense.balanceAfter | currency:currenciesMap?.get(Number(expense.balanceId))?.code }} </span>
-                    <span class="row-subitem amount"
-                          [ngClass]="{'negative': expense.balanceBefore < expense.balanceAfter}"
-                    >{{ expense.balanceBefore | currency:currenciesMap?.get(Number(expense.balanceId))?.code }}</span>
+                    {{ plannedExpense.startDate | localDate:'MMMM dd, yyyy HH:mm' }} <span
+                        class="row-subitem">{{ utcTimeShift }}</span>
                 </span>
+                    </td>
+                    <td class="mat-td">{{ plannedExpense.title }}</td>
+                    <td class="mat-td amount"
+                        [ngClass]="{'negative': !categoriesMap?.get(plannedExpense.categoryId)?.isPositive}">
+                        {{ plannedExpense.amount | currency:getCurrencyCode(plannedExpense.balanceId) }}
+                    </td>
+                    <td class="mat-td"><span
+                            [translation]="categoriesMap?.get(plannedExpense.categoryId)?.title"></span></td>
+                    <td class="mat-td">
+                <span class="row-item-container">
+                    {{ plannedExpense.nextDate | localDate:'MMMM dd, yyyy HH:mm' }} <span
+                        class="row-subitem">{{ utcTimeShift }}</span>
+                </span>
+                    </td>
+                    <td class="mat-td"><span
+                            [translation]="frequenciesMap?.get(plannedExpense.frequencyId)?.title"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
 
-            </td>
-            <td class="mat-td"><span [translation]="categoriesMap?.get(expense.categoryId)?.title"></span></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <ng-container
+            *ngIf="activeTab === 0 && expenses?.entities?.length === 0 ||
+                activeTab === 1 && plannedExpenses?.entities?.length === 0">
+        <div class="empty-table-message">
+            <h4 [translation]="'TABLE.NO_ITEMS'"></h4>
+        </div>
+    </ng-container>
 </section>
 

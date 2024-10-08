@@ -8,4 +8,5 @@ public enum ColumnEnum
     Title = 4,
     Description = 5,
     Amount = 6,
+    NextDate = 7
 }

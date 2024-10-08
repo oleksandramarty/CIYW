@@ -17,8 +17,8 @@ public static class GraphQLEndpoints
     public static readonly GraphQLEndpoint GetFilteredExpenses = new GraphQLEndpoint("expenses_get_filtered_expenses");
     public static readonly GraphQLEndpoint GetFilteredPlannedExpenses = new GraphQLEndpoint("expenses_get_filtered_planned_expenses");
     public static readonly GraphQLEndpoint GetUserProjectById = new GraphQLEndpoint("expenses_get_user_project_by_id");
-    public static readonly GraphQLEndpoint GetUserProjects = new GraphQLEndpoint("expenses_get_user_projects");
-    public static readonly GraphQLEndpoint GetUserAllowedProjects = new GraphQLEndpoint("expenses_get_user_allowed_projects");
+    public static readonly GraphQLEndpoint GetFilteredUserProjects = new GraphQLEndpoint("expenses_get_filtered_user_projects");
+    public static readonly GraphQLEndpoint GetFilteredUserAllowedProjects = new GraphQLEndpoint("expenses_get_filtered_user_allowed_projects");
 }
 
 

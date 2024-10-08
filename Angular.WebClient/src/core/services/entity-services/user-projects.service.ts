@@ -12,15 +12,20 @@ import {
     CreateUpdateUserProjectComponent
 } from "../../../modules/dialogs/create-update-user-project/create-update-user-project.component";
 import {expenses_setUserAllowedProjects, expenses_setUserProjects} from "../../store/actions/expenses.actions";
-import {UserAllowedProjectResponse, UserProjectResponse} from "../../api-clients/common-module.client";
+import {
+    FilteredListResponseOfUserAllowedProjectResponse,
+    FilteredListResponseOfUserProjectResponse,
+    UserAllowedProjectResponse,
+    UserProjectResponse
+} from "../../api-clients/common-module.client";
 import {GraphQlExpensesService} from "../../graph-ql/services/graph-ql-expenses.service";
 
 @Injectable({
     providedIn: "root"
 })
 export class UserProjectsService {
-    private _userProjects: UserProjectResponse[] | undefined;
-    private _userAllowedProjects: UserAllowedProjectResponse[] | undefined;
+    private _userProjects: FilteredListResponseOfUserProjectResponse | undefined;
+    private _userAllowedProjects: FilteredListResponseOfUserAllowedProjectResponse | undefined;
 
     constructor(
         private snackBar: MatSnackBar,
@@ -33,11 +38,11 @@ export class UserProjectsService {
     }
 
     get userProjects(): UserProjectResponse[] | undefined {
-        return this._userProjects;
+        return this._userProjects?.entities;
     }
 
     get userAllowedProjects(): UserAllowedProjectResponse[] | undefined {
-        return this._userAllowedProjects;
+        return this._userAllowedProjects?.entities;
     }
 
     public initProjects(ngUnsubscribe: Subject<void>): void {
@@ -85,19 +90,20 @@ export class UserProjectsService {
 
     private getUserProjects(ngUnsubscribe: Subject<void>): void {
         this.loaderService.isBusy = true;
-        this.graphQlExpensesService.getUSerProjects()
+        this.graphQlExpensesService.getFilteredUserProjects()
             .pipe(
                 takeUntil(ngUnsubscribe),
                 switchMap((result) => {
-                    const userProjects = result?.data?.expenses_get_user_projects as UserProjectResponse[];
+                    const userProjects = result?.data?.expenses_get_filtered_user_projects as FilteredListResponseOfUserProjectResponse;
                     this._userProjects = userProjects;
                     this.store.dispatch(expenses_setUserProjects({ userProjects }));
-                    return this.graphQlExpensesService.getUserAllowedProjects();
+                    return this.graphQlExpensesService.getFilteredUserAllowedProjects();
                 }),
                 tap((result) => {
-                    const userAllowedProjects = result?.data?.expenses_get_user_allowed_projects as UserAllowedProjectResponse[];
+                    const userAllowedProjects = result?.data?.expenses_get_filtered_user_allowed_projects as FilteredListResponseOfUserAllowedProjectResponse;
                     this._userAllowedProjects = userAllowedProjects;
                     this.store.dispatch(expenses_setUserAllowedProjects({ userAllowedProjects }));
+                    this.loaderService.isBusy = false
                 }),
                 handleApiError(this.snackBar),
                 finalize(() => this.loaderService.isBusy = false)

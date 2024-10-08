@@ -6,5 +6,13 @@ namespace Expenses.Mediatr.Mediatr.Projects.Requests;
 
 public class GetUserProjectByIdRequest: BaseIdEntity<Guid>, IRequest<UserProjectResponse>
 {
-    
+    public GetUserProjectByIdRequest()
+    {
+        
+    }
+
+    public GetUserProjectByIdRequest(Guid id)
+    {
+        Id = id;
+    }
 }

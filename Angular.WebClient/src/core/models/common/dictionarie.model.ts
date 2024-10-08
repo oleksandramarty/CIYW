@@ -1,17 +1,17 @@
 import {DataItem, IDataItem} from "./data-item.model";
 import {
-    IVersionedListOfLocaleResponse,
-    VersionedListOfLocaleResponse
-} from "../../api-clients/localizations-client";
-import {
-    IVersionedListOfCountryResponse,
-    IVersionedListOfCurrencyResponse,
-    IVersionedListOfFrequencyResponse,
-    IVersionedListOfTreeNodeResponseOfCategoryResponse,
-    VersionedListOfCountryResponse,
-    VersionedListOfCurrencyResponse, VersionedListOfFrequencyResponse,
-    VersionedListOfTreeNodeResponseOfCategoryResponse
+    IVersionedListResponseOfCountryResponse,
+    IVersionedListResponseOfCurrencyResponse,
+    IVersionedListResponseOfFrequencyResponse,
+    IVersionedListResponseOfTreeNodeResponseOfCategoryResponse,
+    VersionedListResponseOfCountryResponse, VersionedListResponseOfCurrencyResponse,
+    VersionedListResponseOfFrequencyResponse,
+    VersionedListResponseOfTreeNodeResponseOfCategoryResponse
 } from "../../api-clients/dictionaries-client";
+import {
+    IVersionedListResponseOfLocaleResponse,
+    VersionedListResponseOfLocaleResponse
+} from "../../api-clients/localizations-client";
 
 export class DictionaryMap<TKey, TValue> {
   private _items: Map<TKey, TValue>;
@@ -66,17 +66,17 @@ export class DictionaryDataItems implements IDictionaryDataItems {
 }
 
 export interface IDictionary {
-    countries: IVersionedListOfCountryResponse | undefined;
-    currencies: IVersionedListOfCurrencyResponse | undefined;
-    categories: IVersionedListOfTreeNodeResponseOfCategoryResponse | undefined;
-    locales: IVersionedListOfLocaleResponse | undefined;
-    frequencies: IVersionedListOfFrequencyResponse | undefined;
+    countries: IVersionedListResponseOfCountryResponse | undefined;
+    currencies: IVersionedListResponseOfCurrencyResponse | undefined;
+    categories: IVersionedListResponseOfTreeNodeResponseOfCategoryResponse | undefined;
+    locales: IVersionedListResponseOfLocaleResponse | undefined;
+    frequencies: IVersionedListResponseOfFrequencyResponse | undefined;
 }
 
 export class Dictionary implements IDictionary {
-    countries: VersionedListOfCountryResponse | undefined;
-    currencies: VersionedListOfCurrencyResponse | undefined;
-    categories: VersionedListOfTreeNodeResponseOfCategoryResponse | undefined;
-    locales: VersionedListOfLocaleResponse | undefined;
-    frequencies: VersionedListOfFrequencyResponse | undefined;
+    countries: VersionedListResponseOfCountryResponse | undefined;
+    currencies: VersionedListResponseOfCurrencyResponse | undefined;
+    categories: VersionedListResponseOfTreeNodeResponseOfCategoryResponse | undefined;
+    locales: VersionedListResponseOfLocaleResponse | undefined;
+    frequencies: VersionedListResponseOfFrequencyResponse | undefined;
 }

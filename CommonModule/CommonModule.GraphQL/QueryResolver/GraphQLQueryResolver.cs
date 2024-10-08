@@ -1,3 +1,4 @@
+using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Requests.Base;
 using CommonModule.Shared.Responses.Base;
 using GraphQL;
@@ -9,10 +10,10 @@ namespace CommonModule.GraphQL.QueryResolver;
 
 public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
 {
-    public void GetEntityById<TEntityTypeId, TEntityType, TEntityId, TCommand, TEntityResponse>(GraphQLEndpoint endpoint)
+    public void GetEntityById<TEntityTypeId, TEntityType, TEntityId, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
         where TEntityType : ObjectGraphType<TEntityResponse>
         where TEntityTypeId : ScalarGraphType
-        where TCommand : IRequest<TEntityResponse>, new()
+        where TCommand : IBaseIdEntity<TEntityId>, IRequest<TCommandResponse>, new()
     {
         Field<TEntityType>(endpoint.Name)
             .Arguments(new QueryArguments(new QueryArgument<TEntityTypeId> { Name = "id" }))
@@ -20,21 +21,21 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
             {
                 context.IsAuthenticated(endpoint.IsAuthenticated);
                 var cancellationToken = context.CancellationToken;
-                TEntityId entityId = context.GetArgument<TEntityId>("id", default(TEntityId));
-                TCommand command = (TCommand)Activator.CreateInstance(typeof(TCommand), entityId);
+                TCommand command = new TCommand();
+                command.Id = context.GetArgument<TEntityId>("id");
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
                 return await mediator.Send(command, cancellationToken);
             });
     }
 
-    public void GetResultForNonEmptyCommand<TInputType, TEntityResponseType, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
-        where TInputType: InputObjectGraphType
-        where TEntityResponseType: ObjectGraphType<TEntityResponse>
-        where TCommand: IRequest<TCommandResponse>, new()
+    public void GetResultForNonEmptyCommand<TEntityInputType, TEntityResponseType, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
+        where TEntityInputType : InputObjectGraphType
+        where TEntityResponseType : ObjectGraphType<TEntityResponse>
+        where TCommand : IRequest<TCommandResponse>, new()
     {
         Field<TEntityResponseType>(endpoint.Name)
             .Arguments(
-                new QueryArgument<NonNullGraphType<TInputType>> { Name = "input" })
+                new QueryArgument<NonNullGraphType<TEntityInputType>> { Name = "input" })
             .ResolveAsync(async context =>
             {
                 context.IsAuthenticated(endpoint.IsAuthenticated);
@@ -59,23 +60,9 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
             });
     }
     
-    public void GetResultsForEmptyCommand<TEntityType, TEntityResponse, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
-        where TEntityType : ObjectGraphType<TEntityResponse>
-        where TCommand : IRequest<TCommandResponse>, new()
-    {
-        Field<ListGraphType<TEntityType>>(endpoint.Name)
-            .ResolveAsync(async context =>
-            {
-                context.IsAuthenticated(endpoint.IsAuthenticated);
-                var cancellationToken = context.CancellationToken;
-                var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                return await mediator.Send(new TCommand(), cancellationToken);
-            });
-    }
-    
     public void GetFilteredEntities<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
-        where TEntityType : ObjectGraphType<ListWithIncludeResponse<TEntityResponse>>
-        where TCommand : IBaseFilterRequest, IRequest<ListWithIncludeResponse<TEntityResponse>>, new()
+        where TEntityType : ObjectGraphType<FilteredListResponse<TEntityResponse>>
+        where TCommand : IBaseFilterRequest, IRequest<FilteredListResponse<TEntityResponse>>, new()
     {
         Field<TEntityType>(endpoint.Name)
             .Arguments(GraphQLExtension.GetPageableQueryArguments())

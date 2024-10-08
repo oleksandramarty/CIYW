@@ -11,7 +11,7 @@ using MediatR;
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class GetFilteredExpensesRequestHandler : MediatrExpensesBase,
-    IRequestHandler<GetFilteredExpensesRequest, ListWithIncludeResponse<ExpenseResponse>>
+    IRequestHandler<GetFilteredExpensesRequest, FilteredListResponse<ExpenseResponse>>
 {
     private readonly IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse> strategy;
 
@@ -25,7 +25,7 @@ public class GetFilteredExpensesRequestHandler : MediatrExpensesBase,
         this.strategy = strategy;
     }
 
-    public async Task<ListWithIncludeResponse<ExpenseResponse>> Handle(GetFilteredExpensesRequest request,
+    public async Task<FilteredListResponse<ExpenseResponse>> Handle(GetFilteredExpensesRequest request,
         CancellationToken cancellationToken)
     {
         await this.CheckUserProjectByIdAsync(request.UserProjectId, cancellationToken);

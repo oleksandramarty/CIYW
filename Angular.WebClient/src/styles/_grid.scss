@@ -33,6 +33,7 @@
     &-container-three,
     &-container-four {
       grid-template-columns: 1fr;
+      gap: 0;
     }
   }
 }

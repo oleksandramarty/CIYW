@@ -3,13 +3,15 @@ import {
     CategoryResponse,
     CountryResponse,
     CurrencyResponse,
-    DictionaryClient, FrequencyResponse,
+    DictionaryClient,
+    FrequencyResponse,
     GetCategoriesRequest,
     GetCountriesRequest,
     GetCurrenciesRequest,
     TreeNodeResponseOfCategoryResponse,
-    VersionedListOfCountryResponse, VersionedListOfCurrencyResponse, VersionedListOfFrequencyResponse,
-    VersionedListOfTreeNodeResponseOfCategoryResponse
+    VersionedListResponseOfCountryResponse,
+    VersionedListResponseOfCurrencyResponse,
+    VersionedListResponseOfFrequencyResponse, VersionedListResponseOfTreeNodeResponseOfCategoryResponse
 } from "../api-clients/dictionaries-client";
 import {catchError, forkJoin, take, tap} from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -17,7 +19,7 @@ import { handleApiError } from "../helpers/rxjs.helper";
 import {
     GetLocalesRequest,
     LocaleResponse,
-    LocalizationClient, VersionedListOfLocaleResponse
+    LocalizationClient, VersionedListResponseOfLocaleResponse
 } from "../api-clients/localizations-client";
 import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionarie.model";
 import {LocalStorageService} from "./local-storage.service";
@@ -60,7 +62,7 @@ export class DictionaryService {
         return this._countriesMap;
     }
 
-    set countriesMap(value: VersionedListOfCountryResponse | undefined) {
+    set countriesMap(value: VersionedListResponseOfCountryResponse | undefined) {
         if (!!value) {
             this._countriesMap = new DictionaryMap<number, CountryResponse>();
 
@@ -81,7 +83,7 @@ export class DictionaryService {
         return this._currenciesMap;
     }
 
-    set currenciesMap(value: VersionedListOfCurrencyResponse | undefined) {
+    set currenciesMap(value: VersionedListResponseOfCurrencyResponse | undefined) {
         if (!!value) {
             this._currenciesMap = new DictionaryMap<number, CurrencyResponse>();
 
@@ -102,7 +104,7 @@ export class DictionaryService {
         return this._categoriesMap;
     }
 
-    set categoriesMap(value: VersionedListOfTreeNodeResponseOfCategoryResponse | undefined) {
+    set categoriesMap(value: VersionedListResponseOfTreeNodeResponseOfCategoryResponse | undefined) {
         if (!!value) {
             this._categoriesMap = new DictionaryMap<number, CategoryResponse>();
 
@@ -123,7 +125,7 @@ export class DictionaryService {
         return this._localesMap;
     }
 
-    set localesMap(value: VersionedListOfLocaleResponse | undefined) {
+    set localesMap(value: VersionedListResponseOfLocaleResponse | undefined) {
         if (!!value) {
             this._localesMap = new DictionaryMap<number, LocaleResponse>();
 
@@ -145,7 +147,7 @@ export class DictionaryService {
         return this._frequenciesMap;
     }
 
-    set frequenciesMap(value: VersionedListOfFrequencyResponse | undefined) {
+    set frequenciesMap(value: VersionedListResponseOfFrequencyResponse | undefined) {
         if (!!value) {
             this._frequenciesMap = new DictionaryMap<number, FrequencyResponse>();
 

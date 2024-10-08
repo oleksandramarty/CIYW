@@ -1,4 +1,5 @@
 using CommonModule.Core.JsonConverter;
+using CommonModule.Shared.Common.BaseInterfaces;
 using GraphQL;
 using GraphQL.Types;
 using MediatR;
@@ -8,13 +9,13 @@ namespace CommonModule.GraphQL.MutationResolver;
 
 public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
 {
-    public void CreateEntity<TInputType, TCommand>(GraphQLEndpoint endpoint) 
-        where TCommand: IRequest
-        where TInputType: InputObjectGraphType
+    public void CreateEntity<TEntityInputType, TCommand>(GraphQLEndpoint endpoint)
+        where TEntityInputType : InputObjectGraphType
+        where TCommand : IRequest, new()
     {
         Field<BooleanGraphType>(endpoint.Name)
             .Arguments(new QueryArguments(
-                new QueryArgument<NonNullGraphType<TInputType>> { Name = "input" }
+                new QueryArgument<NonNullGraphType<TEntityInputType>> { Name = "input" }
             ))
             .ResolveAsync(async context =>
             {
@@ -27,43 +28,42 @@ public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
             });
     }
     
-    public void UpdateEntity<TInputType, TCommand, TId>(GraphQLEndpoint endpoint) 
-        where TCommand: IRequest
-        where TInputType: InputObjectGraphType
-        where TId: ScalarGraphType
+    public void UpdateEntity<TEntityInputType, TEntityTypeId, TEntityId, TCommand>(GraphQLEndpoint endpoint)
+        where TEntityInputType : InputObjectGraphType
+        where TEntityTypeId : ScalarGraphType
+        where TCommand : IBaseIdEntity<TEntityId>, IRequest
     {
         Field<BooleanGraphType>(endpoint.Name)
             .Arguments(new QueryArguments(
-                new QueryArgument<NonNullGraphType<TId>> { Name = "id" },
-                new QueryArgument<NonNullGraphType<TInputType>> { Name = "input" }
+                new QueryArgument<NonNullGraphType<TEntityTypeId>> { Name = "id" },
+                new QueryArgument<NonNullGraphType<TEntityInputType>> { Name = "input" }
             ))
             .ResolveAsync(async context =>
             {
                 context.IsAuthenticated(endpoint.IsAuthenticated);
                 var cancellationToken = context.CancellationToken;
                 TCommand command = context.GetArgument<TCommand>("input");
-                ReflectionUtils.SetValue<TCommand, Guid>(command, "Id", context.GetArgument<Guid>("id"));
+                command.Id = context.GetArgument<TEntityId>("id");
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
                 await mediator.Send(command, cancellationToken);
                 return true;
             });
     }
     
-    public void DeleteEntity<TCommand, TId>(GraphQLEndpoint endpoint) 
-        where TCommand: IRequest<bool>
-        where TId: ScalarGraphType
+    public void DeleteEntity<TCommand, TEntityTypeId, TEntityId>(GraphQLEndpoint endpoint)
+        where TEntityTypeId : ScalarGraphType
+        where TCommand : IBaseIdEntity<TEntityId>, IRequest<bool>, new()
     {
         Field<BooleanGraphType>(endpoint.Name)
             .Arguments(new QueryArguments(
-                new QueryArgument<NonNullGraphType<TId>> { Name = "id" }
+                new QueryArgument<NonNullGraphType<TEntityTypeId>> { Name = "id" }
             ))
             .ResolveAsync(async context =>
             {
                 context.IsAuthenticated(endpoint.IsAuthenticated);
                 var cancellationToken = context.CancellationToken;
-                TCommand command = Activator.CreateInstance<TCommand>();
-                ReflectionUtils.SetValue<TCommand, Guid>(command, "Id", context.GetArgument<Guid>("id"));
-                
+                TCommand command = new TCommand();
+                command.Id = context.GetArgument<TEntityId>("id");
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
                 await mediator.Send(command, cancellationToken);
                 return true;

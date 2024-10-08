@@ -13,4 +13,4 @@ namespace Dictionaries.Mediatr.Mediatr.Handlers;
 public class GetCurrenciesRequestHandler(
     IDictionaryRepository<int, Currency, CurrencyResponse, DictionariesDataContext> dictionaryRepository)
     : MediatrDictionaryBase<GetCurrenciesRequest, int, Currency, CurrencyResponse, DictionariesDataContext>(
-        dictionaryRepository), IRequestHandler<GetCurrenciesRequest, VersionedList<CurrencyResponse>>;
+        dictionaryRepository), IRequestHandler<GetCurrenciesRequest, VersionedListResponse<CurrencyResponse>>;

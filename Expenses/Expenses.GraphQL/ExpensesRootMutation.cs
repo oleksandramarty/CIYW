@@ -14,13 +14,13 @@ public class ExpensesRootMutation: GraphQLMutationResolver
     public ExpensesRootMutation()
     {
         Name = "Mutation";
-        this.CreateEntity<CreateOrUpdateExpenseInputType, CreateOrUpdateExpenseCommand>(GraphQLEndpoints.CreateExpense);
-        this.UpdateEntity<CreateOrUpdateExpenseInputType, CreateOrUpdateExpenseCommand, GuidGraphType>(GraphQLEndpoints.UpdateExpense);
-        this.DeleteEntity<RemoveExpenseCommand, GuidGraphType>(GraphQLEndpoints.RemoveExpense);
+        this.CreateEntity<CreateExpenseInputType, CreateExpenseCommand>(GraphQLEndpoints.CreateExpense);
+        this.UpdateEntity<UpdateExpenseInputType, GuidGraphType, Guid, UpdateExpenseCommand>(GraphQLEndpoints.UpdateExpense);
+        this.DeleteEntity<RemoveExpenseCommand, GuidGraphType, Guid>(GraphQLEndpoints.RemoveExpense);
         
-        this.CreateEntity<CreateOrUpdatePlannedExpenseInputType, CreateOrUpdatePlannedExpenseCommand>(GraphQLEndpoints.CreatePlannedExpense);
-        this.UpdateEntity<CreateOrUpdatePlannedExpenseInputType, CreateOrUpdatePlannedExpenseCommand, GuidGraphType>(GraphQLEndpoints.UpdatePlannedExpense);
-        this.DeleteEntity<RemovePlannedExpenseCommand, GuidGraphType>(GraphQLEndpoints.RemovePlannedExpense);
+        this.CreateEntity<CreatePlannedExpenseInputType, CreatePlannedExpenseCommand>(GraphQLEndpoints.CreatePlannedExpense);
+        this.UpdateEntity<UpdatePlannedExpenseInputType, GuidGraphType, Guid, UpdatePlannedExpenseCommand>(GraphQLEndpoints.UpdatePlannedExpense);
+        this.DeleteEntity<RemovePlannedExpenseCommand, GuidGraphType, Guid>(GraphQLEndpoints.RemovePlannedExpense);
         
         this.CreateEntity<CreateUserProjectInputType, CreateUserProjectCommand>(GraphQLEndpoints.CreateUserProject);
     }

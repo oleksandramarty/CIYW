@@ -4,7 +4,7 @@ using MediatR;
 namespace CommonModule.Core.Strategies.GetFilteredResult;
 
 public class GetFilteredResultStrategyContext<TCommand, TEntityResponse>
-    where TCommand: IRequest<ListWithIncludeResponse<TEntityResponse>>
+    where TCommand: IRequest<FilteredListResponse<TEntityResponse>>
 {
     private IGetFilteredResultStrategy<TCommand, TEntityResponse> _strategy;
 
@@ -18,7 +18,7 @@ public class GetFilteredResultStrategyContext<TCommand, TEntityResponse>
         _strategy = strategy;
     }
 
-    public async Task<ListWithIncludeResponse<TEntityResponse>> ExecuteStrategyAsync(TCommand command, CancellationToken cancellationToken)
+    public async Task<FilteredListResponse<TEntityResponse>> ExecuteStrategyAsync(TCommand command, CancellationToken cancellationToken)
     {
         return await _strategy.GetFilteredResultAsync(command, cancellationToken);
     }

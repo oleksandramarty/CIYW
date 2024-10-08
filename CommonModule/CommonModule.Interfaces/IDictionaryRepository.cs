@@ -9,5 +9,5 @@ public interface IDictionaryRepository<TId, TEntity, TResponse, TDataContext>
     where TResponse : class, IBaseIdEntity<TId>
     where TDataContext : DbContext
 {
-    Task<VersionedList<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken);
+    Task<VersionedListResponse<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken);
 }

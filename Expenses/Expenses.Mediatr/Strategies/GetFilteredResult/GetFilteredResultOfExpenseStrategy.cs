@@ -25,7 +25,7 @@ public class GetFilteredResultOfExpenseStrategy: IGetFilteredResultStrategy<GetF
         this.expenseRepository = expenseRepository;
     }
 
-    public async Task<ListWithIncludeResponse<ExpenseResponse>> GetFilteredResultAsync(GetFilteredExpensesRequest request, CancellationToken cancellationToken)
+    public async Task<FilteredListResponse<ExpenseResponse>> GetFilteredResultAsync(GetFilteredExpensesRequest request, CancellationToken cancellationToken)
     {
         var query = this.expenseRepository.GetQueryable(
             e => e.UserProjectId == request.UserProjectId &&
@@ -84,7 +84,7 @@ public class GetFilteredResultOfExpenseStrategy: IGetFilteredResultStrategy<GetF
             entities = await query.ToListAsync(cancellationToken);
         }
         
-        return new ListWithIncludeResponse<ExpenseResponse>
+        return new FilteredListResponse<ExpenseResponse>
         {
             Entities = entities.Select(x => this.mapper.Map<Expense, ExpenseResponse>(x)).ToList(),
             Paginator = request?.Paginator,

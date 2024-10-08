@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Dictionaries.Mediatr.Mediatr.Requests;
 
-public class GetCountriesRequest: BaseVersionEntity, IRequest<VersionedList<CountryResponse>>
+public class GetCountriesRequest: BaseVersionEntity, IRequest<VersionedListResponse<CountryResponse>>
 {
     
 }

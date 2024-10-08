@@ -12,8 +12,6 @@ public class ExpenseResponse: BaseDateTimeEntity<Guid>, IBaseVersionEntity
     public string? Description { get; set; }
     [Range(0.01, double.MaxValue)]
     public decimal Amount { get; set; }
-    public decimal BalanceBefore { get; set; }
-    public decimal BalanceAfter { get; set; }
     public Guid BalanceId { get; set; }
     public DateTime Date { get; set; }
     public int CategoryId { get; set; }

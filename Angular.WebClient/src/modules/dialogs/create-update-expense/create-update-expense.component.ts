@@ -148,7 +148,7 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
                 this.expenseFormGroup.value.balanceId,
                 this.expenseFormGroup.value.date,
                 Number(this.expenseFormGroup.value.categoryId),
-                this.userProject?.id
+                !this.expense ? this.userProject?.id : undefined
             ).pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap(() => {
@@ -161,6 +161,5 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
         }
 
         this.commonDialogService.showNoComplaintModal(createOrUpdateExpenseAction);
-
     }
 }

@@ -30,7 +30,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
         this.dictionaryRepository = dictionaryRepository;
     }
     
-    public async Task<VersionedList<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken)
+    public async Task<VersionedListResponse<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken)
     {
         string currentVesrion = await this.cacheRepository.GetCacheVersionAsync();
         
@@ -38,7 +38,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
             !string.IsNullOrEmpty(version) && 
             version.Equals(currentVesrion))
         {
-            return new VersionedList<TreeNodeResponse<TResponse>>
+            return new VersionedListResponse<TreeNodeResponse<TResponse>>
             {
                 Items = new List<TreeNodeResponse<TResponse>>(),
                 Version = currentVesrion
@@ -54,7 +54,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
             await this.cacheRepository.SetCacheVersionAsync();
         }
     
-        return new VersionedList<TreeNodeResponse<TResponse>>
+        return new VersionedListResponse<TreeNodeResponse<TResponse>>
         {
             Items = await BuildSummitsTreeNode(
                 items.Where(c => c.ParentId == null && c.IsActive), 
