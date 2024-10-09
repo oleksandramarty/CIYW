@@ -15,9 +15,7 @@ public class CategoryResponseType : ObjectGraphType<CategoryResponse>
         Field(x => x.IsActive);
         Field(x => x.IsPositive);
         Field(x => x.ParentId, nullable: true);
-        Field<ListGraphType<CategoryResponseType>>(
-            name: "children",
-            resolve: context => context.Source.Children
-        );
+        Field(x => x.Children, type: typeof(ListGraphType<CategoryResponseType>), nullable: true);
+
     }
 }

@@ -14,7 +14,8 @@ csv_localizations_folder=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')
 # Database connection details
 db_host="localhost"
 db_port="5432"
-db_name="CIYW_LocalizationDb"
+source "$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')/provision_helpers.sh"
+db_name=$(getDbNameLocalization)
 db_user="postgres"
 db_password="postgres"
 

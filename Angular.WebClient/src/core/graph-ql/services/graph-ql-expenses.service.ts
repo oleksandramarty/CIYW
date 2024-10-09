@@ -196,8 +196,8 @@ public createOrUpdatePlannedExpense(
                     isFull: false,
                     pageNumber: 1,
                     pageSize: 10,
-                    column: ColumnEnum.Created,
-                    direction: OrderDirectionEnum.Desc
+                    column: ColumnEnum.Created.toString(),
+                    direction: OrderDirectionEnum.Desc.toString()
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{
@@ -215,8 +215,8 @@ public createOrUpdatePlannedExpense(
                     isFull: false,
                     pageNumber: 1,
                     pageSize: 10,
-                    column: ColumnEnum.Created,
-                    direction: OrderDirectionEnum.Desc
+                    column: ColumnEnum.Created.toString(),
+                    direction: OrderDirectionEnum.Desc.toString()
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{

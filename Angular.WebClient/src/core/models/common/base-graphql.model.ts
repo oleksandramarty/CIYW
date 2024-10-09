@@ -8,12 +8,12 @@ export interface IBaseGraphQlFilteredModel {
     isFull: boolean;
     pageNumber: number;
     pageSize: number;
-    column: string;
-    direction: string;
+    column: string | undefined;
+    direction: string | undefined;
     query: string;
 }
 
-export class BaseGraphQlFilteredModel {
+export class BaseGraphQlFilteredModel implements IBaseGraphQlFilteredModel{
     dateFrom: Date | undefined;
     dateTo: Date | undefined;
     amountFrom: number | undefined;
@@ -21,8 +21,8 @@ export class BaseGraphQlFilteredModel {
     isFull: boolean;
     pageNumber: number;
     pageSize: number;
-    column: ColumnEnum;
-    direction: OrderDirectionEnum;
+    column: string | undefined;
+    direction: string | undefined;
     query: string;
 
     constructor(
@@ -33,8 +33,8 @@ export class BaseGraphQlFilteredModel {
         isFull: boolean = false,
         pageNumber: number = 1,
         pageSize: number = 10,
-        column: ColumnEnum = ColumnEnum.Created,
-        direction: OrderDirectionEnum = OrderDirectionEnum.Desc,
+        column: string = ColumnEnum.Created.toString(),
+        direction: string = OrderDirectionEnum.Desc.toString(),
         query: string = ''
     ) {
         this.dateFrom = dateFrom;

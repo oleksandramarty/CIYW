@@ -24,22 +24,35 @@ builder.AddCorsPolicy();
 builder.Services.AddControllers();
 builder.AddAuthorization();
 
-// validators
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
 
+// Fluent validation starts
+// Fluent validation ends
+
 //GraphQL
 builder.Services.AddSingleton<ISchema, DictionariesGraphQLSchema>(services => new DictionariesGraphQLSchema(new SelfActivatingServiceProvider(services)));
+// GraphQL schema ends
+
 builder.AddGraphQL();
 
-builder.Services.AddAutoMapper(config =>
-{
-    config.AddProfile(new MappingDictionariesProfile());
-});
+// Custom DI
+// Custom DI ends
+
+// AutoMapper
+builder.Services.AddAutoMapper(config => { config.AddProfile(new MappingDictionariesProfile()); });
+// AutoMapper ends
+
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+// MediatR modules
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrDictionariesModule()); });
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrCommonModule()); });
+// MediatR modules ends
+
+// Strategies
+// Strategies end
 
 var app = builder.Build();
 

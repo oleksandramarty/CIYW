@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Apollo, ApolloBase} from "apollo-angular";
-import {apolloEnvironments} from "../helpers/apolo.helper";
+import {apolloEnvironments} from "../helpers/apollo.helper";
 
 @Injectable({
     providedIn: 'root',

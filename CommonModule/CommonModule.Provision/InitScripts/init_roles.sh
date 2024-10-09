@@ -8,7 +8,8 @@ csv_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/InitData/roles
 # Database connection details
 db_host="localhost"
 db_port="5432"
-db_name="CIYW_UserDb"
+source "$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')/provision_helpers.sh"
+db_name=$(getDbNameUser)
 db_user="postgres"
 db_password="postgres"
 

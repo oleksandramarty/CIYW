@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.Common;
 using CommonModule.Shared;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Requests.Base;
@@ -31,6 +32,10 @@ public interface IGraphQLQueryResolver
         where TEntityType : ObjectGraphType<VersionedListResponse<TEntityResponse>>
         where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TEntityResponse>>, new();
 
+    void GetVersionedTreeList<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
+        where TEntityType : ObjectGraphType<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>
+        where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>, new();
+    
     void ExecuteForEmptyCommand<TCommand>(GraphQLEndpoint endpoint)
         where TCommand : IRequest, new();
 

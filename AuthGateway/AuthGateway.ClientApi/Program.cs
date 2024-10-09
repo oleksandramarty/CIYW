@@ -23,24 +23,36 @@ builder.AddCorsPolicy();
 builder.Services.AddControllers();
 builder.AddAuthorization();
 
-// validators
-builder.Services.AddValidatorsFromAssemblyContaining<AuthSignUpCommandValidator>();
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
 
-//GraphQL
+// Fluent validation starts
+builder.Services.AddValidatorsFromAssemblyContaining<AuthSignUpCommandValidator>();
+// Fluent validation ends
+
+// GraphQL schema
 builder.Services.AddSingleton<ISchema, AuthGatewayGraphQLSchema>(services => new AuthGatewayGraphQLSchema(new SelfActivatingServiceProvider(services)));
+// GraphQL schema ends
+
 builder.AddGraphQL();
 
-builder.Services.AddAutoMapper(config =>
-{
-    config.AddProfile(new MappingAuthProfile());
-});
+// Custom DI
+// Custom DI ends
+
+// AutoMapper
+builder.Services.AddAutoMapper(config => { config.AddProfile(new MappingAuthProfile()); });
+// AutoMapper ends
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+// MediatR modules
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrAuthModule()); });
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrCommonModule()); });
+// MediatR modules ends
+
+// Strategies
+// Strategies end
 
 var app = builder.Build();
 

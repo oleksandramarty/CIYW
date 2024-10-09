@@ -23,7 +23,7 @@ builder.AddCorsPolicy();
 builder.Services.AddControllers();
 builder.AddAuthorization();
 
-// validators
+// Fluent validation starts
 builder.Services.AddValidatorsFromAssemblyContaining<AuthSignUpCommandValidator>();
 builder.AddJwtAuthentication();
 builder.AddDependencyInjection();

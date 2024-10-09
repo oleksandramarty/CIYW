@@ -47,9 +47,9 @@ public class DictionariesRootQuery : GraphQLQueryResolver
             GetFrequenciesRequest
         >(GraphQLEndpoints.GetFrequenciesDictionary);
         
-        this.GetVersionedList<
+        this.GetVersionedTreeList<
             VersionedListOfGenericType<TreeNodeResponse<CategoryResponse>, TreeNodeResponseOfGenericType<CategoryResponse, CategoryResponseType>>, 
-            TreeNodeResponse<CategoryResponse>, 
+            CategoryResponse, 
             GetCategoriesRequest
         >(GraphQLEndpoints.GetCategoriesDictionary);
 

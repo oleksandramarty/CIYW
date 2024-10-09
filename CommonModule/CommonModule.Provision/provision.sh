@@ -8,6 +8,11 @@ START_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 echo "Provision running..."
+
+# Set the environment variable to use the custom appsettings file
+export ASPNETCORE_ENVIRONMENT=DevelopmentMonolith
+#export ASPNETCORE_ENVIRONMENT=Development
+
 # Truncate the provision_logs.txt file
 truncate -s 0 "$SCRIPT_DIR/provision_logs.txt"
 

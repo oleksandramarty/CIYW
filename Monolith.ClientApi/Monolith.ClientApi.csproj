@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>A0_Monolith</RootNamespace>
+      <UserSecretsId>e53bd9e5-96f4-4744-a6fc-9c725a179683</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.1.24451.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="GraphQL" Version="8.1.0" />
+        <PackageReference Include="GraphQL.MicrosoftDI" Version="8.1.0" />
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="8.0.3" />
+        <PackageReference Include="GraphQL.Server.Transports.WebSockets" Version="4.4.1" />
+        <PackageReference Include="GraphQL.Server.Ui.Playground" Version="8.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AuthGateway\AuthGateway.GraphQL\AuthGateway.GraphQL.csproj" />
+      <ProjectReference Include="..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
+      <ProjectReference Include="..\Dictionaries\Dictionaries.GraphQL\Dictionaries.GraphQL.csproj" />
+      <ProjectReference Include="..\Expenses\Expenses.Domain\Expenses.Domain.csproj" />
+      <ProjectReference Include="..\Expenses\Expenses.GraphQL\Expenses.GraphQL.csproj" />
+      <ProjectReference Include="..\Expenses\Expenses.Mediatr\Expenses.Mediatr.csproj" />
+      <ProjectReference Include="..\Localizations\Localizations.GraphQL\Localizations.GraphQL.csproj" />
+    </ItemGroup>
+
+</Project>
