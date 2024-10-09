@@ -1,11 +1,10 @@
 import {
-  CategoryResponse,
-  CountryResponse,
-  CurrencyResponse, FrequencyResponse, ICategoryResponse, ICountryResponse,
-  ICurrencyResponse, IFrequencyResponse
-} from "../../api-clients/dictionaries-client";
-import {ILocaleResponse, LocaleResponse} from "../../api-clients/localizations-client";
-import {BalanceResponse, IBalanceResponse} from "../../api-clients/common-module.client";
+  BalanceResponse, CategoryResponse, CountryResponse, CurrencyResponse,
+  FrequencyResponse,
+  IBalanceResponse, ICategoryResponse, ICountryResponse,
+  ICurrencyResponse,
+  IFrequencyResponse, ILocaleResponse, LocaleResponse
+} from "../../api-clients/common-module.client";
 
 export interface IDataItem {
   id: string | undefined;

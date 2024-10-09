@@ -39,8 +39,11 @@ public class MappingAuthProfile: Profile
                 dest.AuthType = UserAuthMethodEnum.Base;
             });
 
-        this.CreateMap<CreateOrUpdateUserSettingCommand, UserSetting>()
+        this.CreateMap<CreateUserSettingCommand, UserSetting>()
             .ConstructUsing((src, ctx) => 
-                this.CreateOrUpdateEntity<CreateOrUpdateUserSettingCommand, UserSetting, Guid>(src, ctx));
+                this.CreateOrUpdateEntity<CreateUserSettingCommand, UserSetting, Guid>(src, ctx));
+        this.CreateMap<UpdateUserSettingCommand, UserSetting>()
+            .ConstructUsing((src, ctx) => 
+                this.CreateOrUpdateEntity<UpdateUserSettingCommand, UserSetting, Guid>(src, ctx));
     }
 }

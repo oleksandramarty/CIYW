@@ -3,15 +3,13 @@ import {
     IVersionedListResponseOfCountryResponse,
     IVersionedListResponseOfCurrencyResponse,
     IVersionedListResponseOfFrequencyResponse,
-    IVersionedListResponseOfTreeNodeResponseOfCategoryResponse,
-    VersionedListResponseOfCountryResponse, VersionedListResponseOfCurrencyResponse,
-    VersionedListResponseOfFrequencyResponse,
-    VersionedListResponseOfTreeNodeResponseOfCategoryResponse
-} from "../../api-clients/dictionaries-client";
-import {
     IVersionedListResponseOfLocaleResponse,
-    VersionedListResponseOfLocaleResponse
-} from "../../api-clients/localizations-client";
+    IVersionedListResponseOfTreeNodeResponseOfCategoryResponse,
+    VersionedListResponseOfCountryResponse,
+    VersionedListResponseOfCurrencyResponse, VersionedListResponseOfFrequencyResponse,
+    VersionedListResponseOfLocaleResponse,
+    VersionedListResponseOfTreeNodeResponseOfCategoryResponse
+} from "../../api-clients/common-module.client";
 
 export class DictionaryMap<TKey, TValue> {
   private _items: Map<TKey, TValue>;

@@ -16,8 +16,8 @@ import { handleApiError } from "../../../core/helpers/rxjs.helper";
 import { SharedModule } from "../../../core/shared.module";
 import {LoaderService} from "../../../core/services/loader.service";
 import {CommonDialogService} from "../../../core/services/common-dialog.service";
-import {UserProjectResponse} from "../../../core/api-clients/common-module.client";
 import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
+import {UserProjectResponse} from "../../../core/api-clients/common-module.client";
 
 @Component({
   selector: 'app-create-update-user-project',

@@ -12,13 +12,11 @@ import {
     CreateUpdateUserProjectComponent
 } from "../../../modules/dialogs/create-update-user-project/create-update-user-project.component";
 import {expenses_setUserAllowedProjects, expenses_setUserProjects} from "../../store/actions/expenses.actions";
+import {GraphQlExpensesService} from "../../graph-ql/services/graph-ql-expenses.service";
 import {
     FilteredListResponseOfUserAllowedProjectResponse,
-    FilteredListResponseOfUserProjectResponse,
-    UserAllowedProjectResponse,
-    UserProjectResponse
+    FilteredListResponseOfUserProjectResponse, UserAllowedProjectResponse, UserProjectResponse
 } from "../../api-clients/common-module.client";
-import {GraphQlExpensesService} from "../../graph-ql/services/graph-ql-expenses.service";
 
 @Injectable({
     providedIn: "root"

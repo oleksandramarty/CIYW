@@ -6,6 +6,7 @@ using FluentValidation;
 using GraphQL.MicrosoftDI;
 using GraphQL.Types;
 using Localizations.Domain;
+using Localizations.GraphQL;
 using Localizations.Mediatr;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,7 @@ builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
 
 //GraphQL
-// builder.Services.AddSingleton<ISchema, AuthGatewayGraphQLSchema>(services => new AuthGatewayGraphQLSchema(new SelfActivatingServiceProvider(services)));
+builder.Services.AddSingleton<ISchema, LocalizationsGraphQLSchema>(services => new LocalizationsGraphQLSchema(new SelfActivatingServiceProvider(services)));
 builder.AddGraphQL();
 
 builder.Services.AddAutoMapper(config =>

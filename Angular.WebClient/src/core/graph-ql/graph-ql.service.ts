@@ -1,8 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Apollo, ApolloBase} from "apollo-angular";
 import {apolloEnvironments} from "../helpers/apolo.helper";
-import {ColumnEnum, OrderDirectionEnum} from "../api-clients/common-module.client";
-import {BaseGraphQlFilteredModel} from "../models/common/base-graphql.model";
 
 @Injectable({
     providedIn: 'root',

@@ -1,3 +1,4 @@
+using CommonModule.Shared;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Requests.Base;
 using CommonModule.Shared.Responses.Base;
@@ -25,4 +26,13 @@ public interface IGraphQLQueryResolver
     void GetFilteredEntities<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
         where TEntityType : ObjectGraphType<FilteredListResponse<TEntityResponse>>
         where TCommand : IBaseFilterRequest, IRequest<FilteredListResponse<TEntityResponse>>, new();
+
+    void GetVersionedList<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
+        where TEntityType : ObjectGraphType<VersionedListResponse<TEntityResponse>>
+        where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TEntityResponse>>, new();
+
+    void ExecuteForEmptyCommand<TCommand>(GraphQLEndpoint endpoint)
+        where TCommand : IRequest, new();
+
+    void GetLocalizations(GraphQLEndpoint endpoint);
 }

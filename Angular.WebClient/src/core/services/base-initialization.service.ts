@@ -6,7 +6,6 @@ import {DictionaryService} from "./dictionary.service";
 import {AuthService} from "./auth.service";
 import {take, tap} from "rxjs";
 import {handleApiError} from "../helpers/rxjs.helper";
-import {DictionaryClient} from "../api-clients/dictionaries-client";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
 import {SiteSettingsResponse} from "../api-clients/common-module.client";
 
@@ -20,7 +19,6 @@ export class BaseInitializationService {
         private readonly dictionaryService: DictionaryService,
         private readonly localizationService: LocalizationService,
         private readonly siteSettingsService: SiteSettingsService,
-        private readonly dictionaryClient: DictionaryClient,
         private readonly graphQlDictionariesService: GraphQlDictionariesService
     ) {}
 

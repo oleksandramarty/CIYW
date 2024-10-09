@@ -1,3 +1,4 @@
+using CommonModule.Shared;
 using CommonModule.Shared.Common.BaseInterfaces;
 using GraphQL.Types;
 using MediatR;

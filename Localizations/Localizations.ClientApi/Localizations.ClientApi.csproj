@@ -24,6 +24,7 @@
       <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
       <ProjectReference Include="..\Localizations.Business\Localizations.Business.csproj" />
       <ProjectReference Include="..\Localizations.Domain\Localizations.Domain.csproj" />
+      <ProjectReference Include="..\Localizations.GraphQL\Localizations.GraphQL.csproj" />
       <ProjectReference Include="..\Localizations.Mediatr\Localizations.Mediatr.csproj" />
     </ItemGroup>
 

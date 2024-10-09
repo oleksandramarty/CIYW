@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject, takeUntil, tap} from "rxjs";
-import {UserResponse} from "../../../../core/api-clients/common-module.client";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CustomValidators} from "../../../../core/helpers/validator.helper";
@@ -9,6 +8,7 @@ import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {Store} from "@ngrx/store";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
 import {DataItem} from "../../../../core/models/common/data-item.model";
+import {UserResponse} from "../../../../core/api-clients/common-module.client";
 
 @Component({
     selector: 'app-user-settings',

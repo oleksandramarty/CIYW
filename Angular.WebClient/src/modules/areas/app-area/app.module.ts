@@ -10,7 +10,7 @@ import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { environment } from "../../../core/environments/environment";
 import {APOLLO_NAMED_OPTIONS, APOLLO_OPTIONS, ApolloModule} from "apollo-angular";
 import { HttpLink } from 'apollo-angular/http';
-import {ApolloLink, InMemoryCache} from '@apollo/client/core';
+import {InMemoryCache} from '@apollo/client/core';
 import { AppComponent } from "./app/app.component";
 import { AppCommonModule } from "../../common/common-app/app-common.module";
 import { GoogleLoginProvider, SocialAuthServiceConfig } from "@abacritt/angularx-social-login";
@@ -26,8 +26,6 @@ import { PreloadAllModules, RouterModule, RouterOutlet, Routes } from "@angular/
 import { AuthGuard } from "../../../core/auth-guard";
 import { NotFoundComponent } from "../../common/common-app/not-found/not-found.component";
 import { InDevelopmentComponent } from "../../common/common-in-development/in-development/in-development.component";
-import { API_BASE_URL_Localizations, LocalizationClient } from "../../../core/api-clients/localizations-client";
-import { API_BASE_URL_Dictionaries, DictionaryClient } from "../../../core/api-clients/dictionaries-client";
 import { BaseInitializationService } from "../../../core/services/base-initialization.service";
 import { SiteSettingsService } from "../../../core/services/site-settings.service";
 import { DictionaryService } from "../../../core/services/dictionary.service";
@@ -40,10 +38,9 @@ import {UserProjectsService} from "../../../core/services/entity-services/user-p
 import {GraphQlDictionariesService} from "../../../core/graph-ql/services/graph-ql-dictionaries.service";
 import {GraphQlService} from "../../../core/graph-ql/graph-ql.service";
 import {GraphQlAuthService} from "../../../core/graph-ql/services/graph-ql-auth.service";
-import {API_BASE_URL_AuthGateway, AuthClient} from "../../../core/api-clients/auth-client";
 import {CommonDialogService} from "../../../core/services/common-dialog.service";
-import {UserAreaModule} from "../user-area/user-area.module";
 import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
+import {GraphQlLocalizationsService} from "../../../core/graph-ql/services/graph-ql-localizations.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -72,8 +69,8 @@ export const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () => import('../expenses-area/expenses-area.module')
-      .then(m => m.ExpensesAreaModule),
+    loadChildren: () => import('../dashboard-area/dashboard-area.module')
+      .then(m => m.DashboardAreaModule),
     canActivate: [AuthGuard]
   },
   {
@@ -122,13 +119,7 @@ export const routes: Routes = [
     LoaderService,
     LocalizationService,
     LocalStorageService,
-    AuthClient,
-    LocalizationClient,
-    DictionaryClient,
     UserProjectsService,
-    { provide: API_BASE_URL_AuthGateway, useValue: environment.apiAuthGatewayUrl },
-    { provide: API_BASE_URL_Localizations, useValue: environment.apiLocalizationsUrl },
-    { provide: API_BASE_URL_Dictionaries, useValue: environment.apiDictionariesUrl },
     {
       provide: APOLLO_NAMED_OPTIONS,
       useFactory: (httpLink: HttpLink) => {
@@ -146,6 +137,7 @@ export const routes: Routes = [
     GraphQlDictionariesService,
     GraphQlAuthService,
     GraphQlExpensesService,
+    GraphQlLocalizationsService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

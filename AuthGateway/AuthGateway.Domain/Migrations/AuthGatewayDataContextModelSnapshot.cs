@@ -129,20 +129,20 @@ namespace AuthGateway.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("CurrencyId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("DefaultLocale")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("DefaultUserProject")
+                    b.Property<int>("DefaultUserProjectCurrencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("DefaultUserProjectId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Modified")

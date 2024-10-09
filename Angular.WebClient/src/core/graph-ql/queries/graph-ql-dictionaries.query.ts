@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 
-export const DICTIONARIES_GET_SITE_SETTINGS = gql`
+export const GET_SITE_SETTINGS = gql`
     query GetSiteSettings {
         dictionaries_site_settings {
             locale
@@ -13,6 +13,89 @@ export const DICTIONARIES_GET_SITE_SETTINGS = gql`
                 locale
                 frequency
             }
+        }
+    }
+`;
+
+export const GET_COUNTRIES_DICTIONARY = gql`
+    query GetCountries($version: String) {
+        dictionaries_get_countries_dictionary(version: $version) {
+            items {
+                id
+                title
+                code
+                titleEn
+                isActive
+            }
+            version
+        }
+    }
+`;
+
+export const GET_CURRENCIES_DICTIONARY = gql`
+    query GetCurrencies($version: String) {
+        dictionaries_get_currencies_dictionary(version: $version) {
+            items {
+                id
+                title
+                code
+                symbol
+                titleEn
+                isActive
+            }
+            version
+        }
+    }
+`;
+
+export const GET_FREQUENCIES_DICTIONARY = gql`
+    query GetFrequencies($version: String) {
+        dictionaries_get_frequencies_dictionary(version: $version) {
+            items {
+                id
+                title
+                description
+                isActive
+                frequencyEnum
+            }
+            version
+        }
+    }
+`;
+
+export const GET_CATEGORIES_DICTIONARY = gql`
+    query GetCategories($version: String) {
+        dictionaries_get_categories_dictionary(version: $version) {
+            items {
+                node {
+                    id
+                    title
+                    icon
+                    color
+                    isActive
+                    isPositive
+                    parentId
+                    children {
+                        id
+                        title
+                        icon
+                        color
+                        isActive
+                        isPositive
+                        parentId
+                    }
+                }
+                parent {
+                    id
+                    title
+                    icon
+                    color
+                    isActive
+                    isPositive
+                    parentId
+                }
+            }
+            version
         }
     }
 `;

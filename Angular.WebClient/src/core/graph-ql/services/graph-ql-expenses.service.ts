@@ -13,16 +13,16 @@ import {
     REMOVE_EXPENSE, REMOVE_PLANNED_EXPENSE,
     UPDATE_EXPENSE, UPDATE_PLANNED_EXPENSE
 } from "../queries/graph-ql-expenses.query";
+import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
 import {
     ColumnEnum,
     FilteredListResponseOfExpenseResponse,
     FilteredListResponseOfPlannedExpenseResponse, FilteredListResponseOfUserAllowedProjectResponse,
     FilteredListResponseOfUserProjectResponse,
     OrderDirectionEnum,
-    UserAllowedProjectResponse,
     UserProjectResponse
 } from "../../api-clients/common-module.client";
-import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
+import {ApolloBase} from "apollo-angular";
 
 @Injectable({
     providedIn: 'root',
@@ -33,6 +33,10 @@ export class GraphQlExpensesService {
     ) {
     }
 
+    get apolloClient(): ApolloBase<any> {
+        return this.apollo.expenses;
+    }
+
     public getFilteredExpenses(
         baseFilter: BaseGraphQlFilteredModel,
         userProjectId: string = '',
@@ -40,7 +44,7 @@ export class GraphQlExpensesService {
     ): Observable<ApolloQueryResult<{
         expenses_get_filtered_expenses: FilteredListResponseOfExpenseResponse | undefined
     }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .watchQuery({
                 query: GET_FILTERED_EXPENSES,
                 variables: {
@@ -61,7 +65,7 @@ export class GraphQlExpensesService {
     ): Observable<ApolloQueryResult<{
         expenses_get_filtered_planned_expenses: FilteredListResponseOfPlannedExpenseResponse | undefined
     }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .watchQuery({
                 query: GET_FILTERED_PLANNED_EXPENSES,
                 variables: {
@@ -85,7 +89,7 @@ export class GraphQlExpensesService {
         categoryId: number | undefined,
         userProjectId: string | undefined
     ): Observable<ApolloQueryResult<{ success: boolean }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .mutate({
                 mutation: !!id ? UPDATE_EXPENSE : CREATE_EXPENSE,
                 variables: {
@@ -114,7 +118,7 @@ public createOrUpdatePlannedExpense(
     frequencyId: number | undefined,
     isActive: boolean | undefined
 ): Observable<ApolloQueryResult<{ success: boolean }>> {
-    return this.apollo.expenses
+    return this.apolloClient
         .mutate({
             mutation: !!id ? UPDATE_PLANNED_EXPENSE : CREATE_PLANNED_EXPENSE,
             variables: {
@@ -134,7 +138,7 @@ public createOrUpdatePlannedExpense(
 }
 
     public removeExpense(id: string | undefined): Observable<ApolloQueryResult<{ success: boolean }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .mutate({
                 mutation: REMOVE_EXPENSE,
                 variables: {
@@ -144,7 +148,7 @@ public createOrUpdatePlannedExpense(
     }
 
     public removePlannedExpense(id: string | undefined): Observable<ApolloQueryResult<{ success: boolean }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .mutate({
                 mutation: REMOVE_PLANNED_EXPENSE,
                 variables: {
@@ -158,7 +162,7 @@ public createOrUpdatePlannedExpense(
         currencyIds: number[],
         isActive: boolean
     ): Observable<ApolloQueryResult<{ success: boolean }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .mutate({
                 mutation: CREATE_USER_PROJECT,
                 variables: {
@@ -172,7 +176,7 @@ public createOrUpdatePlannedExpense(
     public getUserProjectById(id: string): Observable<ApolloQueryResult<{
         expenses_get_user_project_by_id: UserProjectResponse
     }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .watchQuery({
                 query: GET_USER_PROJECT_BY_ID,
                 variables: {
@@ -185,15 +189,15 @@ public createOrUpdatePlannedExpense(
     public getFilteredUserProjects(): Observable<ApolloQueryResult<{
         expenses_get_filtered_user_projects: FilteredListResponseOfUserProjectResponse
     }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .watchQuery({
                 query: GET_FILTERED_USER_PROJECTS,
                 variables: {
                     isFull: false,
                     pageNumber: 1,
                     pageSize: 10,
-                    column: ColumnEnum.Created.toString(),
-                    direction: OrderDirectionEnum.Desc.toString()
+                    column: ColumnEnum.Created,
+                    direction: OrderDirectionEnum.Desc
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{
@@ -204,15 +208,15 @@ public createOrUpdatePlannedExpense(
     public getFilteredUserAllowedProjects(): Observable<ApolloQueryResult<{
         expenses_get_filtered_user_allowed_projects: FilteredListResponseOfUserAllowedProjectResponse
     }>> {
-        return this.apollo.expenses
+        return this.apolloClient
             .watchQuery({
                 query: GET_FILTERED_USER_ALLOWED_PROJECTS,
                 variables: {
                     isFull: false,
                     pageNumber: 1,
                     pageSize: 10,
-                    column: ColumnEnum.Created.toString(),
-                    direction: OrderDirectionEnum.Desc.toString()
+                    column: ColumnEnum.Created,
+                    direction: OrderDirectionEnum.Desc
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{

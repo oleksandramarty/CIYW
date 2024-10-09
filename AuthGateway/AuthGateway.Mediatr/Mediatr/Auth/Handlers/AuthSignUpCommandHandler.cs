@@ -37,8 +37,7 @@ public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
         this.entityValidator.ValidateVoidRequest<AuthSignUpCommand>(command, () => new AuthSignUpCommandValidator());
         
         await this.entityValidator.ValidateExistParamAsync<User>(
-            u => (command.Id.HasValue && u.Id != command.Id.Value) &&
-                 u.Email == command.Email, 
+            u => u.Email == command.Email, 
             ErrorMessages.EntityWithEmailAlreadyExists, 
             cancellationToken);
 

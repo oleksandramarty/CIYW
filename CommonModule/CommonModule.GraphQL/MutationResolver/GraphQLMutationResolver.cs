@@ -1,4 +1,5 @@
 using CommonModule.Core.JsonConverter;
+using CommonModule.Shared;
 using CommonModule.Shared.Common.BaseInterfaces;
 using GraphQL;
 using GraphQL.Types;

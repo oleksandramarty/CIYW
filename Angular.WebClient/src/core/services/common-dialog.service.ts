@@ -9,10 +9,10 @@ import {LocalizationService} from "./localization.service";
 import {
     CreateUpdateExpenseComponent
 } from "../../modules/dialogs/create-update-expense/create-update-expense.component";
-import {ExpenseResponse, PlannedExpenseResponse, UserProjectResponse} from "../api-clients/common-module.client";
 import {
     CreateUpdatePlannedExpenseComponent
 } from "../../modules/dialogs/create-update-planned-expense/create-update-planned-expense.component";
+import {ExpenseResponse, PlannedExpenseResponse, UserProjectResponse} from "../api-clients/common-module.client";
 
 @Injectable({
     providedIn: 'root'

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AuthGateway.Mediatr.Mediatr.Auth.Commands;
 
-public class AuthSignUpCommand: BaseIdEntity<Guid?>, IRequest
+public class AuthSignUpCommand: IRequest
 {
     public string Login { get; set; }
     public string Email { get; set; }

@@ -1,31 +1,26 @@
 import { Injectable } from "@angular/core";
-import {
-    CategoryResponse,
-    CountryResponse,
-    CurrencyResponse,
-    DictionaryClient,
-    FrequencyResponse,
-    GetCategoriesRequest,
-    GetCountriesRequest,
-    GetCurrenciesRequest,
-    TreeNodeResponseOfCategoryResponse,
-    VersionedListResponseOfCountryResponse,
-    VersionedListResponseOfCurrencyResponse,
-    VersionedListResponseOfFrequencyResponse, VersionedListResponseOfTreeNodeResponseOfCategoryResponse
-} from "../api-clients/dictionaries-client";
 import {catchError, forkJoin, take, tap} from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { handleApiError } from "../helpers/rxjs.helper";
-import {
-    GetLocalesRequest,
-    LocaleResponse,
-    LocalizationClient, VersionedListResponseOfLocaleResponse
-} from "../api-clients/localizations-client";
 import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionarie.model";
 import {LocalStorageService} from "./local-storage.service";
 import {SiteSettingsService} from "./site-settings.service";
 import {DataItem} from "../models/common/data-item.model";
 import {LocalizationService} from "./localization.service";
+import {
+    CategoryResponse,
+    CountryResponse,
+    CurrencyResponse,
+    FrequencyResponse,
+    LocaleResponse, TreeNodeResponseOfCategoryResponse,
+    VersionedListResponseOfCountryResponse,
+    VersionedListResponseOfCurrencyResponse,
+    VersionedListResponseOfFrequencyResponse,
+    VersionedListResponseOfLocaleResponse,
+    VersionedListResponseOfTreeNodeResponseOfCategoryResponse
+} from "../api-clients/common-module.client";
+import {GraphQlLocalizationsService} from "../graph-ql/services/graph-ql-localizations.service";
+import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
 
 @Injectable({
     providedIn: 'root'
@@ -164,11 +159,11 @@ export class DictionaryService {
 
     constructor(
         private readonly snackBar: MatSnackBar,
-        private readonly localizationClient: LocalizationClient,
-        private readonly dictionaryClient: DictionaryClient,
         private readonly localStorageService: LocalStorageService,
         private readonly siteSettingsService: SiteSettingsService,
-        private readonly localizationService: LocalizationService
+        private readonly localizationService: LocalizationService,
+        private readonly graphQlLocalizationsService: GraphQlLocalizationsService,
+        private readonly graphQlDictionariesService: GraphQlDictionariesService
     ) {
         this._dictionaries = this.localStorageService.getItem('dictionaries') as Dictionary || new Dictionary();
     }
@@ -178,14 +173,12 @@ export class DictionaryService {
             this.siteSettingsService.version.locale !== this.dictionaries?.locales?.version
         ) {
             forkJoin({
-                locales: this.localizationClient.localization_GetLocales(
-                    new GetLocalesRequest({
-                        version: this.dictionaries?.locales?.version
-                    })
-                ).pipe(take(1))
+                locales: this.graphQlLocalizationsService.getDictionaryLocales(
+                    this.dictionaries?.locales?.version).pipe(take(1))
             }).pipe(
-                tap(({ locales }) => {
+                tap((result) => {
                     if (this._dictionaries) {
+                        const locales = result?.locales.data?.localizations_get_locales_dictionary as VersionedListResponseOfLocaleResponse;
                         this._dictionaries.locales = locales;
 
                         this.localesMap = locales;
@@ -209,25 +202,22 @@ export class DictionaryService {
             this.siteSettingsService.version.frequency !== this.dictionaries?.frequencies?.version
         ) {
             forkJoin({
-                countries: this.dictionaryClient.dictionary_GetCountries(
-                    new GetCountriesRequest({
-                        version: this.dictionaries?.countries?.version
-                    })).pipe(take(1)),
-                currencies: this.dictionaryClient.dictionary_GetCurrencies(
-                    new GetCurrenciesRequest({
-                        version: this.dictionaries?.countries?.version
-                    })).pipe(take(1)),
-                categories: this.dictionaryClient.dictionary_GetCategories(
-                    new GetCategoriesRequest({
-                        version: this.dictionaries?.countries?.version
-                    })).pipe(take(1)),
-                frequencies: this.dictionaryClient.dictionary_GetFrequencies(
-                    new GetCategoriesRequest({
-                        version: this.dictionaries?.countries?.version
-                    })).pipe(take(1))
+                result_countries: this.graphQlDictionariesService.getCountriesDictionary(
+                    this.dictionaries?.countries?.version).pipe(take(1)),
+                result_currencies: this.graphQlDictionariesService.getCurrenciesDictionary(
+                    this.dictionaries?.currencies?.version).pipe(take(1)),
+                result_categories: this.graphQlDictionariesService.getCategoriesDictionary(
+                    this.dictionaries?.categories?.version).pipe(take(1)),
+                result_frequencies: this.graphQlDictionariesService.getFrequenciesDictionary(
+                    this.dictionaries?.frequencies?.version).pipe(take(1))
             }).pipe(
-                tap(({ countries, currencies, categories, frequencies }) => {
+                tap(({ result_countries, result_currencies, result_categories, result_frequencies }) => {
                     if (this._dictionaries) {
+                        const countries = result_countries?.data?.dictionaries_get_countries_dictionary as VersionedListResponseOfCountryResponse;
+                        const currencies = result_currencies?.data?.dictionaries_get_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
+                        const categories = result_categories?.data?.dictionaries_get_categories_dictionary as VersionedListResponseOfTreeNodeResponseOfCategoryResponse;
+                        const frequencies = result_frequencies?.data?.dictionaries_get_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
+
                         this._dictionaries.countries = countries;
                         this._dictionaries.currencies = currencies;
                         this._dictionaries.categories = categories;

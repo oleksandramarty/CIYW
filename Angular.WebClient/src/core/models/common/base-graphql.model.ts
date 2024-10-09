@@ -21,8 +21,8 @@ export class BaseGraphQlFilteredModel {
     isFull: boolean;
     pageNumber: number;
     pageSize: number;
-    column: string;
-    direction: string;
+    column: ColumnEnum;
+    direction: OrderDirectionEnum;
     query: string;
 
     constructor(
@@ -33,8 +33,8 @@ export class BaseGraphQlFilteredModel {
         isFull: boolean = false,
         pageNumber: number = 1,
         pageSize: number = 10,
-        column: string = 'Created',
-        direction: string = 'Desc',
+        column: ColumnEnum = ColumnEnum.Created,
+        direction: OrderDirectionEnum = OrderDirectionEnum.Desc,
         query: string = ''
     ) {
         this.dateFrom = dateFrom;

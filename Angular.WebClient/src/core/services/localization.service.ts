@@ -1,15 +1,11 @@
-import {Injectable} from '@angular/core';
-import {LocalStorageService} from './local-storage.service';
-import {take, tap, BehaviorSubject} from 'rxjs';
-import {handleApiError} from '../helpers/rxjs.helper';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {
-    GetLocalizationsRequest,
-    LocalizationClient,
-    LocalizationsResponse
-} from "../api-clients/localizations-client";
-import {SiteSettingsService} from "./site-settings.service";
-import {SiteSettingsResponse} from "../api-clients/common-module.client";
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from './local-storage.service';
+import { take, tap, BehaviorSubject } from 'rxjs';
+import { handleApiError } from '../helpers/rxjs.helper';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SiteSettingsService } from './site-settings.service';
+import { LocalizationsResponse, SiteSettingsResponse, LocalizationResponse, LocalizationItemResponse } from '../api-clients/common-module.client';
+import { GraphQlLocalizationsService } from '../graph-ql/services/graph-ql-localizations.service';
 
 @Injectable({
     providedIn: 'root'
@@ -49,26 +45,38 @@ export class LocalizationService {
             return undefined;
         }
 
-        const mergedData: { [key: string]: { [key: string]: string } } = {};
+        const mergedData: { [key: string]: LocalizationItemResponse[] } = {};
 
         if (this._nonPublicLocalizations?.data) {
-            Object.assign(mergedData, this._nonPublicLocalizations.data);
+            this._nonPublicLocalizations.data.forEach(locale => {
+                mergedData[locale.locale] = locale.items;
+            });
         }
 
         if (this._publicLocalizations?.data) {
-            for (const locale in this._publicLocalizations.data) {
-                if (this._publicLocalizations.data.hasOwnProperty(locale)) {
-                    mergedData[locale] = {
-                        ...mergedData[locale],
-                        ...this._publicLocalizations.data[locale]
-                    };
+            this._publicLocalizations.data.forEach(locale => {
+                if (!mergedData[locale.locale]) {
+                    mergedData[locale.locale] = [];
                 }
-            }
+                locale.items.forEach(item => {
+                    const existingItem = mergedData[locale.locale].find(i => i.key === item.key);
+                    if (existingItem) {
+                        existingItem.value = item.value;
+                    } else {
+                        mergedData[locale.locale].push(item);
+                    }
+                });
+            });
         }
+
+        const mergedLocalizations = Object.keys(mergedData).map(locale => new LocalizationResponse({
+            locale,
+            items: mergedData[locale]
+        }));
 
         return new LocalizationsResponse({
             version: this._nonPublicLocalizations?.version ?? this._publicLocalizations?.version,
-            data: mergedData
+            data: mergedLocalizations
         });
     }
 
@@ -78,43 +86,42 @@ export class LocalizationService {
 
     constructor(
         private readonly snackBar: MatSnackBar,
-        private readonly localizationClient: LocalizationClient,
         private readonly localStorageService: LocalStorageService,
-        private readonly siteSettingsService: SiteSettingsService
-    ) {
-    }
+        private readonly siteSettingsService: SiteSettingsService,
+        private readonly graphQlLocalizationsService: GraphQlLocalizationsService
+    ) { }
 
     public initialize(isPublic: boolean): void {
         if (!this.siteSettingsService.version ||
-            isPublic && this.siteSettingsService.version.localizationPublic !== this.publicLocalizations?.version ||
-            !isPublic && this.siteSettingsService.version.localization !== this.nonPublicLocalizations?.version) {
-            (isPublic ?
-                this.localizationClient.localization_GetPublicLocalizations(
-                    new GetLocalizationsRequest(
-                        {
-                            version: this.publicLocalizations?.version,
-                            isPublic: true
-                        })) :
-                this.localizationClient.localization_GetLocalizations(
-                    new GetLocalizationsRequest(
-                        {
-                            version: this.nonPublicLocalizations?.version,
-                            isPublic: false
-                        })))
-                .pipe(
-                    take(1),
-                    tap((data) => {
-                        if (!!data && Object.keys(data.data).length > 0) {
-                            if (isPublic) {
+            (isPublic && this.siteSettingsService.version.localizationPublic !== this.publicLocalizations?.version) ||
+            (!isPublic && this.siteSettingsService.version.localization !== this.nonPublicLocalizations?.version)) {
+            if (isPublic) {
+                this.graphQlLocalizationsService.getPublicLocalizations(this.publicLocalizations?.version)
+                    .pipe(
+                        take(1),
+                        tap((result) => {
+                            const data = result?.data?.localizations_get_public_localizations as LocalizationsResponse;
+                            if (data && data.data.length > 0) {
                                 this.publicLocalizations = data;
-                            } else {
+                            }
+                            this.localeChangedSub.next(true);
+                        }),
+                        handleApiError(this.snackBar)
+                    ).subscribe();
+            } else {
+                this.graphQlLocalizationsService.getLocalizations(this.nonPublicLocalizations?.version)
+                    .pipe(
+                        take(1),
+                        tap((result) => {
+                            const data = result?.data?.localizations_get_localizations as LocalizationsResponse;
+                            if (data && data.data.length > 0) {
                                 this.nonPublicLocalizations = data;
                             }
-                        }
-                        this.localeChangedSub.next(true);
-                    }),
-                    handleApiError(this.snackBar)
-                ).subscribe();
+                            this.localeChangedSub.next(true);
+                        }),
+                        handleApiError(this.snackBar)
+                    ).subscribe();
+            }
         }
 
         this.localeChangedSub.next(true);
@@ -129,25 +136,38 @@ export class LocalizationService {
             return undefined;
         }
 
-        return this._publicLocalizations?.data[locale ?? 'en']?.[key] ??
-            this._nonPublicLocalizations?.data[locale ?? 'en']?.[key] ?? key;
+        const publicTranslation = this._publicLocalizations?.data.find(l => l.locale === locale)?.items.find(i => i.key === key)?.value;
+        const nonPublicTranslation = this._nonPublicLocalizations?.data.find(l => l.locale === locale)?.items.find(i => i.key === key)?.value;
+
+        return publicTranslation ?? nonPublicTranslation ?? key;
     }
 
     public getAllTranslations(locale: string): { [key: string]: string } | undefined {
-        return this.getAllLocalizations?.data[locale];
+        const translations: { [key: string]: string } = {};
+
+        this._publicLocalizations?.data.find(l => l.locale === locale)?.items.forEach(item => {
+            translations[item.key] = item.value;
+        });
+
+        this._nonPublicLocalizations?.data.find(l => l.locale === locale)?.items.forEach(item => {
+            translations[item.key] = item.value;
+        });
+
+        return translations;
     }
 
     public getAllTranslationsByKey(key: string): string[] | undefined {
         const translations: Set<string> = new Set();
 
-        Object.keys(this.publicLocalizations?.data ?? {}).forEach((locale) => {
-            const translation = this.publicLocalizations?.data[locale ?? 'en']?.[key];
+        this._publicLocalizations?.data.forEach(locale => {
+            const translation = locale.items.find(i => i.key === key)?.value;
             if (translation) {
                 translations.add(translation);
             }
         });
-        Object.keys(this.nonPublicLocalizations?.data ?? {}).forEach((locale) => {
-            const translation = this.nonPublicLocalizations?.data[locale ?? 'en']?.[key];
+
+        this._nonPublicLocalizations?.data.forEach(locale => {
+            const translation = locale.items.find(i => i.key === key)?.value;
             if (translation) {
                 translations.add(translation);
             }
@@ -162,7 +182,7 @@ export class LocalizationService {
             this.siteSettingsService.siteSettings = {
                 ...currentSettings,
                 locale: code ?? 'en'
-            } as SiteSettingsResponse
+            } as SiteSettingsResponse;
 
             this.localeChangedSub.next(true);
         }

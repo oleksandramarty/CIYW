@@ -75,3 +75,20 @@ FROM "CIYW_LocalizationDb"."Locales"."Localizations"
 WHERE "LocaleId" = 1
 ORDER BY "Id";
 ```
+
+### Localizations SQL
+```sql
+SELECT
+    Localizations."Id" || ';' ||
+    Locales."IsoCode"  || ';' ||
+    REPLACE(Localizations."Key", '.', '_') || ';' ||
+    Localizations."ValueEn" || ';' ||
+    Localizations."Value" || ';' ||
+    CASE
+        WHEN Localizations."IsPublic" = true THEN '1'
+        ELSE '0'
+        END || ';' AS "ConcatenatedColumn"
+FROM "Locales"."Localizations" AS Localizations
+         LEFT JOIN "Locales"."Locales" AS Locales ON Locales."Id" = Localizations."LocaleId"
+WHERE "LocaleId" = 1;
+```

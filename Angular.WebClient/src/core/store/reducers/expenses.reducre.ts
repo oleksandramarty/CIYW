@@ -7,9 +7,7 @@ import {
 } from "../actions/expenses.actions";
 import {
     FilteredListResponseOfUserAllowedProjectResponse,
-    FilteredListResponseOfUserProjectResponse,
-    UserAllowedProjectResponse,
-    UserProjectResponse
+    FilteredListResponseOfUserProjectResponse
 } from "../../api-clients/common-module.client";
 
 export interface ExpensesState {

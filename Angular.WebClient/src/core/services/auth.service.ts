@@ -8,13 +8,10 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { handleApiError } from "../helpers/rxjs.helper";
 import {selectToken} from "../store/selectors/auth.selectors";
-import {ConfirmationMessageComponent} from "../../modules/dialogs/confirmation-message/confirmation-message.component";
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {GraphQlAuthService} from "../graph-ql/services/graph-ql-auth.service";
-import {JwtTokenResponse, UserResponse} from "../api-clients/common-module.client";
 import {LoaderService} from "./loader.service";
-import {AuthClient} from "../api-clients/auth-client";
 import {CommonDialogService} from "./common-dialog.service";
+import {JwtTokenResponse, UserResponse} from "../api-clients/common-module.client";
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +32,6 @@ export class AuthService {
     private readonly localizationService: LocalizationService,
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly authClient: AuthClient,
     private readonly store: Store,
     private readonly graphQlAuthService: GraphQlAuthService,
     private readonly loaderService: LoaderService,
@@ -86,7 +82,7 @@ export class AuthService {
 
   public logout(): void {
     const logoutAction = () => {
-      this.authClient.auth_SignOut()
+      this.graphQlAuthService.signOut()
           .pipe(
               take(1),
               tap(() => {

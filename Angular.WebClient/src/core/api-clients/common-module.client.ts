@@ -467,6 +467,408 @@ export interface IUserSettingResponse extends IBaseIdEntityOfGuid {
     version: string;
 }
 
+export class BaseFilterRequest implements IBaseFilterRequest {
+    paginator?: PaginatorEntity | undefined;
+    sort?: BaseSortableRequest | undefined;
+    dateRange?: BaseDateRangeFilterRequest | undefined;
+    amountRange?: BaseAmountRangeFilterRequest | undefined;
+    query?: string | undefined;
+
+    constructor(data?: IBaseFilterRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
+            this.sort = _data["sort"] ? BaseSortableRequest.fromJS(_data["sort"]) : <any>undefined;
+            this.dateRange = _data["dateRange"] ? BaseDateRangeFilterRequest.fromJS(_data["dateRange"]) : <any>undefined;
+            this.amountRange = _data["amountRange"] ? BaseAmountRangeFilterRequest.fromJS(_data["amountRange"]) : <any>undefined;
+            this.query = _data["query"];
+        }
+    }
+
+    static fromJS(data: any): BaseFilterRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseFilterRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
+        data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
+        data["dateRange"] = this.dateRange ? this.dateRange.toJSON() : <any>undefined;
+        data["amountRange"] = this.amountRange ? this.amountRange.toJSON() : <any>undefined;
+        data["query"] = this.query;
+        return data;
+    }
+}
+
+export interface IBaseFilterRequest {
+    paginator?: PaginatorEntity | undefined;
+    sort?: BaseSortableRequest | undefined;
+    dateRange?: BaseDateRangeFilterRequest | undefined;
+    amountRange?: BaseAmountRangeFilterRequest | undefined;
+    query?: string | undefined;
+}
+
+export class PaginatorEntity implements IPaginatorEntity {
+    pageNumber!: number;
+    pageSize!: number;
+    isFull!: boolean;
+
+    constructor(data?: IPaginatorEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            this.isFull = _data["isFull"];
+        }
+    }
+
+    static fromJS(data: any): PaginatorEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatorEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["isFull"] = this.isFull;
+        return data;
+    }
+}
+
+export interface IPaginatorEntity {
+    pageNumber: number;
+    pageSize: number;
+    isFull: boolean;
+}
+
+export class BaseSortableRequest implements IBaseSortableRequest {
+    column?: ColumnEnum | undefined;
+    direction?: OrderDirectionEnum | undefined;
+
+    constructor(data?: IBaseSortableRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.column = _data["column"];
+            this.direction = _data["direction"];
+        }
+    }
+
+    static fromJS(data: any): BaseSortableRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseSortableRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["column"] = this.column;
+        data["direction"] = this.direction;
+        return data;
+    }
+}
+
+export interface IBaseSortableRequest {
+    column?: ColumnEnum | undefined;
+    direction?: OrderDirectionEnum | undefined;
+}
+
+export enum ColumnEnum {
+    Date = 1,
+    Created = 2,
+    Modified = 3,
+    Title = 4,
+    Description = 5,
+    Amount = 6,
+    NextDate = 7,
+}
+
+export enum OrderDirectionEnum {
+    Desc = 1,
+    Asc = 2,
+}
+
+export class BaseDateRangeFilterRequest implements IBaseDateRangeFilterRequest {
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
+
+    constructor(data?: IBaseDateRangeFilterRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): BaseDateRangeFilterRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseDateRangeFilterRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IBaseDateRangeFilterRequest {
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
+}
+
+export class BaseAmountRangeFilterRequest implements IBaseAmountRangeFilterRequest {
+    amountFrom?: number | undefined;
+    amountTo?: number | undefined;
+
+    constructor(data?: IBaseAmountRangeFilterRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amountFrom = _data["amountFrom"];
+            this.amountTo = _data["amountTo"];
+        }
+    }
+
+    static fromJS(data: any): BaseAmountRangeFilterRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseAmountRangeFilterRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amountFrom"] = this.amountFrom;
+        data["amountTo"] = this.amountTo;
+        return data;
+    }
+}
+
+export interface IBaseAmountRangeFilterRequest {
+    amountFrom?: number | undefined;
+    amountTo?: number | undefined;
+}
+
+export class BaseVersionEntity implements IBaseVersionEntity {
+    version?: string | undefined;
+
+    constructor(data?: IBaseVersionEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.version = _data["version"];
+        }
+    }
+
+    static fromJS(data: any): BaseVersionEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseVersionEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["version"] = this.version;
+        return data;
+    }
+}
+
+export interface IBaseVersionEntity {
+    version?: string | undefined;
+}
+
+export class LocalizationsResponse extends BaseVersionEntity implements ILocalizationsResponse {
+    data!: LocalizationResponse[];
+
+    constructor(data?: ILocalizationsResponse) {
+        super(data);
+        if (!data) {
+            this.data = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(LocalizationResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): LocalizationsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new LocalizationsResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ILocalizationsResponse extends IBaseVersionEntity {
+    data: LocalizationResponse[];
+}
+
+export class LocalizationResponse implements ILocalizationResponse {
+    locale!: string;
+    items!: LocalizationItemResponse[];
+
+    constructor(data?: ILocalizationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.locale = _data["locale"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(LocalizationItemResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): LocalizationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new LocalizationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["locale"] = this.locale;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface ILocalizationResponse {
+    locale: string;
+    items: LocalizationItemResponse[];
+}
+
+export class LocalizationItemResponse implements ILocalizationItemResponse {
+    key!: string;
+    value!: string;
+
+    constructor(data?: ILocalizationItemResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.key = _data["key"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): LocalizationItemResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new LocalizationItemResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["key"] = this.key;
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface ILocalizationItemResponse {
+    key: string;
+    value: string;
+}
+
 export class FilteredListResponseOfExpenseResponse implements IFilteredListResponseOfExpenseResponse {
     entities!: ExpenseResponse[];
     paginator?: PaginatorEntity | undefined;
@@ -585,50 +987,6 @@ export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
     userProjectId: string;
     createdUserId: string;
     version: string;
-}
-
-export class PaginatorEntity implements IPaginatorEntity {
-    pageNumber!: number;
-    pageSize!: number;
-    isFull!: boolean;
-
-    constructor(data?: IPaginatorEntity) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageNumber = _data["pageNumber"];
-            this.pageSize = _data["pageSize"];
-            this.isFull = _data["isFull"];
-        }
-    }
-
-    static fromJS(data: any): PaginatorEntity {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginatorEntity();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageNumber"] = this.pageNumber;
-        data["pageSize"] = this.pageSize;
-        data["isFull"] = this.isFull;
-        return data;
-    }
-}
-
-export interface IPaginatorEntity {
-    pageNumber: number;
-    pageSize: number;
-    isFull: boolean;
 }
 
 export class FilteredListResponseOfPlannedExpenseResponse implements IFilteredListResponseOfPlannedExpenseResponse {
@@ -1034,14 +1392,487 @@ export interface IUserAllowedProjectResponse extends IBaseIdEntityOfGuid {
     isReadOnly: boolean;
 }
 
-export class BaseFilterRequest implements IBaseFilterRequest {
-    paginator?: PaginatorEntity | undefined;
-    sort?: BaseSortableRequest | undefined;
-    dateRange?: BaseDateRangeFilterRequest | undefined;
-    amountRange?: BaseAmountRangeFilterRequest | undefined;
-    query?: string | undefined;
+export class VersionedListResponseOfCurrencyResponse extends BaseVersionEntity implements IVersionedListResponseOfCurrencyResponse {
+    items!: CurrencyResponse[];
 
-    constructor(data?: IBaseFilterRequest) {
+    constructor(data?: IVersionedListResponseOfCurrencyResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CurrencyResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListResponseOfCurrencyResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListResponseOfCurrencyResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListResponseOfCurrencyResponse extends IBaseVersionEntity {
+    items: CurrencyResponse[];
+}
+
+export class CurrencyResponse extends BaseIdEntityOfInteger implements ICurrencyResponse {
+    title!: string;
+    code!: string;
+    symbol!: string;
+    titleEn!: string;
+    isActive!: boolean;
+    countries!: CountryResponse[];
+
+    constructor(data?: ICurrencyResponse) {
+        super(data);
+        if (!data) {
+            this.countries = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.code = _data["code"];
+            this.symbol = _data["symbol"];
+            this.titleEn = _data["titleEn"];
+            this.isActive = _data["isActive"];
+            if (Array.isArray(_data["countries"])) {
+                this.countries = [] as any;
+                for (let item of _data["countries"])
+                    this.countries!.push(CountryResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): CurrencyResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrencyResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["code"] = this.code;
+        data["symbol"] = this.symbol;
+        data["titleEn"] = this.titleEn;
+        data["isActive"] = this.isActive;
+        if (Array.isArray(this.countries)) {
+            data["countries"] = [];
+            for (let item of this.countries)
+                data["countries"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICurrencyResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    code: string;
+    symbol: string;
+    titleEn: string;
+    isActive: boolean;
+    countries: CountryResponse[];
+}
+
+export class CountryResponse extends BaseIdEntityOfInteger implements ICountryResponse {
+    title!: string;
+    code!: string;
+    titleEn!: string;
+    isActive!: boolean;
+    currencies!: CurrencyResponse[];
+
+    constructor(data?: ICountryResponse) {
+        super(data);
+        if (!data) {
+            this.currencies = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.code = _data["code"];
+            this.titleEn = _data["titleEn"];
+            this.isActive = _data["isActive"];
+            if (Array.isArray(_data["currencies"])) {
+                this.currencies = [] as any;
+                for (let item of _data["currencies"])
+                    this.currencies!.push(CurrencyResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): CountryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CountryResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["code"] = this.code;
+        data["titleEn"] = this.titleEn;
+        data["isActive"] = this.isActive;
+        if (Array.isArray(this.currencies)) {
+            data["currencies"] = [];
+            for (let item of this.currencies)
+                data["currencies"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICountryResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    code: string;
+    titleEn: string;
+    isActive: boolean;
+    currencies: CurrencyResponse[];
+}
+
+export class VersionedListResponseOfFrequencyResponse extends BaseVersionEntity implements IVersionedListResponseOfFrequencyResponse {
+    items!: FrequencyResponse[];
+
+    constructor(data?: IVersionedListResponseOfFrequencyResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(FrequencyResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListResponseOfFrequencyResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListResponseOfFrequencyResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListResponseOfFrequencyResponse extends IBaseVersionEntity {
+    items: FrequencyResponse[];
+}
+
+export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequencyResponse {
+    title!: string;
+    description!: string;
+    isActive!: boolean;
+    frequencyEnum!: FrequencyEnum;
+
+    constructor(data?: IFrequencyResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.isActive = _data["isActive"];
+            this.frequencyEnum = _data["frequencyEnum"];
+        }
+    }
+
+    static override fromJS(data: any): FrequencyResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new FrequencyResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["isActive"] = this.isActive;
+        data["frequencyEnum"] = this.frequencyEnum;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IFrequencyResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    description: string;
+    isActive: boolean;
+    frequencyEnum: FrequencyEnum;
+}
+
+export enum FrequencyEnum {
+    Daily = 1,
+    Weekly = 2,
+    BiWeekly = 3,
+    Monthly = 4,
+    Quarterly = 5,
+    SemiAnnual = 6,
+    Annual = 7,
+    OneTime = 8,
+    Custom = 9,
+}
+
+export class VersionedListResponseOfLocaleResponse extends BaseVersionEntity implements IVersionedListResponseOfLocaleResponse {
+    items!: LocaleResponse[];
+
+    constructor(data?: IVersionedListResponseOfLocaleResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(LocaleResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListResponseOfLocaleResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListResponseOfLocaleResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListResponseOfLocaleResponse extends IBaseVersionEntity {
+    items: LocaleResponse[];
+}
+
+export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResponse {
+    isoCode!: string;
+    title!: string;
+    titleEn!: string;
+    titleNormalized!: string;
+    titleEnNormalized!: string;
+    isDefault!: boolean;
+    isActive!: boolean;
+    localeEnum!: LocaleEnum;
+    culture!: string;
+
+    constructor(data?: ILocaleResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.isoCode = _data["isoCode"];
+            this.title = _data["title"];
+            this.titleEn = _data["titleEn"];
+            this.titleNormalized = _data["titleNormalized"];
+            this.titleEnNormalized = _data["titleEnNormalized"];
+            this.isDefault = _data["isDefault"];
+            this.isActive = _data["isActive"];
+            this.localeEnum = _data["localeEnum"];
+            this.culture = _data["culture"];
+        }
+    }
+
+    static override fromJS(data: any): LocaleResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new LocaleResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isoCode"] = this.isoCode;
+        data["title"] = this.title;
+        data["titleEn"] = this.titleEn;
+        data["titleNormalized"] = this.titleNormalized;
+        data["titleEnNormalized"] = this.titleEnNormalized;
+        data["isDefault"] = this.isDefault;
+        data["isActive"] = this.isActive;
+        data["localeEnum"] = this.localeEnum;
+        data["culture"] = this.culture;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ILocaleResponse extends IBaseIdEntityOfInteger {
+    isoCode: string;
+    title: string;
+    titleEn: string;
+    titleNormalized: string;
+    titleEnNormalized: string;
+    isDefault: boolean;
+    isActive: boolean;
+    localeEnum: LocaleEnum;
+    culture: string;
+}
+
+export enum LocaleEnum {
+    English = 1,
+    Spanish = 2,
+    French = 3,
+    Ukrainian = 4,
+    Russian = 5,
+    German = 6,
+    Italian = 7,
+}
+
+export class VersionedListResponseOfCountryResponse extends BaseVersionEntity implements IVersionedListResponseOfCountryResponse {
+    items!: CountryResponse[];
+
+    constructor(data?: IVersionedListResponseOfCountryResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CountryResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListResponseOfCountryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListResponseOfCountryResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListResponseOfCountryResponse extends IBaseVersionEntity {
+    items: CountryResponse[];
+}
+
+export class VersionedListResponseOfTreeNodeResponseOfCategoryResponse extends BaseVersionEntity implements IVersionedListResponseOfTreeNodeResponseOfCategoryResponse {
+    items!: TreeNodeResponseOfCategoryResponse[];
+
+    constructor(data?: IVersionedListResponseOfTreeNodeResponseOfCategoryResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListResponseOfTreeNodeResponseOfCategoryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListResponseOfTreeNodeResponseOfCategoryResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListResponseOfTreeNodeResponseOfCategoryResponse extends IBaseVersionEntity {
+    items: TreeNodeResponseOfCategoryResponse[];
+}
+
+export class TreeNodeResponseOfCategoryResponse implements ITreeNodeResponseOfCategoryResponse {
+    node?: CategoryResponse | undefined;
+    parent?: CategoryResponse | undefined;
+
+    constructor(data?: ITreeNodeResponseOfCategoryResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1052,172 +1883,96 @@ export class BaseFilterRequest implements IBaseFilterRequest {
 
     init(_data?: any) {
         if (_data) {
-            this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
-            this.sort = _data["sort"] ? BaseSortableRequest.fromJS(_data["sort"]) : <any>undefined;
-            this.dateRange = _data["dateRange"] ? BaseDateRangeFilterRequest.fromJS(_data["dateRange"]) : <any>undefined;
-            this.amountRange = _data["amountRange"] ? BaseAmountRangeFilterRequest.fromJS(_data["amountRange"]) : <any>undefined;
-            this.query = _data["query"];
+            this.node = _data["node"] ? CategoryResponse.fromJS(_data["node"]) : <any>undefined;
+            this.parent = _data["parent"] ? CategoryResponse.fromJS(_data["parent"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): BaseFilterRequest {
+    static fromJS(data: any): TreeNodeResponseOfCategoryResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new BaseFilterRequest();
+        let result = new TreeNodeResponseOfCategoryResponse();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
-        data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["dateRange"] = this.dateRange ? this.dateRange.toJSON() : <any>undefined;
-        data["amountRange"] = this.amountRange ? this.amountRange.toJSON() : <any>undefined;
-        data["query"] = this.query;
+        data["node"] = this.node ? this.node.toJSON() : <any>undefined;
+        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
         return data;
     }
 }
 
-export interface IBaseFilterRequest {
-    paginator?: PaginatorEntity | undefined;
-    sort?: BaseSortableRequest | undefined;
-    dateRange?: BaseDateRangeFilterRequest | undefined;
-    amountRange?: BaseAmountRangeFilterRequest | undefined;
-    query?: string | undefined;
+export interface ITreeNodeResponseOfCategoryResponse {
+    node?: CategoryResponse | undefined;
+    parent?: CategoryResponse | undefined;
 }
 
-export class BaseSortableRequest implements IBaseSortableRequest {
-    column?: ColumnEnum | undefined;
-    direction?: OrderDirectionEnum | undefined;
+export class CategoryResponse extends BaseIdEntityOfInteger implements ICategoryResponse {
+    title!: string;
+    icon!: string;
+    color!: string;
+    isActive!: boolean;
+    isPositive!: boolean;
+    parentId?: number | undefined;
+    children!: TreeNodeResponseOfCategoryResponse[];
 
-    constructor(data?: IBaseSortableRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+    constructor(data?: ICategoryResponse) {
+        super(data);
+        if (!data) {
+            this.children = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.icon = _data["icon"];
+            this.color = _data["color"];
+            this.isActive = _data["isActive"];
+            this.isPositive = _data["isPositive"];
+            this.parentId = _data["parentId"];
+            if (Array.isArray(_data["children"])) {
+                this.children = [] as any;
+                for (let item of _data["children"])
+                    this.children!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
             }
         }
     }
 
-    init(_data?: any) {
-        if (_data) {
-            this.column = _data["column"];
-            this.direction = _data["direction"];
-        }
-    }
-
-    static fromJS(data: any): BaseSortableRequest {
+    static override fromJS(data: any): CategoryResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new BaseSortableRequest();
+        let result = new CategoryResponse();
         result.init(data);
         return result;
     }
 
-    toJSON(data?: any) {
+    override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["column"] = this.column;
-        data["direction"] = this.direction;
+        data["title"] = this.title;
+        data["icon"] = this.icon;
+        data["color"] = this.color;
+        data["isActive"] = this.isActive;
+        data["isPositive"] = this.isPositive;
+        data["parentId"] = this.parentId;
+        if (Array.isArray(this.children)) {
+            data["children"] = [];
+            for (let item of this.children)
+                data["children"].push(item.toJSON());
+        }
+        super.toJSON(data);
         return data;
     }
 }
 
-export interface IBaseSortableRequest {
-    column?: ColumnEnum | undefined;
-    direction?: OrderDirectionEnum | undefined;
-}
-
-export enum ColumnEnum {
-    Date = 1,
-    Created = 2,
-    Modified = 3,
-    Title = 4,
-    Description = 5,
-    Amount = 6,
-    NextDate = 7,
-}
-
-export enum OrderDirectionEnum {
-    Desc = 1,
-    Asc = 2,
-}
-
-export class BaseDateRangeFilterRequest implements IBaseDateRangeFilterRequest {
-    startDate?: Date | undefined;
-    endDate?: Date | undefined;
-
-    constructor(data?: IBaseDateRangeFilterRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): BaseDateRangeFilterRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new BaseDateRangeFilterRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IBaseDateRangeFilterRequest {
-    startDate?: Date | undefined;
-    endDate?: Date | undefined;
-}
-
-export class BaseAmountRangeFilterRequest implements IBaseAmountRangeFilterRequest {
-    amountFrom?: number | undefined;
-    amountTo?: number | undefined;
-
-    constructor(data?: IBaseAmountRangeFilterRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.amountFrom = _data["amountFrom"];
-            this.amountTo = _data["amountTo"];
-        }
-    }
-
-    static fromJS(data: any): BaseAmountRangeFilterRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new BaseAmountRangeFilterRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["amountFrom"] = this.amountFrom;
-        data["amountTo"] = this.amountTo;
-        return data;
-    }
-}
-
-export interface IBaseAmountRangeFilterRequest {
-    amountFrom?: number | undefined;
-    amountTo?: number | undefined;
+export interface ICategoryResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    icon: string;
+    color: string;
+    isActive: boolean;
+    isPositive: boolean;
+    parentId?: number | undefined;
+    children: TreeNodeResponseOfCategoryResponse[];
 }
 

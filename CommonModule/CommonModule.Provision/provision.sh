@@ -28,10 +28,6 @@ chmod +x "$SCRIPT_DIR/reinitialize_db.sh"
 chmod +x "$SCRIPT_DIR/reinitialize_db_data.sh"
 "$SCRIPT_DIR/reinitialize_db_data.sh" $isBulkUpdate
 
-# Generate client typescript files for Angular app
-chmod +x "$SCRIPT_DIR/InitScripts/generate_client_ts.sh"
-"$SCRIPT_DIR/InitScripts/generate_client_ts.sh"
-
 # Generate client additional models typescript files for Angular app
 chmod +x "$SCRIPT_DIR/InitScripts/generate_client_models_ts.sh"
 "$SCRIPT_DIR/InitScripts/generate_client_models_ts.sh"

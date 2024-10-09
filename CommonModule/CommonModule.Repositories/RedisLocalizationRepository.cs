@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Responses.Localizations;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
@@ -24,7 +25,7 @@ public class RedisLocalizationRepository : ILocalizationRepository
         this.instanceName = configuration["Redis:InstanceNameLocalization"];
     }
 
-    public async Task<Dictionary<string, Dictionary<string, string>>> GetLocalizationDataAllAsync(bool isPublic)
+    public async Task<LocalizationsResponse> GetLocalizationDataAllAsync(bool isPublic)
     {
         var server = connectionMultiplexer.GetServer(connectionMultiplexer.GetEndPoints().First());
         var keys = isPublic
@@ -46,8 +47,20 @@ public class RedisLocalizationRepository : ILocalizationRepository
 
             data[locale][subKey] = value.ToString();
         }
+        
+        LocalizationsResponse response = new LocalizationsResponse();
 
-        return data;
+        foreach (var localeData in data)
+        {
+            var localizationResponse = new LocalizationResponse(localeData.Key);
+            foreach (var item in localeData.Value)
+            {
+                localizationResponse.Items.Add(new LocalizationItemResponse(item.Key, item.Value));
+            }
+            response.Data.Add(localizationResponse);
+        }
+        
+        return response;
     }
 
     public async Task<string> GetLocalizationVersionAsync(bool isPublic)

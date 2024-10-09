@@ -32,11 +32,11 @@ public class GetLocalizationsRequestHandler: IRequestHandler<GetLocalizationsReq
             !string.IsNullOrEmpty(request.Version) && 
             request.Version.Equals(currentVersion))
         {
-            response.Data = new Dictionary<string, Dictionary<string, string>>();
+            response = new LocalizationsResponse();
         }
         else
         {
-            response.Data = await this.localizationRepository.GetLocalizationDataAllAsync(request.IsPublic);
+            response = await this.localizationRepository.GetLocalizationDataAllAsync(request.IsPublic);
         }
         
         return response;

@@ -1,4 +1,5 @@
 using CommonModule.Core.Exceptions;
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Enums;
 using CommonModule.Shared.Requests.Base;
@@ -18,8 +19,8 @@ public static class GraphQLExtension
             new QueryArgument<DateTimeGraphType> { Name = "dateFrom" },
             new QueryArgument<DateTimeGraphType> { Name = "dateTo" },
             new QueryArgument<StringGraphType> { Name = "query" },
-            new QueryArgument<StringGraphType> { Name = "column" },
-            new QueryArgument<StringGraphType> { Name = "direction" },
+            new QueryArgument<ColumnEnumType> { Name = "column" },
+            new QueryArgument<OrderDirectionEnumType> { Name = "direction" },
             new QueryArgument<DecimalGraphType> { Name = "amountFrom" },
             new QueryArgument<DecimalGraphType> { Name = "amountTo" },
             new QueryArgument<IdGraphType> { Name = "userProjectId" },

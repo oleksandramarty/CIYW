@@ -5,6 +5,7 @@ using CommonModule.GraphQL.QueryResolver;
 using CommonModule.GraphQL.Types.InputTypes.AuthGateway;
 using CommonModule.GraphQL.Types.Responses.AuthGateway;
 using CommonModule.GraphQL.Types.Responses.AuthGateway.Users;
+using CommonModule.Shared;
 using CommonModule.Shared.Responses.Auth;
 using CommonModule.Shared.Responses.AuthGateway.Users;
 
@@ -28,5 +29,7 @@ public class AuthGatewayRootQuery : GraphQLQueryResolver
             AuthSignInRequest,
             JwtTokenResponse
         >(GraphQLEndpoints.SignIn);
+        
+        this.ExecuteForEmptyCommand<AuthSignOutRequest>(GraphQLEndpoints.SignOut);
     }
 }

@@ -8,9 +8,9 @@ public class UserSetting: BaseDateTimeEntity<Guid>, IBaseVersionEntity
 {
     public string DefaultLocale { get; set; }
     public int TimeZone { get; set; }
-    public int? CurrencyId { get; set; }
-    public int? CountryId { get; set; }
-    public Guid DefaultUserProject { get; set; }
+    public int CountryId { get; set; }
+    public int DefaultUserProjectCurrencyId { get; set; }
+    public Guid DefaultUserProjectId { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
     

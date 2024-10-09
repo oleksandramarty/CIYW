@@ -12,20 +12,23 @@ import {DataItem} from "../../../../core/models/common/data-item.model";
 import {getUTCString, handleBaseDateRangeFilter} from "../../../../core/helpers/date-time.helper";
 import {LoaderService} from "../../../../core/services/loader.service";
 import {GraphQlExpensesService} from "../../../../core/graph-ql/services/graph-ql-expenses.service";
-import {CategoryResponse, CurrencyResponse, FrequencyResponse} from "../../../../core/api-clients/dictionaries-client";
-import {
-    BaseSortableRequest,
-    ColumnEnum,
-    ExpenseResponse,
-    FilteredListResponseOfExpenseResponse,
-    FilteredListResponseOfPlannedExpenseResponse,
-    OrderDirectionEnum,
-    PaginatorEntity, PlannedExpenseResponse,
-    UserProjectResponse
-} from "../../../../core/api-clients/common-module.client";
 import {CommonDialogService} from "../../../../core/services/common-dialog.service";
 import {fadeInOut} from "../../../../core/animations/animations";
 import {BaseGraphQlFilteredModel} from "../../../../core/models/common/base-graphql.model";
+import {
+    BaseSortableRequest,
+    CategoryResponse,
+    ColumnEnum,
+    CurrencyResponse,
+    ExpenseResponse,
+    FilteredListResponseOfExpenseResponse,
+    FilteredListResponseOfPlannedExpenseResponse,
+    FrequencyResponse,
+    OrderDirectionEnum,
+    PaginatorEntity,
+    PlannedExpenseResponse,
+    UserProjectResponse
+} from "../../../../core/api-clients/common-module.client";
 
 @Component({
     selector: 'app-user-project',
@@ -233,8 +236,8 @@ export class UserProjectComponent implements OnInit, OnDestroy {
                 isFull: this.paginator?.isFull ?? false,
                 pageNumber: this.paginator?.pageNumber ?? 1,
                 pageSize: this.paginator?.pageSize ?? 10,
-                column: this.sort?.column?.toString() ?? (this.activeTab === 0 ? 'Date' : 'NextDate'),
-                direction: this.sort?.direction?.toString() ?? 'Desc',
+                column: this.sort?.column ?? (this.activeTab === 0 ? ColumnEnum.Date : ColumnEnum.NextDate),
+                direction: this.sort?.direction ?? OrderDirectionEnum.Desc,
                 query: this.filterFormGroup?.value?.query ?? '',
             },
             this.userProjectId!,
