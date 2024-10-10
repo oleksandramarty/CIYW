@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MediatR" Version="12.4.1"/>
+        <PackageReference Include="MediatR" Version="12.4.1" />
         <PackageReference Include="GraphQL" Version="8.1.0" />
         <PackageReference Include="GraphQL.MicrosoftDI" Version="8.1.0" />
         <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="8.0.3" />
@@ -16,14 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Dictionaries\Dictionaries.Mediatr\Dictionaries.Mediatr.csproj" />
-        <ProjectReference Include="..\..\Expenses\Expenses.Mediatr\Expenses.Mediatr.csproj" />
-        <ProjectReference Include="..\..\Localizations\Localizations.Mediatr\Localizations.Mediatr.csproj" />
-        <ProjectReference Include="..\CommonModule.Core\CommonModule.Core.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Types\InputTypes\Dictionaries\" />
+      <ProjectReference Include="..\..\CommonModule\CommonModule.GraphQL\CommonModule.GraphQL.csproj" />
     </ItemGroup>
 
 </Project>

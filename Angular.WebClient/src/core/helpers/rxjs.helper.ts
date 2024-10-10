@@ -7,6 +7,13 @@ export function handleApiError(
   localizationService: LocalizationService | undefined = undefined,
   message: string = 'ERROR.GENERIC') {
   return catchError((error: any) => {
+
+    console.log(typeof error)
+    console.log(JSON.stringify(error))
+    console.log(JSON.parse(JSON.stringify(error)))
+    console.log(error)
+    console.log(error)
+
     console.error(error);
     if (!!localizationService) {
       snackBar.open(localizationService.getTranslation(error?.message ?? message) ?? message, 'Close', { duration: 3000 });

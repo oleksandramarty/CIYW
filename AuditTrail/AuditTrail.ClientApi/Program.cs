@@ -1,5 +1,6 @@
 using AuditTrail.Business;
 using AuditTrail.Domain;
+using CommonModule.Facade;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,5 +16,7 @@ builder.Services.AddDbContext<AuditTrailDataContext>(options =>
 builder.Services.AddHostedService<KafkaConsumer>();
 
 var app = builder.Build();
+
+app.AddMiddlewares();
 
 app.Run();

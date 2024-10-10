@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
       <ProjectReference Include="..\AuditTrail.Business\AuditTrail.Business.csproj" />
       <ProjectReference Include="..\AuditTrail.Domain\AuditTrail.Domain.csproj" />
     </ItemGroup>

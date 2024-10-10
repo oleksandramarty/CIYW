@@ -7,17 +7,10 @@ using Localizations.Mediatr.Mediatr.Locations.Requests;
 
 namespace Localizations.GraphQL;
 
-public class LocalizationsRootQuery : GraphQLQueryResolver
+public class LocalizationsRootQuery : GraphQLQueryHelper
 {
     public LocalizationsRootQuery()
     {
-        this.GetVersionedList<
-            VersionedListOfGenericType<LocaleResponse, LocaleResponseType>, 
-            LocaleResponse, 
-            GetLocalesRequest
-        >(GraphQLEndpoints.GetLocalesDictionary);
-        
-        this.GetLocalizations(GraphQLEndpoints.GetLocalizations);
-        this.GetLocalizations(GraphQLEndpoints.GetPublicLocalizations);
+        this.AddLocalizationsQueries();
     }
 }

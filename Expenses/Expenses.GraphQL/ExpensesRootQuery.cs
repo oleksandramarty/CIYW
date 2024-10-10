@@ -14,15 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dictionaries.GraphQL;
 
-public class ExpensesRootQuery: GraphQLQueryResolver
+public class ExpensesRootQuery: GraphQLQueryHelper
 {
     public ExpensesRootQuery()
     {
-        this.GetFilteredEntities<FilteredListResponseOfGenericType<ExpenseResponse, ExpenseResponseType>, ExpenseResponse, GetFilteredExpensesRequest>(GraphQLEndpoints.GetFilteredExpenses);
-        this.GetFilteredEntities<FilteredListResponseOfGenericType<PlannedExpenseResponse, PlannedExpenseResponseType>, PlannedExpenseResponse, GetFilteredPlannedExpensesRequest>(GraphQLEndpoints.GetFilteredPlannedExpenses);
-        this.GetFilteredEntities<FilteredListResponseOfGenericType<UserProjectResponse, UserProjectResponseType>, UserProjectResponse, GetFilteredUserProjectsRequest>(GraphQLEndpoints.GetFilteredUserProjects);
-        this.GetFilteredEntities<FilteredListResponseOfGenericType<UserAllowedProjectResponse, UserAllowedProjectResponseType>, UserAllowedProjectResponse, GetFilteredUserAllowedProjectsRequest>(GraphQLEndpoints.GetFilteredUserAllowedProjects);
-        
-        this.GetEntityById<GuidGraphType, UserProjectResponseType, Guid, UserProjectResponse, GetUserProjectByIdRequest, UserProjectResponse>(GraphQLEndpoints.GetUserProjectById);
+        this.AddExpensesQueries();
     }
 }  

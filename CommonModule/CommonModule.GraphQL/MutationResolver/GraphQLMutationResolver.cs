@@ -1,5 +1,3 @@
-using CommonModule.Core.JsonConverter;
-using CommonModule.Shared;
 using CommonModule.Shared.Common.BaseInterfaces;
 using GraphQL;
 using GraphQL.Types;
@@ -24,7 +22,7 @@ public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
                 var cancellationToken = context.CancellationToken;
                 TCommand command = context.GetArgument<TCommand>("input");
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                await mediator.Send(command, cancellationToken);
+                await ExecuteCommandAsync(mediator, command, cancellationToken, context);
                 return true;
             });
     }
@@ -46,7 +44,7 @@ public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
                 TCommand command = context.GetArgument<TCommand>("input");
                 command.Id = context.GetArgument<TEntityId>("id");
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                await mediator.Send(command, cancellationToken);
+                await ExecuteCommandAsync(mediator, command, cancellationToken, context);
                 return true;
             });
     }
@@ -66,20 +64,32 @@ public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
                 TCommand command = new TCommand();
                 command.Id = context.GetArgument<TEntityId>("id");
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                await mediator.Send(command, cancellationToken);
+                await ExecuteCommandAsync<bool>(mediator, command, cancellationToken, context);
                 return true;
             });
     }
-
-    private async Task<TResult> ModifyEntityWithResultAsync<TCommand, TResult>(IResolveFieldContext<object?> context, CancellationToken cancellationToken, bool isUpdate = false) where TCommand: IRequest<TResult>
+    
+    public async Task ExecuteCommandAsync<TCommandResponse>(IMediator mediator, IRequest<TCommandResponse> command, CancellationToken cancellationToken, IResolveFieldContext context)
     {
-        TCommand command = context.GetArgument<TCommand>("input");
-        if (isUpdate)
+        try
         {
-            ReflectionUtils.SetValue<TCommand, Guid>(command, "Id", context.GetArgument<Guid>("id"));
+            await mediator.Send(command, cancellationToken);
         }
-        var mediator = context.RequestServices.GetRequiredService<IMediator>();
-        TResult result = await mediator.Send(command, cancellationToken);
-        return result;
+        catch (Exception e)
+        {
+            context.Errors.Add(new ExecutionError(e.Message));
+        }
+    }
+    
+    public async Task ExecuteCommandAsync(IMediator mediator, IRequest command, CancellationToken cancellationToken, IResolveFieldContext context)
+    {
+        try
+        {
+            await mediator.Send(command, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            context.Errors.Add(new ExecutionError(e.Message));
+        }
     }
 }

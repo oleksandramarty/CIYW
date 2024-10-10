@@ -6,7 +6,7 @@ import { MatDividerModule } from "@angular/material/divider";
 import { SharedModule } from "../../../core/shared.module";
 import {DashboardAreaComponent} from "./dashboard-area/dashboard-area.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
-import {DashboardUserProjectsComponent} from "./dashboard/dashboard-uer-projects/dashboard-user-projects.component";
+import {DashboardUserProjectsComponent} from "./dashboard/dashboard-user-projects/dashboard-user-projects.component";
 
 const routes: Routes = [
     {

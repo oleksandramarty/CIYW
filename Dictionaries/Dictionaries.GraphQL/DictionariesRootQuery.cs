@@ -18,40 +18,10 @@ using Dictionaries.Mediatr.Mediatr.Requests;
 
 namespace Dictionaries.GraphQL;
 
-public class DictionariesRootQuery : GraphQLQueryResolver
+public class DictionariesRootQuery : GraphQLQueryHelper
 {
     public DictionariesRootQuery()
     {
-        this.GetResultForEmptyCommand<
-            SiteSettingsResponseType,
-            SiteSettingsResponse,
-            GetSiteSettingsRequest,
-            SiteSettingsResponse
-        >(GraphQLEndpoints.SiteSettings);
-
-        this.GetVersionedList<
-            VersionedListOfGenericType<CurrencyResponse, CurrencyResponseType>, 
-            CurrencyResponse, 
-            GetCurrenciesRequest
-        >(GraphQLEndpoints.GetCurrenciesDictionary);
-        
-        this.GetVersionedList<
-            VersionedListOfGenericType<CountryResponse, CountryResponseType>, 
-            CountryResponse, 
-            GetCountriesRequest
-        >(GraphQLEndpoints.GetCountriesDictionary);
-        
-        this.GetVersionedList<
-            VersionedListOfGenericType<FrequencyResponse, FrequencyResponseType>, 
-            FrequencyResponse, 
-            GetFrequenciesRequest
-        >(GraphQLEndpoints.GetFrequenciesDictionary);
-        
-        this.GetVersionedTreeList<
-            VersionedListOfGenericType<TreeNodeResponse<CategoryResponse>, TreeNodeResponseOfGenericType<CategoryResponse, CategoryResponseType>>, 
-            CategoryResponse, 
-            GetCategoriesRequest
-        >(GraphQLEndpoints.GetCategoriesDictionary);
-
+        this.AddDictionariesQueries();
     }
 }

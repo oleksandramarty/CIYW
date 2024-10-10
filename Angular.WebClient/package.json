@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:Angular.WebClient": "node dist/angular.web-client/server/server.mjs",
-    "go": "ng serve -c local"
+    "go": "ng serve -c local",
+    "monolith": "ng serve -c monolith"
   },
   "private": true,
   "dependencies": {

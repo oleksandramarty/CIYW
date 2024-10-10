@@ -89,6 +89,24 @@
               "aot": false,
               "optimization": false,
               "namedChunks": true
+            },
+            "monolith": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kB"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/core/environments/environment.ts",
+                  "with": "src/core/environments/environment.monolith.ts"
+                }
+              ],
+              "sourceMap": true,
+              "aot": false,
+              "optimization": false,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
@@ -104,6 +122,9 @@
             },
             "local": {
               "buildTarget": "Angular.WebClient:build:local"
+            },
+            "monolith": {
+              "buildTarget": "Angular.WebClient:build:monolith"
             }
           },
           "defaultConfiguration": "local"

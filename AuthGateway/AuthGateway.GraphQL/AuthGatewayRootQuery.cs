@@ -11,25 +11,10 @@ using CommonModule.Shared.Responses.AuthGateway.Users;
 
 namespace AuthGateway.GraphQL;
 
-public class AuthGatewayRootQuery : GraphQLQueryResolver
+public class AuthGatewayRootQuery : GraphQLQueryHelper
 {
     public AuthGatewayRootQuery()
     {
-        this.GetResultForEmptyCommand<
-            UserResponseType,
-            UserResponse,
-            GetCurrentUserRequest,
-            UserResponse
-        >(GraphQLEndpoints.CurrentUser);
-
-        this.GetResultForNonEmptyCommand<
-            AuthSignInRequestInputType,
-            JwtTokenResponseType,
-            JwtTokenResponse,
-            AuthSignInRequest,
-            JwtTokenResponse
-        >(GraphQLEndpoints.SignIn);
-        
-        this.ExecuteForEmptyCommand<AuthSignOutRequest>(GraphQLEndpoints.SignOut);
+        this.AddAuthGatewayQueries();
     }
 }

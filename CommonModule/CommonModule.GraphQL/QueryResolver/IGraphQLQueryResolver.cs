@@ -36,8 +36,8 @@ public interface IGraphQLQueryResolver
         where TEntityType : ObjectGraphType<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>
         where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>, new();
     
-    void ExecuteForEmptyCommand<TCommand>(GraphQLEndpoint endpoint)
-        where TCommand : IRequest, new();
+    void ExecuteForEmptyCommand<TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
+        where TCommand : IRequest<TCommandResponse>, new();
 
     void GetLocalizations(GraphQLEndpoint endpoint);
 }

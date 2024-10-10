@@ -1,36 +1,28 @@
+using System.Net;
 using System.Text;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using CommonModule.Core.Exceptions.Errors;
 using CommonModule.Core.Filters;
 using CommonModule.Core.Kafka;
+using CommonModule.Core.Middlewares;
 using CommonModule.Interfaces;
 using CommonModule.Repositories;
 using CommonModule.Shared.Constants;
-using CommonModule.Shared.Requests.Base;
-using CommonModule.Shared.Responses.Auth;
-using CommonModule.Shared.Responses.AuthGateway.Users;
-using CommonModule.Shared.Responses.Base;
-using CommonModule.Shared.Responses.Dictionaries;
-using CommonModule.Shared.Responses.Expenses.Models.Expenses;
-using CommonModule.Shared.Responses.Expenses.Models.Projects;
 using GraphQL;
-using GraphQL.Types;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Namotion.Reflection;
-using NJsonSchema;
-using NSwag.Generation.Processors;
-using NSwag.Generation.Processors.Contexts;
 using StackExchange.Redis;
 
-namespace CommonModule.Facade
-{
+namespace CommonModule.Facade;
+
     public static class WebAppExtension
     {
         #region Auth
@@ -264,10 +256,17 @@ namespace CommonModule.Facade
                     opt.EnableMetrics = true;
                     opt.ThrowOnUnhandledException = true;
                     return next(opt);
-                }).AddSystemTextJson()
+                })
+                    .AddSystemTextJson()
             );
         }
 
         #endregion
+
+        #region Middleware
+        public static void AddMiddlewares(this IApplicationBuilder app)
+        {
+            // app.UseMiddleware<ExceptionHandlingMiddleware>();
+        }
+        #endregion
     }
-}

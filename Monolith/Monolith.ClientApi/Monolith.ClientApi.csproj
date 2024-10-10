@@ -4,8 +4,8 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>A0_Monolith</RootNamespace>
-      <UserSecretsId>e53bd9e5-96f4-4744-a6fc-9c725a179683</UserSecretsId>
+        <RootNamespace>Monolith</RootNamespace>
+    <UserSecretsId>576004d6-5bf6-4ba4-9ed3-9bc798ed6eee</UserSecretsId>
   </PropertyGroup>
 
     <ItemGroup>
@@ -21,13 +21,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AuthGateway\AuthGateway.GraphQL\AuthGateway.GraphQL.csproj" />
-      <ProjectReference Include="..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
-      <ProjectReference Include="..\Dictionaries\Dictionaries.GraphQL\Dictionaries.GraphQL.csproj" />
-      <ProjectReference Include="..\Expenses\Expenses.Domain\Expenses.Domain.csproj" />
-      <ProjectReference Include="..\Expenses\Expenses.GraphQL\Expenses.GraphQL.csproj" />
-      <ProjectReference Include="..\Expenses\Expenses.Mediatr\Expenses.Mediatr.csproj" />
-      <ProjectReference Include="..\Localizations\Localizations.GraphQL\Localizations.GraphQL.csproj" />
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
+      <ProjectReference Include="..\..\Expenses\Expenses.Domain\Expenses.Domain.csproj" />
+      <ProjectReference Include="..\..\Expenses\Expenses.Mediatr\Expenses.Mediatr.csproj" />
+      <ProjectReference Include="..\Monolith.GraphQL\Monolith.GraphQL.csproj" />
     </ItemGroup>
 
 </Project>

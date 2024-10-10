@@ -8,14 +8,11 @@ using GraphQL.Types;
 
 namespace AuthGateway.GraphQL;
 
-public class AuthGatewayRootMutation: GraphQLMutationResolver
+public class AuthGatewayRootMutation: GraphQLMutationHelper
 {
     public AuthGatewayRootMutation()
     {
         Name = "Mutation";
-        this.CreateEntity<CreateOrUpdateUserSettingsInputType, CreateUserSettingCommand>(GraphQLEndpoints.CreateUserSettings);
-        this.UpdateEntity<CreateOrUpdateUserSettingsInputType, GuidGraphType, Guid, UpdateUserSettingCommand>(GraphQLEndpoints.UpdateUserSettings);
-
-        this.CreateEntity<AuthSignUpInputType, AuthSignUpCommand>(GraphQLEndpoints.SignUp);
+        this.AddAuthGatewayMutations();
     }
 }

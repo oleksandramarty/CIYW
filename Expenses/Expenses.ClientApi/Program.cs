@@ -74,6 +74,8 @@ builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProj
 
 var app = builder.Build();
 
+app.AddMiddlewares();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

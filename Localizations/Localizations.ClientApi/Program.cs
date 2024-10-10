@@ -55,6 +55,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(
 
 var app = builder.Build();
 
+app.AddMiddlewares();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
