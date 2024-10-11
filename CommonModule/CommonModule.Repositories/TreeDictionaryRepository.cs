@@ -32,16 +32,16 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
     
     public async Task<VersionedListResponse<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken)
     {
-        string currentVesrion = await this.cacheRepository.GetCacheVersionAsync();
+        string currentVersion = await this.cacheRepository.GetCacheVersionAsync();
         
         if (
             !string.IsNullOrEmpty(version) && 
-            version.Equals(currentVesrion))
+            version.Equals(currentVersion))
         {
             return new VersionedListResponse<TreeNodeResponse<TResponse>>
             {
                 Items = new List<TreeNodeResponse<TResponse>>(),
-                Version = currentVesrion
+                Version = currentVersion
             };
         }
         
@@ -60,7 +60,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
                 items.Where(c => c.ParentId == null && c.IsActive), 
                 items.Where(c => c.ParentId != null && c.IsActive), 
                 cancellationToken),
-            Version = currentVesrion
+            Version = currentVersion
         };
     }
 

@@ -26,8 +26,6 @@ public class GetLocalizationsRequestHandler: IRequestHandler<GetLocalizationsReq
 
         LocalizationsResponse response = new LocalizationsResponse();
         
-        response.Version = currentVersion;
-        
         if (
             !string.IsNullOrEmpty(request.Version) && 
             request.Version.Equals(currentVersion))
@@ -38,6 +36,8 @@ public class GetLocalizationsRequestHandler: IRequestHandler<GetLocalizationsReq
         {
             response = await this.localizationRepository.GetLocalizationDataAllAsync(request.IsPublic);
         }
+        
+        response.Version = currentVersion;
         
         return response;
     }

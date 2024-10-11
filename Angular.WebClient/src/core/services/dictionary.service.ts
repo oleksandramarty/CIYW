@@ -187,7 +187,7 @@ export class DictionaryService {
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
                     }
                 }),
-                catchError(handleApiError(this.snackBar))
+                handleApiError(this.snackBar)
             ).subscribe();
         } else {
             this.updateDateItems(true);
@@ -232,7 +232,7 @@ export class DictionaryService {
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
                     }
                 }),
-                catchError(handleApiError(this.snackBar))
+                handleApiError(this.snackBar)
             ).subscribe();
         } else {
             this.updateDateItems(false);
@@ -246,24 +246,13 @@ export class DictionaryService {
         }
 
         if (isPublic) {
-            this._dataItems.locales = this._dictionaries?.locales?.items
-                .sort((a, b) => a.id - b.id)
+            this._dataItems.locales = this.dictionaries?.locales?.items
                 .map(locale => new DataItem(locale, String(locale.id), locale.title, locale.titleEn));
         } else {
             this._dataItems.categories = this.mapCategories(this.dictionaries?.categories?.items || []);
             this._dataItems.countries = this.dictionaries?.countries?.items
-                .sort((a, b) => a.id - b.id)
                 .map(country => new DataItem(country, String(country.id), country.titleEn, country.title));
             this._dataItems.currencies = this.dictionaries?.currencies?.items
-                .sort((a, b) => {
-                    const importantCurrencies = this._importantCurrencies;
-                    const aIsImportant = importantCurrencies.includes(a.code);
-                    const bIsImportant = importantCurrencies.includes(b.code);
-
-                    if (aIsImportant && !bIsImportant) return -1;
-                    if (!aIsImportant && bIsImportant) return 1;
-                    return a.id - b.id;
-                })
                 .map(currency =>
                     new DataItem(
                         currency,
