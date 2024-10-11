@@ -31,10 +31,6 @@ public interface IGraphQLQueryResolver
     void GetVersionedList<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
         where TEntityType : ObjectGraphType<VersionedListResponse<TEntityResponse>>
         where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TEntityResponse>>, new();
-
-    void GetVersionedTreeList<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
-        where TEntityType : ObjectGraphType<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>
-        where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>, new();
     
     void ExecuteForEmptyCommand<TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
         where TCommand : IRequest<TCommandResponse>, new();

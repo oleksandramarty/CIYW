@@ -100,24 +100,6 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
             });
     }
 
-    public void GetVersionedTreeList<TEntityType, TEntityResponse, TCommand>(GraphQLEndpoint endpoint)
-        where TEntityType : ObjectGraphType<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>
-        where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>, new()
-    {
-        Field<TEntityType>(endpoint.Name)
-            .Arguments(new QueryArguments(new QueryArgument<StringGraphType> { Name = "version" }
-            ))
-            .ResolveAsync(async context =>
-            {
-                context.IsAuthenticated(endpoint.IsAuthenticated);
-                var cancellationToken = context.CancellationToken;
-                TCommand command = new TCommand();
-                command.Version = context.GetArgument<string>("version");
-                var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                return await ExecuteCommandAsync<VersionedListResponse<TreeNodeResponse<TEntityResponse>>>(mediator, command, cancellationToken, context);
-            });
-    }
-
     public void ExecuteForEmptyCommand<TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
         where TCommand : IRequest<TCommandResponse>, new()
     {

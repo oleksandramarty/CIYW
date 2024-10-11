@@ -13,5 +13,5 @@ public class CategoryResponse : BaseIdEntity<int>, ITreeEntity<int, int?>, ITree
     public bool IsPositive { get; set; }
     public int? ParentId { get; set; }
 
-    public ICollection<TreeNodeResponse<CategoryResponse>> Children { get; set; } = new List<TreeNodeResponse<CategoryResponse>>();
+    public ICollection<CategoryResponse> Children { get; set; } = new List<CategoryResponse>();
 }

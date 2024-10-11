@@ -4,5 +4,5 @@ namespace CommonModule.Shared.Common.BaseInterfaces;
 
 public interface ITreeChildren<TResponse>
 {
-    ICollection<TreeNodeResponse<TResponse>> Children { get; set; }
+    ICollection<TResponse> Children { get; set; }
 }

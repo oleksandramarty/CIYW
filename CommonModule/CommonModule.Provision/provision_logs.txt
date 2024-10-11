@@ -1,111 +1,81 @@
+Error adding role with ID 1.
+Error adding role with ID 2.
+Error adding role with ID 3.
+Error adding role with ID 4.
 =================================================
 Title                          : ROLES
 Total records processed        : 4
 Records already exist          : 0
-Errors encountered             : 0
+Errors encountered             : 4
 =================================================
 
+███████╗██████╗ ██████╗  ██████╗ ██████╗         ██████╗  ██████╗ ██████╗██╗   ██╗██████╗ ███████╗██████╗ 
+██╔════╝██╔══██╗██╔══██╗██╔═══██╗██╔══██╗       ██╔═══██╗██╔════╝██╔════╝██║   ██║██╔══██╗██╔════╝██╔══██╗
+█████╗  ██████╔╝██████╔╝██║   ██║██████╔╝       ██║   ██║██║     ██║     ██║   ██║██████╔╝█████╗  ██║  ██║
+██╔══╝  ██╔══██╗██╔══██╗██║   ██║██╔══██╗       ██║   ██║██║     ██║     ██║   ██║██╔══██╗██╔══╝  ██║  ██║
+███████╗██║  ██║██║  ██║╚██████╔╝██║  ██║       ╚██████╔╝╚██████╗╚██████╗╚██████╔╝██║  ██║███████╗██████╔╝
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝        ╚═════╝  ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝ 
+
+
+Error adding user with ID 550e8400-e29b-41d4-a716-446655440000.
+Error adding user with ID 550e8400-e29b-41d4-a716-446655440001.
+Error adding user with ID 550e8400-e29b-41d4-a716-446655440002.
+Error adding user with ID 550e8400-e29b-41d4-a716-446655440003.
+Error adding user with ID 550e8400-e29b-41d4-a716-446655440004.
+Error adding user with ID 550e8400-e29b-41d4-a716-446655440005.
+Error adding user with ID 550e8400-e29b-41d4-a716-446655440006.
 =================================================
 Title                          : USERS
 Total records processed        : 7
 Records already exist          : 0
-Errors encountered             : 0
+Errors encountered             : 7
 =================================================
 
+███████╗██████╗ ██████╗  ██████╗ ██████╗         ██████╗  ██████╗ ██████╗██╗   ██╗██████╗ ███████╗██████╗ 
+██╔════╝██╔══██╗██╔══██╗██╔═══██╗██╔══██╗       ██╔═══██╗██╔════╝██╔════╝██║   ██║██╔══██╗██╔════╝██╔══██╗
+█████╗  ██████╔╝██████╔╝██║   ██║██████╔╝       ██║   ██║██║     ██║     ██║   ██║██████╔╝█████╗  ██║  ██║
+██╔══╝  ██╔══██╗██╔══██╗██║   ██║██╔══██╗       ██║   ██║██║     ██║     ██║   ██║██╔══██╗██╔══╝  ██║  ██║
+███████╗██║  ██║██║  ██║╚██████╔╝██║  ██║       ╚██████╔╝╚██████╗╚██████╗╚██████╔╝██║  ██║███████╗██████╔╝
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝        ╚═════╝  ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝ 
+
+
+Error adding remaining bulk categories.
 =================================================
 Title                          : CATEGORIES
 Total records processed        : 107
 Records already exist          : 0
-Errors encountered             : 0
+Errors encountered             : 107
 =================================================
 
+███████╗██████╗ ██████╗  ██████╗ ██████╗         ██████╗  ██████╗ ██████╗██╗   ██╗██████╗ ███████╗██████╗ 
+██╔════╝██╔══██╗██╔══██╗██╔═══██╗██╔══██╗       ██╔═══██╗██╔════╝██╔════╝██║   ██║██╔══██╗██╔════╝██╔══██╗
+█████╗  ██████╔╝██████╔╝██║   ██║██████╔╝       ██║   ██║██║     ██║     ██║   ██║██████╔╝█████╗  ██║  ██║
+██╔══╝  ██╔══██╗██╔══██╗██║   ██║██╔══██╗       ██║   ██║██║     ██║     ██║   ██║██╔══██╗██╔══╝  ██║  ██║
+███████╗██║  ██║██║  ██║╚██████╔╝██║  ██║       ╚██████╔╝╚██████╗╚██████╗╚██████╔╝██║  ██║███████╗██████╔╝
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝        ╚═════╝  ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝ 
+
+
+Error adding frequency with ID 1.
+Error adding frequency with ID 2.
+Error adding frequency with ID 3.
+Error adding frequency with ID 4.
+Error adding frequency with ID 5.
+Error adding frequency with ID 6.
+Error adding frequency with ID 7.
+Error adding frequency with ID 8.
+Error adding frequency with ID 9.
 =================================================
 Title                          : FREQUENCIES
 Total records processed        : 9
 Records already exist          : 0
-Errors encountered             : 0
+Errors encountered             : 9
 =================================================
 
-=================================================
-Title                          : COUNTRIES
-Total records processed        : 249
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
+███████╗██████╗ ██████╗  ██████╗ ██████╗         ██████╗  ██████╗ ██████╗██╗   ██╗██████╗ ███████╗██████╗ 
+██╔════╝██╔══██╗██╔══██╗██╔═══██╗██╔══██╗       ██╔═══██╗██╔════╝██╔════╝██║   ██║██╔══██╗██╔════╝██╔══██╗
+█████╗  ██████╔╝██████╔╝██║   ██║██████╔╝       ██║   ██║██║     ██║     ██║   ██║██████╔╝█████╗  ██║  ██║
+██╔══╝  ██╔══██╗██╔══██╗██║   ██║██╔══██╗       ██║   ██║██║     ██║     ██║   ██║██╔══██╗██╔══╝  ██║  ██║
+███████╗██║  ██║██║  ██║╚██████╔╝██║  ██║       ╚██████╔╝╚██████╗╚██████╗╚██████╔╝██║  ██║███████╗██████╔╝
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝        ╚═════╝  ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝ 
 
-=================================================
-Title                          : CURRENCIES
-Total records processed        : 154
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
 
-=================================================
-Title                          : COUNTRY_CURRENCY
-Total records processed        : 253
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
-
-=================================================
-Title                          : LOCALES
-Total records processed        : 7
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
-
-=================================================
-Title                          : LOCALIZATIONS
-Total records processed        : 1827
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
-
-Checking localization for English(English)
-Checking localization for Spanish(Español)
-Checking localization for French(Français)
-Checking localization for Ukrainian(Українська)
-Checking localization for Russian(Русский)
-Checking localization for German(Deutsch)
-Checking localization for Italian(Italiano)
-=================================================
-Title                          : CHECK LOCALES LOCALIZATIONS
-Total records processed        : 7
-Records already exist          : 7
-Errors encountered             : 0
-=================================================
-
-=================================================
-Title                          : CACHE LOCALIZATIONS
-Total records processed        : 1827
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
-
-Finished caching Categories.
-=================================================
-Title                          : CACHE CATEGORIES
-Total records processed        : 107
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
-
-Finished caching Countries.
-=================================================
-Title                          : CACHE COUNTRIES
-Total records processed        : 249
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
-
-Finished caching Currencies.
-=================================================
-Title                          : CACHE CURRENCIES
-Total records processed        : 154
-Records already exist          : 0
-Errors encountered             : 0
-=================================================
-
-Provision Start Date           : 2024-10-09 16:32:51
-Provision End Date             : 2024-10-09 16:35:48
-Duration:                      : 177 second(s)

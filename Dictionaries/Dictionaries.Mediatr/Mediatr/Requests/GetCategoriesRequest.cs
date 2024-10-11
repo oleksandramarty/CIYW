@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Dictionaries.Mediatr.Mediatr.Requests;
 
-public class GetCategoriesRequest: BaseVersionEntity, IRequest<VersionedListResponse<TreeNodeResponse<CategoryResponse>>>
+public class GetCategoriesRequest: BaseVersionEntity, IRequest<VersionedListResponse<CategoryResponse>>
 {
     
 }

@@ -37,7 +37,7 @@ public static class GraphQLModelExtension
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<FrequencyResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<LocaleResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CountryResponse>>());
-            config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<TreeNodeResponse<CategoryResponse>>>());
+            config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CategoryResponse>>());
         }
     }
 }

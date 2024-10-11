@@ -89,8 +89,8 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
             GetFrequenciesRequest
         >(GraphQLEndpoints.GetFrequenciesDictionary);
         
-        this.GetVersionedTreeList<
-            VersionedListOfGenericType<TreeNodeResponse<CategoryResponse>, TreeNodeResponseOfGenericType<CategoryResponse, CategoryResponseType>>, 
+        this.GetVersionedList<
+            VersionedListOfGenericType<CategoryResponse, CategoryResponseType>, 
             CategoryResponse, 
             GetCategoriesRequest
         >(GraphQLEndpoints.GetCategoriesDictionary);

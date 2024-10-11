@@ -30,7 +30,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
         this.dictionaryRepository = dictionaryRepository;
     }
     
-    public async Task<VersionedListResponse<TreeNodeResponse<TResponse>>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken)
+    public async Task<VersionedListResponse<TResponse>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken)
     {
         string currentVersion = await this.cacheRepository.GetCacheVersionAsync();
         
@@ -38,9 +38,9 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
             !string.IsNullOrEmpty(version) && 
             version.Equals(currentVersion))
         {
-            return new VersionedListResponse<TreeNodeResponse<TResponse>>
+            return new VersionedListResponse<TResponse>
             {
-                Items = new List<TreeNodeResponse<TResponse>>(),
+                Items = new List<TResponse>(),
                 Version = currentVersion
             };
         }
@@ -54,7 +54,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
             await this.cacheRepository.SetCacheVersionAsync();
         }
     
-        return new VersionedListResponse<TreeNodeResponse<TResponse>>
+        return new VersionedListResponse<TResponse>
         {
             Items = await BuildSummitsTreeNode(
                 items.Where(c => c.ParentId == null && c.IsActive), 
@@ -64,12 +64,12 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
         };
     }
 
-    private async Task<List<TreeNodeResponse<TResponse>>> BuildSummitsTreeNode(
+    private async Task<List<TResponse>> BuildSummitsTreeNode(
         IEnumerable<TEntity> mainEntities,
         IEnumerable<TEntity>? entities,
         CancellationToken cancellationToken)
     {
-        var nodeList = new List<TreeNodeResponse<TResponse>>();
+        var nodeList = new List<TResponse>();
     
         foreach (var entity in mainEntities)
         {
@@ -80,7 +80,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
         return nodeList;
     }
     
-    private async Task<TreeNodeResponse<TResponse>> BuildSummitTreeNode(
+    private async Task<TResponse> BuildSummitTreeNode(
         TEntity entity,
         IEnumerable<TEntity>? entities,
         CancellationToken cancellationToken)
@@ -88,28 +88,23 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
         this.entityValidator.ValidateExist(entity, entity.Id);
     
         var childNodes = await GetChildNodes(entity, entities, cancellationToken);
-        TEntity? parent = await this.GeTParentIdAsync(entities, entity.ParentId, cancellationToken);
         TResponse? node = this.mapper.Map<TEntity, TResponse>(entity);
     
         if (node != null)
         {
             node.Children = childNodes;
         }
-        
-        return new TreeNodeResponse<TResponse>
-        {
-            Node = node,
-            Parent = parent != null ? this.mapper.Map<TEntity, TResponse>(parent) : null
-        };
+
+        return node;
     }
     
-    private async Task<List<TreeNodeResponse<TResponse>>> GetChildNodes(
+    private async Task<List<TResponse>> GetChildNodes(
         TEntity entity,
         IEnumerable<TEntity>? entities,
         CancellationToken cancellationToken)
     {
         IEnumerable<TEntity> children = this.GetChildren(entities, entity.Id);
-        var childNodes = new List<TreeNodeResponse<TResponse>>();
+        var childNodes = new List<TResponse>();
     
         var remainingEntities = entities?.Where(e => !children.Contains(e)).ToList();
     
@@ -126,17 +121,5 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
     {
         return entities?.Where(c => c.ParentId != null && c.ParentId.Equals(parentId)).ToList() ?? 
                this.dictionaryRepository.GetQueryable(c => c.ParentId != null && c.ParentId.Equals(parentId)).AsEnumerable();
-    }
-    
-    private async Task<TEntity?> GeTParentIdAsync(IEnumerable<TEntity>? entities, TParentId parentId, CancellationToken cancellationToken)
-    {
-        if (parentId == null)
-        {
-            return null;
-        }
-        
-        return entities != null ? 
-            entities.FirstOrDefault(c => c.Id != null && c.Id.Equals(parentId)) :
-            await this.dictionaryRepository.GetByIdAsync((TId)(object)parentId, cancellationToken);
     }
 }
