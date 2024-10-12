@@ -11,7 +11,7 @@ import {
     GET_FILTERED_USER_PROJECTS,
     GET_USER_PROJECT_BY_ID,
     REMOVE_EXPENSE, REMOVE_PLANNED_EXPENSE,
-    UPDATE_EXPENSE, UPDATE_PLANNED_EXPENSE
+    UPDATE_EXPENSE, UPDATE_PLANNED_EXPENSE, UPDATE_USER_PROJECT
 } from "../queries/graph-ql-expenses.query";
 import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
 import {
@@ -159,7 +159,6 @@ public createOrUpdatePlannedExpense(
 
     public createUserProject(
         title: string,
-        currencyIds: number[],
         isActive: boolean
     ): Observable<ApolloQueryResult<{ success: boolean }>> {
         return this.apolloClient
@@ -167,7 +166,21 @@ public createOrUpdatePlannedExpense(
                 mutation: CREATE_USER_PROJECT,
                 variables: {
                     title,
-                    currencyIds,
+                    isActive
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
+
+    public updateUserProject(
+        id: string,
+        title: string,
+        isActive: boolean
+    ): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: UPDATE_USER_PROJECT,
+                variables: {
+                    title,
                     isActive
                 },
             }) as Observable<ApolloQueryResult<{ success: boolean }>>;

@@ -7,9 +7,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CommonLoaderComponent } from "../../common/common-loader/common-loader.component";
 import { AppCommonInputModule } from "../../common/common-input/app-common-input.module";
 import { CommonModule } from "@angular/common";
-import { DictionaryService } from "../../../core/services/dictionary.service";
-import { DataItem } from "../../../core/models/common/data-item.model";
-import { CustomValidators } from "../../../core/helpers/validator.helper";
 import { RouterLink } from "@angular/router";
 import { LocalizationService } from "../../../core/services/localization.service";
 import { handleApiError } from "../../../core/helpers/rxjs.helper";
@@ -40,21 +37,20 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
   public userProject: UserProjectResponse | undefined;
   public userProjectForm: FormGroup | undefined;
 
-  get currencies(): DataItem[] | undefined {
-    return this.dictionaryService.dataItems?.currencies;
-  }
-
   constructor(
     public dialogRef: MatDialogRef<CreateUpdateUserProjectComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string | undefined,
+    @Inject(MAT_DIALOG_DATA) public data: {
+      userProject: UserProjectResponse | undefined
+    },
     private readonly snackBar: MatSnackBar,
     private readonly fb: FormBuilder,
-    private readonly dictionaryService: DictionaryService,
     private readonly localizationService: LocalizationService,
     private readonly graphQlExpensesService: GraphQlExpensesService,
     private readonly loaderService: LoaderService,
     private readonly commonDialogService: CommonDialogService,
-  ) { }
+  ) {
+    this.userProject = data.userProject;
+  }
 
   ngOnInit(): void {
     this.createUserForm();
@@ -67,9 +63,8 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
 
   private createUserForm() {
     this.userProjectForm = this.fb.group({
-      title: ['', [Validators.required]],
-      currencyIds: ['', [Validators.required, CustomValidators.MaxMultiSelectedValues(3)]],
-      isActive: [true]
+      title: [this.userProject?.title, [Validators.required]],
+      isActive: [this.userProject?.isActive ?? true, [Validators.required]],
     });
   }
 
@@ -95,7 +90,6 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
 
       this.graphQlExpensesService.createUserProject(
           this.userProjectForm.value.title,
-          this.userProjectForm.value.currencyIds.split(',').map(Number),
           this.userProjectForm.value.isActive)
           .pipe(
               takeUntil(this.ngUnsubscribe),

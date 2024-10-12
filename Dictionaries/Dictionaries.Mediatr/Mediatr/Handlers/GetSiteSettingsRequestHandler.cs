@@ -29,7 +29,8 @@ public class GetSiteSettingsRequestHandler: IRequestHandler<GetSiteSettingsReque
                 Localization = await this.cacheBaseRepository.GetCacheVersionAsync("localization"),
                 LocalizationPublic = await this.cacheBaseRepository.GetCacheVersionAsync("localization_public"),
                 Locale = await this.cacheBaseRepository.GetCacheVersionAsync("locale"),
-                Frequency = await this.cacheBaseRepository.GetCacheVersionAsync("frequency")
+                Frequency = await this.cacheBaseRepository.GetCacheVersionAsync("frequency"),
+                BalanceType = await this.cacheBaseRepository.GetCacheVersionAsync("balancetype"),
             }
         };
 

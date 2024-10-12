@@ -13,9 +13,6 @@ db_password="postgres"
 # Export password to avoid password prompt
 export PGPASSWORD=$db_password
 
-# Print the value of ASPNETCORE_ENVIRONMENT
-echo "ASPNETCORE_ENVIRONMENT is set to: $ASPNETCORE_ENVIRONMENT"
-
 # Create a variable based on the value of ASPNETCORE_ENVIRONMENT
 if [ "$ASPNETCORE_ENVIRONMENT" = "Development" ]; then
   # Array of database names

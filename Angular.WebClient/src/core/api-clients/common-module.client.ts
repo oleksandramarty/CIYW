@@ -67,6 +67,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
     country!: string;
     locale!: string;
     frequency!: string;
+    balanceType!: string;
 
     constructor(data?: ICacheVersionResponse) {
         if (data) {
@@ -86,6 +87,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
             this.country = _data["country"];
             this.locale = _data["locale"];
             this.frequency = _data["frequency"];
+            this.balanceType = _data["balanceType"];
         }
     }
 
@@ -105,6 +107,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
         data["country"] = this.country;
         data["locale"] = this.locale;
         data["frequency"] = this.frequency;
+        data["balanceType"] = this.balanceType;
         return data;
     }
 }
@@ -117,6 +120,7 @@ export interface ICacheVersionResponse {
     country: string;
     locale: string;
     frequency: string;
+    balanceType: string;
 }
 
 export class JwtTokenResponse implements IJwtTokenResponse {
@@ -1244,8 +1248,10 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
     userId!: string;
     amount!: number;
     currencyId!: number;
+    title!: string;
     userProjectId!: string;
     version!: string;
+    balanceTypeId!: number;
 
     constructor(data?: IBalanceResponse) {
         super(data);
@@ -1257,8 +1263,10 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
             this.userId = _data["userId"];
             this.amount = _data["amount"];
             this.currencyId = _data["currencyId"];
+            this.title = _data["title"];
             this.userProjectId = _data["userProjectId"];
             this.version = _data["version"];
+            this.balanceTypeId = _data["balanceTypeId"];
         }
     }
 
@@ -1274,8 +1282,10 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
         data["userId"] = this.userId;
         data["amount"] = this.amount;
         data["currencyId"] = this.currencyId;
+        data["title"] = this.title;
         data["userProjectId"] = this.userProjectId;
         data["version"] = this.version;
+        data["balanceTypeId"] = this.balanceTypeId;
         super.toJSON(data);
         return data;
     }
@@ -1285,8 +1295,10 @@ export interface IBalanceResponse extends IBaseDateTimeEntityOfGuid {
     userId: string;
     amount: number;
     currencyId: number;
+    title: string;
     userProjectId: string;
     version: string;
+    balanceTypeId: number;
 }
 
 export class FilteredListResponseOfUserAllowedProjectResponse implements IFilteredListResponseOfUserAllowedProjectResponse {
@@ -1824,10 +1836,10 @@ export interface IVersionedListResponseOfCountryResponse extends IBaseVersionEnt
     items: CountryResponse[];
 }
 
-export class VersionedListResponseOfTreeNodeResponseOfCategoryResponse extends BaseVersionEntity implements IVersionedListResponseOfTreeNodeResponseOfCategoryResponse {
-    items!: TreeNodeResponseOfCategoryResponse[];
+export class VersionedListResponseOfCategoryResponse extends BaseVersionEntity implements IVersionedListResponseOfCategoryResponse {
+    items!: CategoryResponse[];
 
-    constructor(data?: IVersionedListResponseOfTreeNodeResponseOfCategoryResponse) {
+    constructor(data?: IVersionedListResponseOfCategoryResponse) {
         super(data);
         if (!data) {
             this.items = [];
@@ -1840,14 +1852,14 @@ export class VersionedListResponseOfTreeNodeResponseOfCategoryResponse extends B
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
-                    this.items!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
+                    this.items!.push(CategoryResponse.fromJS(item));
             }
         }
     }
 
-    static override fromJS(data: any): VersionedListResponseOfTreeNodeResponseOfCategoryResponse {
+    static override fromJS(data: any): VersionedListResponseOfCategoryResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new VersionedListResponseOfTreeNodeResponseOfCategoryResponse();
+        let result = new VersionedListResponseOfCategoryResponse();
         result.init(data);
         return result;
     }
@@ -1864,48 +1876,8 @@ export class VersionedListResponseOfTreeNodeResponseOfCategoryResponse extends B
     }
 }
 
-export interface IVersionedListResponseOfTreeNodeResponseOfCategoryResponse extends IBaseVersionEntity {
-    items: TreeNodeResponseOfCategoryResponse[];
-}
-
-export class TreeNodeResponseOfCategoryResponse implements ITreeNodeResponseOfCategoryResponse {
-    node?: CategoryResponse | undefined;
-    parent?: CategoryResponse | undefined;
-
-    constructor(data?: ITreeNodeResponseOfCategoryResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.node = _data["node"] ? CategoryResponse.fromJS(_data["node"]) : <any>undefined;
-            this.parent = _data["parent"] ? CategoryResponse.fromJS(_data["parent"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): TreeNodeResponseOfCategoryResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new TreeNodeResponseOfCategoryResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["node"] = this.node ? this.node.toJSON() : <any>undefined;
-        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface ITreeNodeResponseOfCategoryResponse {
-    node?: CategoryResponse | undefined;
-    parent?: CategoryResponse | undefined;
+export interface IVersionedListResponseOfCategoryResponse extends IBaseVersionEntity {
+    items: CategoryResponse[];
 }
 
 export class CategoryResponse extends BaseIdEntityOfInteger implements ICategoryResponse {
@@ -1915,7 +1887,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
     isActive!: boolean;
     isPositive!: boolean;
     parentId?: number | undefined;
-    children!: TreeNodeResponseOfCategoryResponse[];
+    children!: CategoryResponse[];
 
     constructor(data?: ICategoryResponse) {
         super(data);
@@ -1936,7 +1908,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
             if (Array.isArray(_data["children"])) {
                 this.children = [] as any;
                 for (let item of _data["children"])
-                    this.children!.push(TreeNodeResponseOfCategoryResponse.fromJS(item));
+                    this.children!.push(CategoryResponse.fromJS(item));
             }
         }
     }
@@ -1973,6 +1945,102 @@ export interface ICategoryResponse extends IBaseIdEntityOfInteger {
     isActive: boolean;
     isPositive: boolean;
     parentId?: number | undefined;
-    children: TreeNodeResponseOfCategoryResponse[];
+    children: CategoryResponse[];
+}
+
+export class VersionedListResponseOfBalanceTypeResponse extends BaseVersionEntity implements IVersionedListResponseOfBalanceTypeResponse {
+    items!: BalanceTypeResponse[];
+
+    constructor(data?: IVersionedListResponseOfBalanceTypeResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(BalanceTypeResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListResponseOfBalanceTypeResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListResponseOfBalanceTypeResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListResponseOfBalanceTypeResponse extends IBaseVersionEntity {
+    items: BalanceTypeResponse[];
+}
+
+export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalanceTypeResponse {
+    title!: string;
+    isActive!: boolean;
+    icon!: string;
+    type!: BalanceEnum;
+
+    constructor(data?: IBalanceTypeResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.isActive = _data["isActive"];
+            this.icon = _data["icon"];
+            this.type = _data["type"];
+        }
+    }
+
+    static override fromJS(data: any): BalanceTypeResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new BalanceTypeResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["isActive"] = this.isActive;
+        data["icon"] = this.icon;
+        data["type"] = this.type;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IBalanceTypeResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    isActive: boolean;
+    icon: string;
+    type: BalanceEnum;
+}
+
+export enum BalanceEnum {
+    Cash = 1,
+    DebitCard = 2,
+    CreditCard = 3,
+    CryptoCurrency = 4,
 }
 

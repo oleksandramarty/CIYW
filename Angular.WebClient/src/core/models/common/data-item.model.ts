@@ -1,7 +1,7 @@
 import {
-  BalanceResponse, CategoryResponse, CountryResponse, CurrencyResponse,
+  BalanceResponse, BalanceTypeResponse, CategoryResponse, CountryResponse, CurrencyResponse,
   FrequencyResponse,
-  IBalanceResponse, ICategoryResponse, ICountryResponse,
+  IBalanceResponse, IBalanceTypeResponse, ICategoryResponse, ICountryResponse,
   ICurrencyResponse,
   IFrequencyResponse, ILocaleResponse, LocaleResponse
 } from "../../api-clients/common-module.client";
@@ -19,7 +19,7 @@ export interface IDataItem {
 
   filteredFields?: string[] | undefined;
 
-  originalValue: IFrequencyResponse | IBalanceResponse | ICurrencyResponse | ICategoryResponse | ICountryResponse | ILocaleResponse | undefined;
+  originalValue: IBalanceTypeResponse | IFrequencyResponse | IBalanceResponse | ICurrencyResponse | ICategoryResponse | ICountryResponse | ILocaleResponse | undefined;
 }
 
 export class DataItem implements IDataItem {
@@ -35,10 +35,10 @@ export class DataItem implements IDataItem {
 
   filteredFields?: string[] | undefined;
 
-  originalValue: FrequencyResponse | BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined;
+  originalValue: BalanceTypeResponse | FrequencyResponse | BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined;
 
   constructor(
-    originalValue: FrequencyResponse | BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined,
+    originalValue: BalanceTypeResponse | FrequencyResponse | BalanceResponse | CurrencyResponse | CategoryResponse | CountryResponse | LocaleResponse | undefined,
     id: string | undefined,
     name: string | undefined,
     description: string | undefined,

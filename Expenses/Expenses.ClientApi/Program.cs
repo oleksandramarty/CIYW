@@ -41,6 +41,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateExpenseCommandValidat
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePlannedExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdatePlannedExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProjectCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserProjectCommandValidator>();
 // Fluent validation ends
 
 // GraphQL schema

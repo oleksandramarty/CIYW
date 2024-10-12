@@ -21,6 +21,4 @@ public interface IReadGenericRepository<TId, T, TDataContext>
     IQueryable<T> GetQueryable(
         Expression<Func<T, bool>>? condition,
         params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
-
-    Task RemoveByIdAsync(TId id, CancellationToken cancellationToken);
 }

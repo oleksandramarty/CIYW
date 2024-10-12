@@ -12,4 +12,5 @@ public interface IGenericRepository<TId, T, TDataContext> : IReadGenericReposito
     Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
     Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
     Task RemoveRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
+    Task RemoveByIdAsync(TId id, CancellationToken cancellationToken);
 }

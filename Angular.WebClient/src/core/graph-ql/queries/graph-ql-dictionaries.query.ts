@@ -12,6 +12,7 @@ export const GET_SITE_SETTINGS = gql`
                 country
                 locale
                 frequency
+                balanceType
             }
         }
     }
@@ -63,29 +64,32 @@ export const GET_FREQUENCIES_DICTIONARY = gql`
     }
 `;
 
+export const GET_BALANCE_TYPES_DICTIONARY = gql`
+    query GetBalanceTypesDictionary($version: String) {
+        dictionaries_get_balance_types_dictionary(version: $version) {
+            items {
+                id
+                title
+                isActive
+                icon
+            }
+            version
+        }
+    }
+`;
+
 export const GET_CATEGORIES_DICTIONARY = gql`
     query GetCategories($version: String) {
         dictionaries_get_categories_dictionary(version: $version) {
             items {
-                node {
-                    id
-                    title
-                    icon
-                    color
-                    isActive
-                    isPositive
-                    parentId
-                    children {
-                        id
-                        title
-                        icon
-                        color
-                        isActive
-                        isPositive
-                        parentId
-                    }
-                }
-                parent {
+                id
+                title
+                icon
+                color
+                isActive
+                isPositive
+                parentId
+                children {
                     id
                     title
                     icon

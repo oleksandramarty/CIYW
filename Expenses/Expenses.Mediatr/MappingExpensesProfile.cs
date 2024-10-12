@@ -20,6 +20,13 @@ public class MappingExpensesProfile : Profile
         this.CreateMap<CreateUserProjectCommand, UserProject>()
             .ConstructUsing((src, ctx) => 
                 this.CreateOrUpdateEntity<CreateUserProjectCommand, UserProject, Guid>(src, ctx));
+        this.CreateMap<UpdateUserProjectCommand, UserProject>()
+            .ConstructUsing((src, ctx) => 
+                this.CreateOrUpdateEntity<UpdateUserProjectCommand, UserProject, Guid>(src, ctx));
+        
+        this.CreateMap<BalanceDto, Balance>()
+            .ConstructUsing((src, ctx) => 
+                this.CreateOrUpdateEntity<BalanceDto, Balance, Guid>(src, ctx));
         
         this.CreateMap<CreateExpenseCommand, Expense>()
             .ConstructUsing((src, ctx) => 

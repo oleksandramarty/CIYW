@@ -1,10 +1,13 @@
+using Dictionaries.Domain.Models.Balances;
 using Dictionaries.Domain.Models.Categories;
 using Dictionaries.Domain.Models.Countries;
 using Dictionaries.Domain.Models.Expenses;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
-namespace Dictionaries.Domain
-{
+namespace Dictionaries.Domain;
+
     public class DictionariesDataContext : DbContext
     {
         public DbSet<Frequency> Frequencies { get; set; }
@@ -12,6 +15,7 @@ namespace Dictionaries.Domain
         public DbSet<Models.Currencies.Currency> Currencies { get; set; }
         public DbSet<CountryCurrency> CountryCurrencies { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<BalanceType> BalanceTypes { get; set; }
 
         public DictionariesDataContext(DbContextOptions<DictionariesDataContext> options) : base(options)
         {
@@ -49,6 +53,11 @@ namespace Dictionaries.Domain
             {
                 entity.ToTable("Frequencies", "Dictionaries");
             });
+            
+            modelBuilder.Entity<BalanceType>(entity =>
+            {
+                entity.ToTable("BalanceTypes", "Dictionaries");
+            });
 
             modelBuilder.Entity<Category>(entity =>
             {
@@ -73,5 +82,23 @@ namespace Dictionaries.Domain
 
             base.OnModelCreating(modelBuilder);
         }
+    }
+
+public class DictionariesDataContextFactory : IDesignTimeDbContextFactory<DictionariesDataContext>
+{
+    public DictionariesDataContext CreateDbContext(string[] args)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        var configurationBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environment}.json", optional: true);
+
+        var configuration = configurationBuilder.Build();
+        var optionsBuilder = new DbContextOptionsBuilder<DictionariesDataContext>();
+        var connectionString = configuration.GetConnectionString("Database");
+        optionsBuilder.UseNpgsql(connectionString);
+
+        return new DictionariesDataContext(optionsBuilder.Options);
     }
 }

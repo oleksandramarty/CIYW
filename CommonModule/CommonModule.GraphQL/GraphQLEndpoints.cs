@@ -14,6 +14,8 @@ public static class GraphQLEndpoints
     public static readonly GraphQLEndpoint UpdatePlannedExpense = new GraphQLEndpoint("expenses_update_planned_expense");
     public static readonly GraphQLEndpoint RemovePlannedExpense = new GraphQLEndpoint("expenses_remove_planned_expense");
     public static readonly GraphQLEndpoint CreateUserProject = new GraphQLEndpoint("expenses_create_user_project");
+    public static readonly GraphQLEndpoint UpdateUserProject = new GraphQLEndpoint("expenses_update_user_project");
+    public static readonly GraphQLEndpoint UpdateUserProjectBalances = new GraphQLEndpoint("expenses_update_user_project_balances");
     public static readonly GraphQLEndpoint GetFilteredExpenses = new GraphQLEndpoint("expenses_get_filtered_expenses");
     public static readonly GraphQLEndpoint GetFilteredPlannedExpenses = new GraphQLEndpoint("expenses_get_filtered_planned_expenses");
     public static readonly GraphQLEndpoint GetUserProjectById = new GraphQLEndpoint("expenses_get_user_project_by_id");
@@ -21,6 +23,7 @@ public static class GraphQLEndpoints
     public static readonly GraphQLEndpoint GetFilteredUserAllowedProjects = new GraphQLEndpoint("expenses_get_filtered_user_allowed_projects");
     public static readonly GraphQLEndpoint CreateUserSettings = new GraphQLEndpoint("auth_gateway_create_user_settings");
     public static readonly GraphQLEndpoint UpdateUserSettings = new GraphQLEndpoint("auth_gateway_update_user_settings");
+    public static readonly GraphQLEndpoint GetBalanceTypesDictionary = new GraphQLEndpoint("dictionaries_get_balance_types_dictionary");
     public static readonly GraphQLEndpoint GetCurrenciesDictionary = new GraphQLEndpoint("dictionaries_get_currencies_dictionary");
     public static readonly GraphQLEndpoint GetCategoriesDictionary = new GraphQLEndpoint("dictionaries_get_categories_dictionary");
     public static readonly GraphQLEndpoint GetCountriesDictionary = new GraphQLEndpoint("dictionaries_get_countries_dictionary");

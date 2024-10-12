@@ -2,6 +2,8 @@ using Expenses.Domain.Models.Balances;
 using Microsoft.EntityFrameworkCore;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace Expenses.Domain;
 
@@ -62,5 +64,24 @@ public class ExpensesDataContext : DbContext
             fk.DeleteBehavior = DeleteBehavior.Restrict;
 
         base.OnModelCreating(modelBuilder);
+    }
+}
+
+public class ExpensesDataContextFactory : IDesignTimeDbContextFactory<ExpensesDataContext>
+{
+    public ExpensesDataContext CreateDbContext(string[] args)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        var configurationBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environment}.json", optional: true);
+
+        var configuration = configurationBuilder.Build();
+        var optionsBuilder = new DbContextOptionsBuilder<ExpensesDataContext>();
+        var connectionString = configuration.GetConnectionString("Database");
+        optionsBuilder.UseNpgsql(connectionString);
+
+        return new ExpensesDataContext(optionsBuilder.Options);
     }
 }

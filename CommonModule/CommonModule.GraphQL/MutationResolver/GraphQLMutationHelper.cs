@@ -5,6 +5,7 @@ using CommonModule.GraphQL.Types.InputTypes.Expenses.Expenses;
 using CommonModule.GraphQL.Types.InputTypes.Expenses.UserProjects;
 using Expenses.Mediatr.Mediatr.Expenses.Commands;
 using Expenses.Mediatr.Mediatr.Projects.Commands;
+using Expenses.Mediatr.Mediatr.Projects.Handlers;
 using GraphQL.Types;
 
 namespace CommonModule.GraphQL.MutationResolver;
@@ -27,6 +28,9 @@ public class GraphQLMutationHelper: GraphQLMutationResolver
         this.DeleteEntity<RemovePlannedExpenseCommand, GuidGraphType, Guid>(GraphQLEndpoints.RemovePlannedExpense);
         
         this.CreateEntity<CreateUserProjectInputType, CreateUserProjectCommand>(GraphQLEndpoints.CreateUserProject);
+        this.CreateEntity<UpdateUserProjectInputType, UpdateUserProjectCommand>(GraphQLEndpoints.UpdateUserProject);
+        
+        this.UpdateEntity<UpdateUserProjectBalancesInputType, GuidGraphType, Guid, UpdateUserProjectBalancesCommand>(GraphQLEndpoints.UpdateUserProjectBalances);
     }
 
     public void AddAuthGatewayMutations()

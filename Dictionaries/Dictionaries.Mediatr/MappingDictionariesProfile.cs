@@ -1,8 +1,10 @@
 using AutoMapper;
+using CommonModule.Shared.Responses.Dictionaries.Models.Balances;
 using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 using CommonModule.Shared.Responses.Dictionaries.Models.Expenses;
+using Dictionaries.Domain.Models.Balances;
 using Dictionaries.Domain.Models.Categories;
 using Dictionaries.Domain.Models.Countries;
 using Dictionaries.Domain.Models.Currencies;
@@ -19,6 +21,7 @@ public class MappingDictionariesProfile : Profile
         CreateCurrencyMappings();
 
         CreateMap<Frequency, FrequencyResponse>();
+        CreateMap<BalanceType, BalanceTypeResponse>();
     }
 
     private void CreateCategoryMappings()

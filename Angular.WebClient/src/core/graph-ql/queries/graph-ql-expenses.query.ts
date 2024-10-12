@@ -230,8 +230,14 @@ export const REMOVE_PLANNED_EXPENSE = gql`
 `;
 
 export const CREATE_USER_PROJECT = gql`
-    mutation CreateUserProjectInput($title: String!, $isActive: Boolean!, $currencyIds: [Int!]!) {
-        expenses_create_user_project(input: { title: $title, isActive: $isActive, currencyIds: $currencyIds })
+    mutation CreateUserProjectInput($title: String!, $isActive: Boolean) {
+        expenses_create_user_project(input: { title: $title, isActive: $isActive })
+    }
+`;
+
+export const UPDATE_USER_PROJECT = gql`
+    mutation UpdateUserProjectInput($id: Guid!, $title: String!, $isActive: Boolean!) {
+        expenses_create_user_project(id: $id, input: { title: $title, isActive: $isActive })
     }
 `;
 

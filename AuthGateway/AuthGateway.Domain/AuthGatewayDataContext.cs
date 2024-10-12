@@ -1,6 +1,8 @@
 using AuthGateway.Domain.Models.Users;
 using CommonModule.Facade;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace AuthGateway.Domain;
 
@@ -56,5 +58,24 @@ public class AuthGatewayDataContext : DbContext
             fk.DeleteBehavior = DeleteBehavior.Restrict;
 
         base.OnModelCreating(modelBuilder);
+    }
+}
+
+public class AuthGatewayDataContextFactory : IDesignTimeDbContextFactory<AuthGatewayDataContext>
+{
+    public AuthGatewayDataContext CreateDbContext(string[] args)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        var configurationBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environment}.json", optional: true);
+
+        var configuration = configurationBuilder.Build();
+        var optionsBuilder = new DbContextOptionsBuilder<AuthGatewayDataContext>();
+        var connectionString = configuration.GetConnectionString("Database");
+        optionsBuilder.UseNpgsql(connectionString);
+
+        return new AuthGatewayDataContext(optionsBuilder.Options);
     }
 }

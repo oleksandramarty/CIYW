@@ -8,16 +8,16 @@ import {SiteSettingsService} from "./site-settings.service";
 import {DataItem} from "../models/common/data-item.model";
 import {LocalizationService} from "./localization.service";
 import {
+    BalanceTypeResponse,
     CategoryResponse,
     CountryResponse,
     CurrencyResponse,
     FrequencyResponse,
-    LocaleResponse, TreeNodeResponseOfCategoryResponse,
+    LocaleResponse, VersionedListResponseOfBalanceTypeResponse, VersionedListResponseOfCategoryResponse,
     VersionedListResponseOfCountryResponse,
     VersionedListResponseOfCurrencyResponse,
     VersionedListResponseOfFrequencyResponse,
-    VersionedListResponseOfLocaleResponse,
-    VersionedListResponseOfTreeNodeResponseOfCategoryResponse
+    VersionedListResponseOfLocaleResponse
 } from "../api-clients/common-module.client";
 import {GraphQlLocalizationsService} from "../graph-ql/services/graph-ql-localizations.service";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
@@ -35,6 +35,7 @@ export class DictionaryService {
     _categoriesMap: DictionaryMap<number, CategoryResponse> | undefined;
     _localesMap: DictionaryMap<number, LocaleResponse> | undefined;
     _frequenciesMap: DictionaryMap<number, FrequencyResponse> | undefined;
+    _balanceTypesMap: DictionaryMap<number, BalanceTypeResponse> | undefined;
 
     private readonly _importantCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'MDL', 'UAH']
 
@@ -99,7 +100,7 @@ export class DictionaryService {
         return this._categoriesMap;
     }
 
-    set categoriesMap(value: VersionedListResponseOfTreeNodeResponseOfCategoryResponse | undefined) {
+    set categoriesMap(value: VersionedListResponseOfCategoryResponse | undefined) {
         if (!!value) {
             this._categoriesMap = new DictionaryMap<number, CategoryResponse>();
 
@@ -157,6 +158,28 @@ export class DictionaryService {
         find(locale => locale.isoCode === this.siteSettingsService?.siteSettings?.locale);
     }
 
+    get balanceTypesMap(): DictionaryMap<number, BalanceTypeResponse> | undefined {
+        if (!this._balanceTypesMap && this.dictionaries?.balanceTypes?.items) {
+            this._balanceTypesMap = new DictionaryMap<number, BalanceTypeResponse>();
+
+            for (const balanceType of this.dictionaries.balanceTypes.items) {
+                this._balanceTypesMap.set(balanceType.id, balanceType);
+            }
+        }
+
+        return this._balanceTypesMap;
+    }
+
+    set balanceTypesMap(value: VersionedListResponseOfBalanceTypeResponse | undefined) {
+        if (!!value) {
+            this._balanceTypesMap = new DictionaryMap<number, BalanceTypeResponse>();
+
+            for (const balanceType of value.items) {
+                this._balanceTypesMap.set(balanceType.id, balanceType);
+            }
+        }
+    }
+
     constructor(
         private readonly snackBar: MatSnackBar,
         private readonly localStorageService: LocalStorageService,
@@ -199,7 +222,8 @@ export class DictionaryService {
             this.siteSettingsService.version.country !== this.dictionaries?.countries?.version ||
             this.siteSettingsService.version.currency !== this.dictionaries?.currencies?.version ||
             this.siteSettingsService.version.category !== this.dictionaries?.categories?.version ||
-            this.siteSettingsService.version.frequency !== this.dictionaries?.frequencies?.version
+            this.siteSettingsService.version.frequency !== this.dictionaries?.frequencies?.version ||
+            this.siteSettingsService.version.balanceType !== this.dictionaries?.balanceTypes?.version
         ) {
             forkJoin({
                 result_countries: this.graphQlDictionariesService.getCountriesDictionary(
@@ -209,24 +233,29 @@ export class DictionaryService {
                 result_categories: this.graphQlDictionariesService.getCategoriesDictionary(
                     this.dictionaries?.categories?.version).pipe(take(1)),
                 result_frequencies: this.graphQlDictionariesService.getFrequenciesDictionary(
+                    this.dictionaries?.frequencies?.version).pipe(take(1)),
+                result_balance_types: this.graphQlDictionariesService.getBalanceTypesDictionary(
                     this.dictionaries?.frequencies?.version).pipe(take(1))
             }).pipe(
-                tap(({ result_countries, result_currencies, result_categories, result_frequencies }) => {
+                tap(({ result_countries, result_currencies, result_categories, result_frequencies, result_balance_types }) => {
                     if (this._dictionaries) {
                         const countries = result_countries?.data?.dictionaries_get_countries_dictionary as VersionedListResponseOfCountryResponse;
                         const currencies = result_currencies?.data?.dictionaries_get_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
-                        const categories = result_categories?.data?.dictionaries_get_categories_dictionary as VersionedListResponseOfTreeNodeResponseOfCategoryResponse;
+                        const categories = result_categories?.data?.dictionaries_get_categories_dictionary as VersionedListResponseOfCategoryResponse;
                         const frequencies = result_frequencies?.data?.dictionaries_get_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
+                        const balanceTypes = result_balance_types?.data?.dictionaries_get_balance_types_dictionary as VersionedListResponseOfBalanceTypeResponse;
 
                         this._dictionaries.countries = countries;
                         this._dictionaries.currencies = currencies;
                         this._dictionaries.categories = categories;
                         this._dictionaries.frequencies = frequencies;
+                        this._dictionaries.balanceTypes = balanceTypes;
 
                         this.countriesMap = countries;
                         this.currenciesMap = currencies;
                         this.categoriesMap = categories;
                         this.frequenciesMap = frequencies;
+                        this.balanceTypesMap = balanceTypes;
 
                         this.updateDateItems(false);
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
@@ -246,13 +275,15 @@ export class DictionaryService {
         }
 
         if (isPublic) {
-            this._dataItems.locales = this.dictionaries?.locales?.items
+            const tempLocales = this.dictionaries?.locales?.items
                 .map(locale => new DataItem(locale, String(locale.id), locale.title, locale.titleEn));
+            this._dataItems.locales = tempLocales?.sort((a, b) => Number(a.id) - Number(b.id));
         } else {
             this._dataItems.categories = this.mapCategories(this.dictionaries?.categories?.items || []);
-            this._dataItems.countries = this.dictionaries?.countries?.items
+            const tempCountries = this.dictionaries?.countries?.items
                 .map(country => new DataItem(country, String(country.id), country.titleEn, country.title));
-            this._dataItems.currencies = this.dictionaries?.currencies?.items
+            this._dataItems.countries = tempCountries?.sort((a, b) => Number(a.id) - Number(b.id));
+            const tempCurrencies = this.dictionaries?.currencies?.items
                 .map(currency =>
                     new DataItem(
                         currency,
@@ -266,9 +297,19 @@ export class DictionaryService {
                         this._importantCurrencies.includes(currency.code)
                     )
                 );
-            this._dataItems.frequencies = this.dictionaries?.frequencies?.items
-                .sort((a, b) => a.id - b.id)
+            this._dataItems.currencies = tempCurrencies?.sort((a, b) => {
+                const importantCurrencies = this._importantCurrencies;
+                const aIsImportant = importantCurrencies.includes((a.originalValue as CurrencyResponse).code);
+                const bIsImportant = importantCurrencies.includes((b.originalValue as CurrencyResponse).code);
+
+                if (aIsImportant && !bIsImportant) return -1;
+                if (!aIsImportant && bIsImportant) return 1;
+                return Number(a.id) - Number(b.id);
+            });
+
+            const tempFrequencies = this.dictionaries?.frequencies?.items
                 .map(frequency => new DataItem(frequency, String(frequency.id), frequency.title, frequency.description));
+            this._dataItems.frequencies = tempFrequencies?.sort((a, b) => Number(a.id) - Number(b.id));
 
             this._dataItems!.categoriesFlat = [];
 
@@ -283,33 +324,37 @@ export class DictionaryService {
                         category.color,
                         this.localizationService.getAllTranslationsByKey(category.title) || []));
             });
+
+            const tempBalanceTypes = this.dictionaries?.balanceTypes?.items
+                .map(balance => new DataItem(balance, String(balance.id), balance.title, '', balance.icon));
+            this._dataItems.balanceTypes = tempBalanceTypes?.sort((a, b) => Number(a.id) - Number(b.id));
         }
     }
 
-    private mapCategories(categories: TreeNodeResponseOfCategoryResponse[]): DataItem[] {
+    private mapCategories(categories: CategoryResponse[]): DataItem[] {
         return categories.map(category => this.mapCategory(category));
     }
 
-    private mapCategory(category: TreeNodeResponseOfCategoryResponse): DataItem {
+    private mapCategory(category: CategoryResponse): DataItem {
         const dataItem: DataItem = {
-            originalValue: category.node,
-            id: category.node?.id?.toString(),
-            name: category.node?.title,
-            description: category.node?.isPositive ? 'EXPENSES.INCOME' : 'EXPENSES.EXPENSE',
-            icon: category.node?.icon,
-            color: category.node?.color,
-            isActive: category.node?.isActive,
+            originalValue: category,
+            id: category?.id?.toString(),
+            name: category?.title,
+            description: category?.isPositive ? 'EXPENSES.INCOME' : 'EXPENSES.EXPENSE',
+            icon: category?.icon,
+            color: category?.color,
+            isActive: category?.isActive,
             isImportant: false,
-            children: category.node?.children ? this.mapCategories(category.node.children) : []
+            children: category?.children ? this.mapCategories(category.children) : []
         };
         return dataItem;
     }
 
-    private mapCategoriesToFlat(categories: TreeNodeResponseOfCategoryResponse[]): CategoryResponse[] {
+    private mapCategoriesToFlat(categories: CategoryResponse[]): CategoryResponse[] {
         let categoriesArr: CategoryResponse[] = [];
 
         categories.forEach(category => {
-            this.mapCategoryToFlat(category.node!, categoriesArr);
+            this.mapCategoryToFlat(category!, categoriesArr);
         });
 
         return categoriesArr;
@@ -324,7 +369,7 @@ export class DictionaryService {
 
         if (category.children) {
             category.children.forEach(child => {
-                this.mapCategoryToFlat(child.node!, categories);
+                this.mapCategoryToFlat(child!, categories);
             });
         }
 

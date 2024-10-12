@@ -1,5 +1,7 @@
 using CommonModule.Shared.Domain.AuditTrail;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace AuditTrail.Domain;
 
@@ -23,5 +25,24 @@ public class AuditTrailDataContext: DbContext
             fk.DeleteBehavior = DeleteBehavior.Restrict;
 
         base.OnModelCreating(modelBuilder);
+    }
+}
+
+public class AuditTrailDataContextFactory : IDesignTimeDbContextFactory<AuditTrailDataContext>
+{
+    public AuditTrailDataContext CreateDbContext(string[] args)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        var configurationBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environment}.json", optional: true);
+
+        var configuration = configurationBuilder.Build();
+        var optionsBuilder = new DbContextOptionsBuilder<AuditTrailDataContext>();
+        var connectionString = configuration.GetConnectionString("Database");
+        optionsBuilder.UseNpgsql(connectionString);
+
+        return new AuditTrailDataContext(optionsBuilder.Options);
     }
 }

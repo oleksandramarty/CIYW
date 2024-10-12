@@ -20,7 +20,6 @@ builder.AddDatabaseContext<LocalizationsDataContext>();
 builder.AddDynamoDB();
 builder.AddSwagger();
 builder.AddCorsPolicy();
-builder.Services.AddControllers();
 builder.AddAuthorization();
 
 builder.AddJwtAuthentication();

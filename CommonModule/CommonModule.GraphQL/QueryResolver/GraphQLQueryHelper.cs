@@ -4,6 +4,7 @@ using CommonModule.GraphQL.Types.InputTypes.AuthGateway;
 using CommonModule.GraphQL.Types.Responses.AuthGateway;
 using CommonModule.GraphQL.Types.Responses.AuthGateway.Users;
 using CommonModule.GraphQL.Types.Responses.Dictionaries;
+using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Balances;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Categories;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Countries;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Currencies;
@@ -16,6 +17,7 @@ using CommonModule.Shared.Responses.Auth;
 using CommonModule.Shared.Responses.AuthGateway.Users;
 using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Dictionaries;
+using CommonModule.Shared.Responses.Dictionaries.Models.Balances;
 using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
@@ -94,6 +96,12 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
             CategoryResponse, 
             GetCategoriesRequest
         >(GraphQLEndpoints.GetCategoriesDictionary);
+        
+        this.GetVersionedList<
+            VersionedListOfGenericType<BalanceTypeResponse, BalanceTypeResponseType>, 
+            BalanceTypeResponse, 
+            GetBalanceTypesRequest
+        >(GraphQLEndpoints.GetBalanceTypesDictionary);
     }
 
     public void AddAuthGatewayQueries()

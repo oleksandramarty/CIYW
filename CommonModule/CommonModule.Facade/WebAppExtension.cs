@@ -125,8 +125,9 @@ namespace CommonModule.Facade;
             string dbName = "Database")
             where TDataContext : DbContext
         {
+            var temp = builder.Configuration.GetConnectionString(dbName);
             builder.Services.AddDbContext<TDataContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString(dbName)));
+                options.UseNpgsql(temp));
         }
 
         public static void AddDynamoDB(this WebApplicationBuilder builder)

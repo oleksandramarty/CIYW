@@ -9,6 +9,5 @@ public class CreateUserProjectInputType : InputObjectGraphType
         Name = "CreateUserProjectInput";
         Field<NonNullGraphType<StringGraphType>>("title");
         Field<NonNullGraphType<BooleanGraphType>>("isActive");
-        Field<ListGraphType<NonNullGraphType<IntGraphType>>>("currencyIds");
     }
 }

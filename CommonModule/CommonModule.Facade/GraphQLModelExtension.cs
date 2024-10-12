@@ -5,6 +5,7 @@ using CommonModule.Shared.Responses.Auth;
 using CommonModule.Shared.Responses.AuthGateway.Users;
 using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Dictionaries;
+using CommonModule.Shared.Responses.Dictionaries.Models.Balances;
 using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
@@ -38,6 +39,7 @@ public static class GraphQLModelExtension
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<LocaleResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CountryResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CategoryResponse>>());
+            config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<BalanceTypeResponse>>());
         }
     }
 }

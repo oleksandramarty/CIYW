@@ -26,5 +26,6 @@ public class CacheVersionResponseType : ObjectGraphType<CacheVersionResponse>
         Field(x => x.Country);
         Field(x => x.Locale);
         Field(x => x.Frequency);
+        Field(x => x.BalanceType);
     }
 }

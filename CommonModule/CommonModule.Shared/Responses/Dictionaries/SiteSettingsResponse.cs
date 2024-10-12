@@ -15,4 +15,5 @@ public class CacheVersionResponse
     public string Country { get; set; }
     public string Locale { get; set; }
     public string Frequency { get; set; }
+    public string BalanceType { get; set; }
 }

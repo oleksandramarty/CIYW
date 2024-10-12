@@ -19,5 +19,6 @@ chmod +x "$INSERT_CACHE_VALUE_SCRIPT"
 "$INSERT_CACHE_VALUE_SCRIPT" "version:currency" $(uuidgen | tr -d '-')
 "$INSERT_CACHE_VALUE_SCRIPT" "version:country" $(uuidgen | tr -d '-')
 "$INSERT_CACHE_VALUE_SCRIPT" "version:locale" $(uuidgen | tr -d '-')
+"$INSERT_CACHE_VALUE_SCRIPT" "version:balancetype" $(uuidgen | tr -d '-')
 
 echo "Cache version updated in Redis."

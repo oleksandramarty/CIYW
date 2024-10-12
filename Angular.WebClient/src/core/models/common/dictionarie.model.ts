@@ -1,14 +1,17 @@
 import {DataItem, IDataItem} from "./data-item.model";
 import {
+    IVersionedListResponseOfBalanceTypeResponse,
+    IVersionedListResponseOfCategoryResponse,
     IVersionedListResponseOfCountryResponse,
     IVersionedListResponseOfCurrencyResponse,
     IVersionedListResponseOfFrequencyResponse,
     IVersionedListResponseOfLocaleResponse,
-    IVersionedListResponseOfTreeNodeResponseOfCategoryResponse,
+    VersionedListResponseOfBalanceTypeResponse,
+    VersionedListResponseOfCategoryResponse,
     VersionedListResponseOfCountryResponse,
-    VersionedListResponseOfCurrencyResponse, VersionedListResponseOfFrequencyResponse,
-    VersionedListResponseOfLocaleResponse,
-    VersionedListResponseOfTreeNodeResponseOfCategoryResponse
+    VersionedListResponseOfCurrencyResponse,
+    VersionedListResponseOfFrequencyResponse,
+    VersionedListResponseOfLocaleResponse
 } from "../../api-clients/common-module.client";
 
 export class DictionaryMap<TKey, TValue> {
@@ -49,6 +52,7 @@ export interface IDictionaryDataItems {
     currencies: IDataItem[] | undefined;
     categories: IDataItem[] | undefined;
     frequencies: IDataItem[] | undefined;
+    balanceTypes: IDataItem[] | undefined;
 
     categoriesFlat: IDataItem[] | undefined;
 }
@@ -59,6 +63,7 @@ export class DictionaryDataItems implements IDictionaryDataItems {
     currencies: DataItem[] | undefined;
     categories: DataItem[] | undefined;
     frequencies: DataItem[] | undefined;
+    balanceTypes: DataItem[] | undefined;
 
     categoriesFlat: DataItem[] | undefined;
 }
@@ -66,15 +71,17 @@ export class DictionaryDataItems implements IDictionaryDataItems {
 export interface IDictionary {
     countries: IVersionedListResponseOfCountryResponse | undefined;
     currencies: IVersionedListResponseOfCurrencyResponse | undefined;
-    categories: IVersionedListResponseOfTreeNodeResponseOfCategoryResponse | undefined;
+    categories: IVersionedListResponseOfCategoryResponse | undefined;
     locales: IVersionedListResponseOfLocaleResponse | undefined;
     frequencies: IVersionedListResponseOfFrequencyResponse | undefined;
+    balanceTypes: IVersionedListResponseOfBalanceTypeResponse | undefined;
 }
 
 export class Dictionary implements IDictionary {
     countries: VersionedListResponseOfCountryResponse | undefined;
     currencies: VersionedListResponseOfCurrencyResponse | undefined;
-    categories: VersionedListResponseOfTreeNodeResponseOfCategoryResponse | undefined;
+    categories: VersionedListResponseOfCategoryResponse | undefined;
     locales: VersionedListResponseOfLocaleResponse | undefined;
     frequencies: VersionedListResponseOfFrequencyResponse | undefined;
+    balanceTypes: VersionedListResponseOfBalanceTypeResponse | undefined;
 }

@@ -64,7 +64,7 @@ public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId>
 
     public async Task<string> GetCacheVersionAsync(string dictionaryName)
     {
-        var redisKey = $"version:{dictionaryName}";
+        var redisKey = $"version:{dictionaryName.ToLower()}";
         string version = await database.StringGetAsync(redisKey);
 
         return version;
@@ -72,7 +72,7 @@ public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId>
 
     public async Task SetCacheVersionAsync(string dictionaryName)
     {
-        var redisKey = $"version:{dictionaryName}";
+        var redisKey = $"version:{dictionaryName.ToLower()}";
         await database.StringSetAsync(redisKey, Guid.NewGuid().ToString("N").ToUpper());
     }
 

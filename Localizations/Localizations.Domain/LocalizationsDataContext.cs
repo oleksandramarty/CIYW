@@ -1,5 +1,7 @@
 using Localizations.Domain.Models.Locales;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace Localizations.Domain;
 
@@ -40,5 +42,24 @@ public class LocalizationsDataContext: DbContext
             fk.DeleteBehavior = DeleteBehavior.Restrict;
 
         base.OnModelCreating(modelBuilder);
+    }
+}
+
+public class LocalizationsDataContextFactory : IDesignTimeDbContextFactory<LocalizationsDataContext>
+{
+    public LocalizationsDataContext CreateDbContext(string[] args)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        var configurationBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environment}.json", optional: true);
+
+        var configuration = configurationBuilder.Build();
+        var optionsBuilder = new DbContextOptionsBuilder<LocalizationsDataContext>();
+        var connectionString = configuration.GetConnectionString("Database");
+        optionsBuilder.UseNpgsql(connectionString);
+
+        return new LocalizationsDataContext(optionsBuilder.Options);
     }
 }

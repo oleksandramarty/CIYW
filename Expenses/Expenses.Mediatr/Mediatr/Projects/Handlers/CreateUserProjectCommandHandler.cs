@@ -35,30 +35,12 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         this.entityValidator.ValidateVoidRequest<CreateUserProjectCommand>(command, () => new CreateUserProjectCommandValidator());
         
         Guid userId = await this.GetCurrentUserIdAsync();
-        int count = await this.userProjectRepository.GetQueryable(
-            p => p.CreatedUserId == userId).CountAsync(cancellationToken);
-
-        if (count > 5)
-        {
-            throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
-        }
         
         UserProject userProject = this.mapper.Map<UserProject>(command, opts => opts.Items["IsUpdate"] = false);
         
         userProject.Id = Guid.NewGuid();
         userProject.CreatedUserId = userId;
         userProject.Version = Guid.NewGuid().ToString("N").ToUpper();
-
-        userProject.Balances = command.CurrencyIds.Select(c => new Balance
-        {
-            Id = Guid.NewGuid(),
-            Amount = 0,
-            Created = DateTime.UtcNow,
-            CurrencyId = c,
-            UserProjectId = userProject.Id,
-            UserId = userId,
-            Version = Guid.NewGuid().ToString("N").ToUpper()
-        }).ToList();
         
         await this.userProjectRepository.AddAsync(userProject, cancellationToken);
     }

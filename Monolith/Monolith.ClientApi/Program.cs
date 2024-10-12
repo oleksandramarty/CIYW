@@ -52,6 +52,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateExpenseCommandValidat
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePlannedExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdatePlannedExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProjectCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserProjectCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AuthSignUpCommandValidator>();
 // Fluent validation ends
 

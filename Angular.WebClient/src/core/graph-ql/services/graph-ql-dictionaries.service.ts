@@ -3,17 +3,17 @@ import {Observable} from "rxjs";
 import {ApolloQueryResult} from "@apollo/client";
 import {GraphQlService} from "../graph-ql.service";
 import {
+    GET_BALANCE_TYPES_DICTIONARY,
     GET_CATEGORIES_DICTIONARY,
     GET_COUNTRIES_DICTIONARY,
     GET_CURRENCIES_DICTIONARY, GET_FREQUENCIES_DICTIONARY,
     GET_SITE_SETTINGS
 } from "../queries/graph-ql-dictionaries.query";
 import {
-    SiteSettingsResponse,
+    SiteSettingsResponse, VersionedListResponseOfBalanceTypeResponse, VersionedListResponseOfCategoryResponse,
     VersionedListResponseOfCountryResponse,
     VersionedListResponseOfCurrencyResponse,
-    VersionedListResponseOfFrequencyResponse,
-    VersionedListResponseOfLocaleResponse, VersionedListResponseOfTreeNodeResponseOfCategoryResponse
+    VersionedListResponseOfFrequencyResponse
 } from "../../api-clients/common-module.client";
 import {ApolloBase} from "apollo-angular";
 
@@ -71,7 +71,18 @@ export class GraphQlDictionariesService {
             }).valueChanges as Observable<ApolloQueryResult<{ dictionaries_get_frequencies_dictionary: VersionedListResponseOfFrequencyResponse }>>;
     }
 
-    public getCategoriesDictionary(version: string | undefined): Observable<ApolloQueryResult<{ dictionaries_get_categories_dictionary: VersionedListResponseOfTreeNodeResponseOfCategoryResponse }>> {
+    public getBalanceTypesDictionary(version: string | undefined): Observable<ApolloQueryResult<{ dictionaries_get_balance_types_dictionary: VersionedListResponseOfBalanceTypeResponse }>> {
+        return this.apolloClient
+            .watchQuery({
+                query: GET_BALANCE_TYPES_DICTIONARY,
+                variables: {
+                    version,
+                },
+                fetchPolicy: 'network-only',
+            }).valueChanges as Observable<ApolloQueryResult<{ dictionaries_get_balance_types_dictionary: VersionedListResponseOfBalanceTypeResponse }>>;
+    }
+
+    public getCategoriesDictionary(version: string | undefined): Observable<ApolloQueryResult<{ dictionaries_get_categories_dictionary: VersionedListResponseOfCategoryResponse }>> {
         return this.apolloClient
             .watchQuery({
                 query: GET_CATEGORIES_DICTIONARY,
@@ -79,6 +90,6 @@ export class GraphQlDictionariesService {
                     version,
                 },
                 fetchPolicy: 'network-only',
-            }).valueChanges as Observable<ApolloQueryResult<{ dictionaries_get_categories_dictionary: VersionedListResponseOfTreeNodeResponseOfCategoryResponse }>>;
+            }).valueChanges as Observable<ApolloQueryResult<{ dictionaries_get_categories_dictionary: VersionedListResponseOfCategoryResponse }>>;
     }
 }
