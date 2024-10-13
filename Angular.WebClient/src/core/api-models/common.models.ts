@@ -13,7 +13,7 @@ import { Observable, throwError as _observableThrow, of as _observableOf } from 
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 
-export const API_BASE_URL_CommonModule = new InjectionToken<string>('API_BASE_URL_CommonModule');
+export const API_BASE_URL_Monolith = new InjectionToken<string>('API_BASE_URL_Monolith');
 
 
 export class SiteSettingsResponse implements ISiteSettingsResponse {
@@ -1252,6 +1252,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
     userProjectId!: string;
     version!: string;
     balanceTypeId!: number;
+    isActive!: boolean;
 
     constructor(data?: IBalanceResponse) {
         super(data);
@@ -1267,6 +1268,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
             this.userProjectId = _data["userProjectId"];
             this.version = _data["version"];
             this.balanceTypeId = _data["balanceTypeId"];
+            this.isActive = _data["isActive"];
         }
     }
 
@@ -1286,6 +1288,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
         data["userProjectId"] = this.userProjectId;
         data["version"] = this.version;
         data["balanceTypeId"] = this.balanceTypeId;
+        data["isActive"] = this.isActive;
         super.toJSON(data);
         return data;
     }
@@ -1299,6 +1302,7 @@ export interface IBalanceResponse extends IBaseDateTimeEntityOfGuid {
     userProjectId: string;
     version: string;
     balanceTypeId: number;
+    isActive: boolean;
 }
 
 export class FilteredListResponseOfUserAllowedProjectResponse implements IFilteredListResponseOfUserAllowedProjectResponse {
@@ -1620,7 +1624,7 @@ export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequen
     title!: string;
     description!: string;
     isActive!: boolean;
-    frequencyEnum!: FrequencyEnum;
+    type!: FrequencyEnum;
 
     constructor(data?: IFrequencyResponse) {
         super(data);
@@ -1632,7 +1636,7 @@ export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequen
             this.title = _data["title"];
             this.description = _data["description"];
             this.isActive = _data["isActive"];
-            this.frequencyEnum = _data["frequencyEnum"];
+            this.type = _data["type"];
         }
     }
 
@@ -1648,7 +1652,7 @@ export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequen
         data["title"] = this.title;
         data["description"] = this.description;
         data["isActive"] = this.isActive;
-        data["frequencyEnum"] = this.frequencyEnum;
+        data["type"] = this.type;
         super.toJSON(data);
         return data;
     }
@@ -1658,7 +1662,7 @@ export interface IFrequencyResponse extends IBaseIdEntityOfInteger {
     title: string;
     description: string;
     isActive: boolean;
-    frequencyEnum: FrequencyEnum;
+    type: FrequencyEnum;
 }
 
 export enum FrequencyEnum {

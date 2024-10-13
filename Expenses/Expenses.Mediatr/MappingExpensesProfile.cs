@@ -24,9 +24,12 @@ public class MappingExpensesProfile : Profile
             .ConstructUsing((src, ctx) => 
                 this.CreateOrUpdateEntity<UpdateUserProjectCommand, UserProject, Guid>(src, ctx));
         
-        this.CreateMap<BalanceDto, Balance>()
+        this.CreateMap<CreateUserBalanceCommand, Balance>()
             .ConstructUsing((src, ctx) => 
-                this.CreateOrUpdateEntity<BalanceDto, Balance, Guid>(src, ctx));
+                this.CreateOrUpdateEntity<CreateUserBalanceCommand, Balance, Guid>(src, ctx));
+        this.CreateMap<UpdateUserBalanceCommand, Balance>()
+            .ConstructUsing((src, ctx) => 
+                this.CreateOrUpdateEntity<UpdateUserBalanceCommand, Balance, Guid>(src, ctx));
         
         this.CreateMap<CreateExpenseCommand, Expense>()
             .ConstructUsing((src, ctx) => 
@@ -52,7 +55,11 @@ public class MappingExpensesProfile : Profile
                         Modified = b.Modified,
                         UserProjectId = b.UserProjectId,
                         CurrencyId = b.CurrencyId,
-                        UserId = b.UserId
+                        UserId = b.UserId,
+                        BalanceTypeId = b.BalanceTypeId,
+                        IsActive = b.IsActive,
+                        Version = b.Version,
+                        Title = b.Title
                     }).ToList() : new List<BalanceResponse>()));
 
         this.CreateMap<Balance, BalanceResponse>();
@@ -74,7 +81,11 @@ public class MappingExpensesProfile : Profile
                                 Modified = b.Modified,
                                 UserProjectId = b.UserProjectId,
                                 CurrencyId = b.CurrencyId,
-                                UserId = b.UserId
+                                UserId = b.UserId,
+                                BalanceTypeId = b.BalanceTypeId,
+                                IsActive = b.IsActive,
+                                Version = b.Version,
+                                Title = b.Title
                             }).ToList(),
                     } 
                     : null));

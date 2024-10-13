@@ -38,7 +38,7 @@ builder.AddDatabaseContext<DictionariesDataContext>();
 builder.AddDatabaseContext<AuthGatewayDataContext>();
 builder.AddDatabaseContext<AuditTrailDataContext>();
 builder.AddDynamoDB();
-builder.AddSwagger();
+builder.AddSwagger(true);
 builder.AddCorsPolicy();
 builder.Services.AddControllers();
 builder.AddAuthorization();

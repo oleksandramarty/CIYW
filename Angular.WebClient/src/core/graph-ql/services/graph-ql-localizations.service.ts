@@ -5,7 +5,7 @@ import {GraphQlService} from "../graph-ql.service";
 import {
     LocalizationsResponse,
     VersionedListResponseOfLocaleResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 import {
     GET_LOCALES_DICTIONARY,
     GET_LOCALIZATIONS,

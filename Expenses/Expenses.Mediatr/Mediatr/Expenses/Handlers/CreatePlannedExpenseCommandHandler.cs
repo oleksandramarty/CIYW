@@ -38,7 +38,6 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
         PlannedExpense toAdd = this.mapper.Map<PlannedExpense>(command, opts => opts.Items["IsUpdate"] = false);
-        toAdd.Version = Guid.NewGuid().ToString("N").ToUpper();
             
         await this.plannedExpenseRepository.AddAsync(toAdd, cancellationToken);
         return;

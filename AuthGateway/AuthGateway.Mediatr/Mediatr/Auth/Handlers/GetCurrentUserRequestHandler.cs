@@ -39,7 +39,8 @@ public class GetCurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<GetC
         
         User user = await this.userRepository.GetByIdAsync(userId, cancellationToken, 
             user => user.Include(u => u.Roles).ThenInclude(ur => ur.Role).Include(u => u.UserSetting));
-        this.entityValidator.ValidateExist<User, Guid?>(user, userId);
+        this.entityValidator.IsEntityExist(user);
+        this.entityValidator.IsEntityActive(user);
         
         UserResponse response = this.mapper.Map<User, UserResponse>(user);
 

@@ -30,11 +30,10 @@ public class UpdateUserSettingCommandHandler: IRequestHandler<UpdateUserSettingC
     public async Task Handle(UpdateUserSettingCommand command, CancellationToken cancellationToken)
     {
         Guid? userId = await authRepository.GetCurrentUserIdAsync();
-        this.entityValidator.ValidateExist(userId);
+        this.entityValidator.IsEntityExist(userId);
 
         UserSetting userSetting = await userSettingRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.ValidateExist<UserSetting, Guid>(userSetting, command.Id);
-        userSetting.Version = Guid.NewGuid().ToString("N").ToUpper();
+        this.entityValidator.IsEntityExist(userSetting);
             
         await this.userSettingRepository.UpdateAsync(
             this.mapper.Map(command, userSetting),

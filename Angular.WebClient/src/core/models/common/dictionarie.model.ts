@@ -12,7 +12,7 @@ import {
     VersionedListResponseOfCurrencyResponse,
     VersionedListResponseOfFrequencyResponse,
     VersionedListResponseOfLocaleResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 
 export class DictionaryMap<TKey, TValue> {
   private _items: Map<TKey, TValue>;

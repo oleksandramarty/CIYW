@@ -30,7 +30,8 @@ public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSig
     {
         Guid userId = await this.GetCurrentUserIdAsync();
         User user = await this.userRepository.GetByIdAsync(userId, cancellationToken);
-        this.entityValidator.ValidateExist<User, Guid>(user, userId);
+        this.entityValidator.IsEntityExist(user);
+        this.entityValidator.IsEntityActive(user);
 
         await this.tokenService.RemoveUserTokenAsync(user.Id);
 

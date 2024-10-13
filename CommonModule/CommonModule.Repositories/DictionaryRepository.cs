@@ -51,10 +51,12 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
             await this.cacheRepository.SetCacheVersionAsync();
         }
     
-        return new VersionedListResponse<TResponse>
+        VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>
         {
             Items = items.Where(i => i.IsActive).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
             Version = currencyVersion
         };
+
+        return result;
     }
 }

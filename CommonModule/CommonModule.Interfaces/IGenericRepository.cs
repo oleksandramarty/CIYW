@@ -8,9 +8,9 @@ public interface IGenericRepository<TId, T, TDataContext> : IReadGenericReposito
 {
     Task AddAsync(T entity, CancellationToken cancellationToken);
     Task UpdateAsync(T entity, CancellationToken cancellationToken);
-    Task DeleteAsync(TId id, CancellationToken cancellationToken);
+    Task DeleteAsync(T entity, CancellationToken cancellationToken);
     Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
     Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
-    Task RemoveRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
-    Task RemoveByIdAsync(TId id, CancellationToken cancellationToken);
+    Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
+    Task DeleteByIdAsync(TId id, CancellationToken cancellationToken);
 }

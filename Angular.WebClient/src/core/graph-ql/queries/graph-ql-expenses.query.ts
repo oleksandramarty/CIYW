@@ -230,7 +230,7 @@ export const REMOVE_PLANNED_EXPENSE = gql`
 `;
 
 export const CREATE_USER_PROJECT = gql`
-    mutation CreateUserProjectInput($title: String!, $isActive: Boolean) {
+    mutation CreateUserProjectInput($title: String!, $isActive: Boolean!) {
         expenses_create_user_project(input: { title: $title, isActive: $isActive })
     }
 `;
@@ -238,6 +238,52 @@ export const CREATE_USER_PROJECT = gql`
 export const UPDATE_USER_PROJECT = gql`
     mutation UpdateUserProjectInput($id: Guid!, $title: String!, $isActive: Boolean!) {
         expenses_create_user_project(id: $id, input: { title: $title, isActive: $isActive })
+    }
+`;
+
+export const CREATE_USER_BALANCE = gql`
+    mutation CreateUserBalanceInput(
+        $title: String!, 
+        $isActive: Boolean!, 
+        $currencyId: Int!, 
+        $balanceTypeId: Int!
+        $userProjectId: Guid!
+    ) {
+        expenses_create_user_balance(
+            input: { 
+                title: $title, 
+                isActive: $isActive,
+                currencyId: $currencyId,
+                balanceTypeId: $balanceTypeId
+                userProjectId: $userProjectId
+            })
+    }
+`;
+
+export const UPDATE_USER_BALANCE = gql`
+    mutation UpdateUserBalanceInput(
+        $id: Guid!,
+        $title: String!,
+        $isActive: Boolean!,
+        $currencyId: Int!,
+        $balanceTypeId: Int!
+        $userProjectId: Guid!
+    ) {
+        expenses_update_user_balance(
+            id: $id,
+            input: {
+                title: $title,
+                isActive: $isActive,
+                currencyId: $currencyId,
+                balanceTypeId: $balanceTypeId
+                userProjectId: $userProjectId
+            })
+    }
+`;
+
+export const REMOVE_USER_BALANCE = gql`
+    mutation RemovePlannedExpense($id: Guid!) {
+        expenses_remove_user_balance(id: $id)
     }
 `;
 
@@ -250,10 +296,16 @@ export const GET_USER_PROJECT_BY_ID = gql`
             createdUserId
             balances {
                 id
-                amount
-                currencyId
+                title
                 created
                 modified
+                amount
+                currencyId
+                userProjectId
+                balanceTypeId
+                isActive
+                version
+                userId
             }
             version
             created
@@ -294,10 +346,16 @@ export const GET_FILTERED_USER_PROJECTS = gql`
                 createdUserId
                 balances {
                     id
-                    amount
-                    currencyId
+                    title
                     created
                     modified
+                    amount
+                    currencyId
+                    userProjectId
+                    balanceTypeId
+                    isActive
+                    version
+                    userId
                 }
                 version
                 created
@@ -348,10 +406,16 @@ export const GET_FILTERED_USER_ALLOWED_PROJECTS = gql`
                     createdUserId
                     balances {
                         id
-                        amount
-                        currencyId
+                        title
                         created
                         modified
+                        amount
+                        currencyId
+                        userProjectId
+                        balanceTypeId
+                        isActive
+                        version
+                        userId
                     }
                     version
                     created

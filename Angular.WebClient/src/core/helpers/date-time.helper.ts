@@ -1,4 +1,4 @@
-import {BaseDateRangeFilterRequest} from "../api-clients/common-module.client";
+import {BaseDateRangeFilterRequest} from "../api-models/common.models";
 
 const getUserTimeShift = (): number => {
     const date = new Date();

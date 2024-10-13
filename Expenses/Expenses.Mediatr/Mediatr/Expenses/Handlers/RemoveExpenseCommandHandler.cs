@@ -35,7 +35,7 @@ public class RemoveExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<R
     public async Task<bool> Handle(RemoveExpenseCommand command, CancellationToken cancellationToken)
     {
         Expense expense = await this.expenseRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.ValidateExist(expense, command.Id);
+        this.entityValidator.IsEntityExist(expense);
 
         await this.CheckUserProjectByIdAsync(expense.UserProjectId, cancellationToken);
 

@@ -30,10 +30,9 @@ public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingC
     public async Task Handle(CreateUserSettingCommand command, CancellationToken cancellationToken)
     {
         Guid? userId = await authRepository.GetCurrentUserIdAsync();
-        this.entityValidator.ValidateExist(userId);
+        this.entityValidator.IsEntityExist(userId);
         
         UserSetting toAdd = this.mapper.Map<UserSetting>(command);
-        toAdd.Version = Guid.NewGuid().ToString("N").ToUpper();
         
         await this.userSettingRepository.AddAsync(
             toAdd,

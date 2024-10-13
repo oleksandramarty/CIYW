@@ -12,6 +12,7 @@ public class ErrorMessages
     public const string Blocked = "ERROR.BLOCKED";
     public const string ResourceNotFound = "ERROR.RESOURCE_NOT_FOUND";
     public const string EntityBlocked = "ERROR.ENTITY_BLOCKED";
+    public const string EntityPessimisticLocked = "ERROR.ENTITY_PESSIMISTIC_LOCKED";
     public const string WrongAuth = "ERROR.WRONG_AUTH";
     public const string Forbidden = "ERROR.FORBIDDEN";
     public const string UserBlocked = "ERROR.USER_BLOCKED";

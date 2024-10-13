@@ -7,7 +7,7 @@ import {
   CurrencyResponse,
   UserAllowedProjectResponse,
   UserProjectResponse
-} from "../../../../../core/api-clients/common-module.client";
+} from "../../../../../core/api-models/common.models";
 
 @Component({
   selector: 'app-dashboard-user-projects',

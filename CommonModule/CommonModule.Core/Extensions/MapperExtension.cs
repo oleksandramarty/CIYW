@@ -9,9 +9,11 @@ namespace CommonModule.Core.Extensions;
 public static class MapperExtension
 {
     public static TEntity CreateOrUpdateEntity<TCommand, TEntity, TId>(this Profile profile, TCommand src, ResolutionContext ctx)
-        where TEntity : IBaseDateTimeEntity<TId>, new()
+        where TEntity : IBaseDateTimeEntity<TId>, IBaseVersionEntity, new()
     {
         TEntity entity = new TEntity();
+        
+        entity.Version = Guid.NewGuid().ToString("N").ToUpper();
 
         if (ctx.Items["IsUpdate"] is bool isUpdate && isUpdate)
         {

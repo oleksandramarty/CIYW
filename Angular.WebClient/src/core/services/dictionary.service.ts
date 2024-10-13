@@ -18,7 +18,7 @@ import {
     VersionedListResponseOfCurrencyResponse,
     VersionedListResponseOfFrequencyResponse,
     VersionedListResponseOfLocaleResponse
-} from "../api-clients/common-module.client";
+} from "../api-models/common.models";
 import {GraphQlLocalizationsService} from "../graph-ql/services/graph-ql-localizations.service";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
 

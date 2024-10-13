@@ -14,7 +14,7 @@ import {
     VersionedListResponseOfCountryResponse,
     VersionedListResponseOfCurrencyResponse,
     VersionedListResponseOfFrequencyResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 import {ApolloBase} from "apollo-angular";
 
 @Injectable({

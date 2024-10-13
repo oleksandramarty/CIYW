@@ -40,6 +40,9 @@ namespace Expenses.Domain.Migrations
                     b.Property<int>("CurrencyId")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("timestamp with time zone");
 

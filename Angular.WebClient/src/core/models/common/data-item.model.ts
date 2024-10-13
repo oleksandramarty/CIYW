@@ -4,7 +4,7 @@ import {
   IBalanceResponse, IBalanceTypeResponse, ICategoryResponse, ICountryResponse,
   ICurrencyResponse,
   IFrequencyResponse, ILocaleResponse, LocaleResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 
 export interface IDataItem {
   id: string | undefined;

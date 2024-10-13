@@ -4,14 +4,14 @@
 BASE_DIR=$(cd "$(dirname "$0")" && pwd | sed 's|/CommonModule/CommonModule.Provision/InitScripts||')
 
 # Microservice params
-microserviceName="CommonModule"
-microserviceClientApiName="common-module.client.ts"
-microserviceClientApiClassName="CommonModuleClient"
+microserviceName="Monolith"
+microserviceClientApiName="common.models.ts"
+microserviceClientApiClassName="CommonModelsClient"
 
 # Set the output directory and file name
-outputDir="$BASE_DIR/$microserviceName/$microserviceName.ModelGenerator"
+outputDir="$BASE_DIR/$microserviceName/$microserviceName.ClientApi"
 outputFileName="nswagconfig.nswag"
-outputClientFile="$BASE_DIR/Angular.WebClient/src/core/api-clients/$microserviceClientApiName"
+outputClientFile="$BASE_DIR/Angular.WebClient/src/core/api-models/$microserviceClientApiName"
 
 # Create the directory if it doesn't exist
 mkdir -p "$outputDir"
@@ -23,7 +23,7 @@ cat <<EOL > "$outputDir/$outputFileName"
   "defaultVariables": null,
   "documentGenerator": {
     "aspNetCoreToOpenApi": {
-      "project": "$microserviceName.ModelGenerator.csproj",
+      "project": "$microserviceName.ClientApi.csproj",
       "msBuildProjectExtensionsPath": null,
       "configuration": null,
       "runtime": null,

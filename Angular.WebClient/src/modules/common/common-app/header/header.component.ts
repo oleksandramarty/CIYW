@@ -8,7 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
-import {LocaleResponse, UserResponse} from "../../../../core/api-clients/common-module.client";
+import {LocaleResponse, UserResponse} from "../../../../core/api-models/common.models";
 
 @Component({
   selector: 'app-header',

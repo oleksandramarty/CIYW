@@ -14,7 +14,7 @@ import { SharedModule } from "../../../core/shared.module";
 import {LoaderService} from "../../../core/services/loader.service";
 import {CommonDialogService} from "../../../core/services/common-dialog.service";
 import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
-import {UserProjectResponse} from "../../../core/api-clients/common-module.client";
+import {UserProjectResponse} from "../../../core/api-models/common.models";
 
 @Component({
   selector: 'app-create-update-user-project',
@@ -64,7 +64,7 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
   private createUserForm() {
     this.userProjectForm = this.fb.group({
       title: [this.userProject?.title, [Validators.required]],
-      isActive: [this.userProject?.isActive ?? true, [Validators.required]],
+      isActive: [this.userProject?.isActive ?? true, [Validators.required]]
     });
   }
 
@@ -75,7 +75,6 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
         if (control) {
           control.markAsTouched();
         }
-        console.log(control);
       });
       this.snackBar.open(this.localizationService?.getTranslation('ERROR.FORM_VALIDATION') ?? 'ERROR', 'Close', { duration: 3000 });
       return;

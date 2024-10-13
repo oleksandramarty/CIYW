@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Localizations.Domain.Migrations
 {
     [DbContext(typeof(LocalizationsDataContext))]
-    [Migration("20241012045449_InitLocalization")]
+    [Migration("20241013035347_InitLocalization")]
     partial class InitLocalization
     {
         /// <inheritdoc />

@@ -9,6 +9,8 @@
                 </div>
                 <div class="user-project-details">
                     <ng-container *ngFor="let balance of userProject.balances">
+                        <div class="currency-title mb-0p">{{ balance.title }}</div>
+                        <div class="currency-title mb-0p">{{ balanceTypesMap?.get(balance.balanceTypeId)?.title }}</div>
                         <div class="balance">
                             <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
                             <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>

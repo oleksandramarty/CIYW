@@ -4,7 +4,7 @@ import { take, tap, BehaviorSubject } from 'rxjs';
 import { handleApiError } from '../helpers/rxjs.helper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SiteSettingsService } from './site-settings.service';
-import { LocalizationsResponse, SiteSettingsResponse, LocalizationResponse, LocalizationItemResponse } from '../api-clients/common-module.client';
+import { LocalizationsResponse, SiteSettingsResponse, LocalizationResponse, LocalizationItemResponse } from '../api-models/common.models';
 import { GraphQlLocalizationsService } from '../graph-ql/services/graph-ql-localizations.service';
 
 @Injectable({

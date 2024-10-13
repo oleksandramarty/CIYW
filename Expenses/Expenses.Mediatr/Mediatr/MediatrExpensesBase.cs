@@ -31,7 +31,7 @@ public class MediatrExpensesBase: MediatrAuthBase
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.ValidateExist(userProject, userProjectId);
+        this.entityValidator.IsEntityExist(userProject);
         
         if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {
@@ -48,7 +48,7 @@ public class MediatrExpensesBase: MediatrAuthBase
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.ValidateExist(userProject, userProjectId);
+        this.entityValidator.IsEntityExist(userProject);
         
         if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {

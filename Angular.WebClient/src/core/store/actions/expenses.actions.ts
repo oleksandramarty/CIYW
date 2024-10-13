@@ -3,7 +3,7 @@ import {
     FilteredListResponseOfUserAllowedProjectResponse,
     FilteredListResponseOfUserProjectResponse,
     UserProjectResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 
 export const expenses_setUserProject = createAction('[Expenses] Set UserProject', props<{ userProject: UserProjectResponse }>());
 export const expenses_setUserProjects = createAction('[Expenses] Set UserProjects', props<{ userProjects: FilteredListResponseOfUserProjectResponse }>());

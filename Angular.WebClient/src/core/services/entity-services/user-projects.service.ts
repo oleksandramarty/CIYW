@@ -16,7 +16,7 @@ import {GraphQlExpensesService} from "../../graph-ql/services/graph-ql-expenses.
 import {
     FilteredListResponseOfUserAllowedProjectResponse,
     FilteredListResponseOfUserProjectResponse, UserAllowedProjectResponse, UserProjectResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 
 @Injectable({
     providedIn: "root"

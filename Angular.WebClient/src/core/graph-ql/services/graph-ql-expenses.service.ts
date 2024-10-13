@@ -3,15 +3,15 @@ import {Observable} from "rxjs";
 import {ApolloQueryResult} from "@apollo/client";
 import {GraphQlService} from "../graph-ql.service";
 import {
-    CREATE_EXPENSE, CREATE_PLANNED_EXPENSE,
+    CREATE_EXPENSE, CREATE_PLANNED_EXPENSE, CREATE_USER_BALANCE,
     CREATE_USER_PROJECT,
     GET_FILTERED_EXPENSES,
     GET_FILTERED_PLANNED_EXPENSES,
     GET_FILTERED_USER_ALLOWED_PROJECTS,
     GET_FILTERED_USER_PROJECTS,
     GET_USER_PROJECT_BY_ID,
-    REMOVE_EXPENSE, REMOVE_PLANNED_EXPENSE,
-    UPDATE_EXPENSE, UPDATE_PLANNED_EXPENSE, UPDATE_USER_PROJECT
+    REMOVE_EXPENSE, REMOVE_PLANNED_EXPENSE, REMOVE_USER_BALANCE,
+    UPDATE_EXPENSE, UPDATE_PLANNED_EXPENSE, UPDATE_USER_BALANCE, UPDATE_USER_PROJECT
 } from "../queries/graph-ql-expenses.query";
 import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
 import {
@@ -21,7 +21,7 @@ import {
     FilteredListResponseOfUserProjectResponse,
     OrderDirectionEnum,
     UserProjectResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 import {ApolloBase} from "apollo-angular";
 
 @Injectable({
@@ -182,6 +182,58 @@ public createOrUpdatePlannedExpense(
                 variables: {
                     title,
                     isActive
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
+
+    public createUserBalance(
+        title: string,
+        isActive: boolean,
+        currencyId: number,
+        balanceTypeId: number,
+        userProjectId: string
+    ): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: CREATE_USER_BALANCE,
+                variables: {
+                    title,
+                    isActive,
+                    currencyId,
+                    balanceTypeId,
+                    userProjectId
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
+
+    public updateUserBalance(
+        id: string,
+        title: string,
+        isActive: boolean,
+        currencyId: number,
+        balanceTypeId: number,
+        userProjectId: string
+    ): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: UPDATE_USER_BALANCE,
+                variables: {
+                    id,
+                    title,
+                    isActive,
+                    currencyId,
+                    balanceTypeId,
+                    userProjectId
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
+
+    public removeUserBalance(id: string | undefined): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: REMOVE_USER_BALANCE,
+                variables: {
+                    id
                 },
             }) as Observable<ApolloQueryResult<{ success: boolean }>>;
     }

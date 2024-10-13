@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Expenses.Domain.Migrations
 {
     [DbContext(typeof(ExpensesDataContext))]
-    [Migration("20241012045454_InitExpense")]
+    [Migration("20241013035352_InitExpense")]
     partial class InitExpense
     {
         /// <inheritdoc />
@@ -42,6 +42,9 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<int>("CurrencyId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("timestamp with time zone");

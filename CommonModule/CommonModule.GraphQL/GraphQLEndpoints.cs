@@ -9,13 +9,15 @@ public static class GraphQLEndpoints
     public static readonly GraphQLEndpoint SignUp = new GraphQLEndpoint("auth_gateway_sign_up", false);
     public static readonly GraphQLEndpoint CreateExpense = new GraphQLEndpoint("expenses_create_expense");
     public static readonly GraphQLEndpoint UpdateExpense = new GraphQLEndpoint("expenses_update_expense");
+    public static readonly GraphQLEndpoint CreateUserBalance = new GraphQLEndpoint("expenses_create_user_balance");
+    public static readonly GraphQLEndpoint UpdateUserBalance = new GraphQLEndpoint("expenses_update_user_balance");
+    public static readonly GraphQLEndpoint RemoveUserBalance = new GraphQLEndpoint("expenses_remove_user_balance");
     public static readonly GraphQLEndpoint RemoveExpense = new GraphQLEndpoint("expenses_remove_expense");
     public static readonly GraphQLEndpoint CreatePlannedExpense = new GraphQLEndpoint("expenses_create_planned_expense");
     public static readonly GraphQLEndpoint UpdatePlannedExpense = new GraphQLEndpoint("expenses_update_planned_expense");
     public static readonly GraphQLEndpoint RemovePlannedExpense = new GraphQLEndpoint("expenses_remove_planned_expense");
     public static readonly GraphQLEndpoint CreateUserProject = new GraphQLEndpoint("expenses_create_user_project");
     public static readonly GraphQLEndpoint UpdateUserProject = new GraphQLEndpoint("expenses_update_user_project");
-    public static readonly GraphQLEndpoint UpdateUserProjectBalances = new GraphQLEndpoint("expenses_update_user_project_balances");
     public static readonly GraphQLEndpoint GetFilteredExpenses = new GraphQLEndpoint("expenses_get_filtered_expenses");
     public static readonly GraphQLEndpoint GetFilteredPlannedExpenses = new GraphQLEndpoint("expenses_get_filtered_planned_expenses");
     public static readonly GraphQLEndpoint GetUserProjectById = new GraphQLEndpoint("expenses_get_user_project_by_id");

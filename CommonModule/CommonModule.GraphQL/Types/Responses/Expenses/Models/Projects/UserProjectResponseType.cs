@@ -10,7 +10,7 @@ public class UserProjectResponseType : ObjectGraphType<UserProjectResponse>
     public UserProjectResponseType()
     {
         Field(x => x.Id);
-        Field(x => x.Title);
+        Field(x => x.Title, nullable: true);
         Field(x => x.IsActive);
         Field(x => x.CreatedUserId);
         Field<ListGraphType<BalanceResponseType>>(nameof(UserProjectResponse.Balances));

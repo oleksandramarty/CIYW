@@ -30,7 +30,9 @@ public class GraphQLMutationHelper: GraphQLMutationResolver
         this.CreateEntity<CreateUserProjectInputType, CreateUserProjectCommand>(GraphQLEndpoints.CreateUserProject);
         this.CreateEntity<UpdateUserProjectInputType, UpdateUserProjectCommand>(GraphQLEndpoints.UpdateUserProject);
         
-        this.UpdateEntity<UpdateUserProjectBalancesInputType, GuidGraphType, Guid, UpdateUserProjectBalancesCommand>(GraphQLEndpoints.UpdateUserProjectBalances);
+        this.CreateEntity<CreateUserBalanceInputType, CreateUserBalanceCommand>(GraphQLEndpoints.CreateUserBalance);
+        this.UpdateEntity<UpdateUserBalanceInputType, GuidGraphType, Guid, UpdateUserBalanceCommand>(GraphQLEndpoints.UpdateUserBalance);
+        this.DeleteEntity<RemoveUserBalanceCommand, GuidGraphType, Guid>(GraphQLEndpoints.RemoveUserBalance);
     }
 
     public void AddAuthGatewayMutations()

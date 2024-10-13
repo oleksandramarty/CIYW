@@ -9,7 +9,7 @@ public class CategoryResponseType : ObjectGraphType<CategoryResponse>
     public CategoryResponseType()
     {
         Field(x => x.Id);
-        Field(x => x.Title);
+        Field(x => x.Title, nullable: true);
         Field(x => x.Icon);
         Field(x => x.Color);
         Field(x => x.IsActive);

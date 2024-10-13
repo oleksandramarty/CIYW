@@ -11,7 +11,7 @@ import {selectToken} from "../store/selectors/auth.selectors";
 import {GraphQlAuthService} from "../graph-ql/services/graph-ql-auth.service";
 import {LoaderService} from "./loader.service";
 import {CommonDialogService} from "./common-dialog.service";
-import {JwtTokenResponse, UserResponse} from "../api-clients/common-module.client";
+import {JwtTokenResponse, UserResponse} from "../api-models/common.models";
 
 @Injectable({
   providedIn: 'root'

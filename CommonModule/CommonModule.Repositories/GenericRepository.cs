@@ -103,14 +103,10 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
         await this.dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteAsync(TId id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(T entity, CancellationToken cancellationToken)
     {
-        var entity = await this.GetByIdAsync(id, cancellationToken);
-        if (entity != null)
-        {
-            this.dbSet.Remove(entity);
-            await this.dataContext.SaveChangesAsync(cancellationToken);
-        }
+        this.dataContext.Entry(entity).State = EntityState.Deleted;
+        await this.dataContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
@@ -129,13 +125,13 @@ public class GenericRepository<TId, T, TDataContext> : IGenericRepository<TId, T
         await this.dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task RemoveRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
+    public async Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
     {
         this.dbSet.RemoveRange(entities);
         await this.dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task RemoveByIdAsync(TId id, CancellationToken cancellationToken)
+    public async Task DeleteByIdAsync(TId id, CancellationToken cancellationToken)
     {
         var entity = await this.GetByIdAsync(id, cancellationToken);
         if (entity != null)

@@ -26,11 +26,11 @@ public class RemovePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
     public async Task<bool> Handle(RemovePlannedExpenseCommand command, CancellationToken cancellationToken)
     {
         PlannedExpense plannedExpense = await this.plannedExpenseRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.ValidateExist(plannedExpense, command.Id);
+        this.entityValidator.IsEntityExist(plannedExpense);
 
         await this.CheckUserProjectByIdAsync(plannedExpense.UserProjectId, cancellationToken);
 
-        await this.plannedExpenseRepository.RemoveByIdAsync(command.Id, cancellationToken);
+        await this.plannedExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
 
         return true;
     }

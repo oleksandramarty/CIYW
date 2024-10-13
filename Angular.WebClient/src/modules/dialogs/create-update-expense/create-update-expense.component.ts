@@ -24,7 +24,7 @@ import {
     CurrencyResponse,
     ExpenseResponse,
     UserProjectResponse
-} from "../../../core/api-clients/common-module.client";
+} from "../../../core/api-models/common.models";
 
 @Component({
     selector: 'app-create-update-expense',

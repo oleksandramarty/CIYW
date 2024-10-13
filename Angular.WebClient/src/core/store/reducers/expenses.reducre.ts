@@ -8,7 +8,7 @@ import {
 import {
     FilteredListResponseOfUserAllowedProjectResponse,
     FilteredListResponseOfUserProjectResponse
-} from "../../api-clients/common-module.client";
+} from "../../api-models/common.models";
 
 export interface ExpensesState {
     userProjects: FilteredListResponseOfUserProjectResponse | undefined;

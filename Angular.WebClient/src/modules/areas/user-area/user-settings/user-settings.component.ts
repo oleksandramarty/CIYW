@@ -8,7 +8,7 @@ import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {Store} from "@ngrx/store";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
 import {DataItem} from "../../../../core/models/common/data-item.model";
-import {UserResponse} from "../../../../core/api-clients/common-module.client";
+import {UserResponse} from "../../../../core/api-models/common.models";
 
 @Component({
     selector: 'app-user-settings',

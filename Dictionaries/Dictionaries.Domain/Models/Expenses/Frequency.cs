@@ -9,5 +9,5 @@ public class Frequency: BaseIdEntity<int>, IActivatable
     public string Title { get; set; }
     public string Description { get; set; }
     public bool IsActive { get; set; }
-    public FrequencyEnum FrequencyEnum { get; set; }
+    public FrequencyEnum Type { get; set; }
 }

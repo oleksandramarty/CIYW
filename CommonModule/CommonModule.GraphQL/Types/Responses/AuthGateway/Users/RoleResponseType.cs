@@ -9,7 +9,7 @@ public class RoleResponseType : ObjectGraphType<RoleResponse>
     public RoleResponseType()
     {
         Field(x => x.Id);
-        Field(x => x.Title);
+        Field(x => x.Title, nullable: true);
         Field(x => x.UserRole, type: typeof(EnumerationGraphType<UserRoleEnum>));
     }
 }

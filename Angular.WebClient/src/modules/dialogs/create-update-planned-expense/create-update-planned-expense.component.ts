@@ -23,7 +23,7 @@ import {
     CurrencyResponse,
     PlannedExpenseResponse,
     UserProjectResponse
-} from "../../../core/api-clients/common-module.client";
+} from "../../../core/api-models/common.models";
 
 @Component({
     selector: 'app-create-update-planned-expense',

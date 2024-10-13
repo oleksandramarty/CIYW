@@ -31,7 +31,8 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
     {
         Guid userId = await this.GetCurrentUserIdAsync();
         User user = await this.userRepository.GetByIdAsync(userId, cancellationToken);
-        this.entityValidator.ValidateExist<User, Guid>(user, userId);
+        this.entityValidator.IsEntityExist(user);
+        this.entityValidator.IsEntityActive(user);
 
         if (user.LastForgotPasswordRequest.HasValue &&
             user.LastForgotPasswordRequest.Value.AddMinutes(30) > DateTime.UtcNow)

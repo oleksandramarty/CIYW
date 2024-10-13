@@ -8,7 +8,7 @@ public class CountryResponseType : ObjectGraphType<CountryResponse>
     public CountryResponseType()
     {
         Field(x => x.Id);
-        Field(x => x.Title);
+        Field(x => x.Title, nullable: true);
         Field(x => x.Code);
         Field(x => x.TitleEn);
         Field(x => x.IsActive);

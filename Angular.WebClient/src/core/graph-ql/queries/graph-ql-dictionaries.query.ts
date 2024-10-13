@@ -57,7 +57,7 @@ export const GET_FREQUENCIES_DICTIONARY = gql`
                 title
                 description
                 isActive
-                frequencyEnum
+                type
             }
             version
         }
@@ -72,6 +72,7 @@ export const GET_BALANCE_TYPES_DICTIONARY = gql`
                 title
                 isActive
                 icon
+                type
             }
             version
         }

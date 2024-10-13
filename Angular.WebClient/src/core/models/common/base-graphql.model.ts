@@ -1,4 +1,4 @@
-import {ColumnEnum, OrderDirectionEnum} from "../../api-clients/common-module.client";
+import {ColumnEnum, OrderDirectionEnum} from "../../api-models/common.models";
 
 export interface IBaseGraphQlFilteredModel {
     dateFrom: Date | undefined;

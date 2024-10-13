@@ -12,7 +12,15 @@ import {
 import {
     CreateUpdatePlannedExpenseComponent
 } from "../../modules/dialogs/create-update-planned-expense/create-update-planned-expense.component";
-import {ExpenseResponse, PlannedExpenseResponse, UserProjectResponse} from "../api-clients/common-module.client";
+import {
+    BalanceResponse,
+    ExpenseResponse,
+    PlannedExpenseResponse,
+    UserProjectResponse
+} from "../api-models/common.models";
+import {
+    CreateUpdateBalanceComponent
+} from "../../modules/dialogs/create-update-balance/create-update-balance.component";
 
 @Injectable({
     providedIn: 'root'
@@ -92,6 +100,10 @@ export class CommonDialogService {
         this._handeExecutableAction<CreateUpdatePlannedExpenseComponent>(this._getCreateUpdatePlannedExpenseModal(plannedExpense, userProject), executableAction);
     }
 
+    public showCreateOrUpdateUserBalanceModal(executableAction: () => void, balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateBalanceComponent>(this._getCreateUpdateUserBalanceModal(balance, userProject), executableAction);
+    }
+
     private _getCreateUpdateExpenseModal(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
         return this.dialog.open(CreateUpdateExpenseComponent, {
             width: '600px',
@@ -108,6 +120,17 @@ export class CommonDialogService {
             maxWidth: '80vw',
             data: {
                 plannedExpense,
+                userProject
+            }
+        });
+    }
+
+    private _getCreateUpdateUserBalanceModal(balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateBalanceComponent, any> {
+        return this.dialog.open(CreateUpdateBalanceComponent, {
+            width: '600px',
+            maxWidth: '80vw',
+            data: {
+                balance,
                 userProject
             }
         });

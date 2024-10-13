@@ -85,7 +85,7 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
         IEnumerable<TEntity>? entities,
         CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateExist(entity, entity.Id);
+        this.entityValidator.IsEntityExist(entity);
     
         var childNodes = await GetChildNodes(entity, entities, cancellationToken);
         TResponse? node = this.mapper.Map<TEntity, TResponse>(entity);

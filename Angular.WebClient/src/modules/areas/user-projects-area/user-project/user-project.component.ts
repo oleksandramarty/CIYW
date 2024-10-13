@@ -16,6 +16,7 @@ import {CommonDialogService} from "../../../../core/services/common-dialog.servi
 import {fadeInOut} from "../../../../core/animations/animations";
 import {BaseGraphQlFilteredModel} from "../../../../core/models/common/base-graphql.model";
 import {
+    BalanceResponse,
     BaseSortableRequest,
     CategoryResponse,
     ColumnEnum,
@@ -28,7 +29,7 @@ import {
     PaginatorEntity,
     PlannedExpenseResponse,
     UserProjectResponse
-} from "../../../../core/api-clients/common-module.client";
+} from "../../../../core/api-models/common.models";
 
 @Component({
     selector: 'app-user-project',
@@ -212,6 +213,8 @@ export class UserProjectComponent implements OnInit, OnDestroy {
                     this.userProject = userProject;
                     this.getFilteredItems();
                     this.loaderService.isBusy = false;
+
+                    this.openBalanceDialog(undefined);
                 }),
                 handleApiError(this.snackBar),
                 finalize(() => this.loaderService.isBusy = false)
@@ -283,5 +286,11 @@ export class UserProjectComponent implements OnInit, OnDestroy {
             this.activeTab === 1 && !this.plannedExpenses) {
             this.getFilteredItems();
         }
+    }
+
+    public openBalanceDialog(balance: BalanceResponse | undefined): void {
+        this.commonDialogService.showCreateOrUpdateUserBalanceModal(() => {
+            this.getUserProjectFromApi();
+        }, balance, this.userProject);
     }
 }

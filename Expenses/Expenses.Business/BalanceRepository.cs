@@ -105,9 +105,9 @@ public class BalanceRepository: IBalanceRepository
         CancellationToken cancellationToken)
     {
         Balance? balance = await this.dataContext.Balances.FirstOrDefaultAsync(b => b.Id == expense.BalanceId, cancellationToken);
-        this.entityValidator.ValidateExist(balance, expense.BalanceId);
+        this.entityValidator.IsEntityExist(balance);
         string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, expense.CategoryId);
-        this.entityValidator.ValidateExist(currentCategory);
+        this.entityValidator.IsEntityExist(currentCategory);
         
         if (isRefund)
         {

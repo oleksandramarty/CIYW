@@ -37,11 +37,10 @@ public class UpdatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
         
         PlannedExpense currentPlannedExpense = await this.plannedExpenseRepository.GetAsync(
             e => e.Id == command.Id, cancellationToken);
-        this.entityValidator.ValidateExist(currentPlannedExpense, command.Id);
+        this.entityValidator.IsEntityExist(currentPlannedExpense);
         
         await this.CheckUserProjectByIdAsync(currentPlannedExpense.UserProjectId, cancellationToken);
         
-        currentPlannedExpense.Version = Guid.NewGuid().ToString("N").ToUpper();
         await this.plannedExpenseRepository.UpdateAsync(
             this.mapper.Map<PlannedExpense>(command, opts => opts.Items["IsUpdate"] = true), cancellationToken);
     }

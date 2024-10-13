@@ -69,7 +69,7 @@ log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs
 totalCountFrequencies=$(calculate_total_count "SELECT COUNT(*) FROM \"Dictionaries\".\"Frequencies\";")
 
 # Cache frequencies
-cache_table_data "Frequencies" "dictionary_cache:frequency:{ID}" "SELECT \"Id\", \"Title\", \"Description\", \"IsActive\", \"FrequencyEnum\" FROM \"Dictionaries\".\"Frequencies\";" "$totalCountFrequencies"
+cache_table_data "Frequencies" "dictionary_cache:frequency:{ID}" "SELECT \"Id\", \"Title\", \"Description\", \"IsActive\", \"Type\" FROM \"Dictionaries\".\"Frequencies\";" "$totalCountFrequencies"
 
 # Unset the password variable for security
 unset PGPASSWORD

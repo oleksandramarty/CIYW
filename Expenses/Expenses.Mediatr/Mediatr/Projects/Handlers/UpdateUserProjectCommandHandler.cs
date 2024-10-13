@@ -39,8 +39,6 @@ public class UpdateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<U
         UserProject userProject = await this.userProjectRepository.GetByIdAsync(command.Id, cancellationToken);
         
         this.mapper.Map<UpdateUserProjectCommand, UserProject>(command, userProject, opts => opts.Items["IsUpdate"] = true);
-
-        userProject.Version = Guid.NewGuid().ToString("N").ToUpper();
         
         await this.userProjectRepository.UpdateAsync(userProject, cancellationToken);
     }

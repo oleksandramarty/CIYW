@@ -4,10 +4,11 @@ import {DictionaryMap} from "../../../../core/models/common/dictionarie.model";
 import {UserProjectsService} from "../../../../core/services/entity-services/user-projects.service";
 import {Subject} from "rxjs";
 import {
+    BalanceTypeResponse,
     CurrencyResponse,
     UserAllowedProjectResponse,
     UserProjectResponse
-} from "../../../../core/api-clients/common-module.client";
+} from "../../../../core/api-models/common.models";
 
 @Component({
     selector: 'app-user-projects',
@@ -19,6 +20,9 @@ export class UserProjectsComponent implements OnInit, OnDestroy {
 
     get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {
         return this.dictionaryService.currenciesMap;
+    }
+    get balanceTypesMap(): DictionaryMap<number, BalanceTypeResponse> | undefined {
+        return this.dictionaryService.balanceTypesMap;
     }
 
     get userProjects(): UserProjectResponse[] | undefined {

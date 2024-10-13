@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import {JwtTokenResponse, UserResponse} from "../../api-clients/common-module.client";
+import {JwtTokenResponse, UserResponse} from "../../api-models/common.models";
 
 export const auth_setToken = createAction('[Auth] Set Token', props<{ token: JwtTokenResponse }>());
 export const auth_clearToken = createAction('[Auth] Clear Token');
