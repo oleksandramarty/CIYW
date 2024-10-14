@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
-import {DictionaryMap} from "../../../../../core/models/common/dictionarie.model";
+import {DictionaryMap} from "../../../../../core/models/common/dictionary.model";
 import {DictionaryService} from "../../../../../core/services/dictionary.service";
 import {UserProjectsService} from "../../../../../core/services/entity-services/user-projects.service";
 import {

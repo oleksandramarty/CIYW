@@ -10,7 +10,7 @@ import {provideNativeDateAdapter} from "@angular/material/core";
 import {Subject, takeUntil, tap} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DataItem} from "../../../core/models/common/data-item.model";
-import {DictionaryDataItems, DictionaryMap} from "../../../core/models/common/dictionarie.model";
+import {DictionaryDataItems, DictionaryMap} from "../../../core/models/common/dictionary.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DictionaryService} from "../../../core/services/dictionary.service";
 import {LocalizationService} from "../../../core/services/localization.service";

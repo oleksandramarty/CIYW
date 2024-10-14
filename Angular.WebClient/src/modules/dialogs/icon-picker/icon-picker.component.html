@@ -1,0 +1,25 @@
+<div class="base-modal-container">
+    <h2 mat-dialog-title [translation]="'COMMON.CHOOSE_ICON'"></h2>
+    <div class="base-modal-body-container" *ngIf="iconDataItems">
+        <button
+                *ngFor="let iconDataItem of iconDataItems.items; let i=index"
+                mat-button [color]="activeIndex === i ? 'primary' : 'secondary'"
+                (click)="activeIndex = i">
+            {{ iconDataItem.title | translation }} ({{ iconDataItem.items?.length ?? 0 }})
+        </button>
+
+        <ng-container *ngIf="iconDataItems?.items?.[activeIndex]">
+            <div class="icon-picker-container">
+                <div class="icon-picker-item" *ngFor="let icon of iconDataItems.items![activeIndex]?.items">
+                    <i [ngClass]="icon.id" (click)="iconSelected(icon.id!)"></i>
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+    <div class="base-modal-actions-container">
+        <div class="mat-dialog-actions-container">
+            <button mat-button [translation]="'COMMON.CLOSE'" (click)="dialogRef.close()"></button>
+        </div>
+    </div>
+</div>

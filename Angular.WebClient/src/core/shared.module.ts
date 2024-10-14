@@ -5,13 +5,15 @@ import {LocalDatePipe} from "./pipes/local-date.pipe";
 import {TranslateDirective} from "./directives/translation.directive";
 import {CopyToClipboardDirective} from "./directives/copy-to-clipboard.directive";
 import {SanitizeHtmlPipe} from "./pipes/sanitize-html.pipe";
+import {TranslationPipe} from "./pipes/translation.pipe";
 
 @NgModule({
   declarations: [
     LocalDatePipe,
     TranslateDirective,
     CopyToClipboardDirective,
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe,
+    TranslationPipe
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import {SanitizeHtmlPipe} from "./pipes/sanitize-html.pipe";
     LocalDatePipe,
     TranslateDirective,
     CopyToClipboardDirective,
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe,
+    TranslationPipe
   ]
 })
 export class SharedModule { }

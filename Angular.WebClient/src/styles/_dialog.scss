@@ -4,6 +4,8 @@
   }
   &-body-container {
     padding: 0.5rem;
+    max-height: calc(100vh - 15rem);
+    overflow-y: auto;
   }
   &-actions-container {
     padding: 0.5rem;

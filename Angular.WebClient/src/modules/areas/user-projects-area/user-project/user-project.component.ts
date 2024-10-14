@@ -6,7 +6,7 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {selectExpensesState} from "../../../../core/store/selectors/expenses.selectors";
 import {Store} from "@ngrx/store";
-import {DictionaryMap} from "../../../../core/models/common/dictionarie.model";
+import {DictionaryMap} from "../../../../core/models/common/dictionary.model";
 import {FormControl, FormGroup} from "@angular/forms";
 import {DataItem} from "../../../../core/models/common/data-item.model";
 import {getUTCString, handleBaseDateRangeFilter} from "../../../../core/helpers/date-time.helper";
@@ -64,15 +64,36 @@ export class UserProjectComponent implements OnInit, OnDestroy {
     });
 
     get sort(): BaseSortableRequest {
-        return this.activeTab === 0 ? this.sortExpenses : this.sortPlannedExpenses;
+        switch (this.activeTab) {
+            case 1:
+                return this.sortExpenses;
+            case 2:
+                return this.sortPlannedExpenses;
+            default:
+                return this.sortExpenses;
+        }
     }
 
     get filterFormGroup(): FormGroup {
-        return this.activeTab === 0 ? this.filterFormGroupExpenses : this.filterFormGroupPlannedExpenses;
+        switch (this.activeTab) {
+            case 1:
+                return this.filterFormGroupExpenses;
+            case 2:
+                return this.filterFormGroupPlannedExpenses;
+            default:
+                return this.filterFormGroupExpenses;
+        }
     }
 
     get paginator(): PaginatorEntity {
-        return this.activeTab === 0 ? this.paginatorExpenses : this.paginatorPlannedExpenses;
+        switch (this.activeTab) {
+            case 1:
+                return this.paginatorExpenses;
+            case 2:
+                return this.paginatorPlannedExpenses;
+            default:
+                return this.paginatorExpenses;
+        }
     }
 
     get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {
@@ -213,8 +234,6 @@ export class UserProjectComponent implements OnInit, OnDestroy {
                     this.userProject = userProject;
                     this.getFilteredItems();
                     this.loaderService.isBusy = false;
-
-                    this.openBalanceDialog(undefined);
                 }),
                 handleApiError(this.snackBar),
                 finalize(() => this.loaderService.isBusy = false)
@@ -251,7 +270,7 @@ export class UserProjectComponent implements OnInit, OnDestroy {
     public getFilteredItems(): void {
         this.loaderService.isBusy = true;
 
-        if (this.activeTab === 0) {
+        if (this.activeTab === 1) {
             this.graphQlExpensesService.getFilteredExpenses(...this.filterParams).pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap((result) => {
@@ -263,7 +282,7 @@ export class UserProjectComponent implements OnInit, OnDestroy {
             ).subscribe();
         }
 
-        if (this.activeTab === 1) {
+        if (this.activeTab === 2) {
             this.graphQlExpensesService.getFilteredPlannedExpenses(...this.filterParams).pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap((result) => {
@@ -282,8 +301,8 @@ export class UserProjectComponent implements OnInit, OnDestroy {
 
     public tabChanged(activeTab: number): void {
         this.activeTab = activeTab;
-        if (this.activeTab === 0 && !this.expenses ||
-            this.activeTab === 1 && !this.plannedExpenses) {
+        if (this.activeTab === 1 && !this.expenses ||
+            this.activeTab === 2 && !this.plannedExpenses) {
             this.getFilteredItems();
         }
     }

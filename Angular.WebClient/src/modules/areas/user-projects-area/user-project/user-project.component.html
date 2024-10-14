@@ -61,14 +61,18 @@
 
     <mat-divider></mat-divider>
 
-    <div class="grid-input-container-two">
+    <div class="grid-input-container-three">
         <div class="tab-item">
             <button class="w-100" mat-button [color]="activeTab === 0 ? 'primary' : 'secondary'"
-                    [translation]="'MENU.EXPENSES'" (click)="tabChanged(0)"></button>
+                    [translation]="'MENU.FAVORITES'" (click)="tabChanged(0)"></button>
         </div>
         <div class="tab-item">
             <button class="w-100" mat-button [color]="activeTab === 1 ? 'primary' : 'secondary'"
-                    [translation]="'MENU.PLANNED_EXPENSES'" (click)="tabChanged(1)"></button>
+                    [translation]="'MENU.EXPENSES'" (click)="tabChanged(1)"></button>
+        </div>
+        <div class="tab-item">
+            <button class="w-100" mat-button [color]="activeTab === 2 ? 'primary' : 'secondary'"
+                    [translation]="'MENU.PLANNED_EXPENSES'" (click)="tabChanged(2)"></button>
         </div>
     </div>
 

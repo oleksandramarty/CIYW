@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import {catchError, forkJoin, take, tap} from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { handleApiError } from "../helpers/rxjs.helper";
-import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionarie.model";
+import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionary.model";
 import {LocalStorageService} from "./local-storage.service";
 import {SiteSettingsService} from "./site-settings.service";
 import {DataItem} from "../models/common/data-item.model";
@@ -21,6 +21,7 @@ import {
 } from "../api-models/common.models";
 import {GraphQlLocalizationsService} from "../graph-ql/services/graph-ql-localizations.service";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
+import {extractClassName} from "../helpers/dom.helper";
 
 @Injectable({
     providedIn: 'root'
@@ -37,7 +38,7 @@ export class DictionaryService {
     _frequenciesMap: DictionaryMap<number, FrequencyResponse> | undefined;
     _balanceTypesMap: DictionaryMap<number, BalanceTypeResponse> | undefined;
 
-    private readonly _importantCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'MDL', 'UAH']
+    private readonly _importantCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'MDL', 'UAH'];
 
     get dictionaries(): Dictionary | undefined {
         return this._dictionaries;

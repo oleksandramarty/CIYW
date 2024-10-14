@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ConfirmationMessageComponent} from "../../modules/dialogs/confirmation-message/confirmation-message.component";
-import {take, takeUntil} from "rxjs";
+import {Observable, take, takeUntil} from "rxjs";
 import {tap} from "rxjs/operators";
 import {handleApiError} from "../helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -21,6 +21,7 @@ import {
 import {
     CreateUpdateBalanceComponent
 } from "../../modules/dialogs/create-update-balance/create-update-balance.component";
+import {IconPickerComponent} from "../../modules/dialogs/icon-picker/icon-picker.component";
 
 @Injectable({
     providedIn: 'root'
@@ -104,6 +105,10 @@ export class CommonDialogService {
         this._handeExecutableAction<CreateUpdateBalanceComponent>(this._getCreateUpdateUserBalanceModal(balance, userProject), executableAction);
     }
 
+    public showIconPickerModal(): Observable<any> {
+        return this._getIconPickerModal().afterClosed();
+    }
+
     private _getCreateUpdateExpenseModal(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
         return this.dialog.open(CreateUpdateExpenseComponent, {
             width: '600px',
@@ -133,6 +138,13 @@ export class CommonDialogService {
                 balance,
                 userProject
             }
+        });
+    }
+    private _getIconPickerModal(): MatDialogRef<IconPickerComponent, any> {
+        return this.dialog.open(IconPickerComponent, {
+            width: '800px',
+            maxWidth: '80vw',
+            data: {}
         });
     }
 }
