@@ -15,7 +15,6 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
     private readonly IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository;
-    private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
 
     public CreatePlannedExpenseCommandHandler(
         IAuthRepository authRepository,
@@ -28,7 +27,6 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.plannedExpenseRepository = plannedExpenseRepository;
-        this.userProjectRepository = userProjectRepository;
     }
 
     public async Task Handle(CreatePlannedExpenseCommand command, CancellationToken cancellationToken)

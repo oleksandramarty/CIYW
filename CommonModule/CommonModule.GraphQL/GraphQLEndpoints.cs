@@ -26,6 +26,7 @@ public static class GraphQLEndpoints
     public static readonly GraphQLEndpoint CreateUserSettings = new GraphQLEndpoint("auth_gateway_create_user_settings");
     public static readonly GraphQLEndpoint UpdateUserSettings = new GraphQLEndpoint("auth_gateway_update_user_settings");
     public static readonly GraphQLEndpoint GetBalanceTypesDictionary = new GraphQLEndpoint("dictionaries_get_balance_types_dictionary");
+    public static readonly GraphQLEndpoint GetIconCategoriesDictionary = new GraphQLEndpoint("dictionaries_get_icon_categories_dictionary");
     public static readonly GraphQLEndpoint GetCurrenciesDictionary = new GraphQLEndpoint("dictionaries_get_currencies_dictionary");
     public static readonly GraphQLEndpoint GetCategoriesDictionary = new GraphQLEndpoint("dictionaries_get_categories_dictionary");
     public static readonly GraphQLEndpoint GetCountriesDictionary = new GraphQLEndpoint("dictionaries_get_countries_dictionary");

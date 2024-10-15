@@ -1,8 +1,9 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace Localizations.Domain.Models.Locales;
 
-public class LocalizationBase: BaseIdEntity<Guid>
+public class LocalizationBase: BaseIdEntity<Guid>, IPublicable
 {
     public string Key { get; set; }
     public string Value { get; set; }

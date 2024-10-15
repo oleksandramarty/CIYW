@@ -10,6 +10,7 @@ using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 using CommonModule.Shared.Responses.Dictionaries.Models.Expenses;
+using CommonModule.Shared.Responses.Dictionaries.Models.Icons;
 using CommonModule.Shared.Responses.Expenses.Models.Balances;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
@@ -34,12 +35,14 @@ public static class GraphQLModelExtension
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<PlannedExpenseResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<UserProjectResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<UserAllowedProjectResponse>>());
+            config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<FavoriteExpenseResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CurrencyResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<FrequencyResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<LocaleResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CountryResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CategoryResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<BalanceTypeResponse>>());
+            config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<IconCategoryResponse>>());
         }
     }
 }

@@ -1,6 +1,11 @@
 <div class="base-modal-container" *ngIf="balanceFormGroup">
-    <h2 mat-dialog-title *ngIf="balance">{{ balance.title }}</h2>
-    <h2 mat-dialog-title *ngIf="!balance" [translation]="'BALANCE.CREATE_NEW'"></h2>
+    <div class="base-modal-header-container">
+        <h2 mat-dialog-title *ngIf="balance">{{ balance.title }}</h2>
+        <h2 mat-dialog-title *ngIf="!balance" [translation]="'BALANCE.CREATE_NEW'"></h2>
+        <span class="base-modal-close-icon" (click)="dialogRef.close()">
+            <i class="fa-solid fa-xmark"></i>
+        </span>
+    </div>
     <div class="base-modal-body-container">
         <app-input type="input" [label]="'COMMON.TITLE'" [formGroup]="balanceFormGroup" controlName="title"></app-input>
 
@@ -16,13 +21,20 @@
                        [label]="'COMMON.BALANCE_TYPE'"
                        [formGroup]="balanceFormGroup"
                        controlName="balanceTypeId"></app-input>
-        </div>
 
-        <app-input type="checkbox" [label]="'COMMON.IS_ACTIVE'" [formGroup]="balanceFormGroup"
-                   controlName="isActive"></app-input>
+            <app-input type="checkbox" [label]="'COMMON.IS_ACTIVE'" [formGroup]="balanceFormGroup"
+                       controlName="isActive"></app-input>
+
+            <app-input-icon-picker
+                    [formGroup]="balanceFormGroup"
+                    controlName="iconId"
+            ></app-input-icon-picker>
+
+        </div>
     </div>
     <mat-dialog-actions>
         <div class="mat-dialog-actions-container">
+            <button mat-button [translation]="'COMMON.CLOSE'" (click)="dialogRef.close(false)"></button>
             <button mat-button [translation]="'COMMON.CLOSE'" (click)="dialogRef.close(false)"></button>
             <button mat-flat-button color="primary"
                     [translation]="!!balance ? 'COMMON.UPDATE' : 'COMMON.CREATE'"

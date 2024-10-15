@@ -12,3 +12,13 @@ export const selectUserAllowedProjects = createSelector(
     selectExpensesState,
     (state: ExpensesState) => state.userAllowedProjects
 );
+
+export const selectExpensesSnapshot = createSelector(
+    selectExpensesState,
+    (state: ExpensesState) => state.expensesSnapshot
+);
+
+export const selectPlannedExpensesSnapshot = createSelector(
+    selectExpensesState,
+    (state: ExpensesState) => state.plannedExpensesSnapshot
+);

@@ -23,14 +23,15 @@ public class GetSiteSettingsRequestHandler: IRequestHandler<GetSiteSettingsReque
             Locale = "en",
             Version = new CacheVersionResponse
             {
-                Category = await this.cacheBaseRepository.GetCacheVersionAsync("category"),
-                Country = await this.cacheBaseRepository.GetCacheVersionAsync("country"),
-                Currency = await this.cacheBaseRepository.GetCacheVersionAsync("currency"),
-                Localization = await this.cacheBaseRepository.GetCacheVersionAsync("localization"),
-                LocalizationPublic = await this.cacheBaseRepository.GetCacheVersionAsync("localization_public"),
-                Locale = await this.cacheBaseRepository.GetCacheVersionAsync("locale"),
-                Frequency = await this.cacheBaseRepository.GetCacheVersionAsync("frequency"),
-                BalanceType = await this.cacheBaseRepository.GetCacheVersionAsync("balancetype"),
+                Category = await this.cacheBaseRepository.GetCacheVersionAsync("category") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                Country = await this.cacheBaseRepository.GetCacheVersionAsync("country") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                Currency = await this.cacheBaseRepository.GetCacheVersionAsync("currency") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                Localization = await this.cacheBaseRepository.GetCacheVersionAsync("localization") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                LocalizationPublic = await this.cacheBaseRepository.GetCacheVersionAsync("localization_public") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                Locale = await this.cacheBaseRepository.GetCacheVersionAsync("locale") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                Frequency = await this.cacheBaseRepository.GetCacheVersionAsync("frequency") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                BalanceType = await this.cacheBaseRepository.GetCacheVersionAsync("balancetype") ?? Guid.NewGuid().ToString("N").ToUpper(),
+                IconCategory = await this.cacheBaseRepository.GetCacheVersionAsync("iconcategory") ?? Guid.NewGuid().ToString("N").ToUpper(),
             }
         };
 

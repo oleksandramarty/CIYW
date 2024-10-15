@@ -36,6 +36,8 @@ builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
 
 // Fluent validation starts
+builder.Services.AddValidatorsFromAssemblyContaining<CreateFavoriteExpenseCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateFavoriteExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePlannedExpenseCommandValidator>();
@@ -69,6 +71,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(
 // Strategies
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>, GetFilteredResultOfExpenseStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse>, GetFilteredResultOfPlannedExpenseStrategy>();
+builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse>, GetFilteredResultOfFavoriteExpenseStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>, GetFilteredResultOfUserProjectStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>, GetFilteredResultOfUserAllowedProjectStrategy>();
 // Strategies end

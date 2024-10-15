@@ -10,7 +10,7 @@ import {
 } from "@angular/material/dialog";
 import {CommonModule, NgIf} from "@angular/common";
 import {Subject, takeUntil, tap} from "rxjs";
-import {BalanceResponse, UserProjectResponse} from "../../../core/api-models/common.models";
+import {BalanceResponse, IconResponse, UserProjectResponse} from "../../../core/api-models/common.models";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LocalizationService} from "../../../core/services/localization.service";
@@ -23,6 +23,7 @@ import {RouterLink} from "@angular/router";
 import {SharedModule} from "../../../core/shared.module";
 import {DataItem} from "../../../core/models/common/data-item.model";
 import {DictionaryService} from "../../../core/services/dictionary.service";
+import {InputIconPickerComponent} from "../../common/common-input/input-icon-picker/input-icon-picker.component";
 
 @Component({
   selector: 'app-create-update-balance',
@@ -33,6 +34,7 @@ import {DictionaryService} from "../../../core/services/dictionary.service";
         MatButtonModule,
         CommonLoaderComponent,
         AppCommonInputModule,
+        InputIconPickerComponent,
         RouterLink,
         SharedModule,
     ],
@@ -87,6 +89,7 @@ export class CreateUpdateBalanceComponent implements OnInit, OnDestroy {
             isActive: [this.balance?.isActive ?? true, [Validators.required]],
             currencyId: [this.balance?.currencyId, [Validators.required]],
             balanceTypeId: [this.balance?.balanceTypeId, [Validators.required]],
+            iconId: [this.balance?.iconId, [Validators.required]],
         });
     }
 
@@ -129,13 +132,14 @@ export class CreateUpdateBalanceComponent implements OnInit, OnDestroy {
         this.commonDialogService.showNoComplaintModal(createOrUpdateBalanceAction)
     }
 
-    get inputParams(): [string, boolean, number, number, string] {
+    get inputParams(): [string, boolean, number, number, string, number] {
         return [
             this.balanceFormGroup?.value.title,
             this.balanceFormGroup?.value.isActive,
             Number(this.balanceFormGroup?.value.currencyId),
             Number(this.balanceFormGroup?.value.balanceTypeId),
-            this.userProject!.id
+            this.userProject!.id,
+            this.balanceFormGroup?.value.iconId
         ];
     }
 }

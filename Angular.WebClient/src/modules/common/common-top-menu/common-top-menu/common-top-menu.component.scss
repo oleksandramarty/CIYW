@@ -1,0 +1,15 @@
+.project-menu-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (min-width: 769px) {
+  .mobile-tab-item {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .desktop-tab-item {
+    display: none;
+  }
+}

@@ -15,6 +15,12 @@ chmod +x "$SCRIPT_DIR/init_roles.sh"
 chmod +x "$SCRIPT_DIR/init_users.sh"
 "$SCRIPT_DIR/init_users.sh"
 
+chmod +x "$SCRIPT_DIR/init_category_icons.sh"
+"$SCRIPT_DIR/init_category_icons.sh"
+
+chmod +x "$SCRIPT_DIR/init_icons.sh"
+"$SCRIPT_DIR/init_icons.sh" $isBulkUpdate
+
 chmod +x "$SCRIPT_DIR/init_categories.sh"
 "$SCRIPT_DIR/init_categories.sh" $isBulkUpdate
 
@@ -41,16 +47,3 @@ chmod +x "$SCRIPT_DIR/init_localizations.sh"
 
 chmod +x "$SCRIPT_DIR/check_localizations.sh"
 "$SCRIPT_DIR/check_localizations.sh"
-
-chmod +x "$SCRIPT_DIR/init_cache_localizations.sh"
-"$SCRIPT_DIR/init_cache_localizations.sh"
-
-dictionary_cache=("category" "country" "currency" "frequencies" "balance_types" "locales")
-
-for dictionary in "${dictionary_cache[@]}"; do
-  chmod +x "$SCRIPT_DIR/init_cache_dictionary_$dictionary.sh"
-  "$SCRIPT_DIR/init_cache_dictionary_$dictionary.sh"
-done
-
-chmod +x "$SCRIPT_DIR/init_cache_version.sh"
-"$SCRIPT_DIR/init_cache_version.sh"

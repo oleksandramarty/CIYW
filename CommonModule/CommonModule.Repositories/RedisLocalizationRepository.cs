@@ -24,7 +24,7 @@ public class RedisLocalizationRepository : ILocalizationRepository
 
         this.instanceName = configuration["Redis:InstanceNameLocalization"];
     }
-
+    
     public async Task<LocalizationsResponse> GetLocalizationDataAllAsync(bool isPublic)
     {
         var server = connectionMultiplexer.GetServer(connectionMultiplexer.GetEndPoints().First());
@@ -62,11 +62,27 @@ public class RedisLocalizationRepository : ILocalizationRepository
         
         return response;
     }
+    
+    public async Task ReinitializeLocalizationDataAsync(LocalizationsResponse model, bool isPublic)
+    {
+        string isPublicString = isPublic ? "1" : "0";
+        await database.KeyDeleteAsync( $"{this.instanceName}:*:*:{isPublicString}");
 
-    public async Task<string> GetLocalizationVersionAsync(bool isPublic)
+        var tasks = model.Data.SelectMany(value =>
+            value.Items.Select(item =>
+            {
+                var redisKey = $"{instanceName}:{value.Locale}:{item.Key}:{isPublicString}";
+                return database.StringSetAsync(redisKey, item.Value);
+            })
+        );
+
+        await Task.WhenAll(tasks);
+    }
+
+    public async Task<string?> GetLocalizationVersionAsync(bool isPublic)
     {
         var redisKey = $"version:localization" + (isPublic ? "_public" : string.Empty);
-        string version = await database.StringGetAsync(redisKey);
+        string? version = await database.StringGetAsync(redisKey);
 
         return version;
     }

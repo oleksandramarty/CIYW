@@ -10,7 +10,7 @@ export interface IDataItem {
   id: string | undefined;
   name: string | undefined;
   description: string | undefined;
-  icon: string | undefined;
+  iconId: number | undefined;
   color: string | undefined;
   isActive: boolean | undefined;
   isImportant: boolean | undefined;
@@ -26,7 +26,7 @@ export class DataItem implements IDataItem {
   id: string | undefined;
   name: string | undefined;
   description: string | undefined;
-  icon: string | undefined;
+  iconId: number | undefined;
   color: string | undefined;
   isActive: boolean | undefined;
   isImportant: boolean | undefined;
@@ -42,7 +42,7 @@ export class DataItem implements IDataItem {
     id: string | undefined,
     name: string | undefined,
     description: string | undefined,
-    icon?: string | undefined,
+    iconId?: number | undefined,
     color?: string | undefined,
     filteredFields: string[] | undefined = [],
     isActive: boolean | undefined = true,
@@ -52,7 +52,7 @@ export class DataItem implements IDataItem {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.icon = icon;
+    this.iconId = iconId;
     this.color = color;
     this.isActive = isActive;
     this.isImportant = isImportant;

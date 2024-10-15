@@ -64,7 +64,7 @@ export class CommonDialogService {
 
     private _getConfirmationModal(
         title: string = 'DIALOG.DELETE_TITLE',
-        descriptions: string[] = ['DIALOG.DELETE_DESCRIPTION;'],
+        descriptions: string[] = ['DIALOG.DELETE_DESCRIPTION'],
         yesBtn: string = 'COMMON.YES',
         noBtn: string = 'COMMON.NO'): MatDialogRef<ConfirmationMessageComponent, any> {
         return this.dialog.open(ConfirmationMessageComponent, {

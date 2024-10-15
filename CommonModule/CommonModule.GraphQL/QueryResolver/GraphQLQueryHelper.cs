@@ -9,6 +9,7 @@ using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Categories;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Countries;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Currencies;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Expenses;
+using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Icons;
 using CommonModule.GraphQL.Types.Responses.Expenses.Models.Expenses;
 using CommonModule.GraphQL.Types.Responses.Expenses.Models.Projects;
 using CommonModule.GraphQL.Types.Responses.Lists;
@@ -22,6 +23,7 @@ using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 using CommonModule.Shared.Responses.Dictionaries.Models.Expenses;
+using CommonModule.Shared.Responses.Dictionaries.Models.Icons;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
 using CommonModule.Shared.Responses.Localizations.Models.Locales;
@@ -102,6 +104,12 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
             BalanceTypeResponse, 
             GetBalanceTypesRequest
         >(GraphQLEndpoints.GetBalanceTypesDictionary);
+        
+        this.GetVersionedList<
+            VersionedListOfGenericType<IconCategoryResponse, IconCategoryResponseType>, 
+            IconCategoryResponse, 
+            GetIconCategoriesRequest
+        >(GraphQLEndpoints.GetIconCategoriesDictionary);
     }
 
     public void AddAuthGatewayQueries()

@@ -9,5 +9,6 @@ public class MappingLocalizationsProfile: Profile
     public MappingLocalizationsProfile()
     {
         this.CreateMap<Locale, LocaleResponse>();
+        this.CreateMap<Localization, LocalizationResponse>();
     }
 }

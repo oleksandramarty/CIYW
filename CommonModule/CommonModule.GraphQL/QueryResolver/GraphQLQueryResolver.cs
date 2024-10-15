@@ -123,9 +123,11 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
             {
                 context.IsAuthenticated(endpoint.IsAuthenticated);
                 var cancellationToken = context.CancellationToken;
-                GetLocalizationsRequest command = new GetLocalizationsRequest();
-                command.IsPublic = !endpoint.IsAuthenticated;
-                command.Version = context.GetArgument<string>("version");
+                GetLocalizationsRequest command = new GetLocalizationsRequest
+                {
+                    IsPublic = !endpoint.IsAuthenticated,
+                    Version = context.GetArgument<string>("version")
+                };
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
                 return await ExecuteCommandAsync<LocalizationsResponse>(mediator, command, cancellationToken, context);
             });

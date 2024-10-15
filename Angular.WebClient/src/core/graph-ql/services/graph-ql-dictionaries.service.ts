@@ -6,14 +6,14 @@ import {
     GET_BALANCE_TYPES_DICTIONARY,
     GET_CATEGORIES_DICTIONARY,
     GET_COUNTRIES_DICTIONARY,
-    GET_CURRENCIES_DICTIONARY, GET_FREQUENCIES_DICTIONARY,
+    GET_CURRENCIES_DICTIONARY, GET_FREQUENCIES_DICTIONARY, GET_ICON_CATEGORIES_DICTIONARY,
     GET_SITE_SETTINGS
 } from "../queries/graph-ql-dictionaries.query";
 import {
     SiteSettingsResponse, VersionedListResponseOfBalanceTypeResponse, VersionedListResponseOfCategoryResponse,
     VersionedListResponseOfCountryResponse,
     VersionedListResponseOfCurrencyResponse,
-    VersionedListResponseOfFrequencyResponse
+    VersionedListResponseOfFrequencyResponse, VersionedListResponseOfIconCategoryResponse
 } from "../../api-models/common.models";
 import {ApolloBase} from "apollo-angular";
 
@@ -80,6 +80,17 @@ export class GraphQlDictionariesService {
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{ dictionaries_get_balance_types_dictionary: VersionedListResponseOfBalanceTypeResponse }>>;
+    }
+
+    public getIconCategoriesDictionary(version: string | undefined): Observable<ApolloQueryResult<{ dictionaries_get_icon_categories_dictionary: VersionedListResponseOfIconCategoryResponse }>> {
+        return this.apolloClient
+            .watchQuery({
+                query: GET_ICON_CATEGORIES_DICTIONARY,
+                variables: {
+                    version,
+                },
+                fetchPolicy: 'network-only',
+            }).valueChanges as Observable<ApolloQueryResult<{ dictionaries_get_icon_categories_dictionary: VersionedListResponseOfIconCategoryResponse }>>;
     }
 
     public getCategoriesDictionary(version: string | undefined): Observable<ApolloQueryResult<{ dictionaries_get_categories_dictionary: VersionedListResponseOfCategoryResponse }>> {

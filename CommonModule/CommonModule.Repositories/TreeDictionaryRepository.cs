@@ -1,4 +1,5 @@
 using AutoMapper;
+using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Responses.Base;
@@ -32,11 +33,9 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
     
     public async Task<VersionedListResponse<TResponse>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken)
     {
-        string currentVersion = await this.cacheRepository.GetCacheVersionAsync();
+        string? currentVersion = await this.cacheRepository.GetCacheVersionAsync();
         
-        if (
-            !string.IsNullOrEmpty(version) && 
-            version.Equals(currentVersion))
+        if (LocalizationExtension.IsDictionaryActual(version, currentVersion))
         {
             return new VersionedListResponse<TResponse>
             {
@@ -53,8 +52,13 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
             await this.cacheRepository.ReinitializeDictionaryAsync(items);
             await this.cacheRepository.SetCacheVersionAsync();
         }
+        
+        if (string.IsNullOrEmpty(currentVersion))
+        {
+            currentVersion = await this.cacheRepository.GetCacheVersionAsync();
+        }
     
-        return new VersionedListResponse<TResponse>
+        VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>
         {
             Items = await BuildSummitsTreeNode(
                 items.Where(c => c.ParentId == null && c.IsActive), 
@@ -62,6 +66,8 @@ public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataC
                 cancellationToken),
             Version = currentVersion
         };
+
+        return result;
     }
 
     private async Task<List<TResponse>> BuildSummitsTreeNode(

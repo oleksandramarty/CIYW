@@ -8,7 +8,6 @@ public class BalanceTypeResponse: BaseIdEntity<int>, IActivatable
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }
-    public string Icon { get; set; }
     
     public BalanceEnum Type { get; set; }
 }

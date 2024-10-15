@@ -24,7 +24,7 @@ errorAdded=0
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 
 # Read the balance types CSV file line by line
-while IFS=';' read -r id title icon type isActive;
+while IFS=';' read -r id title type isActive;
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -39,8 +39,8 @@ do
 
       # Non-bulk insert
       sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"BalanceTypes\"
-      (\"Id\", \"Title\", \"Type\", \"Icon\", \"IsActive\")
-      VALUES ($id, '$title', '$type', '$icon', $isActiveBool);"
+      (\"Id\", \"Title\", \"Type\", \"IsActive\")
+      VALUES ($id, '$title', '$type', $isActiveBool);"
       if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
         echo "Balance type with ID $id added successfully."
       else

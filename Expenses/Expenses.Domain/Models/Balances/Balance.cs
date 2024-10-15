@@ -11,6 +11,7 @@ public class Balance: BaseDateTimeEntity<Guid>, IBaseVersionEntity, IActivatable
     public decimal Amount { get; set; }
     public int CurrencyId { get; set; }
     public string Title { get; set; }
+    public int IconId { get; set; }
     
     public Guid UserProjectId { get; set; }
     public UserProject UserProject { get; set; }

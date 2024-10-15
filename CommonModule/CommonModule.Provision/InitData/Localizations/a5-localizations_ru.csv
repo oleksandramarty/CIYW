@@ -276,3 +276,7 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-500000000277;ru;ICONS.PEOPLE;People;Люди;
 550e8400-e29b-41d4-a716-500000000278;ru;ICONS.BUILDINGS;Buildings;Здания;
 550e8400-e29b-41d4-a716-500000000279;ru;MENU.FAVORITES;Избранное;Избранное;
+550e8400-e29b-41d4-a716-500000000280;ru;COMMON.CHOOSE_ICON;Choose Icon;Выбрать иконку;
+550e8400-e29b-41d4-a716-500000000281;ru;BALANCE.CREATE_NEW;Create New Balance;Создать новый баланс;
+550e8400-e29b-41d4-a716-500000000282;ru;COMMON.REMOVE;Remove;Удалить;
+550e8400-e29b-41d4-a716-500000000283;ru;COMMON.BALANCE_TYPE;Balance Type;Тип баланса;

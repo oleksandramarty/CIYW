@@ -68,6 +68,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
     locale!: string;
     frequency!: string;
     balanceType!: string;
+    iconCategory!: string;
 
     constructor(data?: ICacheVersionResponse) {
         if (data) {
@@ -88,6 +89,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
             this.locale = _data["locale"];
             this.frequency = _data["frequency"];
             this.balanceType = _data["balanceType"];
+            this.iconCategory = _data["iconCategory"];
         }
     }
 
@@ -108,6 +110,7 @@ export class CacheVersionResponse implements ICacheVersionResponse {
         data["locale"] = this.locale;
         data["frequency"] = this.frequency;
         data["balanceType"] = this.balanceType;
+        data["iconCategory"] = this.iconCategory;
         return data;
     }
 }
@@ -121,6 +124,7 @@ export interface ICacheVersionResponse {
     locale: string;
     frequency: string;
     balanceType: string;
+    iconCategory: string;
 }
 
 export class JwtTokenResponse implements IJwtTokenResponse {
@@ -1249,6 +1253,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
     amount!: number;
     currencyId!: number;
     title!: string;
+    iconId!: number;
     userProjectId!: string;
     version!: string;
     balanceTypeId!: number;
@@ -1265,6 +1270,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
             this.amount = _data["amount"];
             this.currencyId = _data["currencyId"];
             this.title = _data["title"];
+            this.iconId = _data["iconId"];
             this.userProjectId = _data["userProjectId"];
             this.version = _data["version"];
             this.balanceTypeId = _data["balanceTypeId"];
@@ -1285,6 +1291,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
         data["amount"] = this.amount;
         data["currencyId"] = this.currencyId;
         data["title"] = this.title;
+        data["iconId"] = this.iconId;
         data["userProjectId"] = this.userProjectId;
         data["version"] = this.version;
         data["balanceTypeId"] = this.balanceTypeId;
@@ -1299,6 +1306,7 @@ export interface IBalanceResponse extends IBaseDateTimeEntityOfGuid {
     amount: number;
     currencyId: number;
     title: string;
+    iconId: number;
     userProjectId: string;
     version: string;
     balanceTypeId: number;
@@ -1886,7 +1894,7 @@ export interface IVersionedListResponseOfCategoryResponse extends IBaseVersionEn
 
 export class CategoryResponse extends BaseIdEntityOfInteger implements ICategoryResponse {
     title!: string;
-    icon!: string;
+    iconId!: number;
     color!: string;
     isActive!: boolean;
     isPositive!: boolean;
@@ -1904,7 +1912,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
         super.init(_data);
         if (_data) {
             this.title = _data["title"];
-            this.icon = _data["icon"];
+            this.iconId = _data["iconId"];
             this.color = _data["color"];
             this.isActive = _data["isActive"];
             this.isPositive = _data["isPositive"];
@@ -1927,7 +1935,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["icon"] = this.icon;
+        data["iconId"] = this.iconId;
         data["color"] = this.color;
         data["isActive"] = this.isActive;
         data["isPositive"] = this.isPositive;
@@ -1944,7 +1952,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
 
 export interface ICategoryResponse extends IBaseIdEntityOfInteger {
     title: string;
-    icon: string;
+    iconId: number;
     color: string;
     isActive: boolean;
     isPositive: boolean;
@@ -1999,7 +2007,6 @@ export interface IVersionedListResponseOfBalanceTypeResponse extends IBaseVersio
 export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalanceTypeResponse {
     title!: string;
     isActive!: boolean;
-    icon!: string;
     type!: BalanceEnum;
 
     constructor(data?: IBalanceTypeResponse) {
@@ -2011,7 +2018,6 @@ export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalan
         if (_data) {
             this.title = _data["title"];
             this.isActive = _data["isActive"];
-            this.icon = _data["icon"];
             this.type = _data["type"];
         }
     }
@@ -2027,7 +2033,6 @@ export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalan
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["isActive"] = this.isActive;
-        data["icon"] = this.icon;
         data["type"] = this.type;
         super.toJSON(data);
         return data;
@@ -2037,7 +2042,6 @@ export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalan
 export interface IBalanceTypeResponse extends IBaseIdEntityOfInteger {
     title: string;
     isActive: boolean;
-    icon: string;
     type: BalanceEnum;
 }
 
@@ -2046,5 +2050,142 @@ export enum BalanceEnum {
     DebitCard = 2,
     CreditCard = 3,
     CryptoCurrency = 4,
+}
+
+export class VersionedListResponseOfIconCategoryResponse extends BaseVersionEntity implements IVersionedListResponseOfIconCategoryResponse {
+    items!: IconCategoryResponse[];
+
+    constructor(data?: IVersionedListResponseOfIconCategoryResponse) {
+        super(data);
+        if (!data) {
+            this.items = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(IconCategoryResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): VersionedListResponseOfIconCategoryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new VersionedListResponseOfIconCategoryResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IVersionedListResponseOfIconCategoryResponse extends IBaseVersionEntity {
+    items: IconCategoryResponse[];
+}
+
+export class IconCategoryResponse extends BaseIdEntityOfInteger implements IIconCategoryResponse {
+    title!: string;
+    isActive!: boolean;
+    icons!: IconResponse[];
+
+    constructor(data?: IIconCategoryResponse) {
+        super(data);
+        if (!data) {
+            this.icons = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.isActive = _data["isActive"];
+            if (Array.isArray(_data["icons"])) {
+                this.icons = [] as any;
+                for (let item of _data["icons"])
+                    this.icons!.push(IconResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): IconCategoryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new IconCategoryResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["isActive"] = this.isActive;
+        if (Array.isArray(this.icons)) {
+            data["icons"] = [];
+            for (let item of this.icons)
+                data["icons"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IIconCategoryResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    isActive: boolean;
+    icons: IconResponse[];
+}
+
+export class IconResponse extends BaseIdEntityOfInteger implements IIconResponse {
+    title!: string;
+    isActive!: boolean;
+    iconCategoryId!: number;
+
+    constructor(data?: IIconResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.isActive = _data["isActive"];
+            this.iconCategoryId = _data["iconCategoryId"];
+        }
+    }
+
+    static override fromJS(data: any): IconResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new IconResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["isActive"] = this.isActive;
+        data["iconCategoryId"] = this.iconCategoryId;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IIconResponse extends IBaseIdEntityOfInteger {
+    title: string;
+    isActive: boolean;
+    iconCategoryId: number;
 }
 

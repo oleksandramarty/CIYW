@@ -14,23 +14,6 @@ For example, `a3` for French means all IDs should be `550e8400-e29b-41d4-a716-{I
 - ...
 - `550e8400-e29b-41d4-a716-{ID}..........n`
 
-## For new locale update `init_cache_localizations.sh`
-```shell
-# Function to map localeId to locale code
-get_locale_code() {
-  case $1 in
-    1) echo "en" ;;
-    2) echo "es" ;;
-    3) echo "fr" ;;
-    4) echo "ua" ;;
-    5) echo "ru" ;;
-    6) echo "de" ;;
-    7) echo "it" ;;
-    *) echo "unknown" ;;
-  esac
-}
-```
-
 ## For new locale update `check_localizations.sh`
 ```shell
 csv_files=(

@@ -13,5 +13,6 @@ public class CreateUserBalanceInputType: InputObjectGraphType
         Field<NonNullGraphType<IntGraphType>>("balanceTypeId");
         Field<NonNullGraphType<BooleanGraphType>>("isActive");
         Field<NonNullGraphType<GuidGraphType>>("userProjectId");
+        Field<NonNullGraphType<IntGraphType>>("iconId");
     }
 }

@@ -1,5 +1,10 @@
 <div class="base-modal-container">
-    <h2 mat-dialog-title [translation]="title"></h2>
+    <div class="base-modal-header-container">
+        <h2 mat-dialog-title [translation]="title"></h2>
+        <span class="base-modal-close-icon" (click)="dialogRef.close()">
+            <i class="fa-solid fa-xmark"></i>
+        </span>
+    </div>
     <div class="base-modal-body-container">
         <i class="fa-solid fa-triangle-exclamation warn-icon"></i>
         <ng-container *ngIf="descriptions">

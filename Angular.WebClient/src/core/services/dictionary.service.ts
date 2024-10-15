@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import {catchError, forkJoin, take, tap} from "rxjs";
+import {catchError, forkJoin, of, take, tap} from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { handleApiError } from "../helpers/rxjs.helper";
 import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionary.model";
@@ -12,16 +12,17 @@ import {
     CategoryResponse,
     CountryResponse,
     CurrencyResponse,
-    FrequencyResponse,
+    FrequencyResponse, IconCategoryResponse, IconResponse,
     LocaleResponse, VersionedListResponseOfBalanceTypeResponse, VersionedListResponseOfCategoryResponse,
     VersionedListResponseOfCountryResponse,
     VersionedListResponseOfCurrencyResponse,
-    VersionedListResponseOfFrequencyResponse,
+    VersionedListResponseOfFrequencyResponse, VersionedListResponseOfIconCategoryResponse,
     VersionedListResponseOfLocaleResponse
 } from "../api-models/common.models";
 import {GraphQlLocalizationsService} from "../graph-ql/services/graph-ql-localizations.service";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
 import {extractClassName} from "../helpers/dom.helper";
+import {LoaderService} from "./loader.service";
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +38,8 @@ export class DictionaryService {
     _localesMap: DictionaryMap<number, LocaleResponse> | undefined;
     _frequenciesMap: DictionaryMap<number, FrequencyResponse> | undefined;
     _balanceTypesMap: DictionaryMap<number, BalanceTypeResponse> | undefined;
+    _iconCategoryMap: DictionaryMap<number, IconCategoryResponse> | undefined;
+    _iconMap: DictionaryMap<number, IconResponse> | undefined;
 
     private readonly _importantCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'MDL', 'UAH'];
 
@@ -46,6 +49,54 @@ export class DictionaryService {
 
     get dataItems(): DictionaryDataItems | undefined {
         return this._dataItems;
+    }
+
+    get iconMap(): DictionaryMap<number, IconResponse> | undefined {
+        if (!this._iconMap && this.dictionaries?.iconCategories?.items) {
+            this._iconMap = new DictionaryMap<number, IconResponse>();
+
+            for (const icon of this.dictionaries.iconCategories.items) {
+                for (const iconItem of icon.icons) {
+                    this._iconMap.set(iconItem.id, iconItem);
+                }
+            }
+        }
+
+        return this._iconMap;
+    }
+
+    set iconMap(value: VersionedListResponseOfIconCategoryResponse | undefined) {
+        if (!!value) {
+            this._iconMap = new DictionaryMap<number, IconResponse>();
+
+            for (const icon of value.items) {
+                for (const iconItem of icon.icons) {
+                    this._iconMap.set(iconItem.id, iconItem);
+                }
+            }
+        }
+    }
+
+    get iconCategoryMap(): DictionaryMap<number, IconCategoryResponse> | undefined {
+        if (!this._iconCategoryMap && this.dictionaries?.iconCategories?.items) {
+            this._iconCategoryMap = new DictionaryMap<number, IconCategoryResponse>();
+
+            for (const iconCategory of this.dictionaries.iconCategories.items) {
+                this._iconCategoryMap.set(iconCategory.id, iconCategory);
+            }
+        }
+
+        return this._iconCategoryMap;
+    }
+
+    set iconCategoryMap(value: VersionedListResponseOfIconCategoryResponse | undefined) {
+        if (!!value) {
+            this._iconCategoryMap = new DictionaryMap<number, IconCategoryResponse>();
+
+            for (const iconCategory of value.items) {
+                this._iconCategoryMap.set(iconCategory.id, iconCategory);
+            }
+        }
     }
 
     get countriesMap(): DictionaryMap<number, CountryResponse> | undefined {
@@ -187,7 +238,8 @@ export class DictionaryService {
         private readonly siteSettingsService: SiteSettingsService,
         private readonly localizationService: LocalizationService,
         private readonly graphQlLocalizationsService: GraphQlLocalizationsService,
-        private readonly graphQlDictionariesService: GraphQlDictionariesService
+        private readonly graphQlDictionariesService: GraphQlDictionariesService,
+        private readonly loaderService: LoaderService
     ) {
         this._dictionaries = this.localStorageService.getItem('dictionaries') as Dictionary || new Dictionary();
     }
@@ -196,19 +248,24 @@ export class DictionaryService {
         if (!this.siteSettingsService.version ||
             this.siteSettingsService.version.locale !== this.dictionaries?.locales?.version
         ) {
+            this.loaderService.isBusy = true;
             forkJoin({
-                locales: this.graphQlLocalizationsService.getDictionaryLocales(
-                    this.dictionaries?.locales?.version).pipe(take(1))
+                result_locales: !this.siteSettingsService.version ||
+                    this.siteSettingsService.version.country !== this.dictionaries?.countries?.version ?
+                    this.graphQlLocalizationsService.getDictionaryLocales(
+                    this.dictionaries?.locales?.version).pipe(take(1)) : of(undefined),
             }).pipe(
-                tap((result) => {
+                tap(({ result_locales }) => {
                     if (this._dictionaries) {
-                        const locales = result?.locales.data?.localizations_get_locales_dictionary as VersionedListResponseOfLocaleResponse;
-                        this._dictionaries.locales = locales;
-
-                        this.localesMap = locales;
+                        if (!!result_locales) {
+                            const locales = result_locales?.data?.localizations_get_locales_dictionary as VersionedListResponseOfLocaleResponse;
+                            this._dictionaries.locales = locales;
+                            this.localesMap = locales;
+                        }
 
                         this.updateDateItems(true);
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
+                        this.loaderService.isBusy = false;
                     }
                 }),
                 handleApiError(this.snackBar)
@@ -224,42 +281,77 @@ export class DictionaryService {
             this.siteSettingsService.version.currency !== this.dictionaries?.currencies?.version ||
             this.siteSettingsService.version.category !== this.dictionaries?.categories?.version ||
             this.siteSettingsService.version.frequency !== this.dictionaries?.frequencies?.version ||
-            this.siteSettingsService.version.balanceType !== this.dictionaries?.balanceTypes?.version
+            this.siteSettingsService.version.balanceType !== this.dictionaries?.balanceTypes?.version ||
+            this.siteSettingsService.version.iconCategory !== this.dictionaries?.iconCategories?.version
         ) {
+            this.loaderService.isBusy = true;
             forkJoin({
-                result_countries: this.graphQlDictionariesService.getCountriesDictionary(
-                    this.dictionaries?.countries?.version).pipe(take(1)),
-                result_currencies: this.graphQlDictionariesService.getCurrenciesDictionary(
-                    this.dictionaries?.currencies?.version).pipe(take(1)),
-                result_categories: this.graphQlDictionariesService.getCategoriesDictionary(
-                    this.dictionaries?.categories?.version).pipe(take(1)),
-                result_frequencies: this.graphQlDictionariesService.getFrequenciesDictionary(
-                    this.dictionaries?.frequencies?.version).pipe(take(1)),
-                result_balance_types: this.graphQlDictionariesService.getBalanceTypesDictionary(
-                    this.dictionaries?.frequencies?.version).pipe(take(1))
+                result_countries: !this.siteSettingsService.version ||
+                this.siteSettingsService.version.country !== this.dictionaries?.countries?.version ?
+                    this.graphQlDictionariesService.getCountriesDictionary(
+                    this.dictionaries?.countries?.version).pipe(take(1)) : of(undefined),
+                result_currencies: !this.siteSettingsService.version ||
+                this.siteSettingsService.version.currency !== this.dictionaries?.currencies?.version ?
+                    this.graphQlDictionariesService.getCurrenciesDictionary(
+                    this.dictionaries?.currencies?.version).pipe(take(1)) : of(undefined),
+                result_categories: !this.siteSettingsService.version ||
+                this.siteSettingsService.version.category !== this.dictionaries?.categories?.version ?
+                    this.graphQlDictionariesService.getCategoriesDictionary(
+                    this.dictionaries?.categories?.version).pipe(take(1)) : of(undefined),
+                result_frequencies: !this.siteSettingsService.version ||
+                this.siteSettingsService.version.frequency !== this.dictionaries?.frequencies?.version ?
+                    this.graphQlDictionariesService.getFrequenciesDictionary(
+                    this.dictionaries?.frequencies?.version).pipe(take(1)) : of(undefined),
+                result_balance_types: !this.siteSettingsService.version ||
+                this.siteSettingsService.version.balanceType !== this.dictionaries?.balanceTypes?.version ?
+                    this.graphQlDictionariesService.getBalanceTypesDictionary(
+                    this.dictionaries?.frequencies?.version).pipe(take(1)) : of(undefined),
+                result_icon_categories: !this.siteSettingsService.version ||
+                this.siteSettingsService.version.iconCategory !== this.dictionaries?.iconCategories?.version ?
+                    this.graphQlDictionariesService.getIconCategoriesDictionary(
+                    this.dictionaries?.iconCategories?.version).pipe(take(1)) : of(undefined),
             }).pipe(
-                tap(({ result_countries, result_currencies, result_categories, result_frequencies, result_balance_types }) => {
+                tap(({ result_countries, result_currencies, result_categories, result_frequencies, result_balance_types, result_icon_categories }) => {
                     if (this._dictionaries) {
-                        const countries = result_countries?.data?.dictionaries_get_countries_dictionary as VersionedListResponseOfCountryResponse;
-                        const currencies = result_currencies?.data?.dictionaries_get_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
-                        const categories = result_categories?.data?.dictionaries_get_categories_dictionary as VersionedListResponseOfCategoryResponse;
-                        const frequencies = result_frequencies?.data?.dictionaries_get_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
-                        const balanceTypes = result_balance_types?.data?.dictionaries_get_balance_types_dictionary as VersionedListResponseOfBalanceTypeResponse;
+                        if (!!result_countries) {
+                            const countries = result_countries?.data?.dictionaries_get_countries_dictionary as VersionedListResponseOfCountryResponse;
+                            this._dictionaries.countries = countries;
+                            this.countriesMap = countries;
+                        }
 
-                        this._dictionaries.countries = countries;
-                        this._dictionaries.currencies = currencies;
-                        this._dictionaries.categories = categories;
-                        this._dictionaries.frequencies = frequencies;
-                        this._dictionaries.balanceTypes = balanceTypes;
+                        if (!!result_currencies) {
+                            const currencies = result_currencies?.data?.dictionaries_get_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
+                            this._dictionaries.currencies = currencies;
+                            this.currenciesMap = currencies;
+                        }
 
-                        this.countriesMap = countries;
-                        this.currenciesMap = currencies;
-                        this.categoriesMap = categories;
-                        this.frequenciesMap = frequencies;
-                        this.balanceTypesMap = balanceTypes;
+                        if (!!result_categories) {
+                            const categories = result_categories?.data?.dictionaries_get_categories_dictionary as VersionedListResponseOfCategoryResponse;
+                            this._dictionaries.categories = categories;
+                            this.categoriesMap = categories;
+                        }
+
+                        if (!!result_frequencies) {
+                            const frequencies = result_frequencies?.data?.dictionaries_get_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
+                            this._dictionaries.frequencies = frequencies;
+                            this.frequenciesMap = frequencies;
+                        }
+
+                        if (!!result_balance_types) {
+                            const balanceTypes = result_balance_types?.data?.dictionaries_get_balance_types_dictionary as VersionedListResponseOfBalanceTypeResponse;
+                            this._dictionaries.balanceTypes = balanceTypes;
+                            this.balanceTypesMap = balanceTypes;
+                        }
+
+                        if (!!result_icon_categories) {
+                            const iconCategories = result_icon_categories?.data?.dictionaries_get_icon_categories_dictionary as VersionedListResponseOfIconCategoryResponse;
+                            this._dictionaries.iconCategories = iconCategories;
+                            this.iconCategoryMap = iconCategories;
+                        }
 
                         this.updateDateItems(false);
                         this.localStorageService.setItem('dictionaries', this.dictionaries);
+                        this.loaderService.isBusy = false;
                     }
                 }),
                 handleApiError(this.snackBar)
@@ -321,13 +413,13 @@ export class DictionaryService {
                         String(category.id),
                         category.title,
                         category.isPositive ? 'EXPENSES.INCOME' : 'EXPENSES.EXPENSE',
-                        category.icon,
+                        category.iconId,
                         category.color,
                         this.localizationService.getAllTranslationsByKey(category.title) || []));
             });
 
             const tempBalanceTypes = this.dictionaries?.balanceTypes?.items
-                .map(balance => new DataItem(balance, String(balance.id), balance.title, '', balance.icon));
+                .map(balance => new DataItem(balance, String(balance.id), balance.title, ''));
             this._dataItems.balanceTypes = tempBalanceTypes?.sort((a, b) => Number(a.id) - Number(b.id));
         }
     }
@@ -342,7 +434,7 @@ export class DictionaryService {
             id: category?.id?.toString(),
             name: category?.title,
             description: category?.isPositive ? 'EXPENSES.INCOME' : 'EXPENSES.EXPENSE',
-            icon: category?.icon,
+            iconId: category?.iconId,
             color: category?.color,
             isActive: category?.isActive,
             isImportant: false,

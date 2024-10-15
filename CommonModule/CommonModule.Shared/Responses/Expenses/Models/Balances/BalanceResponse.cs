@@ -10,6 +10,7 @@ public class BalanceResponse: BaseDateTimeEntity<Guid>, IBaseVersionEntity, IAct
     public decimal Amount { get; set; }
     public int CurrencyId { get; set; }
     public string Title { get; set; }
+    public int IconId { get; set; }
     
     public Guid UserProjectId { get; set; }
     public string Version { get; set; }

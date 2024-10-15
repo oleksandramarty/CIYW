@@ -1,6 +1,11 @@
 <div class="base-modal-container" *ngIf="userProjectForm">
-    <h2 mat-dialog-title *ngIf="userProject">{{ userProject.title }}</h2>
-    <h2 mat-dialog-title *ngIf="!userProject" [translation]="'USER_PROJECTS.CREATE_NEW'"></h2>
+    <div class="base-modal-header-container">
+        <h2 mat-dialog-title *ngIf="userProject">{{ userProject.title }}</h2>
+        <h2 mat-dialog-title *ngIf="!userProject" [translation]="'USER_PROJECTS.CREATE_NEW'"></h2>
+        <span class="base-modal-close-icon" (click)="dialogRef.close()">
+            <i class="fa-solid fa-xmark"></i>
+        </span>
+    </div>
     <div class="base-modal-body-container">
         <app-input type="input" [label]="'COMMON.TITLE'" [formGroup]="userProjectForm" controlName="title"></app-input>
 

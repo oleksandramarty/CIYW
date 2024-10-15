@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 using CommonModule.Core.JsonConverter;
-using CommonModule.Core.Utils;
 using CommonModule.Shared.Common;
  using CommonModule.Shared.Common.BaseInterfaces;
- 
+ using CommonModule.Shared.JsonConvertors;
+
  namespace Dictionaries.Domain.Models.Countries;
  
  public class Country: BaseIdEntity<int>, IActivatable

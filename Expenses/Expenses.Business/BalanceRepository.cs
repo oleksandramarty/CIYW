@@ -115,7 +115,7 @@ public class BalanceRepository: IBalanceRepository
         }
         else
         {
-            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
+            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":true") ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
         }
         
         this.dataContext.Balances.Update(balance);

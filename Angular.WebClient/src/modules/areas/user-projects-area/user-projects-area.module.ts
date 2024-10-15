@@ -11,6 +11,12 @@ import { AppCommonInputModule } from "../../common/common-input/app-common-input
 import { MatButtonModule } from "@angular/material/button";
 import { ConfirmationMessageComponent } from "../../dialogs/confirmation-message/confirmation-message.component";
 import { SharedModule } from "../../../core/shared.module";
+import {CommonTopMenuComponent} from "../../common/common-top-menu/common-top-menu/common-top-menu.component";
+import {UserProjectExpensesComponent} from "./user-project/user-project-expenses/user-project-expenses.component";
+import {
+    UserProjectPlannedExpensesComponent
+} from "./user-project/user-project-planned-expenses/user-project-planned-expenses.component";
+import {UserProjectFavoritesComponent} from "./user-project/user-project-favorites/user-project-favorites.component";
 
 const routes: Routes = [
     {
@@ -27,7 +33,10 @@ const routes: Routes = [
     declarations: [
         UserProjectsAreaComponent,
         UserProjectsComponent,
-        UserProjectComponent
+        UserProjectComponent,
+        UserProjectExpensesComponent,
+        UserProjectPlannedExpensesComponent,
+        UserProjectFavoritesComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -38,7 +47,8 @@ const routes: Routes = [
         SharedModule,
         MatDividerModule,
         AppCommonInputModule,
-        MatButtonModule
+        MatButtonModule,
+        CommonTopMenuComponent
     ],
     exports: [
         RouterModule

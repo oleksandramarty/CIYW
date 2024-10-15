@@ -13,6 +13,7 @@ export const GET_SITE_SETTINGS = gql`
                 locale
                 frequency
                 balanceType
+                iconCategory
             }
         }
     }
@@ -71,7 +72,6 @@ export const GET_BALANCE_TYPES_DICTIONARY = gql`
                 id
                 title
                 isActive
-                icon
                 type
             }
             version
@@ -83,21 +83,44 @@ export const GET_CATEGORIES_DICTIONARY = gql`
     query GetCategories($version: String) {
         dictionaries_get_categories_dictionary(version: $version) {
             items {
+                ...CategoryFields
+                children {
+                    ...CategoryFields
+                    children {
+                        ...CategoryFields
+                        children {
+                            ...CategoryFields
+                        }
+                    }
+                }
+            }
+            version
+        }
+    }
+
+    fragment CategoryFields on CategoryResponse {
+        id
+        title
+        iconId
+        color
+        isActive
+        isPositive
+        parentId
+    }
+`;
+
+export const GET_ICON_CATEGORIES_DICTIONARY = gql`
+    query GetIconCategories($version: String) {
+        dictionaries_get_icon_categories_dictionary(version: $version) {
+            items {
                 id
                 title
-                icon
-                color
                 isActive
-                isPositive
-                parentId
-                children {
+                icons {
                     id
                     title
-                    icon
-                    color
                     isActive
-                    isPositive
-                    parentId
+                    iconCategoryId
                 }
             }
             version

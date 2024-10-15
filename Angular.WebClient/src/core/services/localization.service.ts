@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SiteSettingsService } from './site-settings.service';
 import { LocalizationsResponse, SiteSettingsResponse, LocalizationResponse, LocalizationItemResponse } from '../api-models/common.models';
 import { GraphQlLocalizationsService } from '../graph-ql/services/graph-ql-localizations.service';
+import {LoaderService} from "./loader.service";
 
 @Injectable({
     providedIn: 'root'
@@ -88,13 +89,15 @@ export class LocalizationService {
         private readonly snackBar: MatSnackBar,
         private readonly localStorageService: LocalStorageService,
         private readonly siteSettingsService: SiteSettingsService,
-        private readonly graphQlLocalizationsService: GraphQlLocalizationsService
+        private readonly graphQlLocalizationsService: GraphQlLocalizationsService,
+        private readonly loaderService: LoaderService
     ) { }
 
     public initialize(isPublic: boolean): void {
         if (!this.siteSettingsService.version ||
             (isPublic && this.siteSettingsService.version.localizationPublic !== this.publicLocalizations?.version) ||
             (!isPublic && this.siteSettingsService.version.localization !== this.nonPublicLocalizations?.version)) {
+            this.loaderService.isBusy = true;
             if (isPublic) {
                 this.graphQlLocalizationsService.getPublicLocalizations(this.publicLocalizations?.version)
                     .pipe(
@@ -105,6 +108,7 @@ export class LocalizationService {
                                 this.publicLocalizations = data;
                             }
                             this.localeChangedSub.next(true);
+                            this.loaderService.isBusy = false;
                         }),
                         handleApiError(this.snackBar)
                     ).subscribe();
@@ -118,6 +122,7 @@ export class LocalizationService {
                                 this.nonPublicLocalizations = data;
                             }
                             this.localeChangedSub.next(true);
+                            this.loaderService.isBusy = false;
                         }),
                         handleApiError(this.snackBar)
                     ).subscribe();

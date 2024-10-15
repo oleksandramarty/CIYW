@@ -47,6 +47,8 @@ builder.AddJwtAuthentication();
 builder.AddDependencyInjection();
 
 // Fluent validation starts
+builder.Services.AddValidatorsFromAssemblyContaining<CreateFavoriteExpenseCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateFavoriteExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateExpenseCommandValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePlannedExpenseCommandValidator>();
@@ -67,10 +69,13 @@ builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 // Custom DI ends
 
 // AutoMapper
-builder.Services.AddAutoMapper(config => { config.AddProfile(new MappingExpensesProfile()); });
-builder.Services.AddAutoMapper(config => { config.AddProfile(new MappingLocalizationsProfile()); });
-builder.Services.AddAutoMapper(config => { config.AddProfile(new MappingDictionariesProfile()); });
-builder.Services.AddAutoMapper(config => { config.AddProfile(new MappingAuthProfile()); });
+builder.Services.AddAutoMapper(config => 
+{
+    config.AddProfile(new MappingExpensesProfile());
+    config.AddProfile(new MappingLocalizationsProfile());
+    config.AddProfile(new MappingDictionariesProfile());
+    config.AddProfile(new MappingAuthProfile());
+});
 // AutoMapper ends
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -87,6 +92,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(
 // Strategies
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>, GetFilteredResultOfExpenseStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse>, GetFilteredResultOfPlannedExpenseStrategy>();
+builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse>, GetFilteredResultOfFavoriteExpenseStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>, GetFilteredResultOfUserProjectStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>, GetFilteredResultOfUserAllowedProjectStrategy>();
 // Strategies end

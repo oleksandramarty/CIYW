@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommonModule.Core.Exceptions;
+using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Responses.Base;
@@ -27,18 +27,16 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
         this.dictionaryRepository = dictionaryRepository;
     }
 
-    public async Task<VersionedListResponse<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken)
+    public async Task<VersionedListResponse<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken, params Func<IQueryable<TEntity>, IQueryable<TEntity>>[] includeFuncs)
     {
-        string currencyVersion = await this.cacheRepository.GetCacheVersionAsync();
+        string currentVersion = await this.cacheRepository.GetCacheVersionAsync();
         
-        if (
-            !string.IsNullOrEmpty(version) && 
-            version.Equals(currencyVersion))
+        if (LocalizationExtension.IsDictionaryActual(version, currentVersion))
         {
             return new VersionedListResponse<TResponse>
             {
                 Items = new List<TResponse>(),
-                Version = currencyVersion
+                Version = currentVersion
             };
         }
         
@@ -46,15 +44,20 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
     
         if (items == null || items.Count == 0)
         {
-            items = await dictionaryRepository.GetListAsync(null, cancellationToken);
+            items = await dictionaryRepository.GetListAsync(null, cancellationToken, includeFuncs);
             await this.cacheRepository.ReinitializeDictionaryAsync(items);
             await this.cacheRepository.SetCacheVersionAsync();
+        }
+        
+        if (string.IsNullOrEmpty(currentVersion))
+        {
+            currentVersion = await this.cacheRepository.GetCacheVersionAsync();
         }
     
         VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>
         {
             Items = items.Where(i => i.IsActive).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
-            Version = currencyVersion
+            Version = currentVersion
         };
 
         return result;

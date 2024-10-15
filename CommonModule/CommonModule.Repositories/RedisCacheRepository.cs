@@ -41,7 +41,7 @@ public class RedisCacheRepository<TId, TEntity> : ICacheRepository<TId, TEntity>
         await this.cacheBaseRepository.ReinitializeDictionaryAsync(this.dictionaryName, values.ToDictionary(item => item.Id, item => JsonSerializerExtension.ToString(item)));
     }
 
-    public async Task<string> GetCacheVersionAsync()
+    public async Task<string?> GetCacheVersionAsync()
     {
         return await this.cacheBaseRepository.GetCacheVersionAsync(this.dictionaryName);
     }

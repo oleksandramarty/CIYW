@@ -1,0 +1,42 @@
+<section *ngIf="!!userProject" class="user-project-section">
+    <div class="category-items-container">
+        <ng-container *ngIf="userProject?.balances?.length > 0">
+            <div class="category-item-container" *ngFor="let balance of userProject.balances"
+                 (click)="openBalanceDialog(balance)">
+                <div class="category-item-icon-container">
+                    <i [ngClass]="iconMap?.get(balance.iconId)?.title"></i>
+                    <span>{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
+                </div>
+                <div class="category-item-title">
+                    <div class="amount" [ngClass]="{'negative': balance.amount < 0}">
+                        {{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}
+                    </div>
+                    <div>
+                        {{balance.title}}
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <div class="category-item-container" (click)="openBalanceDialog(undefined)">
+            <div class="category-item-icon-container">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="category-item-title">
+            </div>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="category-items-container">
+
+        <div class="category-item-container" (click)="openBalanceDialog(undefined)">
+            <div class="category-item-icon-container">
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="category-item-title">
+            </div>
+        </div>
+    </div>
+</section>
+

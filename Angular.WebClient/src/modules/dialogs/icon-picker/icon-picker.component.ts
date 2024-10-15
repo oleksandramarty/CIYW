@@ -1,10 +1,11 @@
 import {Component, Inject} from '@angular/core';
-import {MatButton, MatButtonModule} from "@angular/material/button";
+import {MatButtonModule} from "@angular/material/button";
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
 import {CommonModule, CurrencyPipe} from "@angular/common";
 import {SharedModule} from "../../../core/shared.module";
-import {IconDataItem, IconDataItemPicker} from "../../../core/models/common/icon-data-item.model";
 import {CommonLoaderComponent} from "../../common/common-loader/common-loader.component";
+import {DictionaryService} from "../../../core/services/dictionary.service";
+import {VersionedListResponseOfIconCategoryResponse} from "../../../core/api-models/common.models";
 
 @Component({
   selector: 'app-icon-picker',
@@ -18,19 +19,23 @@ import {CommonLoaderComponent} from "../../common/common-loader/common-loader.co
     SharedModule
   ],
   templateUrl: './icon-picker.component.html',
-  styleUrl: './icon-picker.component.scss'
+  styleUrls: ['./icon-picker.component.scss']
 })
 export class IconPickerComponent {
-  iconDataItems: IconDataItemPicker = new IconDataItemPicker();
   activeIndex: number = 0;
+
+  get iconCategories(): VersionedListResponseOfIconCategoryResponse | undefined {
+    return this.dictionaryService.dictionaries?.iconCategories;
+  }
 
   constructor(
       public dialogRef: MatDialogRef<IconPickerComponent>,
       @Inject(MAT_DIALOG_DATA) public data: {},
+      private readonly dictionaryService: DictionaryService,
   ) {
   }
 
-    iconSelected(icon: string): void {
-        this.dialogRef.close(icon);
+    iconSelected(iconId: number): void {
+        this.dialogRef.close(iconId);
     }
 }

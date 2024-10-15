@@ -4,13 +4,13 @@ import {
     IVersionedListResponseOfCategoryResponse,
     IVersionedListResponseOfCountryResponse,
     IVersionedListResponseOfCurrencyResponse,
-    IVersionedListResponseOfFrequencyResponse,
+    IVersionedListResponseOfFrequencyResponse, IVersionedListResponseOfIconCategoryResponse,
     IVersionedListResponseOfLocaleResponse,
     VersionedListResponseOfBalanceTypeResponse,
     VersionedListResponseOfCategoryResponse,
     VersionedListResponseOfCountryResponse,
     VersionedListResponseOfCurrencyResponse,
-    VersionedListResponseOfFrequencyResponse,
+    VersionedListResponseOfFrequencyResponse, VersionedListResponseOfIconCategoryResponse,
     VersionedListResponseOfLocaleResponse
 } from "../../api-models/common.models";
 
@@ -75,6 +75,7 @@ export interface IDictionary {
     locales: IVersionedListResponseOfLocaleResponse | undefined;
     frequencies: IVersionedListResponseOfFrequencyResponse | undefined;
     balanceTypes: IVersionedListResponseOfBalanceTypeResponse | undefined;
+    iconCategories: IVersionedListResponseOfIconCategoryResponse | undefined;
 }
 
 export class Dictionary implements IDictionary {
@@ -84,4 +85,5 @@ export class Dictionary implements IDictionary {
     locales: VersionedListResponseOfLocaleResponse | undefined;
     frequencies: VersionedListResponseOfFrequencyResponse | undefined;
     balanceTypes: VersionedListResponseOfBalanceTypeResponse | undefined;
+    iconCategories: VersionedListResponseOfIconCategoryResponse | undefined;
 }

@@ -1,17 +1,22 @@
 <div class="base-modal-container">
-    <h2 mat-dialog-title [translation]="'COMMON.CHOOSE_ICON'"></h2>
-    <div class="base-modal-body-container" *ngIf="iconDataItems">
+    <div class="base-modal-header-container">
+        <h2 mat-dialog-title [translation]="'COMMON.CHOOSE_ICON'"></h2>
+        <span class="base-modal-close-icon" (click)="dialogRef.close()">
+            <i class="fa-solid fa-xmark"></i>
+        </span>
+    </div>
+    <div class="base-modal-body-container" *ngIf="iconCategories">
         <button
-                *ngFor="let iconDataItem of iconDataItems.items; let i=index"
+                *ngFor="let iconDataItem of iconCategories.items; let i=index"
                 mat-button [color]="activeIndex === i ? 'primary' : 'secondary'"
                 (click)="activeIndex = i">
-            {{ iconDataItem.title | translation }} ({{ iconDataItem.items?.length ?? 0 }})
+            {{ iconDataItem.title | translation }} ({{ iconDataItem.icons?.length ?? 0 }})
         </button>
 
-        <ng-container *ngIf="iconDataItems?.items?.[activeIndex]">
+        <ng-container *ngIf="iconCategories?.items?.[activeIndex]">
             <div class="icon-picker-container">
-                <div class="icon-picker-item" *ngFor="let icon of iconDataItems.items![activeIndex]?.items">
-                    <i [ngClass]="icon.id" (click)="iconSelected(icon.id!)"></i>
+                <div class="icon-picker-item" *ngFor="let icon of iconCategories.items![activeIndex]?.icons">
+                    <i [ngClass]="icon.title" (click)="iconSelected(icon.id!)"></i>
                 </div>
             </div>
         </ng-container>

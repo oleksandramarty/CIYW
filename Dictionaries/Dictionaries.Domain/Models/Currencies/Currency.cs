@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 using CommonModule.Core.JsonConverter;
-using CommonModule.Core.Utils;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.JsonConvertors;
 using Dictionaries.Domain.Models.Countries;
 
 namespace Dictionaries.Domain.Models.Currencies;

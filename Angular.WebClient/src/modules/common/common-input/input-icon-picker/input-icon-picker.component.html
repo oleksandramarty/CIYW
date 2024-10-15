@@ -1,0 +1,7 @@
+<div class="icon-picker-container">
+    <ng-container *ngIf="icon">
+        <i [ngClass]="icon"></i>
+    </ng-container>
+    <button mat-button [color]="!icon && isRequired ? 'warn' : 'primary'" [translation]="'ICONS.CHOOSE_ICON'" (click)="openIconPicker()"></button>
+    <span *ngIf="!!icon" class="icon-picker-remove" (click)="removeIcon()">X</span>
+</div>

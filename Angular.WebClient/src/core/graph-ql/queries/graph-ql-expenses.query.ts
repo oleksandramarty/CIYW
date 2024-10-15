@@ -248,6 +248,7 @@ export const CREATE_USER_BALANCE = gql`
         $currencyId: Int!, 
         $balanceTypeId: Int!
         $userProjectId: Guid!
+        $iconId: Int!
     ) {
         expenses_create_user_balance(
             input: { 
@@ -256,6 +257,7 @@ export const CREATE_USER_BALANCE = gql`
                 currencyId: $currencyId,
                 balanceTypeId: $balanceTypeId
                 userProjectId: $userProjectId
+                iconId: $iconId
             })
     }
 `;
@@ -268,6 +270,7 @@ export const UPDATE_USER_BALANCE = gql`
         $currencyId: Int!,
         $balanceTypeId: Int!
         $userProjectId: Guid!
+        $iconId: Int!
     ) {
         expenses_update_user_balance(
             id: $id,
@@ -277,6 +280,7 @@ export const UPDATE_USER_BALANCE = gql`
                 currencyId: $currencyId,
                 balanceTypeId: $balanceTypeId
                 userProjectId: $userProjectId
+                iconId: $iconId
             })
     }
 `;
@@ -297,6 +301,7 @@ export const GET_USER_PROJECT_BY_ID = gql`
             balances {
                 id
                 title
+                iconId
                 created
                 modified
                 amount
@@ -347,6 +352,7 @@ export const GET_FILTERED_USER_PROJECTS = gql`
                 balances {
                     id
                     title
+                    iconId
                     created
                     modified
                     amount
@@ -407,6 +413,7 @@ export const GET_FILTERED_USER_ALLOWED_PROJECTS = gql`
                     balances {
                         id
                         title
+                        iconId
                         created
                         modified
                         amount

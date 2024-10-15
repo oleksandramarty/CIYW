@@ -11,6 +11,7 @@ public class ExpensesDataContext : DbContext
 {
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<PlannedExpense> PlannedExpenses { get; set; }
+    public DbSet<FavoriteExpense> FavoriteExpenses { get; set; }
 
     public DbSet<UserProject> UserProjects { get; set; }
     public DbSet<UserAllowedProject> UserAllowedProjects { get; set; }
@@ -42,6 +43,16 @@ public class ExpensesDataContext : DbContext
             entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
             entity.Property(c => c.Description).HasMaxLength(100);
             entity.Property(c => c.Amount).IsRequired();
+        });
+        modelBuilder.Entity<FavoriteExpense>(entity =>
+        {
+            entity.ToTable("FavoriteExpenses", "Expenses");
+            entity.HasOne(e => e.UserProject)
+                .WithMany(uc => uc.FavoriteExpenses)
+                .HasForeignKey(e => e.UserProjectId);
+            entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
+            entity.Property(c => c.Description).HasMaxLength(100);
+            entity.Property(c => c.Limit).IsRequired();
         });
         modelBuilder.Entity<UserProject>(entity => { entity.ToTable("UserProjects", "Projects"); });
 

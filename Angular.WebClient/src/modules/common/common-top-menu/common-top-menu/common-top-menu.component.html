@@ -1,0 +1,30 @@
+<div class="project-menu-container">
+    <div class="mobile-tab-item">
+        <button class="w-100" mat-button [color]="activeTab !== 0 ? 'primary' : 'secondary'"
+                (click)="mobileTabChanged(-1)">
+            <i class="fa-solid fa-angles-left"></i>
+        </button>
+    </div>
+
+    <div class="desktop-tab-item" *ngFor="let menuItem of menu.menuItems">
+        <button class="w-100"
+                mat-button
+                [color]="activeTab === menuItem.index ? 'primary' : 'secondary'"
+                [translation]="menuItem.title"
+                (click)="tabChanged(menuItem.index)"></button>
+    </div>
+
+    <div class="mobile-tab-item">
+        <button class="w-100"
+                mat-button
+                [color]="'primary'"
+        >{{currentMenuTitle | translation}}</button>
+    </div>
+
+    <div class="mobile-tab-item">
+        <button class="w-100" mat-button [color]="activeTab !== menu?.menuItems?.length - 1 ? 'primary' : 'secondary'"
+                (click)="mobileTabChanged(1)">
+            <i class="fa-solid fa-angles-right"></i>
+        </button>
+    </div>
+</div>

@@ -13,7 +13,7 @@ import {TranslationPipe} from "./pipes/translation.pipe";
     TranslateDirective,
     CopyToClipboardDirective,
     SanitizeHtmlPipe,
-    TranslationPipe
+    TranslationPipe,
   ],
   imports: [
     CommonModule,

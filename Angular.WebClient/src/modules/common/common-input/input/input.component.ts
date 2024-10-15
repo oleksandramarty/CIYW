@@ -1,11 +1,14 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, signal} from '@angular/core';
-import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DataItem} from "../../../../core/models/common/data-item.model";
 import {debounceTime, Observable, startWith, Subject, takeUntil, tap} from "rxjs";
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {map} from "rxjs/operators";
 import {LocalizationService} from "../../../../core/services/localization.service";
+import {DictionaryMap} from "../../../../core/models/common/dictionary.model";
+import {IconResponse} from "../../../../core/api-models/common.models";
+import {DictionaryService} from "../../../../core/services/dictionary.service";
 
 type InputType =
     'input' |
@@ -62,8 +65,13 @@ export class InputComponent implements OnInit, OnDestroy {
 
     internalFormGroup: FormGroup | undefined;
 
+    get iconMap(): DictionaryMap<number, IconResponse> | undefined {
+        return this.dictionaryService.iconMap;
+    }
+
     constructor(
         private readonly localizationService: LocalizationService,
+        private readonly dictionaryService: DictionaryService,
         private snackBar: MatSnackBar
     ) {
         if (this.dataItems) {
@@ -84,6 +92,13 @@ export class InputComponent implements OnInit, OnDestroy {
             this.internalFormGroup = new FormGroup({
                 autocomplete: new FormControl(this.dataItems?.find(x => x.id === this.currentValue))
             });
+
+            if (!!this.currentValue) {
+                const initialItem = this.dataItems?.find(item => item.id === String(this.currentValue));
+                if (initialItem) {
+                    this.internalFormGroup?.get('autocomplete')?.setValue(initialItem);
+                }
+            }
 
             this.filteredDataItems = this.internalFormGroup?.get('autocomplete')?.valueChanges.pipe(
                 startWith(''),

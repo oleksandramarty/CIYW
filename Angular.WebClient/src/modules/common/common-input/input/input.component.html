@@ -15,7 +15,7 @@
                     [required]="!!isRequired"
                     [formControlName]="controlName">
             <ng-container *ngIf="!!icon">
-                <i [class]="icon + ' input-icon'"></i>
+                <i [ngClass]="icon + ' input-icon'"></i>
             </ng-container>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
             <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
@@ -46,7 +46,7 @@
                 </ng-template>
             </mat-select>
             <ng-container *ngIf="!!icon">
-                <i [class]="icon + ' input-icon'"></i>
+                <i [ngClass]="icon + ' input-icon'"></i>
             </ng-container>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
         </mat-form-field>
@@ -66,7 +66,7 @@
                     [attr.cols]="cols"
                     [formControlName]="controlName"></textarea>
             <ng-container *ngIf="!!icon">
-                <i [class]="icon + ' input-icon'"></i>
+                <i [ngClass]="icon + ' input-icon'"></i>
             </ng-container>
             <mat-hint *ngIf="!!hint"><span [translation]="hint"></span></mat-hint>
             <mat-hint align="end" *ngIf="!!maxLength" [ngClass]="{'error': currentValue?.length > maxLength}">
@@ -170,7 +170,7 @@
                               (optionSelected)="onAutoCompleteChecked();">
                 <mat-option *ngFor="let item of filteredDataItems | async" [value]="item">
                     <div class="autocomplete-item-container">
-                        <i *ngIf="item.icon" [class]="item.icon"></i>
+                        <i *ngIf="item.iconId" [ngClass]="iconMap?.get(item.iconId)?.title"></i>
                         <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant}"></span>
                         <span class="autocomplete-item" *ngIf="item.color" [style]="'background-color: ' + item.color + ';'"></span>
                         <span class="select-description-hint" [translation]="item.description"></span>
@@ -194,3 +194,4 @@
         </mat-hint>
     </ng-container>
 </div>
+

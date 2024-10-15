@@ -191,7 +191,8 @@ public createOrUpdatePlannedExpense(
         isActive: boolean,
         currencyId: number,
         balanceTypeId: number,
-        userProjectId: string
+        userProjectId: string,
+        iconId: number
     ): Observable<ApolloQueryResult<{ success: boolean }>> {
         return this.apolloClient
             .mutate({
@@ -201,7 +202,8 @@ public createOrUpdatePlannedExpense(
                     isActive,
                     currencyId,
                     balanceTypeId,
-                    userProjectId
+                    userProjectId,
+                    iconId
                 },
             }) as Observable<ApolloQueryResult<{ success: boolean }>>;
     }
@@ -212,7 +214,8 @@ public createOrUpdatePlannedExpense(
         isActive: boolean,
         currencyId: number,
         balanceTypeId: number,
-        userProjectId: string
+        userProjectId: string,
+        iconId: number
     ): Observable<ApolloQueryResult<{ success: boolean }>> {
         return this.apolloClient
             .mutate({
@@ -223,7 +226,8 @@ public createOrUpdatePlannedExpense(
                     isActive,
                     currencyId,
                     balanceTypeId,
-                    userProjectId
+                    userProjectId,
+                    iconId
                 },
             }) as Observable<ApolloQueryResult<{ success: boolean }>>;
     }

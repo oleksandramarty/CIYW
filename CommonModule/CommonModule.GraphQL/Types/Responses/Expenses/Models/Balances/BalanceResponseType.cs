@@ -9,6 +9,7 @@ namespace CommonModule.GraphQL.Types.Responses.Expenses.Models.Balances
         {
             Field(x => x.Id);
             Field(x => x.Title, nullable: true);
+            Field(x => x.IconId);
             Field(x => x.Created);
             Field(x => x.Modified, nullable: true);
             Field(x => x.UserId);

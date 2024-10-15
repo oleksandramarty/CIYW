@@ -1,0 +1,90 @@
+<section class="user-project-section">
+
+    <div class="filter-container" *ngIf="filterFormGroup" [formGroup]="filterFormGroup">
+        <div class="filter-input-container">
+            <div class="filter-input-item">
+                <app-input
+                        type="input"
+                        [label]="'COMMON.SEARCH'"
+                        [formGroup]="filterFormGroup"
+                        controlName="query">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input
+                        type="multiselect"
+                        [dataItems]="categoriesDataItems"
+                        [label]="'COMMON.CATEGORY'"
+                        [formGroup]="filterFormGroup"
+                        controlName="categoryIds">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input
+                        type="rangedatapicker"
+                        [label]="'COMMON.DATES'"
+                        [formGroup]="filterFormGroup"
+                        controlName="dateRange">
+                </app-input>
+            </div>
+        </div>
+        <div class="filter-button-container">
+            <div>
+                <div class="filter-button-item">
+                    <button mat-flat-button color="warn" [translation]="'EXPENSES.ADD'"
+                            (click)="openCreateUpdateExpenseDialog(undefined)"></button>
+                </div>
+            </div>
+            <div>
+                <div class="filter-button-item">
+                    <button mat-button color="warn" [translation]="'FILTER.RESET'" (click)="resetFilter()"></button>
+                    <button mat-flat-button color="primary" [translation]="'COMMON.FILTER.SEARCH'"
+                            (click)="getFilteredItems()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-container" *ngIf="!!expenses">
+        <table class="mat-table">
+            <thead>
+            <tr class="mat-tr">
+                <th class="mat-th"></th>
+                <th class="mat-th"></th>
+                <th class="mat-th" [translation]="'COMMON.DATE'"></th>
+                <th class="mat-th" [translation]="'COMMON.COMMENT'"></th>
+                <th class="mat-th" [translation]="'COMMON.AMOUNT'"></th>
+                <th class="mat-th" [translation]="'COMMON.CATEGORY'"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="mat-tr" *ngFor="let expense of expenses.entities; let i=index">
+                <td class="mat-td"><i class="fa-solid fa-pencil pointer"
+                                      (click)="openCreateUpdateExpenseDialog(expense)"></i></td>
+                <td class="mat-td"><i class="fa-solid fa-trash pointer" (click)="removeExpense(expense)"></i></td>
+                <td class="mat-td">
+                <span class="row-item-container">
+                    {{ expense.date | localDate:'MMMM dd, yyyy HH:mm' }} <span
+                        class="row-subitem">{{ utcTimeShift }}</span>
+                </span>
+                </td>
+                <td class="mat-td">{{ expense.title }}</td>
+                <td class="mat-td amount"
+                    [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive}">
+                    {{ expense.amount | currency:getCurrencyCode(expense.balanceId) }}
+                </td>
+                <td class="mat-td"><span [translation]="categoriesMap?.get(expense.categoryId)?.title"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-container *ngIf="expenses?.entities?.length === 0">
+        <div class="empty-table-message">
+            <h4 [translation]="'TABLE.NO_ITEMS'"></h4>
+        </div>
+    </ng-container>
+</section>
+

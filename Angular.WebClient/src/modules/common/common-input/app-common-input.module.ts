@@ -19,6 +19,7 @@ import { MatSliderModule } from "@angular/material/slider";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatChipsModule } from "@angular/material/chips";
 import { SharedModule } from "../../../core/shared.module";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
     declarations: [

@@ -10,6 +10,6 @@ public interface ICacheRepository<TId, TEntity>
 {
     Task<List<TEntity>> GetItemsFromCacheAsync();
     Task ReinitializeDictionaryAsync(List<TEntity> values);
-    Task<string> GetCacheVersionAsync();
+    Task<string?> GetCacheVersionAsync();
     Task SetCacheVersionAsync();
 }

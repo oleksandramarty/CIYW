@@ -1,0 +1,17 @@
+.icon-picker-container {
+  position: relative;
+  & i {
+    margin-right: 0.5rem;
+  }
+}
+
+.icon-picker-remove {
+  position: absolute;
+  top: -0.6rem;
+  left: 0.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #f44336;
+  opacity: 0.75;
+  cursor: pointer;
+}

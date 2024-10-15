@@ -1,6 +1,11 @@
 <div class="base-modal-container" *ngIf="plannedExpenseFormGroup">
-    <h2 mat-dialog-title *ngIf="plannedExpense">{{ plannedExpense.title }}</h2>
-    <h2 mat-dialog-title *ngIf="!plannedExpense" [translation]="'PLANNED_EXPENSES.CREATE_NEW'"></h2>
+    <div class="base-modal-header-container">
+        <h2 mat-dialog-title *ngIf="plannedExpense">{{ plannedExpense.title }}</h2>
+        <h2 mat-dialog-title *ngIf="!plannedExpense" [translation]="'PLANNED_EXPENSES.CREATE_NEW'"></h2>
+        <span class="base-modal-close-icon" (click)="dialogRef.close()">
+            <i class="fa-solid fa-xmark"></i>
+        </span>
+    </div>
     <div class="base-modal-body-container">
         <app-input className="grid-input-item" type="input" [label]="'COMMON.TITLE'"
                    [formGroup]="plannedExpenseFormGroup" controlName="title" [maxLength]="50"></app-input>

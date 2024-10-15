@@ -15,4 +15,11 @@ public static class LocalizationExtension
             "it" => 7
         };
     }
+    
+    public static bool IsDictionaryActual(string? version, string? currentVersion)
+    {
+        return !string.IsNullOrEmpty(currentVersion) &&
+               !string.IsNullOrEmpty(version) &&
+               version.Equals(currentVersion);
+    }
 }

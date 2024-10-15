@@ -41,6 +41,7 @@ import {GraphQlAuthService} from "../../../core/graph-ql/services/graph-ql-auth.
 import {CommonDialogService} from "../../../core/services/common-dialog.service";
 import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
 import {GraphQlLocalizationsService} from "../../../core/graph-ql/services/graph-ql-localizations.service";
+import {MatDialogModule} from "@angular/material/dialog";
 
 export const MY_FORMATS = {
   parse: {

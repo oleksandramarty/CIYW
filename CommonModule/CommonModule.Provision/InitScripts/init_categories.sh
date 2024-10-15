@@ -28,7 +28,7 @@ bulkInsertSQL=""
 
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 # Read the CSV file line by line
-while IFS=';' read -r id parentId title icon color isActive isPositive;
+while IFS=';' read -r id parentId title iconId color isActive isPositive;
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -50,8 +50,8 @@ do
       if [ "$isBulkUpdate" == "true" ]; then
         # Construct the SQL command
         bulkInsertSQL+="INSERT INTO \"$db_name\".\"Dictionaries\".\"Categories\" 
-        (\"Id\", \"Title\", \"Icon\", \"Color\", \"IsActive\", \"ParentId\", \"IsPositive\") 
-        VALUES ($id, '$title', '$icon', '$color', $isActiveBool, $parentId, $isPositiveBool);"
+        (\"Id\", \"Title\", \"IconId\", \"Color\", \"IsActive\", \"ParentId\", \"IsPositive\") 
+        VALUES ($id, '$title', '$iconId', '$color', $isActiveBool, $parentId, $isPositiveBool);"
         ((bulkCounter++))
 
         # If bulkCounter reaches 500, execute the bulk insert
@@ -69,8 +69,8 @@ do
       else
         # Non-bulk insert
         sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"Categories\" 
-        (\"Id\", \"Title\", \"Icon\", \"Color\", \"IsActive\", \"ParentId\", \"IsPositive\") 
-        VALUES ($id, '$title', '$icon', '$color', $isActiveBool, $parentId, $isPositiveBool);"
+        (\"Id\", \"Title\", \"IconId\", \"Color\", \"IsActive\", \"ParentId\", \"IsPositive\") 
+        VALUES ($id, '$title', '$iconId', '$color', $isActiveBool, $parentId, $isPositiveBool);"
         if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
           echo "Category with ID $id added successfully."
         else

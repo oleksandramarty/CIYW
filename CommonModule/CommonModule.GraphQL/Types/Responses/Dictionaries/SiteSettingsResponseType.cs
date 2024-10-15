@@ -14,18 +14,19 @@ public class SiteSettingsResponseType : ObjectGraphType<SiteSettingsResponse>
         );
     }
 }
-    
+
 public class CacheVersionResponseType : ObjectGraphType<CacheVersionResponse>
 {
     public CacheVersionResponseType()
     {
-        Field(x => x.LocalizationPublic);
-        Field(x => x.Localization);
-        Field(x => x.Category);
-        Field(x => x.Currency);
-        Field(x => x.Country);
-        Field(x => x.Locale);
-        Field(x => x.Frequency);
-        Field(x => x.BalanceType);
+        Field(x => x.LocalizationPublic, nullable: true);
+        Field(x => x.Localization, nullable: true);
+        Field(x => x.Category, nullable: true);
+        Field(x => x.Currency, nullable: true);
+        Field(x => x.Country, nullable: true);
+        Field(x => x.Locale, nullable: true);
+        Field(x => x.Frequency, nullable: true);
+        Field(x => x.BalanceType, nullable: true);
+        Field(x => x.IconCategory, nullable: true);
     }
 }
