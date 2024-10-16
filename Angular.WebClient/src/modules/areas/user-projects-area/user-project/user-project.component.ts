@@ -39,7 +39,7 @@ export class UserProjectComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly dictionaryService: DictionaryService,
-        private snackBar: MatSnackBar,
+        private readonly snackBar: MatSnackBar,
         private route: ActivatedRoute,
         private router: Router,
         private readonly store: Store,

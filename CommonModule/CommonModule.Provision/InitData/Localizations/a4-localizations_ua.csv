@@ -280,3 +280,6 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-400000000281;ua;BALANCE.CREATE_NEW;Create New Balance;Створити новий баланс;
 550e8400-e29b-41d4-a716-400000000282;ua;COMMON.REMOVE;Remove;Видалити;
 550e8400-e29b-41d4-a716-400000000283;ua;COMMON.BALANCE_TYPE;Balance Type;Тип балансу;
+550e8400-e29b-41d4-a716-400000000284;ua;ICONS.CHOOSE_ICON;Choose Icon;Виберіть іконку;
+550e8400-e29b-41d4-a716-400000000285;ua;COMMON.LIMIT;Limit;Ліміт;
+550e8400-e29b-41d4-a716-400000000286;ua;FAVORITE_EXPENSES.CREATE_NEW;Create New Favorite Expense;Створити новий улюблений витрату;

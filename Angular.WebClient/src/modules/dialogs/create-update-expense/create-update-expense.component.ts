@@ -22,7 +22,7 @@ import {
     BalanceResponse,
     CategoryResponse,
     CurrencyResponse,
-    ExpenseResponse,
+    ExpenseResponse, FavoriteExpenseResponse,
     UserProjectResponse
 } from "../../../core/api-models/common.models";
 
@@ -50,6 +50,8 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
     public expenseFormGroup: FormGroup | undefined;
 
     public expense: ExpenseResponse | undefined;
+    public balance: BalanceResponse | undefined;
+    public favoriteExpense: FavoriteExpenseResponse | undefined;
     public userProject: UserProjectResponse | undefined;
 
     public balancesDataItems: DataItem[] | undefined;
@@ -83,7 +85,9 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
         public dialogRef: MatDialogRef<CreateUpdateExpenseComponent>,
         @Inject(MAT_DIALOG_DATA) public data: {
             expense: ExpenseResponse | undefined,
-            userProject: UserProjectResponse | undefined
+            userProject: UserProjectResponse | undefined,
+            balance: BalanceResponse | undefined,
+            favoriteExpense: FavoriteExpenseResponse | undefined,
         } | undefined,
         private readonly snackBar: MatSnackBar,
         private readonly fb: FormBuilder,
@@ -96,6 +100,8 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
     ) {
         this.expense = data?.expense;
         this.userProject = data?.userProject;
+        this.balance = data?.balance;
+        this.favoriteExpense = data?.favoriteExpense;
 
         this.balancesDataItems = this.userProject?.balances?.map(
             balance =>
@@ -124,6 +130,13 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
             balanceId: [this.expense?.balanceId ?? this.balancesDataItems![0]?.id, Validators.required],
             categoryId: [String(this.expense?.categoryId), Validators.required]
         });
+
+        if (!!this.balance) {
+            this.expenseFormGroup.get('balanceId')?.setValue(this.balance.id);
+        }
+        if (!!this.favoriteExpense) {
+            this.expenseFormGroup.get('categoryId')?.setValue(this.favoriteExpense.categoryId);
+        }
     }
 
     public createOrUpdateExpense(): void {

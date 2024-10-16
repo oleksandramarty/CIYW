@@ -132,6 +132,10 @@ export class CreateUpdateBalanceComponent implements OnInit, OnDestroy {
         this.commonDialogService.showNoComplaintModal(createOrUpdateBalanceAction)
     }
 
+    public removeBalance(): void {
+        this.snackBar.open('In development', 'Close', { duration: 3000 });
+    }
+
     get inputParams(): [string, boolean, number, number, string, number] {
         return [
             this.balanceFormGroup?.value.title,

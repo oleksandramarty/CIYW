@@ -22,3 +22,8 @@ export const selectPlannedExpensesSnapshot = createSelector(
     selectExpensesState,
     (state: ExpensesState) => state.plannedExpensesSnapshot
 );
+
+export const selectFavoriteExpensesSnapshot = createSelector(
+    selectExpensesState,
+    (state: ExpensesState) => state.favoriteExpensesSnapshot
+);

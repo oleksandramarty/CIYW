@@ -280,3 +280,6 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-600000000281;de;BALANCE.CREATE_NEW;Create New Balance;Neuen Saldo erstellen;
 550e8400-e29b-41d4-a716-600000000282;de;COMMON.REMOVE;Remove;Entfernen;
 550e8400-e29b-41d4-a716-600000000283;de;COMMON.BALANCE_TYPE;Balance Type;Kontotyp;
+550e8400-e29b-41d4-a716-600000000284;de;ICONS.CHOOSE_ICON;Choose Icon;Symbol wählen;
+550e8400-e29b-41d4-a716-600000000285;de;COMMON.LIMIT;Limit;Limit;
+550e8400-e29b-41d4-a716-600000000286;de;FAVORITE_EXPENSES.CREATE_NEW;Create New Favorite Expense;Neue Lieblingsausgabe erstellen;

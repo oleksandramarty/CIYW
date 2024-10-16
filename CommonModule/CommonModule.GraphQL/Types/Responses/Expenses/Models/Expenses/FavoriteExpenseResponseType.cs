@@ -12,11 +12,11 @@ public class FavoriteExpenseResponseType : ObjectGraphType<FavoriteExpenseRespon
         Field(x => x.Modified, nullable: true);
         Field(x => x.Title);
         Field(x => x.Description, nullable: true);
-        Field(x => x.Limit);
-        Field(x => x.CurrentAmount);
-        Field(x => x.BalanceId);
-        Field(x => x.CategoryId);
-        Field(x => x.FrequencyId);
+        Field(x => x.Limit, nullable: true);
+        Field(x => x.CurrentAmount, nullable: true);
+        Field(x => x.CategoryId, nullable: true);
+        Field(x => x.FrequencyId, nullable: true);
+        Field(x => x.CurrencyId, nullable: true);
         Field(x => x.EndDate, nullable: true);
         Field(x => x.UserProjectId);
         Field(x => x.IconId);

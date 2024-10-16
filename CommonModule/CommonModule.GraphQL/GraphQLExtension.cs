@@ -101,6 +101,18 @@ public static class GraphQLExtension
             return (TFilter)(object)plannedExpensesRequest;
         }
 
+        if (query is GetFilteredFavoriteExpensesRequest favoriteExpensesRequest)
+        {
+            var ids = context.GetIdsModel<int>("categoryIds");
+            favoriteExpensesRequest.UserProjectId = context.GetArgument<Guid>("userProjectId");
+            favoriteExpensesRequest.CategoryIds = new BaseFilterIdsRequest<int>
+            {
+                Ids = ids
+            };
+
+            return (TFilter)(object)favoriteExpensesRequest;
+        }
+
         return query;
     }
 

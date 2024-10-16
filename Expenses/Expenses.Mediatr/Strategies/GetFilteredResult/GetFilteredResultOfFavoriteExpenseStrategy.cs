@@ -30,7 +30,7 @@ public class GetFilteredResultOfFavoriteExpenseStrategy: IGetFilteredResultStrat
         var query = this.favoriteExpenseRepository.GetQueryable(
             e => e.UserProjectId == request.UserProjectId &&
                  (string.IsNullOrEmpty(request.Query) || EF.Functions.Like(e.Title, $"%{request.Query}%")) &&
-                 (!request.CategoryIds.Ids.Any() || request.CategoryIds.Ids.Contains(e.CategoryId)) &&
+                 (!request.CategoryIds.Ids.Any() || e.CategoryId.HasValue && request.CategoryIds.Ids.Contains(e.CategoryId.Value)) &&
                  (request.DateRange == null || (
                          request.DateRange.StartDate.HasValue && !request.DateRange.EndDate.HasValue && e.EndDate >= request.DateRange.StartDate && e.EndDate.HasValue ||
                          !request.DateRange.StartDate.HasValue && request.DateRange.EndDate.HasValue && e.EndDate <= request.DateRange.EndDate && e.EndDate.HasValue ||

@@ -1,9 +1,14 @@
 import {createAction, props} from "@ngrx/store";
 import {
-    BaseSortableRequest, ColumnEnum,
-    FilteredListResponseOfExpenseResponse, FilteredListResponseOfPlannedExpenseResponse,
+    BaseSortableRequest,
+    ColumnEnum,
+    FilteredListResponseOfExpenseResponse,
+    FilteredListResponseOfFavoriteExpenseResponse,
+    FilteredListResponseOfPlannedExpenseResponse,
     FilteredListResponseOfUserAllowedProjectResponse,
-    FilteredListResponseOfUserProjectResponse, OrderDirectionEnum, PaginatorEntity,
+    FilteredListResponseOfUserProjectResponse,
+    OrderDirectionEnum,
+    PaginatorEntity,
     UserProjectResponse
 } from "../../api-models/common.models";
 import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
@@ -43,5 +48,17 @@ export const expenses_setUserProject_plannedExpensesSnapshot = createAction(
         categoryIds: any;
     }>()
 );
+export const expenses_setUserProject_favoriteExpensesSnapshot = createAction(
+    '[Expenses] Set UserProject Favorite Expenses Snapshot',
+    props<{
+        favoriteExpenses: FilteredListResponseOfFavoriteExpenseResponse | undefined;
+        paginator: PaginatorEntity | undefined;
+        sort: BaseSortableRequest | undefined;
+        dateRange: any;
+        query: any;
+        categoryIds: any;
+    }>()
+);
 export const expenses_clearUserProject_expensesSnapshots = createAction('[Expenses] Clear UserProject Expenses Snapshots');
 export const expenses_clearUserProject_plannedExpensesSnapshots = createAction('[Expenses] Clear UserProject Planned Expenses Snapshots');
+export const expenses_clearUserProject_favoriteExpensesSnapshots = createAction('[Expenses] Clear UserProject Favorite Expenses Snapshots');

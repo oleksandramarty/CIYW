@@ -280,3 +280,6 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-500000000281;ru;BALANCE.CREATE_NEW;Create New Balance;Создать новый баланс;
 550e8400-e29b-41d4-a716-500000000282;ru;COMMON.REMOVE;Remove;Удалить;
 550e8400-e29b-41d4-a716-500000000283;ru;COMMON.BALANCE_TYPE;Balance Type;Тип баланса;
+550e8400-e29b-41d4-a716-500000000284;ru;ICONS.CHOOSE_ICON;Choose Icon;Выберите иконку;
+550e8400-e29b-41d4-a716-500000000285;ru;COMMON.LIMIT;Limit;Лимит;
+550e8400-e29b-41d4-a716-500000000286;ru;FAVORITE_EXPENSES.CREATE_NEW;Create New Favorite Expense;Создать новый любимый расход;

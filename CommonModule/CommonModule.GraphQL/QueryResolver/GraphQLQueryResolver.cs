@@ -87,16 +87,20 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
         where TCommand : IBaseVersionEntity, IRequest<VersionedListResponse<TEntityResponse>>, new()
     {
         Field<TEntityType>(endpoint.Name)
-            .Arguments(new QueryArguments(new QueryArgument<StringGraphType> { Name = "version" }
-            ))
+            .Arguments(new QueryArguments(new QueryArgument<StringGraphType> { Name = "version" }))
             .ResolveAsync(async context =>
             {
                 context.IsAuthenticated(endpoint.IsAuthenticated);
                 var cancellationToken = context.CancellationToken;
-                TCommand command = new TCommand();
-                command.Version = context.GetArgument<string>("version");
-                var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                return await ExecuteCommandAsync<VersionedListResponse<TEntityResponse>>(mediator, command, cancellationToken, context);
+                var serviceScopeFactory = context.RequestServices.GetRequiredService<IServiceScopeFactory>();
+
+                using (var scope = serviceScopeFactory.CreateScope())
+                {
+                    var scopedMediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                    TCommand command = new TCommand();
+                    command.Version = context.GetArgument<string>("version");
+                    return await ExecuteCommandAsync<VersionedListResponse<TEntityResponse>>(scopedMediator, command, cancellationToken, context);
+                }
             });
     }
 

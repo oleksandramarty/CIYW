@@ -120,6 +120,65 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("Expenses", "Expenses");
                 });
 
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("CurrentAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("FrequencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IconId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Limit")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("UserProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserProjectId");
+
+                    b.ToTable("FavoriteExpenses", "Expenses");
+                });
+
             modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpense", b =>
                 {
                     b.Property<Guid>("Id")
@@ -261,6 +320,17 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("UserProject");
                 });
 
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpense", b =>
+                {
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                        .WithMany("FavoriteExpenses")
+                        .HasForeignKey("UserProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UserProject");
+                });
+
             modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpense", b =>
                 {
                     b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
@@ -290,6 +360,8 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("Balances");
 
                     b.Navigation("Expenses");
+
+                    b.Navigation("FavoriteExpenses");
 
                     b.Navigation("PlannedExpenses");
                 });

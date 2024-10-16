@@ -2,20 +2,23 @@ import { createReducer, on } from '@ngrx/store';
 import {
     expenses_clearAll,
     expenses_clearUserAllowedProjects,
-    expenses_clearUserProject_expensesSnapshots,
+    expenses_clearUserProject_expensesSnapshots, expenses_clearUserProject_favoriteExpensesSnapshots,
     expenses_clearUserProject_plannedExpensesSnapshots,
     expenses_clearUserProjects,
     expenses_setUserAllowedProjects,
     expenses_setUserProject,
-    expenses_setUserProject_expensesSnapshot,
+    expenses_setUserProject_expensesSnapshot, expenses_setUserProject_favoriteExpensesSnapshot,
     expenses_setUserProject_plannedExpensesSnapshot,
     expenses_setUserProjects
 } from "../actions/expenses.actions";
 import {
     BaseSortableRequest,
-    FilteredListResponseOfExpenseResponse, FilteredListResponseOfPlannedExpenseResponse,
+    FilteredListResponseOfExpenseResponse,
+    FilteredListResponseOfFavoriteExpenseResponse,
+    FilteredListResponseOfPlannedExpenseResponse,
     FilteredListResponseOfUserAllowedProjectResponse,
-    FilteredListResponseOfUserProjectResponse, PaginatorEntity
+    FilteredListResponseOfUserProjectResponse,
+    PaginatorEntity
 } from "../../api-models/common.models";
 import {FormGroup} from "@angular/forms";
 
@@ -37,6 +40,14 @@ export interface ExpensesState {
         dateRange: any,
         query: any,
         categoryIds: any
+    } | undefined,
+    favoriteExpensesSnapshot: {
+        favoriteExpenses: FilteredListResponseOfFavoriteExpenseResponse | undefined,
+        paginator: PaginatorEntity | undefined,
+        sort: BaseSortableRequest | undefined,
+        dateRange: any,
+        query: any,
+        categoryIds: any
     } | undefined
 }
 
@@ -44,7 +55,8 @@ export const initialState: ExpensesState = {
     userProjects: undefined,
     userAllowedProjects: undefined,
     expensesSnapshot: undefined,
-    plannedExpensesSnapshot: undefined
+    plannedExpensesSnapshot: undefined,
+    favoriteExpensesSnapshot: undefined
 };
 
 export const expensesReducer = createReducer(
@@ -76,6 +88,10 @@ export const expensesReducer = createReducer(
         ...state,
         plannedExpensesSnapshot: { plannedExpenses, paginator, sort, dateRange, query, categoryIds }
     })),
+    on(expenses_setUserProject_favoriteExpensesSnapshot, (state, { favoriteExpenses, paginator, sort, dateRange, query, categoryIds }) => ({
+        ...state,
+        favoriteExpensesSnapshot: { favoriteExpenses, paginator, sort, dateRange, query, categoryIds }
+    })),
     on(expenses_clearUserProject_expensesSnapshots, state => ({
         ...state,
         expensesSnapshot: undefined,
@@ -83,5 +99,9 @@ export const expensesReducer = createReducer(
     on(expenses_clearUserProject_plannedExpensesSnapshots, state => ({
         ...state,
         plannedExpensesSnapshot: undefined
+    })),
+    on(expenses_clearUserProject_favoriteExpensesSnapshots, state => ({
+        ...state,
+        favoriteExpensesSnapshot: undefined
     }))
 );

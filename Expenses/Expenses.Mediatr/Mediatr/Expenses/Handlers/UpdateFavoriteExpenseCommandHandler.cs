@@ -40,6 +40,6 @@ public class UpdateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
         await this.CheckUserProjectByIdAsync(currentFavoriteExpense.UserProjectId, cancellationToken);
         
         await this.favoriteExpenseRepository.UpdateAsync(
-            this.mapper.Map<FavoriteExpense>(command, opts => opts.Items["IsUpdate"] = true), cancellationToken);
+            this.mapper.Map<UpdateFavoriteExpenseCommand, FavoriteExpense>(command, currentFavoriteExpense, opts => opts.Items["IsUpdate"] = true), cancellationToken);
     }
 }

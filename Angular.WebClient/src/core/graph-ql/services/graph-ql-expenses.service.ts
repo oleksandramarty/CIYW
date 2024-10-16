@@ -3,20 +3,20 @@ import {Observable} from "rxjs";
 import {ApolloQueryResult} from "@apollo/client";
 import {GraphQlService} from "../graph-ql.service";
 import {
-    CREATE_EXPENSE, CREATE_PLANNED_EXPENSE, CREATE_USER_BALANCE,
+    CREATE_EXPENSE, CREATE_FAVORITE_EXPENSE, CREATE_PLANNED_EXPENSE, CREATE_USER_BALANCE,
     CREATE_USER_PROJECT,
-    GET_FILTERED_EXPENSES,
+    GET_FILTERED_EXPENSES, GET_FILTERED_FAVORITE_EXPENSES,
     GET_FILTERED_PLANNED_EXPENSES,
     GET_FILTERED_USER_ALLOWED_PROJECTS,
     GET_FILTERED_USER_PROJECTS,
     GET_USER_PROJECT_BY_ID,
-    REMOVE_EXPENSE, REMOVE_PLANNED_EXPENSE, REMOVE_USER_BALANCE,
-    UPDATE_EXPENSE, UPDATE_PLANNED_EXPENSE, UPDATE_USER_BALANCE, UPDATE_USER_PROJECT
+    REMOVE_EXPENSE, REMOVE_FAVORITE_EXPENSE, REMOVE_PLANNED_EXPENSE, REMOVE_USER_BALANCE,
+    UPDATE_EXPENSE, UPDATE_FAVORITE_EXPENSE, UPDATE_PLANNED_EXPENSE, UPDATE_USER_BALANCE, UPDATE_USER_PROJECT
 } from "../queries/graph-ql-expenses.query";
 import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
 import {
     ColumnEnum,
-    FilteredListResponseOfExpenseResponse,
+    FilteredListResponseOfExpenseResponse, FilteredListResponseOfFavoriteExpenseResponse,
     FilteredListResponseOfPlannedExpenseResponse, FilteredListResponseOfUserAllowedProjectResponse,
     FilteredListResponseOfUserProjectResponse,
     OrderDirectionEnum,
@@ -79,6 +79,27 @@ export class GraphQlExpensesService {
         }>>;
     }
 
+    public getFilteredFavoriteExpenses(
+        baseFilter: BaseGraphQlFilteredModel,
+        userProjectId: string = '',
+        categoryIds: number[] = []
+    ): Observable<ApolloQueryResult<{
+        expenses_get_filtered_favorite_expenses: FilteredListResponseOfFavoriteExpenseResponse | undefined
+    }>> {
+        return this.apolloClient
+            .watchQuery({
+                query: GET_FILTERED_FAVORITE_EXPENSES,
+                variables: {
+                    ...baseFilter,
+                    userProjectId,
+                    categoryIds
+                },
+                fetchPolicy: 'network-only',
+            }).valueChanges as Observable<ApolloQueryResult<{
+            expenses_get_filtered_favorite_expenses: FilteredListResponseOfFavoriteExpenseResponse | undefined
+        }>>;
+    }
+
     public createOrUpdateExpense(
         id: string | undefined,
         title: string | undefined,
@@ -105,37 +126,37 @@ export class GraphQlExpensesService {
             }) as Observable<ApolloQueryResult<{ success: boolean }>>;
     }
 
-public createOrUpdatePlannedExpense(
-    id: string | undefined,
-    title: string | undefined,
-    description: string | undefined,
-    amount: number | undefined,
-    balanceId: string | undefined,
-    startDate: Date | undefined,
-    endDate: Date | undefined,
-    categoryId: number | undefined,
-    userProjectId: string | undefined,
-    frequencyId: number | undefined,
-    isActive: boolean | undefined
-): Observable<ApolloQueryResult<{ success: boolean }>> {
-    return this.apolloClient
-        .mutate({
-            mutation: !!id ? UPDATE_PLANNED_EXPENSE : CREATE_PLANNED_EXPENSE,
-            variables: {
-                ...(id && { id }),
-                title,
-                description,
-                amount,
-                balanceId,
-                startDate,
-                endDate,
-                categoryId,
-                frequencyId,
-                isActive,
-                ...(!id && {userProjectId})
-            },
-        }) as Observable<ApolloQueryResult<{ success: boolean }>>;
-}
+    public createOrUpdatePlannedExpense(
+        id: string | undefined,
+        title: string | undefined,
+        description: string | undefined,
+        amount: number | undefined,
+        balanceId: string | undefined,
+        startDate: Date | undefined,
+        endDate: Date | undefined,
+        categoryId: number | undefined,
+        userProjectId: string | undefined,
+        frequencyId: number | undefined,
+        isActive: boolean | undefined
+    ): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: !!id ? UPDATE_PLANNED_EXPENSE : CREATE_PLANNED_EXPENSE,
+                variables: {
+                    ...(id && {id}),
+                    title,
+                    description,
+                    amount,
+                    balanceId,
+                    startDate,
+                    endDate,
+                    categoryId,
+                    frequencyId,
+                    isActive,
+                    ...(!id && {userProjectId})
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
 
     public removeExpense(id: string | undefined): Observable<ApolloQueryResult<{ success: boolean }>> {
         return this.apolloClient
@@ -236,6 +257,70 @@ public createOrUpdatePlannedExpense(
         return this.apolloClient
             .mutate({
                 mutation: REMOVE_USER_BALANCE,
+                variables: {
+                    id
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
+
+    public createFavoriteExpense(
+        title: string,
+        description: string | undefined,
+        limit: number | undefined,
+        categoryId: number | undefined,
+        frequencyId: number | undefined,
+        currencyId: number,
+        userProjectId: string,
+        iconId: number
+    ): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: CREATE_FAVORITE_EXPENSE,
+                variables: {
+                    title,
+                    description,
+                    limit,
+                    categoryId,
+                    frequencyId,
+                    currencyId,
+                    userProjectId,
+                    iconId
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
+
+    public updateFavoriteExpense(
+        id: string,
+        title: string,
+        description: string | undefined,
+        limit: number | undefined,
+        categoryId: number | undefined,
+        frequencyId: number | undefined,
+        currencyId: number,
+        userProjectId: string,
+        iconId: number
+    ): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: UPDATE_FAVORITE_EXPENSE,
+                variables: {
+                    id,
+                    title,
+                    description,
+                    limit,
+                    categoryId,
+                    frequencyId,
+                    currencyId,
+                    userProjectId,
+                    iconId
+                },
+            }) as Observable<ApolloQueryResult<{ success: boolean }>>;
+    }
+
+    public removeFavoriteExpense(id: string): Observable<ApolloQueryResult<{ success: boolean }>> {
+        return this.apolloClient
+            .mutate({
+                mutation: REMOVE_FAVORITE_EXPENSE,
                 variables: {
                     id
                 },

@@ -26,7 +26,7 @@ export class UserProjectsService {
     private _userAllowedProjects: FilteredListResponseOfUserAllowedProjectResponse | undefined;
 
     constructor(
-        private snackBar: MatSnackBar,
+        private readonly snackBar: MatSnackBar,
         private dialog: MatDialog,
         private router: Router,
         private readonly store: Store,

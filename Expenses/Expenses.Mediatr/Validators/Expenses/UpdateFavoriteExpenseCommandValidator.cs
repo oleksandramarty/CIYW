@@ -13,8 +13,5 @@ public class UpdateFavoriteExpenseCommandValidator : AbstractValidator<UpdateFav
 
         RuleFor(x => x.Description)
             .MaximumLength(100).WithMessage("Description must be at most 100 characters long.");
-
-        RuleFor(x => x.Limit)
-            .GreaterThan(0).WithMessage("Amount must be greater than 0.");
     }
 }

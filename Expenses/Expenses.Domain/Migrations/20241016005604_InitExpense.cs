@@ -99,6 +99,39 @@ namespace Expenses.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FavoriteExpenses",
+                schema: "Expenses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Limit = table.Column<decimal>(type: "numeric", nullable: false),
+                    CurrentAmount = table.Column<decimal>(type: "numeric", nullable: true),
+                    CategoryId = table.Column<int>(type: "integer", nullable: true),
+                    FrequencyId = table.Column<int>(type: "integer", nullable: true),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IconId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FavoriteExpenses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FavoriteExpenses_UserProjects_UserProjectId",
+                        column: x => x.UserProjectId,
+                        principalSchema: "Projects",
+                        principalTable: "UserProjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PlannedExpenses",
                 schema: "Expenses",
                 columns: table => new
@@ -168,6 +201,12 @@ namespace Expenses.Domain.Migrations
                 column: "UserProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FavoriteExpenses_UserProjectId",
+                schema: "Expenses",
+                table: "FavoriteExpenses",
+                column: "UserProjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PlannedExpenses_UserProjectId",
                 schema: "Expenses",
                 table: "PlannedExpenses",
@@ -189,6 +228,10 @@ namespace Expenses.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expenses",
+                schema: "Expenses");
+
+            migrationBuilder.DropTable(
+                name: "FavoriteExpenses",
                 schema: "Expenses");
 
             migrationBuilder.DropTable(

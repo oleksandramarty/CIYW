@@ -6,7 +6,7 @@ import {
     GET_BALANCE_TYPES_DICTIONARY,
     GET_CATEGORIES_DICTIONARY,
     GET_COUNTRIES_DICTIONARY,
-    GET_CURRENCIES_DICTIONARY, GET_FREQUENCIES_DICTIONARY, GET_ICON_CATEGORIES_DICTIONARY,
+    GET_CURRENCIES_DICTIONARY, GET_FREQUENCIES_DICTIONARY, GET_ICON_CATEGORIES_DICTIONARY, GET_NON_PUBLIC_DICTIONARIES,
     GET_SITE_SETTINGS
 } from "../queries/graph-ql-dictionaries.query";
 import {
@@ -102,5 +102,43 @@ export class GraphQlDictionariesService {
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{ dictionaries_get_categories_dictionary: VersionedListResponseOfCategoryResponse }>>;
+    }
+
+    public getNonPublicDictionaries(
+        versionIconCategories: string | undefined,
+        versionCategories: string | undefined,
+        versionBalanceTypes: string | undefined,
+        versionFrequencies: string | undefined,
+        versionCurrencies: string | undefined,
+        versionCountries: string | undefined,
+    ):
+        Observable<ApolloQueryResult<{
+        dictionaries_get_icon_categories_dictionary: VersionedListResponseOfIconCategoryResponse
+        dictionaries_get_categories_dictionary: VersionedListResponseOfCategoryResponse,
+        dictionaries_get_balance_types_dictionary: VersionedListResponseOfBalanceTypeResponse,
+        dictionaries_get_frequencies_dictionary: VersionedListResponseOfFrequencyResponse,
+        dictionaries_get_currencies_dictionary: VersionedListResponseOfCurrencyResponse,
+        dictionaries_get_countries_dictionary: VersionedListResponseOfCountryResponse
+    }>> {
+        return this.apolloClient
+            .watchQuery({
+                query: GET_NON_PUBLIC_DICTIONARIES,
+                variables: {
+                    versionIconCategories,
+                    versionCategories,
+                    versionBalanceTypes,
+                    versionFrequencies,
+                    versionCurrencies,
+                    versionCountries,
+                },
+                fetchPolicy: 'network-only',
+            }).valueChanges as Observable<ApolloQueryResult<{
+            dictionaries_get_icon_categories_dictionary: VersionedListResponseOfIconCategoryResponse
+            dictionaries_get_categories_dictionary: VersionedListResponseOfCategoryResponse,
+            dictionaries_get_balance_types_dictionary: VersionedListResponseOfBalanceTypeResponse,
+            dictionaries_get_frequencies_dictionary: VersionedListResponseOfFrequencyResponse,
+            dictionaries_get_currencies_dictionary: VersionedListResponseOfCurrencyResponse,
+            dictionaries_get_countries_dictionary: VersionedListResponseOfCountryResponse
+        }>>;
     }
 }

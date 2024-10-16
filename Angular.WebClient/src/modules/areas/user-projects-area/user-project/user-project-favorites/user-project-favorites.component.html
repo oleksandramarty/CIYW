@@ -1,9 +1,12 @@
 <section *ngIf="!!userProject" class="user-project-section">
     <div class="category-items-container">
         <ng-container *ngIf="userProject?.balances?.length > 0">
-            <div class="category-item-container" *ngFor="let balance of userProject.balances"
+            <div class="category-item-container" *ngFor="let balance of userProject.balances; let i=index"
                  (click)="openBalanceDialog(balance)">
-                <div class="category-item-icon-container">
+                <div
+                        draggable="true"
+                        (dragstart)="onDragStart($event, i)"
+                        class="category-item-icon-container">
                     <i [ngClass]="iconMap?.get(balance.iconId)?.title"></i>
                     <span>{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
                 </div>
@@ -12,7 +15,7 @@
                         {{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}
                     </div>
                     <div>
-                        {{balance.title}}
+                        {{ balance.title }}
                     </div>
                 </div>
             </div>
@@ -30,7 +33,32 @@
 
     <div class="category-items-container">
 
-        <div class="category-item-container" (click)="openBalanceDialog(undefined)">
+        <ng-container *ngIf="favoriteExpenses?.entities?.length > 0">
+            <div class="category-item-container" *ngFor="let favoriteExpense of favoriteExpenses?.entities; let i=index"
+                 (click)="openFavoriteExpenseDialog(favoriteExpense)">
+                <div
+                        (dragover)="onDragOver($event)"
+                        (drop)="onDrop($event, i)"
+                        class="category-item-icon-container">
+                    <i [ngClass]="iconMap?.get(favoriteExpense.iconId)?.title"></i>
+                    <span>{{ currenciesMap?.get(favoriteExpense.currencyId)?.code }}</span>
+                </div>
+                <div class="category-item-title">
+                    <div class="amount"
+                         [ngClass]="{'negative': favoriteExpense.limit - favoriteExpense.currentAmount < 0}">
+                        {{ favoriteExpense.currentAmount ?? 0 | currency:currenciesMap?.get(favoriteExpense.currencyId)?.code }}
+                        <ng-container *ngIf="favoriteExpense.limit">
+                            {{ favoriteExpense.limit ?? 0 | currency:currenciesMap?.get(favoriteExpense.currencyId)?.code }}
+                        </ng-container>
+                    </div>
+                    <div>
+                        {{ favoriteExpense.title }}
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="category-item-container" (click)="openFavoriteExpenseDialog(undefined)">
             <div class="category-item-icon-container">
                 <i class="fa fa-plus"></i>
             </div>
@@ -39,4 +67,3 @@
         </div>
     </div>
 </section>
-

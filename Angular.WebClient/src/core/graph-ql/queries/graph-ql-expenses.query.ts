@@ -109,6 +109,62 @@ export const GET_FILTERED_PLANNED_EXPENSES = gql`
     }
 `;
 
+export const GET_FILTERED_FAVORITE_EXPENSES = gql`
+    query GetFilteredFavoriteExpenses(
+        $isFull: Boolean,
+        $pageNumber: Int,
+        $pageSize: Int,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
+        $column: String,
+        $direction: String,
+        $query: String,
+        $amountFrom: Decimal,
+        $amountTo: Decimal,
+        $userProjectId: ID,
+        $categoryIds: [Int]
+    ) {
+        expenses_get_filtered_favorite_expenses(
+            isFull: $isFull,
+            pageNumber: $pageNumber,
+            pageSize: $pageSize,
+            dateFrom: $dateFrom,
+            dateTo: $dateTo,
+            column: $column,
+            direction: $direction,
+            query: $query,
+            amountFrom: $amountFrom,
+            amountTo: $amountTo,
+            userProjectId: $userProjectId,
+            categoryIds: $categoryIds
+        ) {
+            entities {
+                id
+                created
+                modified
+                title
+                description
+                limit
+                currentAmount
+                categoryId
+                frequencyId
+                currencyId
+                endDate
+                userProjectId
+                iconId
+                createdUserId
+                version
+            }
+            paginator {
+                pageNumber
+                pageSize
+                isFull
+            }
+            totalCount
+        }
+    }
+`;
+
 export const CREATE_EXPENSE = gql`
     mutation CreateOrUpdateExpenseInput(
         $title: String!,
@@ -243,16 +299,16 @@ export const UPDATE_USER_PROJECT = gql`
 
 export const CREATE_USER_BALANCE = gql`
     mutation CreateUserBalanceInput(
-        $title: String!, 
-        $isActive: Boolean!, 
-        $currencyId: Int!, 
+        $title: String!,
+        $isActive: Boolean!,
+        $currencyId: Int!,
         $balanceTypeId: Int!
         $userProjectId: Guid!
         $iconId: Int!
     ) {
         expenses_create_user_balance(
-            input: { 
-                title: $title, 
+            input: {
+                title: $title,
                 isActive: $isActive,
                 currencyId: $currencyId,
                 balanceTypeId: $balanceTypeId
@@ -288,6 +344,64 @@ export const UPDATE_USER_BALANCE = gql`
 export const REMOVE_USER_BALANCE = gql`
     mutation RemovePlannedExpense($id: Guid!) {
         expenses_remove_user_balance(id: $id)
+    }
+`;
+
+export const CREATE_FAVORITE_EXPENSE = gql`
+    mutation CreateFavoriteExpenseInput(
+        $title: String!,
+        $description: String,
+        $limit: Decimal,
+        $categoryId: Int,
+        $frequencyId: Int,
+        $currencyId: Int!,
+        $userProjectId: ID!,
+        $iconId: Int!
+    ) {
+        expenses_create_favorite_expense(
+            input: {
+                title: $title,
+                description: $description,
+                limit: $limit,
+                categoryId: $categoryId,
+                frequencyId: $frequencyId,
+                currencyId: $currencyId,
+                userProjectId: $userProjectId,
+                iconId: $iconId
+            })
+    }
+`;
+
+export const UPDATE_FAVORITE_EXPENSE = gql`
+    mutation UpdateFavoriteExpenseInput(
+        $id: Guid!,
+        $title: String!,
+        $description: String,
+        $limit: Decimal,
+        $categoryId: Int,
+        $frequencyId: Int,
+        $currencyId: Int!,
+        $userProjectId: ID!,
+        $iconId: Int!
+    ) {
+        expenses_update_favorite_expense(
+            id: $id,
+            input: {
+                title: $title,
+                description: $description,
+                limit: $limit,
+                categoryId: $categoryId,
+                frequencyId: $frequencyId,
+                currencyId: $currencyId,
+                userProjectId: $userProjectId,
+                iconId: $iconId
+            })
+    }
+`;
+
+export const REMOVE_FAVORITE_EXPENSE = gql`
+    mutation RemoveFavoriteExpense($id: Guid!) {
+        expenses_remove_favorite_expense(id: $id)
     }
 `;
 

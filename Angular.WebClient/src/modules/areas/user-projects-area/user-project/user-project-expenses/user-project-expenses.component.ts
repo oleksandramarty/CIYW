@@ -66,7 +66,7 @@ export class UserProjectExpensesComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly dictionaryService: DictionaryService,
-        private snackBar: MatSnackBar,
+        private readonly snackBar: MatSnackBar,
         private readonly store: Store,
         private readonly loaderService: LoaderService,
         private readonly graphQlExpensesService: GraphQlExpensesService,

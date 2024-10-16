@@ -60,6 +60,7 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
     {
         this.GetFilteredEntities<FilteredListResponseOfGenericType<ExpenseResponse, ExpenseResponseType>, ExpenseResponse, GetFilteredExpensesRequest>(GraphQLEndpoints.GetFilteredExpenses);
         this.GetFilteredEntities<FilteredListResponseOfGenericType<PlannedExpenseResponse, PlannedExpenseResponseType>, PlannedExpenseResponse, GetFilteredPlannedExpensesRequest>(GraphQLEndpoints.GetFilteredPlannedExpenses);
+        this.GetFilteredEntities<FilteredListResponseOfGenericType<FavoriteExpenseResponse, FavoriteExpenseResponseType>, FavoriteExpenseResponse, GetFilteredFavoriteExpensesRequest>(GraphQLEndpoints.GetFilteredFavoriteExpenses);
         this.GetFilteredEntities<FilteredListResponseOfGenericType<UserProjectResponse, UserProjectResponseType>, UserProjectResponse, GetFilteredUserProjectsRequest>(GraphQLEndpoints.GetFilteredUserProjects);
         this.GetFilteredEntities<FilteredListResponseOfGenericType<UserAllowedProjectResponse, UserAllowedProjectResponseType>, UserAllowedProjectResponse, GetFilteredUserAllowedProjectsRequest>(GraphQLEndpoints.GetFilteredUserAllowedProjects);
         

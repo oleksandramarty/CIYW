@@ -619,6 +619,8 @@ export enum ColumnEnum {
     Description = 5,
     Amount = 6,
     NextDate = 7,
+    CurrentAmount = 8,
+    EndDate = 9,
 }
 
 export enum OrderDirectionEnum {
@@ -1414,6 +1416,138 @@ export interface IUserAllowedProjectResponse extends IBaseIdEntityOfGuid {
     userProject: UserProjectResponse;
     userId: string;
     isReadOnly: boolean;
+}
+
+export class FilteredListResponseOfFavoriteExpenseResponse implements IFilteredListResponseOfFavoriteExpenseResponse {
+    entities!: FavoriteExpenseResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount!: number;
+
+    constructor(data?: IFilteredListResponseOfFavoriteExpenseResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.entities = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["entities"])) {
+                this.entities = [] as any;
+                for (let item of _data["entities"])
+                    this.entities!.push(FavoriteExpenseResponse.fromJS(item));
+            }
+            this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilteredListResponseOfFavoriteExpenseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilteredListResponseOfFavoriteExpenseResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.entities)) {
+            data["entities"] = [];
+            for (let item of this.entities)
+                data["entities"].push(item.toJSON());
+        }
+        data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilteredListResponseOfFavoriteExpenseResponse {
+    entities: FavoriteExpenseResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount: number;
+}
+
+export class FavoriteExpenseResponse extends BaseDateTimeEntityOfGuid implements IFavoriteExpenseResponse {
+    title!: string;
+    description?: string | undefined;
+    limit?: number | undefined;
+    currentAmount?: number | undefined;
+    categoryId?: number | undefined;
+    frequencyId?: number | undefined;
+    currencyId!: number;
+    endDate?: Date | undefined;
+    userProjectId!: string;
+    iconId!: number;
+    createdUserId!: string;
+    version!: string;
+
+    constructor(data?: IFavoriteExpenseResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.limit = _data["limit"];
+            this.currentAmount = _data["currentAmount"];
+            this.categoryId = _data["categoryId"];
+            this.frequencyId = _data["frequencyId"];
+            this.currencyId = _data["currencyId"];
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.userProjectId = _data["userProjectId"];
+            this.iconId = _data["iconId"];
+            this.createdUserId = _data["createdUserId"];
+            this.version = _data["version"];
+        }
+    }
+
+    static override fromJS(data: any): FavoriteExpenseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new FavoriteExpenseResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["limit"] = this.limit;
+        data["currentAmount"] = this.currentAmount;
+        data["categoryId"] = this.categoryId;
+        data["frequencyId"] = this.frequencyId;
+        data["currencyId"] = this.currencyId;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["userProjectId"] = this.userProjectId;
+        data["iconId"] = this.iconId;
+        data["createdUserId"] = this.createdUserId;
+        data["version"] = this.version;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IFavoriteExpenseResponse extends IBaseDateTimeEntityOfGuid {
+    title: string;
+    description?: string | undefined;
+    limit?: number | undefined;
+    currentAmount?: number | undefined;
+    categoryId?: number | undefined;
+    frequencyId?: number | undefined;
+    currencyId: number;
+    endDate?: Date | undefined;
+    userProjectId: string;
+    iconId: number;
+    createdUserId: string;
+    version: string;
 }
 
 export class VersionedListResponseOfCurrencyResponse extends BaseVersionEntity implements IVersionedListResponseOfCurrencyResponse {

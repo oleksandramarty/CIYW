@@ -1,0 +1,45 @@
+<div class="base-modal-container" *ngIf="favoriteExpenseFormGroup">
+    <div class="base-modal-header-container">
+        <h2 mat-dialog-title *ngIf="favoriteExpense">{{ favoriteExpense.title }}</h2>
+        <h2 mat-dialog-title *ngIf="!favoriteExpense" [translation]="'EXPENSES.CREATE_NEW'"></h2>
+        <span class="base-modal-close-icon" (click)="dialogRef.close()">
+            <i class="fa-solid fa-xmark"></i>
+        </span>
+    </div>
+    <div class="base-modal-body-container">
+        <app-input className="grid-input-item" type="input" [label]="'COMMON.TITLE'"
+                   [formGroup]="favoriteExpenseFormGroup" controlName="title" [maxLength]="50"></app-input>
+        <div class="grid-input-container-two">
+            <app-input className="grid-input-item" type="autocomplete" [dataItems]="categories ?? []"
+                       [label]="'COMMON.CATEGORY'" [formGroup]="favoriteExpenseFormGroup"
+                       controlName="categoryId"></app-input>
+            <app-input className="grid-input-item" type="autocomplete" [dataItems]="frequencies ?? []"
+                       [label]="'COMMON.FREQUENCIES'" [formGroup]="favoriteExpenseFormGroup"
+                       controlName="frequencyId"></app-input>
+            <app-input className="grid-input-item" type="input" [label]="'COMMON.LIMIT'"
+                       [formGroup]="favoriteExpenseFormGroup" controlName="limit"></app-input>
+            <app-input className="grid-input-item" type="autocomplete" [dataItems]="currencies ?? []"
+                       [label]="'COMMON.CURRENCY'" [formGroup]="favoriteExpenseFormGroup"
+                       controlName="currencyId"></app-input>
+
+            <app-input className="grid-input-item" type="textarea" [label]="'COMMON.COMMENT'"
+                       [formGroup]="favoriteExpenseFormGroup" controlName="description" [maxLength]="100"></app-input>
+
+            <app-input-icon-picker
+                    [formGroup]="favoriteExpenseFormGroup"
+                    controlName="iconId"
+            ></app-input-icon-picker>
+        </div>
+
+    </div>
+    <div class="base-modal-actions-container">
+        <div class="mat-dialog-actions-container">
+            <button mat-button translation="COMMON.CLOSE" (click)="dialogRef.close(false)"></button>
+            <button mat-button [translation]="'COMMON.REMOVE'" (click)="removeFavoriteExpense()" color="warn" *ngIf="favoriteExpense"></button>
+            <button mat-flat-button color="primary" (click)="createOrUpdateFavoriteExpense()"
+                    [disabled]="favoriteExpenseFormGroup.invalid"
+                    [translation]="!!favoriteExpense ? 'COMMON.UPDATE' : 'COMMON.CREATE'"
+            ></button>
+        </div>
+    </div>
+</div>

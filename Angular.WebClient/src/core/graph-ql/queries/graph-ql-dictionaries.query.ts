@@ -127,3 +127,94 @@ export const GET_ICON_CATEGORIES_DICTIONARY = gql`
         }
     }
 `;
+
+export const GET_NON_PUBLIC_DICTIONARIES = gql`
+    query GetNonPublicDictionaries(
+        $versionIconCategories: String,
+        $versionCategories: String,
+        $versionBalanceTypes: String,
+        $versionFrequencies: String,
+        $versionCurrencies: String,
+        $versionCountries: String
+    ) {
+        dictionaries_get_icon_categories_dictionary(version: $versionIconCategories) {
+            items {
+                id
+                title
+                isActive
+                icons {
+                    id
+                    title
+                    isActive
+                    iconCategoryId
+                }
+            }
+            version
+        }
+        dictionaries_get_categories_dictionary(version: $versionCategories) {
+            items {
+                ...CategoryFields
+                children {
+                    ...CategoryFields
+                    children {
+                        ...CategoryFields
+                        children {
+                            ...CategoryFields
+                        }
+                    }
+                }
+            }
+            version
+        }
+        dictionaries_get_balance_types_dictionary(version: $versionBalanceTypes) {
+            items {
+                id
+                title
+                isActive
+                type
+            }
+            version
+        }
+        dictionaries_get_frequencies_dictionary(version: $versionFrequencies) {
+            items {
+                id
+                title
+                description
+                isActive
+                type
+            }
+            version
+        }
+        dictionaries_get_currencies_dictionary(version: $versionCurrencies) {
+            items {
+                id
+                title
+                code
+                symbol
+                titleEn
+                isActive
+            }
+            version
+        }
+        dictionaries_get_countries_dictionary(version: $versionCountries) {
+            items {
+                id
+                title
+                code
+                titleEn
+                isActive
+            }
+            version
+        }
+    }
+
+    fragment CategoryFields on CategoryResponse {
+        id
+        title
+        iconId
+        color
+        isActive
+        isPositive
+        parentId
+    }
+`;

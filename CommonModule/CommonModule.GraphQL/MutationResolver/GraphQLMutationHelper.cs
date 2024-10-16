@@ -27,6 +27,10 @@ public class GraphQLMutationHelper: GraphQLMutationResolver
         this.UpdateEntity<UpdatePlannedExpenseInputType, GuidGraphType, Guid, UpdatePlannedExpenseCommand>(GraphQLEndpoints.UpdatePlannedExpense);
         this.DeleteEntity<RemovePlannedExpenseCommand, GuidGraphType, Guid>(GraphQLEndpoints.RemovePlannedExpense);
         
+        this.CreateEntity<CreateFavoriteExpenseInputType, CreateFavoriteExpenseCommand>(GraphQLEndpoints.CreateFavoriteExpense);
+        this.UpdateEntity<UpdateFavoriteExpenseInputType, GuidGraphType, Guid, UpdateFavoriteExpenseCommand>(GraphQLEndpoints.UpdateFavoriteExpense);
+        this.DeleteEntity<RemoveFavoriteExpenseCommand, GuidGraphType, Guid>(GraphQLEndpoints.RemoveFavoriteExpense);
+        
         this.CreateEntity<CreateUserProjectInputType, CreateUserProjectCommand>(GraphQLEndpoints.CreateUserProject);
         this.CreateEntity<UpdateUserProjectInputType, UpdateUserProjectCommand>(GraphQLEndpoints.UpdateUserProject);
         

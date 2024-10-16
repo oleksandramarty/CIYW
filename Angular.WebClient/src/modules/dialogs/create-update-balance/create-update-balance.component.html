@@ -35,7 +35,7 @@
     <mat-dialog-actions>
         <div class="mat-dialog-actions-container">
             <button mat-button [translation]="'COMMON.CLOSE'" (click)="dialogRef.close(false)"></button>
-            <button mat-button [translation]="'COMMON.CLOSE'" (click)="dialogRef.close(false)"></button>
+            <button mat-button [translation]="'COMMON.REMOVE'" (click)="removeBalance()" color="warn" *ngIf="balance"></button>
             <button mat-flat-button color="primary"
                     [translation]="!!balance ? 'COMMON.UPDATE' : 'COMMON.CREATE'"
                     (click)="createOrUpdateBalance()"></button>

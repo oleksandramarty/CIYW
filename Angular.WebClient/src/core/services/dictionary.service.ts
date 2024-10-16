@@ -285,77 +285,61 @@ export class DictionaryService {
             this.siteSettingsService.version.iconCategory !== this.dictionaries?.iconCategories?.version
         ) {
             this.loaderService.isBusy = true;
-            forkJoin({
-                result_countries: !this.siteSettingsService.version ||
-                this.siteSettingsService.version.country !== this.dictionaries?.countries?.version ?
-                    this.graphQlDictionariesService.getCountriesDictionary(
-                    this.dictionaries?.countries?.version).pipe(take(1)) : of(undefined),
-                result_currencies: !this.siteSettingsService.version ||
-                this.siteSettingsService.version.currency !== this.dictionaries?.currencies?.version ?
-                    this.graphQlDictionariesService.getCurrenciesDictionary(
-                    this.dictionaries?.currencies?.version).pipe(take(1)) : of(undefined),
-                result_categories: !this.siteSettingsService.version ||
-                this.siteSettingsService.version.category !== this.dictionaries?.categories?.version ?
-                    this.graphQlDictionariesService.getCategoriesDictionary(
-                    this.dictionaries?.categories?.version).pipe(take(1)) : of(undefined),
-                result_frequencies: !this.siteSettingsService.version ||
-                this.siteSettingsService.version.frequency !== this.dictionaries?.frequencies?.version ?
-                    this.graphQlDictionariesService.getFrequenciesDictionary(
-                    this.dictionaries?.frequencies?.version).pipe(take(1)) : of(undefined),
-                result_balance_types: !this.siteSettingsService.version ||
-                this.siteSettingsService.version.balanceType !== this.dictionaries?.balanceTypes?.version ?
-                    this.graphQlDictionariesService.getBalanceTypesDictionary(
-                    this.dictionaries?.frequencies?.version).pipe(take(1)) : of(undefined),
-                result_icon_categories: !this.siteSettingsService.version ||
-                this.siteSettingsService.version.iconCategory !== this.dictionaries?.iconCategories?.version ?
-                    this.graphQlDictionariesService.getIconCategoriesDictionary(
-                    this.dictionaries?.iconCategories?.version).pipe(take(1)) : of(undefined),
-            }).pipe(
-                tap(({ result_countries, result_currencies, result_categories, result_frequencies, result_balance_types, result_icon_categories }) => {
-                    if (this._dictionaries) {
-                        if (!!result_countries) {
-                            const countries = result_countries?.data?.dictionaries_get_countries_dictionary as VersionedListResponseOfCountryResponse;
-                            this._dictionaries.countries = countries;
-                            this.countriesMap = countries;
-                        }
+            this.graphQlDictionariesService.getNonPublicDictionaries(
+                this.dictionaries?.iconCategories?.version,
+                this.dictionaries?.categories?.version,
+                this.dictionaries?.balanceTypes?.version,
+                this.dictionaries?.frequencies?.version,
+                this.dictionaries?.currencies?.version,
+                this.dictionaries?.countries?.version
+            )
+                .pipe(
+                    take(1),
+                    tap(({ data }) => {
+                        if (this._dictionaries) {
+                            if (!!data.dictionaries_get_icon_categories_dictionary) {
+                                const iconCategoriesDictionary = data!.dictionaries_get_icon_categories_dictionary as VersionedListResponseOfIconCategoryResponse;
+                                this._dictionaries.iconCategories = iconCategoriesDictionary;
+                                this.iconCategoryMap = iconCategoriesDictionary;
+                                this.iconMap = iconCategoriesDictionary;
+                            }
 
-                        if (!!result_currencies) {
-                            const currencies = result_currencies?.data?.dictionaries_get_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
-                            this._dictionaries.currencies = currencies;
-                            this.currenciesMap = currencies;
-                        }
+                            if (!!data.dictionaries_get_categories_dictionary) {
+                                const categoriesDictionary = data!.dictionaries_get_categories_dictionary as VersionedListResponseOfCategoryResponse;
+                                this._dictionaries.categories = categoriesDictionary;
+                                this.categoriesMap = categoriesDictionary;
+                            }
 
-                        if (!!result_categories) {
-                            const categories = result_categories?.data?.dictionaries_get_categories_dictionary as VersionedListResponseOfCategoryResponse;
-                            this._dictionaries.categories = categories;
-                            this.categoriesMap = categories;
-                        }
+                            if (!!data.dictionaries_get_balance_types_dictionary) {
+                                const balanceTypesDictionary = data!.dictionaries_get_balance_types_dictionary as VersionedListResponseOfBalanceTypeResponse;
+                                this._dictionaries.balanceTypes = balanceTypesDictionary;
+                                this.balanceTypesMap = balanceTypesDictionary;
+                            }
 
-                        if (!!result_frequencies) {
-                            const frequencies = result_frequencies?.data?.dictionaries_get_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
-                            this._dictionaries.frequencies = frequencies;
-                            this.frequenciesMap = frequencies;
-                        }
+                            if (!!data.dictionaries_get_frequencies_dictionary) {
+                                const frequenciesDictionary = data!.dictionaries_get_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
+                                this._dictionaries.frequencies = frequenciesDictionary;
+                                this.frequenciesMap = frequenciesDictionary;
+                            }
 
-                        if (!!result_balance_types) {
-                            const balanceTypes = result_balance_types?.data?.dictionaries_get_balance_types_dictionary as VersionedListResponseOfBalanceTypeResponse;
-                            this._dictionaries.balanceTypes = balanceTypes;
-                            this.balanceTypesMap = balanceTypes;
-                        }
+                            if (!!data.dictionaries_get_currencies_dictionary) {
+                                const currenciesDictionary = data!.dictionaries_get_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
+                                this._dictionaries.currencies = currenciesDictionary;
+                                this.currenciesMap = currenciesDictionary;
+                            }
 
-                        if (!!result_icon_categories) {
-                            const iconCategories = result_icon_categories?.data?.dictionaries_get_icon_categories_dictionary as VersionedListResponseOfIconCategoryResponse;
-                            this._dictionaries.iconCategories = iconCategories;
-                            this.iconCategoryMap = iconCategories;
-                        }
+                            if (!!data.dictionaries_get_countries_dictionary) {
+                                const countriesDictionary = data!.dictionaries_get_countries_dictionary as VersionedListResponseOfCountryResponse;
+                                this._dictionaries.countries = countriesDictionary;
+                                this.countriesMap = countriesDictionary;
+                            }
 
-                        this.updateDateItems(false);
-                        this.localStorageService.setItem('dictionaries', this.dictionaries);
-                        this.loaderService.isBusy = false;
-                    }
-                }),
-                handleApiError(this.snackBar)
-            ).subscribe();
+                            this.updateDateItems(false);
+                            this.localStorageService.setItem('dictionaries', this.dictionaries);
+                            this.loaderService.isBusy = false;
+                        }
+                    })
+                ).subscribe();
         } else {
             this.updateDateItems(false);
         }

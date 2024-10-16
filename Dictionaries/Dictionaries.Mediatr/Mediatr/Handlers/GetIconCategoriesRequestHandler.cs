@@ -22,9 +22,12 @@ public class GetIconCategoriesRequestHandler: IRequestHandler<GetIconCategoriesR
     
     public async Task<VersionedListResponse<IconCategoryResponse>> Handle(GetIconCategoriesRequest request, CancellationToken cancellationToken)
     {
-        return await this.dictionaryRepository.GetDictionaryAsync(
-            request.Version, 
+        VersionedListResponse<IconCategoryResponse> response = await this.dictionaryRepository.GetDictionaryAsync(
+            request.Version,
             cancellationToken,
-            ic => ic.Include(i => i.Icons));
+            ic => ic.Include(i => i.Icons).OrderBy(i => i.Id));
+
+        response.Items = response.Items.OrderBy(ic => ic.Id).ToList();
+        return response;
     }
 }
