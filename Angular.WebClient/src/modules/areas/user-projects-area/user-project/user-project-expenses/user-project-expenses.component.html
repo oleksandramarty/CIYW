@@ -44,47 +44,47 @@
             </div>
         </div>
     </div>
-
-    <mat-divider></mat-divider>
-
-    <div class="table-container" *ngIf="!!expenses">
-        <table class="mat-table">
-            <thead>
-            <tr class="mat-tr">
-                <th class="mat-th"></th>
-                <th class="mat-th"></th>
-                <th class="mat-th" [translation]="'COMMON.DATE'"></th>
-                <th class="mat-th" [translation]="'COMMON.COMMENT'"></th>
-                <th class="mat-th" [translation]="'COMMON.AMOUNT'"></th>
-                <th class="mat-th" [translation]="'COMMON.CATEGORY'"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="mat-tr" *ngFor="let expense of expenses.entities; let i=index">
+    
+    <app-generic-table
+            *ngIf="!!filteredResult"
+            [totalCount]="filteredResult?.totalCount"
+            [paginator]="paginator"
+            (pageChanged)="pageChanged($event)"
+    >
+        <ng-container header>
+            <ng-container *ngFor="let headerItem of tableHeaderItems">
+                <th class="mat-th" *ngIf="!headerItem.isSortable">{{ headerItem.title }}</th>
+                <th class="mat-th pointer" *ngIf="headerItem.isSortable && headerItem.column" (click)="sortItems(headerItem.column)">
+                    {{ headerItem.title }}
+                    <i *ngIf="true"
+                       [ngClass]="{
+              'fa-solid': true,
+              'fa-arrow-down-wide-short': sort!.direction === directions.Desc,
+              'fa-arrow-down-short-wide': sort!.direction === directions.Asc,
+              'opacity-07': sort!.column !== headerItem.column
+            }"></i>
+                </th>
+            </ng-container>
+        </ng-container>
+        <ng-container body>
+            <tr class="mat-tr" *ngFor="let entity of filteredResult.entities; let i=index">
                 <td class="mat-td"><i class="fa-solid fa-pencil pointer"
-                                      (click)="openCreateUpdateExpenseDialog(expense)"></i></td>
-                <td class="mat-td"><i class="fa-solid fa-trash pointer" (click)="removeExpense(expense)"></i></td>
+                                      (click)="openCreateUpdateExpenseDialog(entity)"></i></td>
+                <td class="mat-td"><i class="fa-solid fa-trash pointer" (click)="removeExpense(entity)"></i></td>
                 <td class="mat-td">
                 <span class="row-item-container">
-                    {{ expense.date | localDate:'MMMM dd, yyyy HH:mm' }} <span
+                    {{ entity.date | localDate:'MMMM dd, yyyy HH:mm' }} <span
                         class="row-subitem">{{ utcTimeShift }}</span>
                 </span>
                 </td>
-                <td class="mat-td">{{ expense.title }}</td>
+                <td class="mat-td">{{ entity.title }}</td>
                 <td class="mat-td amount"
-                    [ngClass]="{'negative': !categoriesMap?.get(expense.categoryId)?.isPositive}">
-                    {{ expense.amount | currency:getCurrencyCode(expense.balanceId) }}
+                    [ngClass]="{'negative': !categoriesMap?.get(entity.categoryId)?.isPositive}">
+                    {{ entity.amount | currency:getCurrencyCode(entity.balanceId) }}
                 </td>
-                <td class="mat-td"><span [translation]="categoriesMap?.get(expense.categoryId)?.title"></span></td>
+                <td class="mat-td"><span [translation]="categoriesMap?.get(entity.categoryId)?.title"></span></td>
             </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <ng-container *ngIf="expenses?.entities?.length === 0">
-        <div class="empty-table-message">
-            <h4 [translation]="'TABLE.NO_ITEMS'"></h4>
-        </div>
-    </ng-container>
+        </ng-container>
+    </app-generic-table>
 </section>
 

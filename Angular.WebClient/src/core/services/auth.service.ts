@@ -77,7 +77,7 @@ export class AuthService {
       ).subscribe();
     }
 
-    this.commonDialogService.showNoComplaintModal(loginActon);
+    this.commonDialogService.showNoComplaintDialog(loginActon);
   }
 
   public logout(): void {
@@ -93,7 +93,7 @@ export class AuthService {
           ).subscribe();
     }
 
-    this.commonDialogService.showNoComplaintModal(logoutAction);
+    this.commonDialogService.showNoComplaintDialog(logoutAction);
   }
 
   private getCurrentUser(): void {

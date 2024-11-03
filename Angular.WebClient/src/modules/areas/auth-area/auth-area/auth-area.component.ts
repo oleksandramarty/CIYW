@@ -5,23 +5,23 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
 import {selectToken} from "../../../../core/store/selectors/auth.selectors";
+import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
   selector: 'app-auth-area',
   templateUrl: './auth-area.component.html',
   styleUrl: './auth-area.component.scss'
 })
-export class AuthAreaComponent implements OnInit{
-  protected ngUnsubscribe: Subject<void> = new Subject<void>();
-
+export class AuthAreaComponent extends BaseUnsubscribeComponent {
   constructor(
     private readonly store: Store,
     private readonly snackBar: MatSnackBar,
     private readonly router: Router
   ) {
+      super();
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.store.select(selectToken)
       .pipe(
         takeUntil(this.ngUnsubscribe),
@@ -32,10 +32,5 @@ export class AuthAreaComponent implements OnInit{
         }),
         handleApiError(this.snackBar)
         ).subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 }

@@ -19,6 +19,9 @@
         <PackageReference Include="MediatR" Version="12.4.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-preview.7.24406.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-preview.7.24406.2" />
+        <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.0.2" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-rc.1.24451.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.1.24451.1">
             <PrivateAssets>all</PrivateAssets>
@@ -26,6 +29,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.0.2" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0-rc.1" />
         <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />

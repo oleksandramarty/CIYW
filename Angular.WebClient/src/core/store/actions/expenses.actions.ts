@@ -29,7 +29,7 @@ export const expenses_clearAll = createAction('[Expenses] Clear All');
 export const expenses_setUserProject_expensesSnapshot = createAction(
     '[Expenses] Set UserProject Expenses Snapshot',
     props<{
-        expenses: FilteredListResponseOfExpenseResponse | undefined;
+        filteredResult: FilteredListResponseOfExpenseResponse | undefined;
         paginator: PaginatorEntity | undefined;
         sort: BaseSortableRequest | undefined;
         dateRange: any;
@@ -40,7 +40,7 @@ export const expenses_setUserProject_expensesSnapshot = createAction(
 export const expenses_setUserProject_plannedExpensesSnapshot = createAction(
     '[Expenses] Set UserProject Planned Expenses Snapshot',
     props<{
-        plannedExpenses: FilteredListResponseOfPlannedExpenseResponse | undefined;
+        filteredResult: FilteredListResponseOfPlannedExpenseResponse | undefined;
         paginator: PaginatorEntity | undefined;
         sort: BaseSortableRequest | undefined;
         dateRange: any;
@@ -51,7 +51,7 @@ export const expenses_setUserProject_plannedExpensesSnapshot = createAction(
 export const expenses_setUserProject_favoriteExpensesSnapshot = createAction(
     '[Expenses] Set UserProject Favorite Expenses Snapshot',
     props<{
-        favoriteExpenses: FilteredListResponseOfFavoriteExpenseResponse | undefined;
+        filteredResult: FilteredListResponseOfFavoriteExpenseResponse | undefined;
         paginator: PaginatorEntity | undefined;
         sort: BaseSortableRequest | undefined;
         dateRange: any;

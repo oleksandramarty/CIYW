@@ -19,6 +19,7 @@ import {CommonDialogService} from "../../../core/services/common-dialog.service"
 import {DictionaryService} from "../../../core/services/dictionary.service";
 import {handleApiError} from "../../../core/helpers/rxjs.helper";
 import {handleIntId} from "../../../core/helpers/apollo.helper";
+import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
     selector: 'app-create-update-favorite-expense',
@@ -36,9 +37,7 @@ import {handleIntId} from "../../../core/helpers/apollo.helper";
     templateUrl: './create-update-favorite-expense.component.html',
     styleUrl: './create-update-favorite-expense.component.scss'
 })
-export class CreateUpdateFavoriteExpenseComponent implements OnInit, OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
-
+export class CreateUpdateFavoriteExpenseComponent extends BaseUnsubscribeComponent {
     public favoriteExpense: FavoriteExpenseResponse | undefined;
     public userProject: UserProjectResponse | undefined;
     public favoriteExpenseFormGroup: FormGroup | undefined;
@@ -69,17 +68,13 @@ export class CreateUpdateFavoriteExpenseComponent implements OnInit, OnDestroy {
         private readonly commonDialogService: CommonDialogService,
         private readonly dictionaryService: DictionaryService
     ) {
+        super();
         this.favoriteExpense = data.favoriteExpense;
         this.userProject = data.userProject;
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
         this.createUserForm();
-    }
-
-    ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
     }
 
     private createUserForm() {
@@ -134,7 +129,7 @@ export class CreateUpdateFavoriteExpenseComponent implements OnInit, OnDestroy {
                 ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintModal(createOrUpdateBalanceAction)
+        this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction)
     }
 
     get inputParams(): [

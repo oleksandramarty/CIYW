@@ -20,13 +20,12 @@ import {
     FilteredListResponseOfUserProjectResponse,
     PaginatorEntity
 } from "../../api-models/common.models";
-import {FormGroup} from "@angular/forms";
 
 export interface ExpensesState {
     userProjects: FilteredListResponseOfUserProjectResponse | undefined;
     userAllowedProjects: FilteredListResponseOfUserAllowedProjectResponse | undefined;
     expensesSnapshot: {
-        expenses: FilteredListResponseOfExpenseResponse | undefined,
+        filteredResult: FilteredListResponseOfExpenseResponse | undefined,
         paginator: PaginatorEntity | undefined,
         sort: BaseSortableRequest | undefined,
         dateRange: any,
@@ -34,7 +33,7 @@ export interface ExpensesState {
         categoryIds: any
     } | undefined,
     plannedExpensesSnapshot: {
-        plannedExpenses: FilteredListResponseOfPlannedExpenseResponse | undefined,
+        filteredResult: FilteredListResponseOfPlannedExpenseResponse | undefined,
         paginator: PaginatorEntity | undefined,
         sort: BaseSortableRequest | undefined,
         dateRange: any,
@@ -42,7 +41,7 @@ export interface ExpensesState {
         categoryIds: any
     } | undefined,
     favoriteExpensesSnapshot: {
-        favoriteExpenses: FilteredListResponseOfFavoriteExpenseResponse | undefined,
+        filteredResult: FilteredListResponseOfFavoriteExpenseResponse | undefined,
         paginator: PaginatorEntity | undefined,
         sort: BaseSortableRequest | undefined,
         dateRange: any,
@@ -80,17 +79,17 @@ export const expensesReducer = createReducer(
     on(expenses_setUserAllowedProjects, (state, { userAllowedProjects }) => ({ ...state, userAllowedProjects })),
     on(expenses_clearUserAllowedProjects, state => ({ ...state, userAllowedProjects: undefined })),
     on(expenses_clearAll, state => ({ ...state, userProjects: undefined, userAllowedProjects: undefined })),
-    on(expenses_setUserProject_expensesSnapshot, (state, { expenses, paginator, sort, dateRange, query, categoryIds }) => ({
+    on(expenses_setUserProject_expensesSnapshot, (state, { filteredResult, paginator, sort, dateRange, query, categoryIds }) => ({
         ...state,
-        expensesSnapshot: { expenses, paginator, sort, dateRange, query, categoryIds }
+        expensesSnapshot: { filteredResult, paginator, sort, dateRange, query, categoryIds }
     })),
-    on(expenses_setUserProject_plannedExpensesSnapshot, (state, { plannedExpenses, paginator, sort, dateRange, query, categoryIds }) => ({
+    on(expenses_setUserProject_plannedExpensesSnapshot, (state, { filteredResult, paginator, sort, dateRange, query, categoryIds }) => ({
         ...state,
-        plannedExpensesSnapshot: { plannedExpenses, paginator, sort, dateRange, query, categoryIds }
+        plannedExpensesSnapshot: { filteredResult, paginator, sort, dateRange, query, categoryIds }
     })),
-    on(expenses_setUserProject_favoriteExpensesSnapshot, (state, { favoriteExpenses, paginator, sort, dateRange, query, categoryIds }) => ({
+    on(expenses_setUserProject_favoriteExpensesSnapshot, (state, { filteredResult, paginator, sort, dateRange, query, categoryIds }) => ({
         ...state,
-        favoriteExpensesSnapshot: { favoriteExpenses, paginator, sort, dateRange, query, categoryIds }
+        favoriteExpensesSnapshot: { filteredResult, paginator, sort, dateRange, query, categoryIds }
     })),
     on(expenses_clearUserProject_expensesSnapshots, state => ({
         ...state,

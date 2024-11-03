@@ -15,6 +15,7 @@ import {LoaderService} from "../../../core/services/loader.service";
 import {CommonDialogService} from "../../../core/services/common-dialog.service";
 import {GraphQlExpensesService} from "../../../core/graph-ql/services/graph-ql-expenses.service";
 import {UserProjectResponse} from "../../../core/api-models/common.models";
+import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
   selector: 'app-create-update-user-project',
@@ -31,9 +32,7 @@ import {UserProjectResponse} from "../../../core/api-models/common.models";
   templateUrl: './create-update-user-project.component.html',
   styleUrls: ['./create-update-user-project.component.scss'] // Corrected property name
 })
-export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
-  protected ngUnsubscribe: Subject<void> = new Subject<void>();
-
+export class CreateUpdateUserProjectComponent extends BaseUnsubscribeComponent {
   public userProject: UserProjectResponse | undefined;
   public userProjectForm: FormGroup | undefined;
 
@@ -49,16 +48,12 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
     private readonly loaderService: LoaderService,
     private readonly commonDialogService: CommonDialogService,
   ) {
+    super();
     this.userProject = data.userProject;
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.createUserForm();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   private createUserForm() {
@@ -101,6 +96,6 @@ export class CreateUpdateUserProjectComponent implements OnInit, OnDestroy {
           ).subscribe();
     }
 
-    this.commonDialogService.showNoComplaintModal(createUserProjectAction)
+    this.commonDialogService.showNoComplaintDialog(createUserProjectAction)
   }
 }

@@ -1,21 +1,23 @@
 import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 import { LocalizationService } from '../services/localization.service';
 import { Subject, takeUntil, tap } from 'rxjs';
+import {BaseUnsubscribeComponent} from "../base-components/base-unsubscribe.compoinent";
 
 @Directive({
   selector: '[translation]'
 })
-export class TranslateDirective implements OnInit, OnDestroy {
-  protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class TranslateDirective extends BaseUnsubscribeComponent {
   @Input('translation') key: string | undefined;
   @Input() translationAttr: 'innerText' | 'placeholder' = 'innerText';
 
   constructor(
     private el: ElementRef,
     private localizationService: LocalizationService
-  ) {}
+  ) {
+    super();
+  }
 
-  ngOnInit() {
+  override ngOnInit() {
     if (!this.key) {
       return;
     }
@@ -32,11 +34,6 @@ export class TranslateDirective implements OnInit, OnDestroy {
         })
       )
       .subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   private updateTranslation() {

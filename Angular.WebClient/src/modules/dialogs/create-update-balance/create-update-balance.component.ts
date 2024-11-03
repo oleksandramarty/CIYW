@@ -24,6 +24,7 @@ import {SharedModule} from "../../../core/shared.module";
 import {DataItem} from "../../../core/models/common/data-item.model";
 import {DictionaryService} from "../../../core/services/dictionary.service";
 import {InputIconPickerComponent} from "../../common/common-input/input-icon-picker/input-icon-picker.component";
+import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
   selector: 'app-create-update-balance',
@@ -41,9 +42,7 @@ import {InputIconPickerComponent} from "../../common/common-input/input-icon-pic
   templateUrl: './create-update-balance.component.html',
   styleUrl: './create-update-balance.component.scss'
 })
-export class CreateUpdateBalanceComponent implements OnInit, OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
-
+export class CreateUpdateBalanceComponent extends BaseUnsubscribeComponent {
     public balance: BalanceResponse | undefined;
     public userProject: UserProjectResponse | undefined;
     public balanceFormGroup: FormGroup | undefined;
@@ -70,17 +69,13 @@ export class CreateUpdateBalanceComponent implements OnInit, OnDestroy {
         private readonly commonDialogService: CommonDialogService,
         private readonly dictionaryService: DictionaryService
     ) {
+        super();
         this.balance = data.balance;
         this.userProject = data.userProject;
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
         this.createUserForm();
-    }
-
-    ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
     }
 
     private createUserForm() {
@@ -129,7 +124,7 @@ export class CreateUpdateBalanceComponent implements OnInit, OnDestroy {
                 ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintModal(createOrUpdateBalanceAction)
+        this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction)
     }
 
     public removeBalance(): void {

@@ -9,15 +9,14 @@ import {Store} from "@ngrx/store";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
 import {DataItem} from "../../../../core/models/common/data-item.model";
 import {UserResponse} from "../../../../core/api-models/common.models";
+import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
     selector: 'app-user-settings',
     templateUrl: './user-settings.component.html',
     styleUrl: './user-settings.component.scss'
 })
-export class UserSettingsComponent implements OnInit, OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
-
+export class UserSettingsComponent extends BaseUnsubscribeComponent {
     public currentUser: UserResponse | undefined;
     public userSettingsForm: FormGroup | undefined;
 
@@ -31,9 +30,10 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         private readonly store: Store,
         private readonly dictionaryService: DictionaryService,
     ) {
+        super();
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
         this.store.select(selectUser)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
@@ -43,11 +43,6 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
                 }),
                 handleApiError(this.snackBar)
             ).subscribe();
-    }
-
-    ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
     }
 
     public updateUserSettings(): void {

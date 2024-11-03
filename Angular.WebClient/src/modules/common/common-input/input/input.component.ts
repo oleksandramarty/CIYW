@@ -9,6 +9,7 @@ import {LocalizationService} from "../../../../core/services/localization.servic
 import {DictionaryMap} from "../../../../core/models/common/dictionary.model";
 import {IconResponse} from "../../../../core/api-models/common.models";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
+import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 type InputType =
     'input' |
@@ -32,8 +33,7 @@ type InputType =
     styleUrls: ['./input.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent implements OnInit, OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class InputComponent extends BaseUnsubscribeComponent {
     @Input() className: string | undefined;
     @Input() type: InputType = 'input';
     @Input() appearance: 'fill' | 'outline' = 'outline';
@@ -74,6 +74,7 @@ export class InputComponent implements OnInit, OnDestroy {
         private readonly dictionaryService: DictionaryService,
         private snackBar: MatSnackBar
     ) {
+        super();
         if (this.dataItems) {
             this.dataItems.sort((a, b) => (b.isImportant ? 1 : 0) - (a.isImportant ? 1 : 0));
         }
@@ -81,7 +82,7 @@ export class InputComponent implements OnInit, OnDestroy {
         this.displayFn = this.displayFn.bind(this);
     }
 
-    public ngOnInit(): void {
+    override ngOnInit(): void {
         if (!this.formGroup) {
             this.formGroup = new FormGroup({
                 inputControl: new FormControl(null)
@@ -125,11 +126,6 @@ export class InputComponent implements OnInit, OnDestroy {
                     handleApiError(this.snackBar),
                 ).subscribe();
         }
-    }
-
-    public ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
     }
 
     get currentControl(): any {

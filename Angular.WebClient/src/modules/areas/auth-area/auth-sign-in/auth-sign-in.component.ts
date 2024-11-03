@@ -4,14 +4,14 @@ import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { LocalizationService } from "../../../../core/services/localization.service";
 import { AuthService } from "../../../../core/services/auth.service";
+import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
   selector: 'app-auth-sign-in',
   templateUrl: './auth-sign-in.component.html',
   styleUrl: '../auth-area/auth-area.component.scss',
 })
-export class AuthSignInComponent implements OnInit, OnDestroy {
-  protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class AuthSignInComponent extends BaseUnsubscribeComponent {
   loginForm: FormGroup | undefined;
 
   constructor(
@@ -19,19 +19,16 @@ export class AuthSignInComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private readonly localizationService: LocalizationService,
     private readonly authService: AuthService
-  ) {}
+  ) {
+    super();
+  }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.loginForm = this.fb.group({
       login: ['', [Validators.required]],
       password: ['', [Validators.required]],
       rememberMe: [false]
     });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   public login(): void {

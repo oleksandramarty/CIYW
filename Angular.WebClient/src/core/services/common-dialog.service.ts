@@ -37,11 +37,11 @@ export class CommonDialogService {
     ) {
     }
 
-    public showNoComplaintModal(executableAction: () => void): void {
-        this._handeExecutableAction<ConfirmationMessageComponent>(this._getNoComplaintModal(), executableAction);
+    public showNoComplaintDialog(executableAction: () => void): void {
+        this._handeExecutableAction<ConfirmationMessageComponent>(this._getNoComplaintDialog(), executableAction);
     }
 
-    private _getNoComplaintModal(): MatDialogRef<ConfirmationMessageComponent, any> {
+    private _getNoComplaintDialog(): MatDialogRef<ConfirmationMessageComponent, any> {
         return this.dialog.open(ConfirmationMessageComponent, {
             width: '400px',
             maxWidth: '80vw',
@@ -57,15 +57,15 @@ export class CommonDialogService {
         });
     }
 
-    public showRemoveExpenseConfirmationModal(executableAction: () => void): void {
-        this._handeExecutableAction<ConfirmationMessageComponent>(this._getRemoveExpenseConfirmationModal(), executableAction);
+    public showRemoveExpenseConfirmationDialog(executableAction: () => void): void {
+        this._handeExecutableAction<ConfirmationMessageComponent>(this._getRemoveExpenseConfirmationDialog(), executableAction);
     }
 
-    private _getRemoveExpenseConfirmationModal(): MatDialogRef<ConfirmationMessageComponent, any> {
-        return this._getConfirmationModal();
+    private _getRemoveExpenseConfirmationDialog(): MatDialogRef<ConfirmationMessageComponent, any> {
+        return this._getConfirmationDialog();
     }
 
-    private _getConfirmationModal(
+    private _getConfirmationDialog(
         title: string = 'DIALOG.DELETE_TITLE',
         descriptions: string[] = ['DIALOG.DELETE_DESCRIPTION'],
         yesBtn: string = 'COMMON.YES',
@@ -96,31 +96,31 @@ export class CommonDialogService {
             .subscribe();
     }
 
-    public showCreateOrUpdateExpenseModal(executableAction: () => void, expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateExpenseComponent>(this._getCreateUpdateExpenseModal(expense, userProject), executableAction);
+    public showCreateOrUpdateExpenseDialog(executableAction: () => void, expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateExpenseComponent>(this._getCreateUpdateExpenseDialog(expense, userProject), executableAction);
     }
 
-    public showCreateOrUpdateExpenseByFavoriteModal(executableAction: () => void, balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateExpenseComponent>(this._getCreateUpdateExpenseByFavoriteModal(balance, favoriteExpense, userProject), executableAction);
+    public showCreateOrUpdateExpenseByFavoriteDialog(executableAction: () => void, balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateExpenseComponent>(this._getCreateUpdateExpenseByFavoriteDialog(balance, favoriteExpense, userProject), executableAction);
     }
 
-    public showCreateOrUpdatePlannedExpenseModal(executableAction: () => void, plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdatePlannedExpenseComponent>(this._getCreateUpdatePlannedExpenseModal(plannedExpense, userProject), executableAction);
+    public showCreateOrUpdatePlannedExpenseDialog(executableAction: () => void, plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdatePlannedExpenseComponent>(this._getCreateUpdatePlannedExpenseDialog(plannedExpense, userProject), executableAction);
     }
 
-    public showCreateOrUpdateUserBalanceModal(executableAction: () => void, balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateBalanceComponent>(this._getCreateUpdateUserBalanceModal(balance, userProject), executableAction);
+    public showCreateOrUpdateUserBalanceDialog(executableAction: () => void, balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateBalanceComponent>(this._getCreateUpdateUserBalanceDialog(balance, userProject), executableAction);
     }
 
-    public showCreateOrUpdateFavoriteExpenseModal(executableAction: () => void, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateFavoriteExpenseComponent>(this._getCreateUpdateFavoriteExpenseModal(favoriteExpense, userProject), executableAction);
+    public showCreateOrUpdateFavoriteExpenseDialog(executableAction: () => void, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateFavoriteExpenseComponent>(this._getCreateUpdateFavoriteExpenseDialog(favoriteExpense, userProject), executableAction);
     }
 
-    public showIconPickerModal(): Observable<any> {
-        return this._getIconPickerModal().afterClosed();
+    public showIconPickerDialog(): Observable<any> {
+        return this._getIconPickerDialog().afterClosed();
     }
 
-    private _getCreateUpdateExpenseModal(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
+    private _getCreateUpdateExpenseDialog(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
         return this.dialog.open(CreateUpdateExpenseComponent, {
             width: '600px',
             maxWidth: '80vw',
@@ -133,7 +133,7 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdateExpenseByFavoriteModal(balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
+    private _getCreateUpdateExpenseByFavoriteDialog(balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
         return this.dialog.open(CreateUpdateExpenseComponent, {
             width: '600px',
             maxWidth: '80vw',
@@ -146,7 +146,7 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdatePlannedExpenseModal(plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdatePlannedExpenseComponent, any> {
+    private _getCreateUpdatePlannedExpenseDialog(plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdatePlannedExpenseComponent, any> {
         return this.dialog.open(CreateUpdatePlannedExpenseComponent, {
             width: '600px',
             maxWidth: '80vw',
@@ -157,7 +157,7 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdateUserBalanceModal(balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateBalanceComponent, any> {
+    private _getCreateUpdateUserBalanceDialog(balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateBalanceComponent, any> {
         return this.dialog.open(CreateUpdateBalanceComponent, {
             width: '600px',
             maxWidth: '80vw',
@@ -168,7 +168,7 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdateFavoriteExpenseModal(favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateFavoriteExpenseComponent, any> {
+    private _getCreateUpdateFavoriteExpenseDialog(favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateFavoriteExpenseComponent, any> {
         return this.dialog.open(CreateUpdateFavoriteExpenseComponent, {
             width: '600px',
             maxWidth: '80vw',
@@ -179,7 +179,7 @@ export class CommonDialogService {
         });
     }
 
-    private _getIconPickerModal(): MatDialogRef<IconPickerComponent, any> {
+    private _getIconPickerDialog(): MatDialogRef<IconPickerComponent, any> {
         return this.dialog.open(IconPickerComponent, {
             width: '800px',
             maxWidth: '80vw',

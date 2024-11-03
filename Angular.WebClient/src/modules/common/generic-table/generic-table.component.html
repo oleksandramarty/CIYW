@@ -1,0 +1,26 @@
+<mat-divider></mat-divider>
+
+<div class="table-container">
+  <table class="mat-table">
+    <thead>
+    <tr class="mat-tr">
+      <ng-content select="[header]"></ng-content>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-content select="[body]"></ng-content>
+    </tbody>
+  </table>
+</div>
+
+<ng-container *ngIf="totalCount === 0">
+    <div class="empty-table-message">
+        <h4 [translation]="'TABLE.NO_ITEMS'"></h4>
+    </div>
+</ng-container>
+
+<app-common-paginator
+  [totalCount]="totalCount ?? 0"
+  [paginator]="paginator"
+  (pageChanged)="pageChanged.emit($event)"
+></app-common-paginator>

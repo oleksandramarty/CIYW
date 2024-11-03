@@ -16,6 +16,7 @@ import {
     CurrencyResponse,
     UserProjectResponse
 } from "../../../../core/api-models/common.models";
+import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
     selector: 'app-user-project',
@@ -23,8 +24,7 @@ import {
     styleUrl: './user-project.component.scss',
     animations: [fadeInOut]
 })
-export class UserProjectComponent implements OnInit, OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class UserProjectComponent extends BaseUnsubscribeComponent {
     public userProjectId: string | undefined;
     public userProject: UserProjectResponse | undefined;
     public activeTab: number = 0;
@@ -47,6 +47,7 @@ export class UserProjectComponent implements OnInit, OnDestroy {
         private readonly graphQlExpensesService: GraphQlExpensesService,
         private readonly commonDialogService: CommonDialogService
     ) {
+        super();
         this.route.paramMap
             .pipe(
                 take(1),
@@ -62,14 +63,6 @@ export class UserProjectComponent implements OnInit, OnDestroy {
                 handleApiError(this.snackBar)
             )
             .subscribe();
-    }
-
-    public ngOnInit(): void {
-    }
-
-    public ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
     }
 
     private getUserProject(): void {

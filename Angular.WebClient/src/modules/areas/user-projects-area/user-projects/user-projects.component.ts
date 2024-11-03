@@ -9,15 +9,14 @@ import {
     UserAllowedProjectResponse,
     UserProjectResponse
 } from "../../../../core/api-models/common.models";
+import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
     selector: 'app-user-projects',
     templateUrl: './user-projects.component.html',
     styleUrl: './user-projects.component.scss'
 })
-export class UserProjectsComponent implements OnInit, OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
-
+export class UserProjectsComponent extends BaseUnsubscribeComponent {
     get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {
         return this.dictionaryService.currenciesMap;
     }
@@ -37,15 +36,11 @@ export class UserProjectsComponent implements OnInit, OnDestroy {
         private readonly dictionaryService: DictionaryService,
         private readonly userProjectsService: UserProjectsService,
     ) {
+        super();
     }
 
-    public ngOnInit(): void {
+    override ngOnInit(): void {
         this.userProjectsService.initProjects(this.ngUnsubscribe);
-    }
-
-    public ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
     }
 
     public openUserProject(id: string | undefined): void {

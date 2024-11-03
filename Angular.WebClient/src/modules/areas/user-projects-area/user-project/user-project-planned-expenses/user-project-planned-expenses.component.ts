@@ -28,14 +28,14 @@ import {
   selectPlannedExpensesSnapshot
 } from "../../../../../core/store/selectors/expenses.selectors";
 import {expenses_setUserProject_plannedExpensesSnapshot} from "../../../../../core/store/actions/expenses.actions";
+import {BaseUnsubscribeComponent} from "../../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
   selector: 'app-user-project-planned-expenses',
   templateUrl: './user-project-planned-expenses.component.html',
   styleUrl: '../user-project.component.scss'
 })
-export class UserProjectPlannedExpensesComponent implements OnInit, OnDestroy {
-  protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class UserProjectPlannedExpensesComponent extends BaseUnsubscribeComponent {
   @Input() userProject: UserProjectResponse | undefined;
   @Output() plannedExpenseChanged: EventEmitter<void> = new EventEmitter();
   plannedExpenses: FilteredListResponseOfPlannedExpenseResponse | undefined;
@@ -77,16 +77,17 @@ export class UserProjectPlannedExpensesComponent implements OnInit, OnDestroy {
       private readonly graphQlExpensesService: GraphQlExpensesService,
       private readonly commonDialogService: CommonDialogService
   ) {
+    super();
   }
 
-  public ngOnInit(): void {
+  override ngOnInit(): void {
     this.store.select(selectPlannedExpensesSnapshot)
         .pipe(
             take(1),
             tap((result) => {
               if (result) {
-                if (result.plannedExpenses) {
-                  this.plannedExpenses = result.plannedExpenses;
+                if (result.filteredResult) {
+                  this.plannedExpenses = result.filteredResult;
                 }
                 if (result.paginator) {
                   this.paginator = result.paginator;
@@ -112,21 +113,20 @@ export class UserProjectPlannedExpensesComponent implements OnInit, OnDestroy {
         .subscribe();
   }
 
-  public ngOnDestroy(): void {
+  override ngOnDestroy(): void {
     this.store.dispatch(expenses_setUserProject_plannedExpensesSnapshot({
-      plannedExpenses: this.plannedExpenses!,
+      filteredResult: this.plannedExpenses!,
       paginator: this.paginator,
       sort: this.sort,
       dateRange: this.filterFormGroup.value.dateRange,
       query: this.filterFormGroup.value.query,
       categoryIds: this.filterFormGroup.value.categoryIds
     }));
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    super.ngOnDestroy();
   }
 
   public openCreateUpdatePlannedExpenseDialog(plannedExpense: PlannedExpenseResponse | undefined): void {
-    this.commonDialogService.showCreateOrUpdatePlannedExpenseModal(() => {
+    this.commonDialogService.showCreateOrUpdatePlannedExpenseDialog(() => {
       this.getFilteredItems();
       this.plannedExpenseChanged.emit();
     }, plannedExpense, this.userProject);
@@ -145,9 +145,9 @@ export class UserProjectPlannedExpensesComponent implements OnInit, OnDestroy {
             )
             .subscribe();
       }
-      this.commonDialogService.showRemoveExpenseConfirmationModal(removePlannedExpenseActionProceed);
+      this.commonDialogService.showRemoveExpenseConfirmationDialog(removePlannedExpenseActionProceed);
     }
-    this.commonDialogService.showNoComplaintModal(removePlannedExpenseAction);
+    this.commonDialogService.showNoComplaintDialog(removePlannedExpenseAction);
   }
 
   public resetFilter(): void {

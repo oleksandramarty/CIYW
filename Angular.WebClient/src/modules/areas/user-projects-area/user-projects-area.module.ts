@@ -17,6 +17,7 @@ import {
     UserProjectPlannedExpensesComponent
 } from "./user-project/user-project-planned-expenses/user-project-planned-expenses.component";
 import {UserProjectFavoritesComponent} from "./user-project/user-project-favorites/user-project-favorites.component";
+import {GenericTableComponent} from "../../common/generic-table/generic-table.component";
 
 const routes: Routes = [
     {
@@ -48,7 +49,8 @@ const routes: Routes = [
         MatDividerModule,
         AppCommonInputModule,
         MatButtonModule,
-        CommonTopMenuComponent
+        CommonTopMenuComponent,
+        GenericTableComponent
     ],
     exports: [
         RouterModule

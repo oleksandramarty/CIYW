@@ -13,6 +13,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
 import {DictionaryMap} from "../../../../core/models/common/dictionary.model";
 import {IconResponse} from "../../../../core/api-models/common.models";
+import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
     selector: 'app-input-icon-picker',
@@ -28,8 +29,7 @@ import {IconResponse} from "../../../../core/api-models/common.models";
     templateUrl: './input-icon-picker.component.html',
     styleUrl: './input-icon-picker.component.scss'
 })
-export class InputIconPickerComponent implements OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class InputIconPickerComponent extends BaseUnsubscribeComponent {
     @Input() formGroup: FormGroup | undefined;
     @Input() controlName: string = 'inputControl';
 
@@ -46,15 +46,11 @@ export class InputIconPickerComponent implements OnDestroy {
         private readonly commonDialogService: CommonDialogService,
         private readonly snackBar: MatSnackBar,
     ) {
-    }
-
-    ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
+        super();
     }
 
     public openIconPicker(): void {
-        this.commonDialogService.showIconPickerModal()
+        this.commonDialogService.showIconPickerDialog()
             .pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap((icon: number | undefined) => {

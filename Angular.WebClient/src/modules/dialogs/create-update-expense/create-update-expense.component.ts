@@ -25,6 +25,7 @@ import {
     ExpenseResponse, FavoriteExpenseResponse,
     UserProjectResponse
 } from "../../../core/api-models/common.models";
+import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
     selector: 'app-create-update-expense',
@@ -45,8 +46,7 @@ import {
     templateUrl: './create-update-expense.component.html',
     styleUrls: ['./create-update-expense.component.scss'] // Corrected property name
 })
-export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
-    protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class CreateUpdateExpenseComponent extends BaseUnsubscribeComponent {
     public expenseFormGroup: FormGroup | undefined;
 
     public expense: ExpenseResponse | undefined;
@@ -98,6 +98,7 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
         private readonly commonDialogService: CommonDialogService,
         private readonly graphQlExpensesService: GraphQlExpensesService
     ) {
+        super();
         this.expense = data?.expense;
         this.userProject = data?.userProject;
         this.balance = data?.balance;
@@ -112,13 +113,8 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
                     this.currenciesMap?.get(balance.currencyId)?.title));
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
         this.createExpenseForm();
-    }
-
-    ngOnDestroy(): void {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
     }
 
     public createExpenseForm(): void {
@@ -178,6 +174,6 @@ export class CreateUpdateExpenseComponent implements OnInit, OnDestroy {
             ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintModal(createOrUpdateExpenseAction);
+        this.commonDialogService.showNoComplaintDialog(createOrUpdateExpenseAction);
     }
 }
