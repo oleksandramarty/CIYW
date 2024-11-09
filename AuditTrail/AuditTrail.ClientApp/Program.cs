@@ -1,3 +1,4 @@
+using AuditTrail.Business;
 using AuditTrail.Domain;
 using AuditTrail.GraphQL;
 using AuditTrail.Mediatr;
@@ -35,6 +36,7 @@ builder.Services.AddSingleton<ISchema, AuditTrailGraphQLSchema>(services => new 
 builder.AddGraphQL();
 
 // Custom DI
+builder.Services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
 // Custom DI ends
 
 // AutoMapper

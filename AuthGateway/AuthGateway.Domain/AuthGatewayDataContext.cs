@@ -1,6 +1,7 @@
 using AuthGateway.Domain.Models.Users;
 using CommonModule.Core;
 using CommonModule.Facade;
+using CommonModule.Shared.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;

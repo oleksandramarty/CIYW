@@ -1,5 +1,6 @@
 using CommonModule.Core;
 using CommonModule.Facade;
+using CommonModule.Shared.Core;
 using Localizations.Domain.Models.Locales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;

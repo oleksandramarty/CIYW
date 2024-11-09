@@ -1,7 +1,7 @@
 using CommonModule.Shared.Common.BaseInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommonModule.Facade;
+namespace CommonModule.Shared.Core;
 
 /// <summary>
 /// The database save change context.

@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\AuditTrail\AuditTrail.Business\AuditTrail.Business.csproj" />
       <ProjectReference Include="..\..\AuditTrail\AuditTrail.Domain\AuditTrail.Domain.csproj" />
       <ProjectReference Include="..\..\AuditTrail\AuditTrail.Mediatr\AuditTrail.Mediatr.csproj" />
       <ProjectReference Include="..\..\AuthGateway\AuthGateway.Domain\AuthGateway.Domain.csproj" />

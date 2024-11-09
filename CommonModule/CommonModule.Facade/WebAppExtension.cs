@@ -1,9 +1,9 @@
 using System.Text;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using AuditTrail.Business;
 using CommonModule.Core.Filters;
 using CommonModule.Core.Kafka;
-using CommonModule.Core.Middlewares;
 using CommonModule.Interfaces;
 using CommonModule.Repositories;
 using CommonModule.Shared.Constants;

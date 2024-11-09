@@ -1,5 +1,6 @@
 using CommonModule.Core;
 using CommonModule.Facade;
+using CommonModule.Shared.Core;
 using Dictionaries.Domain.Models.Balances;
 using Dictionaries.Domain.Models.Categories;
 using Dictionaries.Domain.Models.Countries;

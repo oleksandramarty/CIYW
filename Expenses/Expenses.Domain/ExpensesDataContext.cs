@@ -1,5 +1,6 @@
 using CommonModule.Core;
 using CommonModule.Facade;
+using CommonModule.Shared.Core;
 using Expenses.Domain.Models.Balances;
 using Microsoft.EntityFrameworkCore;
 using Expenses.Domain.Models.Expenses;

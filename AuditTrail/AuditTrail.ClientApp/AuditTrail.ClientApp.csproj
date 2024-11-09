@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
+      <ProjectReference Include="..\AuditTrail.Business\AuditTrail.Business.csproj" />
       <ProjectReference Include="..\AuditTrail.Domain\AuditTrail.Domain.csproj" />
       <ProjectReference Include="..\AuditTrail.GraphQL\AuditTrail.GraphQL.csproj" />
       <ProjectReference Include="..\AuditTrail.Mediatr\AuditTrail.Mediatr.csproj" />

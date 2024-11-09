@@ -1,3 +1,4 @@
+using AuditTrail.Business;
 using AuditTrail.Domain;
 using AuditTrail.Mediatr;
 using AuthGateway.Domain;
@@ -67,6 +68,7 @@ builder.AddGraphQL();
 
 // Custom DI
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+builder.Services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
 // Custom DI ends
 
 // AutoMapper
