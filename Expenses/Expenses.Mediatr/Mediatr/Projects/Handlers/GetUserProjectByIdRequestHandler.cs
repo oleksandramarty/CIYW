@@ -17,11 +17,11 @@ public class GetUserProjectByIdRequestHandler: MediatrExpensesBase, IRequestHand
     private readonly IMapper mapper;
     
     public GetUserProjectByIdRequestHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ): base(authRepository, entityValidator, userProjectRepository)
+        ): base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
     }

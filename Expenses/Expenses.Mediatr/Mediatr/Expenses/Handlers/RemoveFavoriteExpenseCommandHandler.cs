@@ -13,11 +13,11 @@ public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
     private readonly IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository;
 
     public RemoveFavoriteExpenseCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-    ) : base(authRepository, entityValidator, userProjectRepository)
+    ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.entityValidator = entityValidator;
         this.favoriteExpenseRepository = favoriteExpenseRepository;

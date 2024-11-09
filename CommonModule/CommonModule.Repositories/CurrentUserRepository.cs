@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace CommonModule.Repositories;
 
-public class AuthRepository : IAuthRepository
+public class CurrentUserRepository : ICurrentUserRepository
 {
     private readonly IHttpContextAccessor httpContextAccessor;
 
-    public AuthRepository(IHttpContextAccessor httpContextAccessor)
+    public CurrentUserRepository(IHttpContextAccessor httpContextAccessor)
     {
         this.httpContextAccessor = httpContextAccessor;
     }

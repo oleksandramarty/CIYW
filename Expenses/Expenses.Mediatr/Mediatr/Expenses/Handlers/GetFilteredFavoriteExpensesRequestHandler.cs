@@ -17,11 +17,11 @@ public class GetFilteredFavoriteExpensesRequestHandler: MediatrExpensesBase, IRe
     private readonly IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse> strategy;
 
     public GetFilteredFavoriteExpensesRequestHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
         IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse> strategy
-    ): base(authRepository, entityValidator, userProjectRepository)
+    ): base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.strategy = strategy;
     }

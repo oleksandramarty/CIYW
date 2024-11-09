@@ -15,10 +15,10 @@ public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSig
     private readonly ITokenRepository tokenService;
     
     public AuthSignOutRequestHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
-        ITokenRepository tokenService): base(authRepository)
+        ITokenRepository tokenService): base(currentUserRepository)
     {
         this.entityValidator = entityValidator;
         this.userRepository = userRepository;

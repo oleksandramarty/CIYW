@@ -13,24 +13,24 @@ namespace Expenses.Mediatr.Strategies.GetFilteredResult;
 
 public class GetFilteredResultOfUserAllowedProjectStrategy: IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>
 {
-    private readonly IAuthRepository authRepository;
+    private readonly ICurrentUserRepository currentUserRepository;
     private readonly IMapper mapper;
     private readonly IReadGenericRepository<Guid, UserAllowedProject, ExpensesDataContext> userAllowedProjectRepository;
 
     public GetFilteredResultOfUserAllowedProjectStrategy(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IReadGenericRepository<Guid, UserAllowedProject, ExpensesDataContext> userAllowedProjectRepository
         )
     {
-        this.authRepository = authRepository;
+        this.currentUserRepository = currentUserRepository;
         this.mapper = mapper;
         this.userAllowedProjectRepository = userAllowedProjectRepository;
     }
 
     public async Task<FilteredListResponse<UserAllowedProjectResponse>> GetFilteredResultAsync(GetFilteredUserAllowedProjectsRequest request, CancellationToken cancellationToken)
     {
-        Guid? userId = await this.authRepository.GetCurrentUserIdAsync();
+        Guid? userId = await this.currentUserRepository.GetCurrentUserIdAsync();
 
         if (!userId.HasValue)
         {

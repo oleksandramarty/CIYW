@@ -16,11 +16,11 @@ public class GetFilteredExpensesRequestHandler : MediatrExpensesBase,
     private readonly IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse> strategy;
 
     public GetFilteredExpensesRequestHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
         IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse> strategy
-    ) : base(authRepository, entityValidator, userProjectRepository)
+    ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.strategy = strategy;
     }

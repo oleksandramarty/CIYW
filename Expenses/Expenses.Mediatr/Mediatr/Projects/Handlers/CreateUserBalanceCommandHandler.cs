@@ -16,12 +16,12 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     
     
     public CreateUserBalanceCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IGenericRepository<Guid, Balance, ExpensesDataContext> balanceRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
         IMapper mapper
-        ) : base(authRepository, entityValidator, userProjectRepository)
+        ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
         this.balanceRepository = balanceRepository;

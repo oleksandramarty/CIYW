@@ -13,15 +13,15 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthForgotRequest>
 {
-    private readonly IAuthRepository authRepository;
+    private readonly ICurrentUserRepository currentUserRepository;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
     private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
 
     public AuthForgotRequestHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository
-    ) : base(authRepository)
+    ) : base(currentUserRepository)
     {
         this.entityValidator = entityValidator;
         this.userRepository = userRepository;

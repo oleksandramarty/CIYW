@@ -151,7 +151,7 @@ public static class WebAppExtension
         builder.Services.AddScoped(typeof(IReadGenericRepository<,,>), typeof(GenericRepository<,,>));
         builder.Services.AddScoped(typeof(IGenericRepository<,,>), typeof(GenericRepository<,,>));
 
-        builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+        builder.Services.AddScoped<ICurrentUserRepository, CurrentUserRepository>();
         builder.Services.AddScoped<IJwtTokenFactory, JwtTokenFactory>();
 
         var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];

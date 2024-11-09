@@ -13,11 +13,11 @@ public class RemovePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
     private readonly IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository;
 
     public RemovePlannedExpenseCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-    ) : base(authRepository, entityValidator, userProjectRepository)
+    ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.entityValidator = entityValidator;
         this.plannedExpenseRepository = plannedExpenseRepository;

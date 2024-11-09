@@ -17,11 +17,11 @@ public class GetFilteredPlannedExpensesRequestHandler: MediatrExpensesBase, IReq
     private readonly IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse> strategy;
 
     public GetFilteredPlannedExpensesRequestHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
         IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse> strategy
-    ): base(authRepository, entityValidator, userProjectRepository)
+    ): base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.strategy = strategy;
     }

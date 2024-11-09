@@ -5,16 +5,16 @@ namespace CommonModule.Core.Mediatr;
 
 public class MediatrAuthBase
 {
-    private readonly IAuthRepository authRepository;
+    private readonly ICurrentUserRepository currentUserRepository;
     
-    public MediatrAuthBase(IAuthRepository authRepository)
+    public MediatrAuthBase(ICurrentUserRepository currentUserRepository)
     {
-        this.authRepository = authRepository;
+        this.currentUserRepository = currentUserRepository;
     }
 
     protected async Task<Guid> GetCurrentUserIdAsync()
     {
-        Guid? userId = await this.authRepository.GetCurrentUserIdAsync();
+        Guid? userId = await this.currentUserRepository.GetCurrentUserIdAsync();
 
         if (!userId.HasValue)
         {

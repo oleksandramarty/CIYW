@@ -3,7 +3,7 @@ using CommonModule.Shared.Enums;
 
 namespace CommonModule.Interfaces;
 
-public interface IAuthRepository
+public interface ICurrentUserRepository
 {
     string GetCurrentToken();
     IEnumerable<Claim> GetCurrentClaims();

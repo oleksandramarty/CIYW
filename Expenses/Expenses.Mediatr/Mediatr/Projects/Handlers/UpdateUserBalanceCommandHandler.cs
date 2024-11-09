@@ -15,12 +15,12 @@ public class UpdateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     private readonly IGenericRepository<Guid, Balance, ExpensesDataContext> balanceRepository;
     
     public UpdateUserBalanceCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IGenericRepository<Guid, Balance, ExpensesDataContext> balanceRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ) : base(authRepository, entityValidator, userProjectRepository)
+        ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;

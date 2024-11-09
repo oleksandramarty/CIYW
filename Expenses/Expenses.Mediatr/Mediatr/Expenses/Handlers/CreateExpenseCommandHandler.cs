@@ -20,13 +20,13 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
     private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
 
     public CreateExpenseCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IBalanceRepository balanceRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ) : base(authRepository, entityValidator, userProjectRepository)
+        ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
         this.balanceRepository = balanceRepository;

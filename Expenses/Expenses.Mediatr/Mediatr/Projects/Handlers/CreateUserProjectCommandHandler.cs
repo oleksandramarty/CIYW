@@ -20,10 +20,10 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
     private readonly IGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
     
     public CreateUserProjectCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository): base(authRepository)
+        IGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository): base(currentUserRepository)
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;

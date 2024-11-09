@@ -13,10 +13,10 @@ public class MediatrExpensesBase: MediatrAuthBase
     private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
     
     public MediatrExpensesBase(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ) : base(authRepository)
+        ) : base(currentUserRepository)
     {
         this.entityValidator = entityValidator;
         this.userProjectRepository = userProjectRepository;

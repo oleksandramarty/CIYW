@@ -17,12 +17,12 @@ public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
     private readonly IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository;
 
     public CreateFavoriteExpenseCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-        ) : base(authRepository, entityValidator, userProjectRepository)
+        ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;

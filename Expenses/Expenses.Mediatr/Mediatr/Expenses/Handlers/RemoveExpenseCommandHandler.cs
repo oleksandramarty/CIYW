@@ -20,12 +20,12 @@ public class RemoveExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<R
     private readonly IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository;
 
     public RemoveExpenseCommandHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IBalanceRepository balanceRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
         IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-    ) : base(authRepository, entityValidator, userProjectRepository)
+    ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.balanceRepository = balanceRepository;
         this.entityValidator = entityValidator;

@@ -19,12 +19,12 @@ public class GetCurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<GetC
     private readonly IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository;
 
     public GetCurrentUserRequestHandler(
-        IAuthRepository authRepository,
+        ICurrentUserRepository currentUserRepository,
         IMediator mediator,
         IMapper mapper, 
         IEntityValidator<AuthGatewayDataContext> entityValidator, 
         IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
-        IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository): base(authRepository)
+        IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository): base(currentUserRepository)
     {
         this.mediator = mediator;
         this.mapper = mapper;
