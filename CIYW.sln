@@ -82,17 +82,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monolith.GraphQL", "Monolit
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuditTrail", "AuditTrail", "{622CFC20-E1D0-4580-A745-446EBEA04088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.ClientApp", "AuditTrail.ClientApp\AuditTrail.ClientApp.csproj", "{FBAC44BC-437B-4DF1-BBFC-02D220907178}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.ClientApp", "AuditTrail\AuditTrail.ClientApp\AuditTrail.ClientApp.csproj", "{FBAC44BC-437B-4DF1-BBFC-02D220907178}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuditTrail.Infrastructure", "AuditTrail.Infrastructure", "{85C34A9F-C82A-4F34-964F-0759B616FDE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Business", "AuditTrail.Business\AuditTrail.Business.csproj", "{F604C96C-DA0E-4D0A-BAE5-25AF5D4D2270}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Business", "AuditTrail\AuditTrail.Business\AuditTrail.Business.csproj", "{F604C96C-DA0E-4D0A-BAE5-25AF5D4D2270}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Domain", "AuditTrail.Domain\AuditTrail.Domain.csproj", "{5B5ED4FF-6DA0-456C-98EE-516903353101}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Domain", "AuditTrail\AuditTrail.Domain\AuditTrail.Domain.csproj", "{5B5ED4FF-6DA0-456C-98EE-516903353101}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.GraphQL", "AuditTrail.GraphQL\AuditTrail.GraphQL.csproj", "{B1808633-F3E9-480E-AB0E-E7E2AE59CC5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.GraphQL", "AuditTrail\AuditTrail.GraphQL\AuditTrail.GraphQL.csproj", "{B1808633-F3E9-480E-AB0E-E7E2AE59CC5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Mediatr", "AuditTrail.Mediatr\AuditTrail.Mediatr.csproj", "{25548B80-289E-4E0F-84BA-D625EBF7F1A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Mediatr", "AuditTrail\AuditTrail.Mediatr\AuditTrail.Mediatr.csproj", "{25548B80-289E-4E0F-84BA-D625EBF7F1A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
