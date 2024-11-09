@@ -50,7 +50,7 @@ export class BaseUrlInterceptor implements HttpInterceptor {
               }
               return next.handle(request);
             }),
-            catchError((error: HttpErrorCustomResponse) => {
+            catchError((error: HttpErrorResponse) => {
               if (typeof error === 'string') {
                 error = JSON.parse(error);
               }

@@ -21,6 +21,7 @@ public static class GraphQLEndpoints
     public static readonly GraphQLEndpoint RemovePlannedExpense = new GraphQLEndpoint("expenses_remove_planned_expense");
     public static readonly GraphQLEndpoint CreateUserProject = new GraphQLEndpoint("expenses_create_user_project");
     public static readonly GraphQLEndpoint UpdateUserProject = new GraphQLEndpoint("expenses_update_user_project");
+    public static readonly GraphQLEndpoint GetFilteredAuditTrail = new GraphQLEndpoint("audit_trail_get_filtered_audit_trail");
     public static readonly GraphQLEndpoint GetFilteredExpenses = new GraphQLEndpoint("expenses_get_filtered_expenses");
     public static readonly GraphQLEndpoint GetFilteredPlannedExpenses = new GraphQLEndpoint("expenses_get_filtered_planned_expenses");
     public static readonly GraphQLEndpoint GetFilteredFavoriteExpenses = new GraphQLEndpoint("expenses_get_filtered_favorite_expenses");

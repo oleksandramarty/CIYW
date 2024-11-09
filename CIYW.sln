@@ -82,7 +82,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monolith.GraphQL", "Monolit
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuditTrail", "AuditTrail", "{622CFC20-E1D0-4580-A745-446EBEA04088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.ClientApp", "AuditTrail\AuditTrail.ClientApp\AuditTrail.ClientApp.csproj", "{FBAC44BC-437B-4DF1-BBFC-02D220907178}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.ClientApi", "AuditTrail\AuditTrail.ClientApi\AuditTrail.ClientApi.csproj", "{FBAC44BC-437B-4DF1-BBFC-02D220907178}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuditTrail.Infrastructure", "AuditTrail.Infrastructure", "{85C34A9F-C82A-4F34-964F-0759B616FDE8}"
 EndProject

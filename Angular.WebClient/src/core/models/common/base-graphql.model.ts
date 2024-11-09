@@ -33,7 +33,7 @@ export class BaseGraphQlFilteredModel implements IBaseGraphQlFilteredModel{
         isFull: boolean = false,
         pageNumber: number = 1,
         pageSize: number = 10,
-        column: string = ColumnEnum.Created.toString(),
+        column: string = ColumnEnum.CreatedAt.toString(),
         direction: string = OrderDirectionEnum.Desc.toString(),
         query: string = ''
     ) {

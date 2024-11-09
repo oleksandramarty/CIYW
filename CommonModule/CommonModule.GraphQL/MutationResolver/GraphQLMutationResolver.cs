@@ -69,27 +69,13 @@ public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
             });
     }
     
-    public async Task ExecuteCommandAsync<TCommandResponse>(IMediator mediator, IRequest<TCommandResponse> command, CancellationToken cancellationToken, IResolveFieldContext context)
+    public async Task<TCommandResponse> ExecuteCommandAsync<TCommandResponse>(IMediator mediator, IRequest<TCommandResponse> command, CancellationToken cancellationToken, IResolveFieldContext context)
     {
-        try
-        {
-            await mediator.Send(command, cancellationToken);
-        }
-        catch (Exception e)
-        {
-            context.Errors.Add(new ExecutionError(e.Message));
-        }
+        return await mediator.Send(command, cancellationToken);
     }
     
     public async Task ExecuteCommandAsync(IMediator mediator, IRequest command, CancellationToken cancellationToken, IResolveFieldContext context)
     {
-        try
-        {
-            await mediator.Send(command, cancellationToken);
-        }
-        catch (Exception e)
-        {
-            context.Errors.Add(new ExecutionError(e.Message));
-        }
+        await mediator.Send(command, cancellationToken);
     }
 }

@@ -4,7 +4,8 @@
 db_name="CIYW_MonolithDb"
 localization_db="CIYW_LocalizationDb"
 dictionary_db="CIYW_DictionaryDb"
-users_db="CIYW_Users"
+users_db="CIYW_UserDb"
+auditTrail_db="CIYW_AuditTrailDb"
 
 # Function to get the database name based on the environment
 getDbName() {
@@ -26,4 +27,8 @@ getDbNameDictionary() {
 
 getDbNameUser() {
   getDbName "$users_db"
+}
+
+getDbNameAuditTrail() {
+  echo "$auditTrail_db"
 }

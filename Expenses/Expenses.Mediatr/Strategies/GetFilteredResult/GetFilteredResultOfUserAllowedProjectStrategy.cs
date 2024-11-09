@@ -11,20 +11,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Strategies.GetFilteredResult;
 
-public class GetFilteredResultOfUserAllowedProjectStrategy: IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>
+public class GetFilteredResultOfUserAllowedProjectStrategy: GetFilteredResultStrategyResponseContext<GetFilteredUserAllowedProjectsRequest, UserAllowedProject, UserAllowedProjectResponse>, IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>
 {
     private readonly ICurrentUserRepository currentUserRepository;
-    private readonly IMapper mapper;
     private readonly IReadGenericRepository<Guid, UserAllowedProject, ExpensesDataContext> userAllowedProjectRepository;
 
     public GetFilteredResultOfUserAllowedProjectStrategy(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IReadGenericRepository<Guid, UserAllowedProject, ExpensesDataContext> userAllowedProjectRepository
-        )
+        ): base(mapper)
     {
         this.currentUserRepository = currentUserRepository;
-        this.mapper = mapper;
         this.userAllowedProjectRepository = userAllowedProjectRepository;
     }
 
@@ -40,28 +38,6 @@ public class GetFilteredResultOfUserAllowedProjectStrategy: IGetFilteredResultSt
         var query = this.userAllowedProjectRepository.GetQueryable(up => up.UserId  == userId.Value, 
             up => up.Include(p => p.UserProject).ThenInclude(b => b.Balances));
         
-        var total = await query.CountAsync(cancellationToken);
-
-        List<UserAllowedProject> userAllowedProjects = new List<UserAllowedProject>();
-
-        if (request.Paginator != null)
-        {
-            userAllowedProjects = request.Paginator.IsFull ? 
-                await query.ToListAsync(cancellationToken) :
-                await query.Skip((request.Paginator.PageNumber - 1) * request.Paginator.PageSize)
-                    .Take(request.Paginator.PageSize)
-                    .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            userAllowedProjects = await query.ToListAsync(cancellationToken);
-        }
-
-        return new FilteredListResponse<UserAllowedProjectResponse>
-        {
-            Entities = userAllowedProjects.Select(x => this.mapper.Map<UserAllowedProject, UserAllowedProjectResponse>(x)).ToList(),
-            Paginator = request?.Paginator,
-            TotalCount = total
-        };
+        return await this.GetFilteredResultAsync(request, query, cancellationToken);
     }
 }

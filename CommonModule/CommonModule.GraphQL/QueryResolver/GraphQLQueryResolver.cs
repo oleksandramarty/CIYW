@@ -139,14 +139,6 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
     
     public async Task<TCommandResponse?> ExecuteCommandAsync<TCommandResponse>(IMediator mediator, IRequest<TCommandResponse> command, CancellationToken cancellationToken, IResolveFieldContext context)
     {
-        try
-        {
-            return await mediator.Send(command, cancellationToken);
-        }
-        catch (Exception e)
-        {
-            context.Errors.Add(new ExecutionError(e.Message));
-            return default(TCommandResponse);
-        }
+        return await mediator.Send(command, cancellationToken);
     }
 }

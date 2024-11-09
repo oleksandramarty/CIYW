@@ -15,10 +15,13 @@
 
     <ItemGroup>
       <Folder Include="Mediatr\Commands\" />
-      <Folder Include="Mediatr\Handlers\" />
-      <Folder Include="Mediatr\Requests\" />
-      <Folder Include="Strategies\GetFilteredResult\" />
       <Folder Include="Validators\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Core\CommonModule.Core.csproj" />
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
+      <ProjectReference Include="..\AuditTrail.Domain\AuditTrail.Domain.csproj" />
     </ItemGroup>
 
 </Project>

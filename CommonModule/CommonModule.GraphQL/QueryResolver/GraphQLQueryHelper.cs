@@ -1,6 +1,8 @@
+using AuditTrail.Mediatr.Mediatr.Requests;
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using CommonModule.GraphQL.Types.Common;
 using CommonModule.GraphQL.Types.InputTypes.AuthGateway;
+using CommonModule.GraphQL.Types.Responses.AuditTrail.AuditTrail;
 using CommonModule.GraphQL.Types.Responses.AuthGateway;
 using CommonModule.GraphQL.Types.Responses.AuthGateway.Users;
 using CommonModule.GraphQL.Types.Responses.Dictionaries;
@@ -14,6 +16,7 @@ using CommonModule.GraphQL.Types.Responses.Expenses.Models.Expenses;
 using CommonModule.GraphQL.Types.Responses.Expenses.Models.Projects;
 using CommonModule.GraphQL.Types.Responses.Lists;
 using CommonModule.GraphQL.Types.Responses.Localizations.Models.Locales;
+using CommonModule.Shared.Responses.AuditTrail;
 using CommonModule.Shared.Responses.Auth;
 using CommonModule.Shared.Responses.AuthGateway.Users;
 using CommonModule.Shared.Responses.Base;
@@ -69,6 +72,7 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
     }
     public void AddAuditTrailQueries()
     {
+        this.GetFilteredEntities<FilteredListResponseOfGenericType<AuditTrailResponse, AuditTrailResponseType>, AuditTrailResponse, GetFilteredAuditTrailRequest>(GraphQLEndpoints.GetFilteredAuditTrail);
     }
 
     public void AddDictionariesQueries()

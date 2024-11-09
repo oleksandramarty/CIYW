@@ -3,7 +3,7 @@ namespace CommonModule.Shared.Enums.AuditTrail;
 /// <summary>
 /// Enum for AuditTrailType
 /// </summary>
-public enum AuditTrailTypeEnum
+public enum AuditTrailEnum
 {
     /// <summary>
     /// Informational message

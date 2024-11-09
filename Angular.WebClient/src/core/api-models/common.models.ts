@@ -613,8 +613,8 @@ export interface IBaseSortableRequest {
 
 export enum ColumnEnum {
     Date = 1,
-    Created = 2,
-    Modified = 3,
+    CreatedAt = 2,
+    UpdatedAt = 3,
     Title = 4,
     Description = 5,
     Amount = 6,
@@ -1548,6 +1548,172 @@ export interface IFavoriteExpenseResponse extends IBaseDateTimeEntityOfGuid {
     iconId: number;
     createdUserId: string;
     version: string;
+}
+
+export class FilteredListResponseOfAuditTrailResponse implements IFilteredListResponseOfAuditTrailResponse {
+    entities!: AuditTrailResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount!: number;
+
+    constructor(data?: IFilteredListResponseOfAuditTrailResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.entities = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["entities"])) {
+                this.entities = [] as any;
+                for (let item of _data["entities"])
+                    this.entities!.push(AuditTrailResponse.fromJS(item));
+            }
+            this.paginator = _data["paginator"] ? PaginatorEntity.fromJS(_data["paginator"]) : <any>undefined;
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilteredListResponseOfAuditTrailResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilteredListResponseOfAuditTrailResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.entities)) {
+            data["entities"] = [];
+            for (let item of this.entities)
+                data["entities"].push(item.toJSON());
+        }
+        data["paginator"] = this.paginator ? this.paginator.toJSON() : <any>undefined;
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilteredListResponseOfAuditTrailResponse {
+    entities: AuditTrailResponse[];
+    paginator?: PaginatorEntity | undefined;
+    totalCount: number;
+}
+
+export class AuditTrailResponse extends BaseDateTimeEntityOfGuid implements IAuditTrailResponse {
+    entityType?: AuditTrailEntityEnum | undefined;
+    action?: AuditTrailActionEnum | undefined;
+    type!: AuditTrailEnum;
+    exceptionType?: ExceptionEnum | undefined;
+    message?: string | undefined;
+    entityId?: string | undefined;
+    oldValue?: string | undefined;
+    newValue?: string | undefined;
+    payload?: string | undefined;
+    uri?: string | undefined;
+    userId?: string | undefined;
+    archiveDate?: Date | undefined;
+
+    constructor(data?: IAuditTrailResponse) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.entityType = _data["entityType"];
+            this.action = _data["action"];
+            this.type = _data["type"];
+            this.exceptionType = _data["exceptionType"];
+            this.message = _data["message"];
+            this.entityId = _data["entityId"];
+            this.oldValue = _data["oldValue"];
+            this.newValue = _data["newValue"];
+            this.payload = _data["payload"];
+            this.uri = _data["uri"];
+            this.userId = _data["userId"];
+            this.archiveDate = _data["archiveDate"] ? new Date(_data["archiveDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static override fromJS(data: any): AuditTrailResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditTrailResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["entityType"] = this.entityType;
+        data["action"] = this.action;
+        data["type"] = this.type;
+        data["exceptionType"] = this.exceptionType;
+        data["message"] = this.message;
+        data["entityId"] = this.entityId;
+        data["oldValue"] = this.oldValue;
+        data["newValue"] = this.newValue;
+        data["payload"] = this.payload;
+        data["uri"] = this.uri;
+        data["userId"] = this.userId;
+        data["archiveDate"] = this.archiveDate ? this.archiveDate.toISOString() : <any>undefined;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IAuditTrailResponse extends IBaseDateTimeEntityOfGuid {
+    entityType?: AuditTrailEntityEnum | undefined;
+    action?: AuditTrailActionEnum | undefined;
+    type: AuditTrailEnum;
+    exceptionType?: ExceptionEnum | undefined;
+    message?: string | undefined;
+    entityId?: string | undefined;
+    oldValue?: string | undefined;
+    newValue?: string | undefined;
+    payload?: string | undefined;
+    uri?: string | undefined;
+    userId?: string | undefined;
+    archiveDate?: Date | undefined;
+}
+
+export enum AuditTrailEntityEnum {
+    User = 1,
+    UserProject = 2,
+    UserAllowedProject = 3,
+    Expense = 4,
+}
+
+export enum AuditTrailActionEnum {
+    ExceptionHandlingMiddleware = 1,
+}
+
+export enum AuditTrailEnum {
+    Info = 1,
+    Warning = 2,
+    Error = 3,
+    Create = 4,
+    Update = 5,
+    Delete = 6,
+    Job = 7,
+    JobManually = 8,
+}
+
+export enum ExceptionEnum {
+    AuthException = 1,
+    LockException = 2,
+    JobException = 3,
+    BusinessException = 4,
+    EntityNotFoundException = 5,
+    ForbiddenException = 6,
+    VersionException = 7,
+    BaseException = 8,
+    Exception = 9,
 }
 
 export class VersionedListResponseOfCurrencyResponse extends BaseVersionEntity implements IVersionedListResponseOfCurrencyResponse {

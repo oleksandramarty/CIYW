@@ -1,5 +1,8 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Enums;
 using CommonModule.Shared.Requests.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Core.Extensions;
 
@@ -11,12 +14,33 @@ public static class FilterExtension
         {
             throw new ArgumentNullException(nameof(filter));
         }
+
+        if (string.IsNullOrEmpty(filter.Query))
+        {
+            filter.Query = null;
+        }
+
+        if (filter.DateRange != null &&
+            !filter.DateRange.StartDate.HasValue &&
+            !filter.DateRange.EndDate.HasValue)
+        {
+            filter.DateRange = null;
+        }
         
-        filter.Query ??= string.Empty;
         filter.DateRange.CheckOrApplyDefaultExpenseFilter();
-        filter.AmountRange.CheckAmountRangeFilter();
+        
+        if (filter.AmountRange != null &&
+            !filter.AmountRange.AmountFrom.HasValue &&
+            !filter.AmountRange.AmountTo.HasValue)
+        {
+            filter.AmountRange = null;
+        }
+        
+        filter.AmountRange.CheckAmountRange();
+        
         filter.Paginator.CheckPaginator();
     }
+    
     public static void CheckOrApplyDefaultExpenseFilter(this BaseDateRangeFilterRequest? range)
     {
         if (range == null)
@@ -35,19 +59,20 @@ public static class FilterExtension
         range.EndDate.SetMidnight();
     }
     
-    public static void CheckAmountRangeFilter(this BaseAmountRangeFilterRequest? range)
+    /// <summary>
+    /// Checks or applies the default filter to the date range filter request.
+    /// </summary>
+    /// <param name="range">The date range filter request to check or apply the default filter.</param>
+    public static void CheckAmountRange(this BaseAmountRangeFilterRequest? range)
     {
-        if (range != null)
+        if (range == null)
         {
-            if (range.AmountFrom.HasValue && range.AmountTo.HasValue && range.AmountFrom > range.AmountTo)
-            {
-                range.AmountTo = range.AmountFrom;
-            }
-            
-            if (range.AmountFrom.HasValue && range.AmountFrom < 0)
-            {
-                range.AmountFrom = 0;
-            }
+            return;
+        }
+        
+        if (range.AmountFrom < 0.0m)
+        {
+            range.AmountFrom = 0.0m;
         }
     }
 
@@ -85,5 +110,39 @@ public static class FilterExtension
         {
             paginator.PageSize = 100;
         }
+    }
+    
+    /// <summary>
+    /// Sorts the query by the title field.
+    /// </summary>
+    /// <param name="query">Query to be sorted</param>
+    /// <param name="direction">Direction of the sorting</param>
+    /// <typeparam name="TEntity">Type of the entity</typeparam>
+    public static void SortByCreatedAt<TEntity>(this IQueryable<TEntity> query, OrderDirectionEnum? direction)
+        where TEntity : ICreatedBaseDateTimeEntity
+    {
+        if (direction == null)
+        {
+            return;
+        }
+        
+        query = direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt);
+    }
+    
+    /// <summary>
+    /// Sorts the query by the updated at field.
+    /// </summary>
+    /// <param name="query">Query to be sorted</param>
+    /// <param name="direction">Direction of the sorting</param>
+    /// <typeparam name="TEntity">Type of the entity</typeparam>
+    public static void SortByUpdatedAt<TEntity>(this IQueryable<TEntity> query, OrderDirectionEnum? direction)
+        where TEntity : IUpdatedBaseDateTimeEntity
+    {
+        if (direction == null)
+        {
+            return;
+        }
+        
+        query = direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.UpdatedAt) : query.OrderByDescending(x => x.UpdatedAt);
     }
 }

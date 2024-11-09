@@ -27,12 +27,19 @@ if [ "$ASPNETCORE_ENVIRONMENT" = "Development" ]; then
     # Execute the SQL command
     psql -h $db_host -p $db_port -U $db_user -c "$sql"
   done
-else
-      echo "Dropping database: CIYW_MonolithDb"
-      sql="DROP DATABASE IF EXISTS \"CIYW_MonolithDb\";"
-      
+else     
+    # Array of database names
+    dbNames=("CIYW_MonolithDb" "CIYW_AuditTrailDb")
+        
+    # Loop through each database name and drop it
+    for db_name in "${dbNames[@]}"; do
+      # Construct the SQL command to drop the database
+      echo "Dropping database: $db_name"
+      sql="DROP DATABASE IF EXISTS \"$db_name\";"
+          
       # Execute the SQL command
       psql -h $db_host -p $db_port -U $db_user -c "$sql"
+    done
 fi
 
 # Unset the password variable for security

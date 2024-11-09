@@ -1,6 +1,7 @@
 using AuditTrail.Business;
 using AuditTrail.Domain;
 using AuditTrail.Mediatr;
+using AuditTrail.Mediatr.Mediatr.Requests;
 using AuthGateway.Domain;
 using AuthGateway.Mediatr;
 using AuthGateway.Mediatr.Validators.Auth;
@@ -8,6 +9,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommonModule.Core.Strategies.GetFilteredResult;
 using CommonModule.Facade;
+using CommonModule.Shared.Responses.AuditTrail;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
 using Dictionaries.Domain;
@@ -38,7 +40,7 @@ builder.AddDatabaseContext<ExpensesDataContext>();
 builder.AddDatabaseContext<LocalizationsDataContext>();
 builder.AddDatabaseContext<DictionariesDataContext>();
 builder.AddDatabaseContext<AuthGatewayDataContext>();
-builder.AddDatabaseContext<AuditTrailDataContext>();
+builder.AddDatabaseContext<AuditTrailDataContext>("Logs");
 builder.AddDynamoDB();
 builder.AddSwagger(true);
 builder.AddCorsPolicy();
@@ -100,6 +102,7 @@ builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpenses
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse>, GetFilteredResultOfFavoriteExpenseStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>, GetFilteredResultOfUserProjectStrategy>();
 builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>, GetFilteredResultOfUserAllowedProjectStrategy>();
+builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredAuditTrailRequest, AuditTrailResponse>, GetFilteredResultOfAuditTrailStrategy>();
 // Strategies end
 
 var app = builder.Build();

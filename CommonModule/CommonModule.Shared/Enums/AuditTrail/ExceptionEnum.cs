@@ -1,6 +1,6 @@
 namespace CommonModule.Shared.Enums.AuditTrail;
 
-public enum ExceptionTypeEnum
+public enum ExceptionEnum
 {
     AuthException = 1,
     LockException = 2,

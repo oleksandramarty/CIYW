@@ -1,6 +1,7 @@
 using CommonModule.Shared;
 using CommonModule.Shared.Enums;
 using CommonModule.Shared.Requests.Base;
+using CommonModule.Shared.Responses.AuditTrail;
 using CommonModule.Shared.Responses.Auth;
 using CommonModule.Shared.Responses.AuthGateway.Users;
 using CommonModule.Shared.Responses.Base;
@@ -36,6 +37,7 @@ public static class GraphQLModelExtension
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<UserProjectResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<UserAllowedProjectResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<FavoriteExpenseResponse>>());
+            config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<FilteredListResponse<AuditTrailResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CurrencyResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<FrequencyResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<LocaleResponse>>());

@@ -1,5 +1,69 @@
 import {gql} from "@apollo/client";
 
+export const GET_FILTERED_AUDIT_TRAIL = gql`
+    query GetFilteredAuditTrail(
+        $isFull: Boolean,
+        $pageNumber: Int,
+        $pageSize: Int,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
+        $column: String,
+        $direction: String,
+        $query: String,
+        $amountFrom: Decimal,
+        $amountTo: Decimal,
+        $entityType: String,
+        $action: String,
+        $type: String,
+        $exceptionType: String,
+        $entityId: ID,
+        $userId: ID,
+    ) {
+        audit_trail_get_filtered_audit_trail(
+            isFull: $isFull,
+            pageNumber: $pageNumber,
+            pageSize: $pageSize,
+            dateFrom: $dateFrom,
+            dateTo: $dateTo,
+            column: $column,
+            direction: $direction,
+            query: $query,
+            amountFrom: $amountFrom,
+            amountTo: $amountTo,
+            entityType: $entityType,
+            action: $action,
+            type: $type,
+            exceptionType: $exceptionType,
+            entityId: $entityId,
+            userId: $userId
+        ) {
+            entities {
+                id
+                createdAt
+                entityType
+                action
+                type
+                exceptionType
+                message
+                entityId
+                oldValue
+                newValue
+                payload
+                uri
+                userId
+                archiveDate
+            }
+            paginator {
+                pageNumber
+                pageSize
+                isFull
+            }
+            totalCount
+        }
+    }
+`;
+
+
 export const GET_FILTERED_EXPENSES = gql`
     query GetFilteredExpenses(
         $isFull: Boolean,
@@ -31,8 +95,8 @@ export const GET_FILTERED_EXPENSES = gql`
         ) {
             entities {
                 id
-                created
-                modified
+                createdAt
+                updatedAt
                 title
                 description
                 amount
@@ -84,8 +148,8 @@ export const GET_FILTERED_PLANNED_EXPENSES = gql`
         ) {
             entities {
                 id
-                created
-                modified
+                createdAt
+                updatedAt
                 title
                 description
                 amount
@@ -140,8 +204,8 @@ export const GET_FILTERED_FAVORITE_EXPENSES = gql`
         ) {
             entities {
                 id
-                created
-                modified
+                createdAt
+                updatedAt
                 title
                 description
                 limit
@@ -416,8 +480,8 @@ export const GET_USER_PROJECT_BY_ID = gql`
                 id
                 title
                 iconId
-                created
-                modified
+                createdAt
+                updatedAt
                 amount
                 currencyId
                 userProjectId
@@ -427,8 +491,8 @@ export const GET_USER_PROJECT_BY_ID = gql`
                 userId
             }
             version
-            created
-            modified
+            createdAt
+            updatedAt
         }
     }
 `;
@@ -467,8 +531,8 @@ export const GET_FILTERED_USER_PROJECTS = gql`
                     id
                     title
                     iconId
-                    created
-                    modified
+                    createdAt
+                    updatedAt
                     amount
                     currencyId
                     userProjectId
@@ -478,8 +542,8 @@ export const GET_FILTERED_USER_PROJECTS = gql`
                     userId
                 }
                 version
-                created
-                modified
+                createdAt
+                updatedAt
             }
             paginator {
                 pageNumber
@@ -528,8 +592,8 @@ export const GET_FILTERED_USER_ALLOWED_PROJECTS = gql`
                         id
                         title
                         iconId
-                        created
-                        modified
+                        createdAt
+                        updatedAt
                         amount
                         currencyId
                         userProjectId
@@ -539,8 +603,8 @@ export const GET_FILTERED_USER_ALLOWED_PROJECTS = gql`
                         userId
                     }
                     version
-                    created
-                    modified
+                    createdAt
+                    updatedAt
                 }
                 userId
                 isReadOnly

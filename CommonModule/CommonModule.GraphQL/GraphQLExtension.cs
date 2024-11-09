@@ -1,7 +1,9 @@
+using AuditTrail.Mediatr.Mediatr.Requests;
 using CommonModule.Core.Exceptions;
 using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Enums;
+using CommonModule.Shared.Enums.AuditTrail;
 using CommonModule.Shared.Requests.Base;
 using Expenses.Mediatr.Mediatr.Expenses.Requests;
 using GraphQL;
@@ -24,7 +26,13 @@ public static class GraphQLExtension
             new QueryArgument<DecimalGraphType> { Name = "amountFrom" },
             new QueryArgument<DecimalGraphType> { Name = "amountTo" },
             new QueryArgument<IdGraphType> { Name = "userProjectId" },
-            new QueryArgument<ListGraphType<IntGraphType>> { Name = "categoryIds" }
+            new QueryArgument<ListGraphType<IntGraphType>> { Name = "categoryIds" },
+            new QueryArgument<StringGraphType> { Name = "entityType" },
+            new QueryArgument<StringGraphType> { Name = "action" },
+            new QueryArgument<StringGraphType> { Name = "type" },
+            new QueryArgument<StringGraphType> { Name = "exceptionType" },
+            new QueryArgument<IdGraphType> { Name = "entityId" },
+            new QueryArgument<IdGraphType> { Name = "userId" }
         );
     }
 
@@ -39,7 +47,7 @@ public static class GraphQLExtension
 
         query.Sort = new BaseSortableRequest
         {
-            Column = context.GetArgument<ColumnEnum?>("column") ?? ColumnEnum.Created,
+            Column = context.GetArgument<ColumnEnum?>("column") ?? ColumnEnum.CreatedAt,
             Direction = context.GetArgument<OrderDirectionEnum?>("direction") ?? OrderDirectionEnum.Desc
         };
 
@@ -111,6 +119,18 @@ public static class GraphQLExtension
             };
 
             return (TFilter)(object)favoriteExpensesRequest;
+        }
+        
+        if (query is GetFilteredAuditTrailRequest auditTrailRequest)
+        {
+            auditTrailRequest.EntityType = context.GetArgument<AuditTrailEntityEnum?>("entityType");
+            auditTrailRequest.Action = context.GetArgument<AuditTrailActionEnum?>("action");
+            auditTrailRequest.Type = context.GetArgument<AuditTrailEnum?>("type");
+            auditTrailRequest.ExceptionType = context.GetArgument<ExceptionEnum?>("exceptionType");
+            auditTrailRequest.EntityId = context.GetArgument<Guid?>("entityId");
+            auditTrailRequest.UserId = context.GetArgument<Guid?>("userId");
+
+            return (TFilter)(object)auditTrailRequest;
         }
 
         return query;

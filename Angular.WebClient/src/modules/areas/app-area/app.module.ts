@@ -63,6 +63,13 @@ export const routes: Routes = [
   { path: 'settings', pathMatch: 'full', redirectTo: 'in-development' },
   { path: 'notifications', pathMatch: 'full', redirectTo: 'in-development' },
   {
+    path: 'admin',
+    loadChildren: () => import('../admin-areas/admin-area.module')
+        .then(m => m.AdminAreaModule),
+    // TODO only admins
+    canActivate: [AuthGuard]
+  },
+  {
     path: '',
     loadChildren: () => import('../user-projects-area/user-projects-area.module')
       .then(m => m.UserProjectsAreaModule),

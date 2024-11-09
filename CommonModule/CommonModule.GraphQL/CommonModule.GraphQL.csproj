@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\AuditTrail\AuditTrail.Mediatr\AuditTrail.Mediatr.csproj" />
       <ProjectReference Include="..\..\AuthGateway\AuthGateway.Mediatr\AuthGateway.Mediatr.csproj" />
       <ProjectReference Include="..\..\Dictionaries\Dictionaries.Mediatr\Dictionaries.Mediatr.csproj" />
       <ProjectReference Include="..\..\Expenses\Expenses.Mediatr\Expenses.Mediatr.csproj" />

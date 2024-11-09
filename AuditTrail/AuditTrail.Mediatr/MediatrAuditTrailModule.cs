@@ -1,4 +1,5 @@
 using System.Reflection;
+using AuditTrail.Mediatr.Mediatr.Requests;
 using Autofac;
 using MediatR;
 
@@ -10,5 +11,7 @@ public class MediatrAuditTrailModule: Autofac.Module
     {
         builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
             .AsImplementedInterfaces();
+        
+        builder.RegisterAssemblyTypes(typeof(GetFilteredAuditTrailRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
     }
 }

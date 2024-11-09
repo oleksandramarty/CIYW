@@ -44,7 +44,7 @@ export class UserProjectFavoritesComponent extends BaseUnsubscribeComponent {
     favoriteExpenses: FilteredListResponseOfFavoriteExpenseResponse | undefined;
     paginator: PaginatorEntity = new PaginatorEntity({pageSize: 10, pageNumber: 0, isFull: false});
     sort: BaseSortableRequest = new BaseSortableRequest({
-        column: ColumnEnum.Created,
+        column: ColumnEnum.CreatedAt,
         direction: OrderDirectionEnum.Desc
     });
 

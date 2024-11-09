@@ -34,14 +34,14 @@ public class AuditTrailRepository: IAuditTrailRepository
     /// Add log to the database
     /// </summary>
     /// <param name="userId">User ID</param>
-    /// <param name="exceptionType">Exception type</param>
+    /// <param name="exception">Exception type</param>
     /// <param name="message">Exception message</param>
     /// <param name="payload">Request payload</param>
     /// <param name="cancellationToken">The cancellation token</param>
     /// <returns></returns>
     public async Task AddExceptionLogAsync(
         Guid? userId,
-        ExceptionTypeEnum exceptionType,
+        ExceptionEnum exception,
         string? message,
         string? payload,
         CancellationToken cancellationToken)
@@ -50,8 +50,9 @@ public class AuditTrailRepository: IAuditTrailRepository
         {
             Id = Guid.NewGuid(),
             CreatedAt = DateTime.UtcNow,
-            Type = AuditTrailTypeEnum.Error,
-            ExceptionType = exceptionType,
+            Type = AuditTrailEnum.Error,
+            ExceptionType = exception,
+            Action = AuditTrailActionEnum.ExceptionHandlingMiddleware,
             Message = message,
             Payload = payload,
             UserId = userId

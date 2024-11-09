@@ -14,20 +14,18 @@ using Microsoft.EntityFrameworkCore;
 namespace Expenses.Mediatr.Strategies.GetFilteredResult;
 
 public class
-    GetFilteredResultOfUserProjectStrategy : IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>
+    GetFilteredResultOfUserProjectStrategy : GetFilteredResultStrategyResponseContext<GetFilteredUserProjectsRequest, UserProject, UserProjectResponse>, IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>
 {
     private ICurrentUserRepository currentUserRepository;
-    private readonly IMapper mapper;
     private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
 
     public GetFilteredResultOfUserProjectStrategy(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
-    )
+    ): base(mapper)
     {
         this.currentUserRepository = currentUserRepository;
-        this.mapper = mapper;
         this.userProjectRepository = userProjectRepository;
     }
 
@@ -45,28 +43,6 @@ public class
             up => up.CreatedUserId == userId.Value,
             up => up.Include(up =>up.Balances));
 
-        var total = await query.CountAsync(cancellationToken);
-
-        List<UserProject> userProjects = new List<UserProject>();
-
-        if (request.Paginator != null)
-        {
-            userProjects = request.Paginator.IsFull ? 
-                await query.ToListAsync(cancellationToken) :
-                await query.Skip((request.Paginator.PageNumber - 1) * request.Paginator.PageSize)
-                .Take(request.Paginator.PageSize)
-                .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            userProjects = await query.ToListAsync(cancellationToken);
-        }
-
-        return new FilteredListResponse<UserProjectResponse>
-        {
-            Entities = userProjects.Select(x => this.mapper.Map<UserProject, UserProjectResponse>(x)).ToList(),
-            Paginator = request?.Paginator,
-            TotalCount = total
-        };
+        return await this.GetFilteredResultAsync(request, query, cancellationToken);
     }
 }

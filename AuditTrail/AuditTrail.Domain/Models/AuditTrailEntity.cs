@@ -11,22 +11,22 @@ public class AuditTrailEntity: CreatedBaseDateTimeEntity<Guid>
     /// <summary>
     /// EntityType of the entity
     /// </summary>
-    public AuditTrailEntityTypeEnum? EntityType { get; set; }
+    public AuditTrailEntityEnum? EntityType { get; set; }
     
     /// <summary>
     /// Action of the entity
     /// </summary>
-    public AuditTrailActionTypeEnum? Action { get; set; }
+    public AuditTrailActionEnum? Action { get; set; }
     
     /// <summary>
     /// Type of the entity
     /// </summary>
-    public AuditTrailTypeEnum Type { get; set; }
+    public AuditTrailEnum Type { get; set; }
     
     /// <summary>
     /// ExceptionTypeEnum of the log
     /// </summary>
-    public ExceptionTypeEnum? ExceptionType { get; set; }
+    public ExceptionEnum? ExceptionType { get; set; }
     
     /// <summary>
     /// Message of the log
@@ -52,6 +52,11 @@ public class AuditTrailEntity: CreatedBaseDateTimeEntity<Guid>
     /// Payload of the entity
     /// </summary>
     public string? Payload { get; set; }
+    
+    /// <summary>
+    /// Uri
+    /// </summary>
+    public string? Uri { get; set; }
     
     /// <summary>
     /// UserId of the entity

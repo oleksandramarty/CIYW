@@ -2,10 +2,14 @@ using AuditTrail.Business;
 using AuditTrail.Domain;
 using AuditTrail.GraphQL;
 using AuditTrail.Mediatr;
+using AuditTrail.Mediatr.Mediatr.Requests;
 using AuthGateway.Mediatr;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CommonModule.Core.Strategies.GetFilteredResult;
 using CommonModule.Facade;
+using CommonModule.Shared.Responses.AuditTrail;
+using Expenses.Mediatr.Strategies.GetFilteredResult;
 using GraphQL.MicrosoftDI;
 using GraphQL.Types;
 
@@ -16,7 +20,7 @@ if (builder.Environment.IsDevelopment())
     builder.Configuration.AddUserSecrets<Program>();
 }
 
-builder.AddDatabaseContext<AuditTrailDataContext>();
+builder.AddDatabaseContext<AuditTrailDataContext>("Logs");
 builder.AddDynamoDB();
 builder.AddSwagger();
 builder.AddCorsPolicy();
@@ -52,6 +56,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(
 // MediatR modules ends
 
 // Strategies
+builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredAuditTrailRequest, AuditTrailResponse>, GetFilteredResultOfAuditTrailStrategy>();
 // Strategies end
 
 var app = builder.Build();

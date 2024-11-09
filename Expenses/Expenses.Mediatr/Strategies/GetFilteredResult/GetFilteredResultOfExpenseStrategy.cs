@@ -1,4 +1,5 @@
 using AutoMapper;
+using CommonModule.Core.Extensions;
 using CommonModule.Core.Strategies.GetFilteredResult;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Enums;
@@ -11,17 +12,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Strategies.GetFilteredResult;
 
-public class GetFilteredResultOfExpenseStrategy: IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>
+public class GetFilteredResultOfExpenseStrategy: GetFilteredResultStrategyResponseContext<GetFilteredExpensesRequest, Expense, ExpenseResponse>, IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>
 {
-    private readonly IMapper mapper;
     private readonly IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository;
 
     public GetFilteredResultOfExpenseStrategy(
         IMapper mapper,
         IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository
-        )
+        ): base(mapper)
     {
-        this.mapper = mapper;
         this.expenseRepository = expenseRepository;
     }
 
@@ -46,10 +45,6 @@ public class GetFilteredResultOfExpenseStrategy: IGetFilteredResultStrategy<GetF
                      )
             );
 
-        var total = await query.CountAsync(cancellationToken);
-
-        List<Expense> entities = new List<Expense>();
-
         if (request.Sort != null && request.Sort.Column.HasValue)
         {
             switch (request.Sort.Column.Value)
@@ -60,35 +55,18 @@ public class GetFilteredResultOfExpenseStrategy: IGetFilteredResultStrategy<GetF
                 case ColumnEnum.Amount:
                     query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
                     break;
-                case ColumnEnum.Created:
-                    query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt);
+                case ColumnEnum.CreatedAt:
+                    query.SortByCreatedAt(request.Sort.Direction);
                     break;
-                case ColumnEnum.Modified:
-                    query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.UpdatedAt) : query.OrderByDescending(x => x.UpdatedAt);
+                case ColumnEnum.UpdatedAt:
+                    query.SortByUpdatedAt(request.Sort.Direction);
                     break;
                 default:
                     query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.Date) : query.OrderByDescending(x => x.Date);
                     break;
             }
         }
-
-        if (request.Paginator != null)
-        {
-            entities = await query
-                .Skip((request.Paginator.PageNumber - 1) * request.Paginator.PageSize)
-                .Take(request.Paginator.PageSize)
-                .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            entities = await query.ToListAsync(cancellationToken);
-        }
         
-        return new FilteredListResponse<ExpenseResponse>
-        {
-            Entities = entities.Select(x => this.mapper.Map<Expense, ExpenseResponse>(x)).ToList(),
-            Paginator = request?.Paginator,
-            TotalCount = total
-        };
+        return await this.GetFilteredResultAsync(request, query, cancellationToken);
     }
 }

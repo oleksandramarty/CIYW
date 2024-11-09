@@ -4,7 +4,7 @@ import {ApolloQueryResult} from "@apollo/client";
 import {GraphQlService} from "../graph-ql.service";
 import {
     CREATE_EXPENSE, CREATE_FAVORITE_EXPENSE, CREATE_PLANNED_EXPENSE, CREATE_USER_BALANCE,
-    CREATE_USER_PROJECT,
+    CREATE_USER_PROJECT, GET_FILTERED_AUDIT_TRAIL,
     GET_FILTERED_EXPENSES, GET_FILTERED_FAVORITE_EXPENSES,
     GET_FILTERED_PLANNED_EXPENSES,
     GET_FILTERED_USER_ALLOWED_PROJECTS,
@@ -15,7 +15,9 @@ import {
 } from "../queries/graph-ql-expenses.query";
 import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
 import {
-    ColumnEnum,
+    AuditTrailActionEnum,
+    AuditTrailEntityEnum, AuditTrailEnum,
+    ColumnEnum, ExceptionEnum, FilteredListResponseOfAuditTrailResponse,
     FilteredListResponseOfExpenseResponse, FilteredListResponseOfFavoriteExpenseResponse,
     FilteredListResponseOfPlannedExpenseResponse, FilteredListResponseOfUserAllowedProjectResponse,
     FilteredListResponseOfUserProjectResponse,
@@ -97,6 +99,35 @@ export class GraphQlExpensesService {
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{
             expenses_get_filtered_favorite_expenses: FilteredListResponseOfFavoriteExpenseResponse | undefined
+        }>>;
+    }
+
+    public getFilteredAuditTrail(
+        baseFilter: BaseGraphQlFilteredModel,
+        entityType: AuditTrailEntityEnum,
+        action: AuditTrailActionEnum,
+        type: AuditTrailEnum,
+        exceptionType: ExceptionEnum,
+        entityId: string,
+        userId: string
+    ): Observable<ApolloQueryResult<{
+        audit_trail_get_filtered_audit_trail: FilteredListResponseOfAuditTrailResponse | undefined
+    }>> {
+        return this.apolloClient
+            .watchQuery({
+                query: GET_FILTERED_AUDIT_TRAIL,
+                variables: {
+                    ...baseFilter,
+                    entityType,
+                    action,
+                    type,
+                    exceptionType,
+                    entityId,
+                    userId
+                },
+                fetchPolicy: 'network-only',
+            }).valueChanges as Observable<ApolloQueryResult<{
+            audit_trail_get_filtered_audit_trail: FilteredListResponseOfAuditTrailResponse | undefined
         }>>;
     }
 
@@ -350,7 +381,7 @@ export class GraphQlExpensesService {
                     isFull: false,
                     pageNumber: 1,
                     pageSize: 10,
-                    column: ColumnEnum.Created.toString(),
+                    column: ColumnEnum.CreatedAt.toString(),
                     direction: OrderDirectionEnum.Desc.toString()
                 },
                 fetchPolicy: 'network-only',
@@ -369,7 +400,7 @@ export class GraphQlExpensesService {
                     isFull: false,
                     pageNumber: 1,
                     pageSize: 10,
-                    column: ColumnEnum.Created.toString(),
+                    column: ColumnEnum.CreatedAt.toString(),
                     direction: OrderDirectionEnum.Desc.toString()
                 },
                 fetchPolicy: 'network-only',

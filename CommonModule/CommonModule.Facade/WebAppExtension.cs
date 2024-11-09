@@ -35,7 +35,14 @@ public static class WebAppExtension
 
     public static void AddJwtAuthentication(this WebApplicationBuilder builder)
     {
-        byte[] key = Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Jwt:SecretKey"]);
+        string secretKey = builder.Configuration["Authentication:Jwt:SecretKey"];
+        
+        if (string.IsNullOrEmpty(secretKey))
+        {
+            throw new ArgumentNullException(nameof(secretKey), "SecretKey cannot be null or empty.");
+        }
+        
+        byte[] key = Encoding.UTF8.GetBytes(secretKey);
 
         builder.Services.AddAuthentication(options =>
             {
@@ -229,7 +236,7 @@ public static class WebAppExtension
     {
         string version = builder.Configuration.GetVersion();
 
-        app.UseDeveloperExceptionPage();
+        // app.UseDeveloperExceptionPage();
         app.UseSwagger(options => options.SerializeAsV2 = true);
         app.UseSwaggerUI(c =>
             c.SwaggerEndpoint(

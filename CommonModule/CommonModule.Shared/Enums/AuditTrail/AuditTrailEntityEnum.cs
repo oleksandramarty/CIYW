@@ -1,9 +1,9 @@
 namespace CommonModule.Shared.Enums.AuditTrail;
 
 /// <summary>
-/// Enum for AuditTrailEntityType
+/// Enum for AuditTrailEntity
 /// </summary>
-public enum AuditTrailEntityTypeEnum
+public enum AuditTrailEntityEnum
 {
     User = 1,
     UserProject = 2,
