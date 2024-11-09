@@ -6,9 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
-      <ProjectReference Include="..\Localizations.Domain\Localizations.Domain.csproj" />
-    </ItemGroup>
-
 </Project>

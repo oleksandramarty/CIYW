@@ -3,7 +3,7 @@ using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace CommonModule.Shared.Responses.Localizations.Models.Locales;
 
-public class LocalizationResponse: BaseIdEntity<Guid>, IPublicable
+public class LocalizationResponse: BaseIdEntity<Guid>, IPublicableEntity
 {
     public string Key { get; set; }
     public string Value { get; set; }

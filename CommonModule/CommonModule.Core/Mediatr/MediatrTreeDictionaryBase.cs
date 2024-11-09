@@ -8,8 +8,8 @@ namespace CommonModule.Core.Mediatr;
 
 public class MediatrTreeDictionaryBase<TRequest, TId, TParentId, TEntity, TResponse, TDataContext>: IRequestHandler<TRequest, VersionedListResponse<TResponse>>
     where TRequest : IBaseVersionEntity, IRequest<VersionedListResponse<TResponse>>
-    where TEntity : class, ITreeEntity<TId, TParentId>, IActivatable
-    where TResponse : class, ITreeChildren<TResponse>
+    where TEntity : class, ITreeEntityEntity<TId, TParentId>, IActivatableEntity
+    where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {
     private readonly ITreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataContext> treeDictionaryRepository;

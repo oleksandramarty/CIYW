@@ -8,7 +8,7 @@ namespace CommonModule.Core.Mediatr;
 
 public class MediatrDictionaryBase<TRequest, TId, TEntity, TResponse, TDataContext>: IRequestHandler<TRequest, VersionedListResponse<TResponse>>
     where TRequest : IBaseVersionEntity, IRequest<VersionedListResponse<TResponse>>
-    where TEntity : class, IBaseIdEntity<TId>, IActivatable
+    where TEntity : class, IBaseIdEntity<TId>, IActivatableEntity
     where TResponse : class, IBaseIdEntity<TId>
     where TDataContext : DbContext
 {

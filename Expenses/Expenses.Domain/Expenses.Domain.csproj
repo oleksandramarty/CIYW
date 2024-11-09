@@ -15,11 +15,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
+      <Folder Include="Migrations\" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Core\CommonModule.Core.csproj" />
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
     </ItemGroup>
 
 </Project>

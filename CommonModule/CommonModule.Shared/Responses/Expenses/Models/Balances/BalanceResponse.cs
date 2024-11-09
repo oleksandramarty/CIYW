@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums.Expenses;
 
 namespace CommonModule.Shared.Responses.Expenses.Models.Balances;
 
-public class BalanceResponse: BaseDateTimeEntity<Guid>, IBaseVersionEntity, IActivatable
+public class BalanceResponse: BaseDateTimeEntity<Guid>, IBaseVersionEntity, IActivatableEntity
 {
     public Guid UserId { get; set; }
     public decimal Amount { get; set; }

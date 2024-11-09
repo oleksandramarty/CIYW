@@ -33,7 +33,7 @@ public class UpdateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
         
         Balance balance = await this.balanceRepository.GetByIdAsync(command.Id, cancellationToken);
         this.entityValidator.IsEntityExist(balance);
-        this.mapper.Map(command, balance, opts => opts.Items["IsUpdate"] = true);
+        this.mapper.Map(command, balance);
         await this.balanceRepository.UpdateAsync(balance, cancellationToken);
     }
 }

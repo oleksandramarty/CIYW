@@ -10,7 +10,7 @@ public interface IEntityValidator<TDataContext> where TDataContext : DbContext
 {
     void IsEntityExist<T>(T entity);
     void IsEntityActive<T>(T entity)
-        where T : IActivatable?;
+        where T : IActivatableEntity?;
     void IsEntityLocked<T>(T entity)
         where T : IPessimisticOfflineLockEntity?;
     void IsEntityHasWrongVersion<T>(T entity, string version)

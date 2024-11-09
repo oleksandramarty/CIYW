@@ -3,7 +3,7 @@ using CommonModule.Shared.JsonConvertors;
 
 namespace CommonModule.Shared.Common.BaseInterfaces;
 
-public interface IPublicable
+public interface IPublicableEntity
 {
     [JsonConverter(typeof(BooleanJsonConverter))]
     bool IsPublic { get; set; }

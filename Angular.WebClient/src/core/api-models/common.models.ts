@@ -200,8 +200,8 @@ export interface IBaseIdEntityOfGuid {
 }
 
 export class BaseDateTimeEntityOfGuid extends BaseIdEntityOfGuid implements IBaseDateTimeEntityOfGuid {
-    created!: Date;
-    modified?: Date | undefined;
+    createdAt!: Date;
+    updatedAt?: Date | undefined;
 
     constructor(data?: IBaseDateTimeEntityOfGuid) {
         super(data);
@@ -210,8 +210,8 @@ export class BaseDateTimeEntityOfGuid extends BaseIdEntityOfGuid implements IBas
     override init(_data?: any) {
         super.init(_data);
         if (_data) {
-            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
-            this.modified = _data["modified"] ? new Date(_data["modified"].toString()) : <any>undefined;
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
         }
     }
 
@@ -224,16 +224,16 @@ export class BaseDateTimeEntityOfGuid extends BaseIdEntityOfGuid implements IBas
 
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["modified"] = this.modified ? this.modified.toISOString() : <any>undefined;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         super.toJSON(data);
         return data;
     }
 }
 
 export interface IBaseDateTimeEntityOfGuid extends IBaseIdEntityOfGuid {
-    created: Date;
-    modified?: Date | undefined;
+    createdAt: Date;
+    updatedAt?: Date | undefined;
 }
 
 export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserResponse {

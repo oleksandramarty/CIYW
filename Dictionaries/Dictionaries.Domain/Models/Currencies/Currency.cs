@@ -7,7 +7,7 @@ using Dictionaries.Domain.Models.Countries;
 
 namespace Dictionaries.Domain.Models.Currencies;
 
-public class Currency: BaseIdEntity<int>, IActivatable
+public class Currency: BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public string Code { get; set; }

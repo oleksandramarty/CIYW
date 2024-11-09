@@ -15,7 +15,7 @@ public class UserProjectResponseType : ObjectGraphType<UserProjectResponse>
         Field(x => x.CreatedUserId);
         Field<ListGraphType<BalanceResponseType>>(nameof(UserProjectResponse.Balances));
         Field(x => x.Version);
-        Field(x => x.Created);
-        Field(x => x.Modified, nullable: true);
+        Field(x => x.CreatedAt);
+        Field(x => x.UpdatedAt, nullable: true);
     }
 }

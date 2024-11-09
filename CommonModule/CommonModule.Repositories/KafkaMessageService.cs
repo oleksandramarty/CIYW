@@ -1,6 +1,5 @@
 using CommonModule.Core.Kafka;
 using CommonModule.Interfaces;
-using CommonModule.Shared.Domain.AuditTrail;
 using Microsoft.Extensions.Configuration;
 
 namespace CommonModule.Repositories;
@@ -18,7 +17,7 @@ public class KafkaMessageService: IKafkaMessageService
         this.kafkaProducer = kafkaProducer;
     }
 
-    public async Task LogAuditTrailAsync(AuditTrailLog log)
+    public async Task LogAuditTrailAsync(object log)
     {
         await this.kafkaProducer.ProduceAsync(logTopic, log);
     }

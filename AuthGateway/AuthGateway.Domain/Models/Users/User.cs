@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums;
 
 namespace AuthGateway.Domain.Models.Users;
 
-public class User: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionEntity
+public class User: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
 {
     public string Login { get; set; }
     public string LoginNormalized { get; set; }

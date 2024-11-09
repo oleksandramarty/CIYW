@@ -3,7 +3,7 @@ using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace CommonModule.Shared.Responses.Dictionaries.Models.Icons;
 
-public class IconResponse: BaseIdEntity<int>, IActivatable
+public class IconResponse: BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }

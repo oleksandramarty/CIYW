@@ -3,7 +3,7 @@ using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace CommonModule.Shared.Responses.Expenses.Models.Expenses;
 
-public class PlannedExpenseResponse: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionEntity
+public class PlannedExpenseResponse: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
 {
     public string Title { get; set; }
     public string? Description { get; set; }

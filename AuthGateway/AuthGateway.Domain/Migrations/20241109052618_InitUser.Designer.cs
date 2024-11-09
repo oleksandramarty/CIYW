@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthGateway.Domain.Migrations
 {
     [DbContext(typeof(AuthGatewayDataContext))]
-    [Migration("20241016005610_InitUser")]
+    [Migration("20241109052618_InitUser")]
     partial class InitUser
     {
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace AuthGateway.Domain.Migrations
                     b.Property<int>("AuthType")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -85,9 +85,6 @@ namespace AuthGateway.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
@@ -95,6 +92,9 @@ namespace AuthGateway.Domain.Migrations
                     b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UserSettingId")
                         .HasColumnType("uuid");
@@ -135,7 +135,7 @@ namespace AuthGateway.Domain.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DefaultLocale")
@@ -148,11 +148,11 @@ namespace AuthGateway.Domain.Migrations
                     b.Property<Guid>("DefaultUserProjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("TimeZone")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");

@@ -1,3 +1,4 @@
+using CommonModule.Shared.Constants;
 using CommonModule.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -17,7 +18,14 @@ public class UserInRoleAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = context.HttpContext.User;
-        if (user == null || !_roles.Any(role => user.IsInRole(role.ToString())))
+        if (user == null || !user.Identity.IsAuthenticated)
+        {
+            context.Result = new ForbidResult();
+            return;
+        }
+
+        var roleString = user.FindFirst(AuthClaims.Role)?.Value;
+        if (string.IsNullOrEmpty(roleString) || !Enum.TryParse<UserRoleEnum>(roleString, out var role) || !_roles.Contains(role))
         {
             context.Result = new ForbidResult();
         }

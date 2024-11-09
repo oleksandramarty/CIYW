@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Core\CommonModule.Core.csproj" />
       <ProjectReference Include="..\Expenses.Domain\Expenses.Domain.csproj" />
     </ItemGroup>
 

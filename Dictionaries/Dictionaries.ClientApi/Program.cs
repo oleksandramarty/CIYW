@@ -5,10 +5,8 @@ using CommonModule.Facade;
 using Dictionaries.Domain;
 using Dictionaries.GraphQL;
 using Dictionaries.Mediatr;
-using FluentValidation;
 using GraphQL.MicrosoftDI;
 using GraphQL.Types;
-using Localizations.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 

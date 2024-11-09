@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommonModule.Interfaces;
 
 public interface IDictionaryRepository<TId, TEntity, TResponse, TDataContext>
-    where TEntity : class, IBaseIdEntity<TId>, IActivatable
+    where TEntity : class, IBaseIdEntity<TId>, IActivatableEntity
     where TResponse : class, IBaseIdEntity<TId>
     where TDataContext : DbContext
 {

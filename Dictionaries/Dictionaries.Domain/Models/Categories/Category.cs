@@ -7,7 +7,7 @@ using Dictionaries.Domain.Models.Icons;
 
 namespace Dictionaries.Domain.Models.Categories;
 
-public class Category : BaseIdEntity<int>, ITreeEntity<int, int?>, IActivatable
+public class Category : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, IActivatableEntity
 {
     public string Title { get; set; }
     public int IconId { get; set; }

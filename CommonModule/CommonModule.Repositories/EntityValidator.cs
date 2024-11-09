@@ -28,7 +28,7 @@ public class EntityValidator<TDataContext> : IEntityValidator<TDataContext> wher
         }
     }
 
-    public void IsEntityActive<T>(T entity) where T : IActivatable?
+    public void IsEntityActive<T>(T entity) where T : IActivatableEntity?
     {
         if (entity.IsActive == false)
         {

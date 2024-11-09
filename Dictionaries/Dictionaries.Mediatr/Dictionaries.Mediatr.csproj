@@ -14,15 +14,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Core\CommonModule.Core.csproj" />
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Interfaces\CommonModule.Interfaces.csproj" />
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
-      <ProjectReference Include="..\Dictionaries.Domain\Dictionaries.Domain.csproj" />
+      <Folder Include="Mediatr\Commands\" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Mediatr\Commands\" />
+      <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
+      <ProjectReference Include="..\Dictionaries.Domain\Dictionaries.Domain.csproj" />
     </ItemGroup>
 
 </Project>

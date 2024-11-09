@@ -5,7 +5,7 @@ using Expenses.Domain.Models.Projects;
 
 namespace Expenses.Domain.Models.Expenses;
 
-public class PlannedExpense: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionEntity
+public class PlannedExpense: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
 {
     [MaxLength(50)]
     public string Title { get; set; }

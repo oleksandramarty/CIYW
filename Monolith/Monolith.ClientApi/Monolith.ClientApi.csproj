@@ -21,9 +21,16 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\AuthGateway\AuthGateway.Domain\AuthGateway.Domain.csproj" />
+      <ProjectReference Include="..\..\AuthGateway\AuthGateway.Mediatr\AuthGateway.Mediatr.csproj" />
       <ProjectReference Include="..\..\CommonModule\CommonModule.Facade\CommonModule.Facade.csproj" />
+      <ProjectReference Include="..\..\Dictionaries\Dictionaries.Domain\Dictionaries.Domain.csproj" />
+      <ProjectReference Include="..\..\Dictionaries\Dictionaries.Mediatr\Dictionaries.Mediatr.csproj" />
+      <ProjectReference Include="..\..\Expenses\Expenses.Business\Expenses.Business.csproj" />
       <ProjectReference Include="..\..\Expenses\Expenses.Domain\Expenses.Domain.csproj" />
       <ProjectReference Include="..\..\Expenses\Expenses.Mediatr\Expenses.Mediatr.csproj" />
+      <ProjectReference Include="..\..\Localizations\Localizations.Domain\Localizations.Domain.csproj" />
+      <ProjectReference Include="..\..\Localizations\Localizations.Mediatr\Localizations.Mediatr.csproj" />
       <ProjectReference Include="..\Monolith.GraphQL\Monolith.GraphQL.csproj" />
     </ItemGroup>
 

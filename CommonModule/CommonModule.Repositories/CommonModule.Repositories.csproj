@@ -5,13 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
   </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Localizations\Localizations.Domain\Localizations.Domain.csproj" />
-      <ProjectReference Include="..\CommonModule.Core\CommonModule.Core.csproj" />
-      <ProjectReference Include="..\CommonModule.Interfaces\CommonModule.Interfaces.csproj" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="12.0.1" />
       <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.0-preview.2" />
@@ -20,6 +14,12 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-rc.2.24473.5" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
       <PackageReference Include="StackExchange.Redis" Version="2.8.12" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\CommonModule.Core\CommonModule.Core.csproj" />
+      <ProjectReference Include="..\CommonModule.Interfaces\CommonModule.Interfaces.csproj" />
+      <ProjectReference Include="..\CommonModule.Shared\CommonModule.Shared.csproj" />
     </ItemGroup>
 
 </Project>

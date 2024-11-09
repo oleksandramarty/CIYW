@@ -64,10 +64,10 @@ public class GetFilteredResultOfFavoriteExpenseStrategy: IGetFilteredResultStrat
                     query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.CurrentAmount) : query.OrderByDescending(x => x.CurrentAmount);
                     break;
                 case ColumnEnum.Created:
-                    query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.Created) : query.OrderByDescending(x => x.Created);
+                    query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt);
                     break;
                 case ColumnEnum.Modified:
-                    query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.Modified) : query.OrderByDescending(x => x.Modified);
+                    query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.UpdatedAt) : query.OrderByDescending(x => x.UpdatedAt);
                     break;
                 default:
                     query = request.Sort.Direction == OrderDirectionEnum.Asc ? query.OrderBy(x => x.EndDate) : query.OrderByDescending(x => x.EndDate);

@@ -1,3 +1,5 @@
+using CommonModule.Core;
+using CommonModule.Facade;
 using Expenses.Domain.Models.Balances;
 using Microsoft.EntityFrameworkCore;
 using Expenses.Domain.Models.Expenses;
@@ -7,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Expenses.Domain;
 
-public class ExpensesDataContext : DbContext
+public class ExpensesDataContext : DbSaveChangeContext
 {
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<PlannedExpense> PlannedExpenses { get; set; }
@@ -63,7 +65,6 @@ public class ExpensesDataContext : DbContext
                 .WithMany(uc => uc.AllowedUsers)
                 .HasForeignKey(e => e.UserProjectId);
         });
-
 
         modelBuilder.Entity<Balance>(entity => { entity.ToTable("Balances", "Balance"); });
 

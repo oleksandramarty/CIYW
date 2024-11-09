@@ -5,7 +5,7 @@ using Dictionaries.Domain.Models.Categories;
 
 namespace Dictionaries.Domain.Models.Icons;
 
-public class Icon : BaseIdEntity<int>, IActivatable
+public class Icon : BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }

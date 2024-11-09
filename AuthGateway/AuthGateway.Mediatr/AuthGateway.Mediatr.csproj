@@ -14,13 +14,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Interfaces\CommonModule.Interfaces.csproj" />
-      <ProjectReference Include="..\..\CommonModule\CommonModule.Shared\CommonModule.Shared.csproj" />
-      <ProjectReference Include="..\AuthGateway.Domain\AuthGateway.Domain.csproj" />
+      <Folder Include="Mediatr\" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Mediatr\" />
+      <ProjectReference Include="..\AuthGateway.Domain\AuthGateway.Domain.csproj" />
     </ItemGroup>
 
 </Project>

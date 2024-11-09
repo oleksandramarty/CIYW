@@ -36,7 +36,7 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         
         Guid userId = await this.GetCurrentUserIdAsync();
         
-        UserProject userProject = this.mapper.Map<UserProject>(command, opts => opts.Items["IsUpdate"] = false);
+        UserProject userProject = this.mapper.Map<UserProject>(command);
         
         userProject.Id = Guid.NewGuid();
         userProject.CreatedUserId = userId;

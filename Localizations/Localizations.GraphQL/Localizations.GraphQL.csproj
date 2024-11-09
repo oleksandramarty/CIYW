@@ -17,7 +17,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\CommonModule\CommonModule.GraphQL\CommonModule.GraphQL.csproj" />
-      <ProjectReference Include="..\Localizations.Mediatr\Localizations.Mediatr.csproj" />
     </ItemGroup>
-
+    
 </Project>

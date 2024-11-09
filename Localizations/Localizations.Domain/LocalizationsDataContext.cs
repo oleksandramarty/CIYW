@@ -1,3 +1,5 @@
+using CommonModule.Core;
+using CommonModule.Facade;
 using Localizations.Domain.Models.Locales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -5,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Localizations.Domain;
 
-public class LocalizationsDataContext: DbContext
+public class LocalizationsDataContext: DbSaveChangeContext
 {
     public DbSet<Locale> Locales { get; set; }
     public DbSet<Localization> Localizations { get; set; }

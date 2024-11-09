@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums;
 
 namespace Localizations.Domain.Models.Locales;
 
-public class Locale: BaseIdEntity<int>, IActivatable
+public class Locale: BaseIdEntity<int>, IActivatableEntity
 {
     public string IsoCode { get; set; }
     public string Title { get; set; }

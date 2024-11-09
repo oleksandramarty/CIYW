@@ -6,7 +6,7 @@ using CommonModule.Shared.Common;
 
  namespace Dictionaries.Domain.Models.Countries;
  
- public class Country: BaseIdEntity<int>, IActivatable
+ public class Country: BaseIdEntity<int>, IActivatableEntity
  {
      public string Title { get; set; }
      public string Code { get; set; }

@@ -1,8 +1,14 @@
-using CommonModule.Shared.Domain.AuditTrail;
-
 namespace CommonModule.Interfaces;
 
+/// <summary>
+/// Interface for KafkaMessageService
+/// </summary>
 public interface IKafkaMessageService
 {
-    Task LogAuditTrailAsync(AuditTrailLog log);
+    /// <summary>
+    /// Log audit trail
+    /// </summary>
+    /// <param name="log">AuditTrailEntity</param>
+    /// <returns></returns>
+    Task LogAuditTrailAsync(object log);
 }

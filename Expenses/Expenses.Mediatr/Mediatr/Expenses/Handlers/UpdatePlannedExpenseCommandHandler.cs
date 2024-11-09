@@ -40,6 +40,6 @@ public class UpdatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
         await this.CheckUserProjectByIdAsync(currentPlannedExpense.UserProjectId, cancellationToken);
         
         await this.plannedExpenseRepository.UpdateAsync(
-            this.mapper.Map<PlannedExpense>(command, opts => opts.Items["IsUpdate"] = true), cancellationToken);
+            this.mapper.Map<PlannedExpense>(command), cancellationToken);
     }
 }

@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 namespace CommonModule.Repositories;
 
 public class TreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataContext>: ITreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataContext>
-    where TEntity : class, ITreeEntity<TId, TParentId>, IActivatable
-    where TResponse : class, ITreeChildren<TResponse>
+    where TEntity : class, ITreeEntityEntity<TId, TParentId>, IActivatableEntity
+    where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {
     private readonly IMapper mapper;

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Expenses.Domain.Migrations
 {
     [DbContext(typeof(ExpensesDataContext))]
-    [Migration("20241016005604_InitExpense")]
+    [Migration("20241109052614_InitExpense")]
     partial class InitExpense
     {
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace Expenses.Domain.Migrations
                     b.Property<int>("BalanceTypeId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("CurrencyId")
@@ -49,12 +49,12 @@ namespace Expenses.Domain.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -88,7 +88,7 @@ namespace Expenses.Domain.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CreatedUserId")
@@ -101,13 +101,13 @@ namespace Expenses.Domain.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");
@@ -132,7 +132,7 @@ namespace Expenses.Domain.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CreatedUserId")
@@ -160,13 +160,13 @@ namespace Expenses.Domain.Migrations
                     b.Property<decimal>("Limit")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");
@@ -197,7 +197,7 @@ namespace Expenses.Domain.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -213,9 +213,6 @@ namespace Expenses.Domain.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<DateTime>("NextDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -226,6 +223,9 @@ namespace Expenses.Domain.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -276,7 +276,7 @@ namespace Expenses.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CreatedUserId")
@@ -285,12 +285,12 @@ namespace Expenses.Domain.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Version")
                         .IsRequired()

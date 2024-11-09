@@ -8,8 +8,8 @@ public class PlannedExpenseResponseType : ObjectGraphType<PlannedExpenseResponse
     public PlannedExpenseResponseType()
     {
         Field(x => x.Id);
-        Field(x => x.Created);
-        Field(x => x.Modified, nullable: true);
+        Field(x => x.CreatedAt);
+        Field(x => x.UpdatedAt, nullable: true);
         Field(x => x.Title, nullable: true);
         Field(x => x.Description, nullable: true);
         Field(x => x.Amount);

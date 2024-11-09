@@ -17,7 +17,5 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\CommonModule\CommonModule.GraphQL\CommonModule.GraphQL.csproj" />
-      <ProjectReference Include="..\Dictionaries.Mediatr\Dictionaries.Mediatr.csproj" />
     </ItemGroup>
-
 </Project>

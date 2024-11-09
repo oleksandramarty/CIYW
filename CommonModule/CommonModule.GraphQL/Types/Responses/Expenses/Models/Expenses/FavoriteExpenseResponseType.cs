@@ -8,8 +8,8 @@ public class FavoriteExpenseResponseType : ObjectGraphType<FavoriteExpenseRespon
     public FavoriteExpenseResponseType()
     {
         Field(x => x.Id);
-        Field(x => x.Created);
-        Field(x => x.Modified, nullable: true);
+        Field(x => x.CreatedAt);
+        Field(x => x.UpdatedAt, nullable: true);
         Field(x => x.Title);
         Field(x => x.Description, nullable: true);
         Field(x => x.Limit, nullable: true);

@@ -31,7 +31,7 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     {
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
         
-        Balance balance = this.mapper.Map<CreateUserBalanceCommand, Balance>(command, opts => opts.Items["IsUpdate"] = false);
+        Balance balance = this.mapper.Map<CreateUserBalanceCommand, Balance>(command);
         balance.UserId = await this.GetCurrentUserIdAsync();
         await this.balanceRepository.AddAsync(balance, cancellationToken);
     }

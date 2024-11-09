@@ -1,4 +1,5 @@
 using AuthGateway.Domain.Models.Users;
+using CommonModule.Core;
 using CommonModule.Facade;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace AuthGateway.Domain;
 
-public class AuthGatewayDataContext : DbContext
+public class AuthGatewayDataContext : DbSaveChangeContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }

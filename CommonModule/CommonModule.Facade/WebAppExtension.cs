@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using CommonModule.Core.Filters;
 using CommonModule.Core.Kafka;
+using CommonModule.Core.Middlewares;
 using CommonModule.Interfaces;
 using CommonModule.Repositories;
 using CommonModule.Shared.Constants;
@@ -264,7 +265,7 @@ public static class WebAppExtension
 
     public static void AddMiddlewares(this IApplicationBuilder app)
     {
-        // app.UseMiddleware<ExceptionHandlingMiddleware>();
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
     }
 
     #endregion

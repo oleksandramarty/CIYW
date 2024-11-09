@@ -31,7 +31,6 @@ public class MappingAuthProfile: Profile
             .AfterMap((src, dest) =>
             {
                 dest.Id = Guid.NewGuid();
-                dest.Created = DateTime.UtcNow;
                 dest.LoginNormalized = src.Login.ToUpper();
                 dest.EmailNormalized = src.Email.ToUpper();
                 dest.IsActive = true;
@@ -39,11 +38,7 @@ public class MappingAuthProfile: Profile
                 dest.AuthType = UserAuthMethodEnum.Base;
             });
 
-        this.CreateMap<CreateUserSettingCommand, UserSetting>()
-            .ConstructUsing((src, ctx) => 
-                this.CreateOrUpdateEntity<CreateUserSettingCommand, UserSetting, Guid>(src, ctx));
-        this.CreateMap<UpdateUserSettingCommand, UserSetting>()
-            .ConstructUsing((src, ctx) => 
-                this.CreateOrUpdateEntity<UpdateUserSettingCommand, UserSetting, Guid>(src, ctx));
+        this.CreateMap<CreateUserSettingCommand, UserSetting>();
+        this.CreateMap<UpdateUserSettingCommand, UserSetting>();
     }
 }

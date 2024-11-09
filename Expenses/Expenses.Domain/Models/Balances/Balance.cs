@@ -5,7 +5,7 @@ using Expenses.Domain.Models.Projects;
 
 namespace Expenses.Domain.Models.Balances;
 
-public class Balance: BaseDateTimeEntity<Guid>, IBaseVersionEntity, IActivatable
+public class Balance: BaseDateTimeEntity<Guid>, IBaseVersionEntity, IActivatableEntity
 {
     public Guid UserId { get; set; }
     public decimal Amount { get; set; }

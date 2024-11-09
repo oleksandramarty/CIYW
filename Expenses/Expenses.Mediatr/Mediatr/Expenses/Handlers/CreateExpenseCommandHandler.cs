@@ -1,12 +1,7 @@
-using AuthGateway.Mediatr.Validators.Auth;
 using AutoMapper;
-using CommonModule.Core.Exceptions;
-using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
-using CommonModule.Shared.Constants;
 using Expenses.Business;
 using Expenses.Domain;
-using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
 using Expenses.Mediatr.Mediatr.Expenses.Commands;
@@ -46,7 +41,7 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
-        Expense toAdd = this.mapper.Map<Expense>(command, opts => opts.Items["IsUpdate"] = false);
+        Expense toAdd = this.mapper.Map<Expense>(command);
         await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
         return;
     }

@@ -1,4 +1,3 @@
-using Dictionaries.GraphQL;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 

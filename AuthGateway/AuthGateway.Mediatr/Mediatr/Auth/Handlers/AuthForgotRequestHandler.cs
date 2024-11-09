@@ -48,6 +48,6 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
             $"{StringExtension.InterleaveStrings(userId.ToString("N"), Guid.NewGuid().ToString("N"))}" +
             $"&honkler={StringExtension.InterleaveStrings(
                 (new DateTimeOffset(user.LastForgotPasswordRequest.Value).ToUnixTimeSeconds()).ToString(),
-                (new DateTimeOffset(user.Created).ToUnixTimeSeconds()).ToString())}";
+                (new DateTimeOffset(user.CreatedAt).ToUnixTimeSeconds()).ToString())}";
     }
 }

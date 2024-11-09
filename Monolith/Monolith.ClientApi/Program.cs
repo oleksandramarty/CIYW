@@ -1,4 +1,3 @@
-using AuditTrail.Domain;
 using AuthGateway.Domain;
 using AuthGateway.Mediatr;
 using AuthGateway.Mediatr.Validators.Auth;
@@ -36,7 +35,6 @@ builder.AddDatabaseContext<ExpensesDataContext>();
 builder.AddDatabaseContext<LocalizationsDataContext>();
 builder.AddDatabaseContext<DictionariesDataContext>();
 builder.AddDatabaseContext<AuthGatewayDataContext>();
-builder.AddDatabaseContext<AuditTrailDataContext>();
 builder.AddDynamoDB();
 builder.AddSwagger(true);
 builder.AddCorsPolicy();

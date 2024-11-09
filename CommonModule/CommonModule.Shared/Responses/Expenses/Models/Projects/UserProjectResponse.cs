@@ -5,7 +5,7 @@ using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 
 namespace CommonModule.Shared.Responses.Expenses.Models.Projects;
 
-public class UserProjectResponse: BaseDateTimeEntity<Guid>, IActivatable, IBaseVersionEntity
+public class UserProjectResponse: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }

@@ -1,18 +1,12 @@
-using AuthGateway.Mediatr.Validators.Auth;
 using AutoMapper;
-using CommonModule.Core.Exceptions;
-using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
-using CommonModule.Shared.Constants;
 using Expenses.Business;
 using Expenses.Domain;
-using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
 using Expenses.Mediatr.Mediatr.Expenses.Commands;
 using Expenses.Mediatr.Validators.Expenses;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
@@ -51,6 +45,6 @@ public class UpdateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<U
         await this.CheckUserProjectByIdAsync(currentExpense.UserProjectId, cancellationToken);
         
         await this.balanceRepository.UpdateExpenseAsync(currentExpense,
-            this.mapper.Map<Expense>(command, opts => opts.Items["IsUpdate"] = true), cancellationToken);
+            this.mapper.Map<Expense>(command), cancellationToken);
     }
 }

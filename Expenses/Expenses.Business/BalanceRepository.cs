@@ -63,7 +63,6 @@ public class BalanceRepository: IBalanceRepository
             currentExpense.Date = newExpense.Date;
             currentExpense.Description = newExpense.Description;
             currentExpense.Amount = newExpense.Amount;
-            currentExpense.Modified = DateTime.UtcNow;
             currentExpense.BalanceId = newExpense.BalanceId;
             
             this.dataContext.Expenses.Update(currentExpense);

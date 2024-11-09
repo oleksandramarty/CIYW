@@ -4,7 +4,7 @@ using CommonModule.Shared.Responses.Base;
 
 namespace CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 
-public class CategoryResponse : BaseIdEntity<int>, ITreeEntity<int, int?>, ITreeChildren<CategoryResponse>, IActivatable
+public class CategoryResponse : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, ITreeChildrenEntity<CategoryResponse>, IActivatableEntity
 {
     public string Title { get; set; }
     public int IconId { get; set; }

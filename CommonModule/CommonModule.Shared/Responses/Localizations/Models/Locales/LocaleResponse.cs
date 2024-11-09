@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums;
 
 namespace CommonModule.Shared.Responses.Localizations.Models.Locales;
 
-public class LocaleResponse: BaseIdEntity<int>, IActivatable
+public class LocaleResponse: BaseIdEntity<int>, IActivatableEntity
 {
     public string IsoCode { get; set; }
     public string Title { get; set; }

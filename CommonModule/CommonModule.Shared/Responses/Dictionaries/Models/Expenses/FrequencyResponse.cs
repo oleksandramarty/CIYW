@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums.Expenses;
 
 namespace CommonModule.Shared.Responses.Dictionaries.Models.Expenses;
 
-public class FrequencyResponse: BaseIdEntity<int>, IActivatable
+public class FrequencyResponse: BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public string Description { get; set; }

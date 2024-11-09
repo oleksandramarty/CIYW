@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums.Expenses;
 
 namespace CommonModule.Shared.Responses.Dictionaries.Models.Balances;
 
-public class BalanceTypeResponse: BaseIdEntity<int>, IActivatable
+public class BalanceTypeResponse: BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }

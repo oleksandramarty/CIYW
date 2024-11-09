@@ -35,7 +35,7 @@ public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
-        FavoriteExpense toAdd = this.mapper.Map<FavoriteExpense>(command, opts => opts.Items["IsUpdate"] = false);
+        FavoriteExpense toAdd = this.mapper.Map<FavoriteExpense>(command);
         toAdd.CreatedUserId = await this.GetCurrentUserIdAsync();
             
         await this.favoriteExpenseRepository.AddAsync(toAdd, cancellationToken);

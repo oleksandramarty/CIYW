@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Localizations.Mediatr.Mediatr.Locations.Requests;
 
-public class GetLocalizationsRequest: BaseVersionEntity, IPublicable, IRequest<LocalizationsResponse>
+public class GetLocalizationsRequest: BaseVersionEntity, IPublicableEntity, IRequest<LocalizationsResponse>
 {
     public bool IsPublic { get; set; }
 }

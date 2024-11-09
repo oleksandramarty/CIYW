@@ -4,7 +4,7 @@ using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 
 namespace CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 
-public class CurrencyResponse: BaseIdEntity<int>, IActivatable
+public class CurrencyResponse: BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public string Code { get; set; }
