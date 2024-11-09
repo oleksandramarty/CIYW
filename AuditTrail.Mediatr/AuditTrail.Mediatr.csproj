@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac" Version="8.1.0" />
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="FluentValidation" Version="11.10.0" />
+        <PackageReference Include="MediatR" Version="12.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Mediatr\Commands\" />
+      <Folder Include="Mediatr\Handlers\" />
+      <Folder Include="Mediatr\Requests\" />
+      <Folder Include="Strategies\GetFilteredResult\" />
+      <Folder Include="Validators\" />
+    </ItemGroup>
+
+</Project>

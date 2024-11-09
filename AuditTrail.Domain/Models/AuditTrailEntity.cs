@@ -1,0 +1,60 @@
+using CommonModule.Shared.Common;
+using CommonModule.Shared.Enums.AuditTrail;
+
+namespace AuditTrail.Domain.Models;
+
+/// <summary>
+/// Entity for AuditTrail
+/// </summary>
+public class AuditTrailEntity: CreatedBaseDateTimeEntity<Guid>
+{
+    /// <summary>
+    /// EntityType of the entity
+    /// </summary>
+    public AuditTrailEntityTypeEnum? EntityType { get; set; }
+    
+    /// <summary>
+    /// Action of the entity
+    /// </summary>
+    public AuditTrailActionTypeEnum? Action { get; set; }
+    
+    /// <summary>
+    /// Type of the entity
+    /// </summary>
+    public AuditTrailTypeEnum Type { get; set; }
+    
+    /// <summary>
+    /// ExceptionTypeEnum of the log
+    /// </summary>
+    public ExceptionTypeEnum? ExceptionType { get; set; }
+    
+    /// <summary>
+    /// Message of the log
+    /// </summary>
+    public string? Message { get; set; }
+    
+    /// <summary>
+    /// EntityId of the entity
+    /// </summary>
+    public Guid? EntityId { get; set; }
+    
+    /// <summary>
+    /// PropertyName of the entity
+    /// </summary>
+    public string? OldValue { get; set; }
+    
+    /// <summary>
+    /// OldValue of the entity
+    /// </summary>
+    public string? NewValue { get; set; }
+    
+    /// <summary>
+    /// Payload of the entity
+    /// </summary>
+    public string? Payload { get; set; }
+    
+    /// <summary>
+    /// UserId of the entity
+    /// </summary>
+    public Guid? UserId { get; set; }
+}

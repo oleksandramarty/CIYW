@@ -43,6 +43,7 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
         this.AddExpensesQueries();
         this.AddDictionariesQueries();
         this.AddAuthGatewayQueries();
+        this.AddAuditTrailQueries();
     }
     public void AddLocalizationsQueries()
     {
@@ -65,6 +66,9 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
         this.GetFilteredEntities<FilteredListResponseOfGenericType<UserAllowedProjectResponse, UserAllowedProjectResponseType>, UserAllowedProjectResponse, GetFilteredUserAllowedProjectsRequest>(GraphQLEndpoints.GetFilteredUserAllowedProjects);
         
         this.GetEntityById<GuidGraphType, UserProjectResponseType, Guid, UserProjectResponse, GetUserProjectByIdRequest, UserProjectResponse>(GraphQLEndpoints.GetUserProjectById);
+    }
+    public void AddAuditTrailQueries()
+    {
     }
 
     public void AddDictionariesQueries()

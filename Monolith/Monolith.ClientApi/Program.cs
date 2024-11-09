@@ -1,3 +1,5 @@
+using AuditTrail.Domain;
+using AuditTrail.Mediatr;
 using AuthGateway.Domain;
 using AuthGateway.Mediatr;
 using AuthGateway.Mediatr.Validators.Auth;
@@ -35,6 +37,7 @@ builder.AddDatabaseContext<ExpensesDataContext>();
 builder.AddDatabaseContext<LocalizationsDataContext>();
 builder.AddDatabaseContext<DictionariesDataContext>();
 builder.AddDatabaseContext<AuthGatewayDataContext>();
+builder.AddDatabaseContext<AuditTrailDataContext>();
 builder.AddDynamoDB();
 builder.AddSwagger(true);
 builder.AddCorsPolicy();
@@ -73,6 +76,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile(new MappingLocalizationsProfile());
     config.AddProfile(new MappingDictionariesProfile());
     config.AddProfile(new MappingAuthProfile());
+    config.AddProfile(new MappingAuditTrailProfile());
 });
 // AutoMapper ends
 
@@ -85,6 +89,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrDictionariesModule()); });
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrAuthModule()); });
 builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrCommonModule()); });
+builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrAuditTrailModule()); });
 // MediatR modules ends
 
 // Strategies

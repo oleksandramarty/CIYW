@@ -16,6 +16,10 @@ public class GraphQLMutationHelper: GraphQLMutationResolver
     {
         this.AddExpensesMutations();
         this.AddAuthGatewayMutations();
+        this.AddAuditTrailMutations();
+    }
+    public void AddAuditTrailMutations()
+    {
     }
     public void AddExpensesMutations()
     {
