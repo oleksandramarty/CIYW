@@ -1,9 +1,4 @@
 import {RouterModule, Routes} from "@angular/router";
-import {AuthAreaComponent} from "../auth-area/auth-area/auth-area.component";
-import {AuthSignInComponent} from "../auth-area/auth-sign-in/auth-sign-in.component";
-import {AuthSignUpComponent} from "../auth-area/auth-sign-up/auth-sign-up.component";
-import {AuthForgotComponent} from "../auth-area/auth-forgot/auth-forgot.component";
-import {AuthRestoreComponent} from "../auth-area/auth-restore/auth-restore.component";
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
@@ -19,34 +14,27 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSelectModule} from "@angular/material/select";
 import {MatGridListModule} from "@angular/material/grid-list";
-import {AppCommonInputModule} from "../../common/common-input/app-common-input.module";
+import {AppCommonInputModule} from "../../../../common/common-input/app-common-input.module";
 import {MatDividerModule} from "@angular/material/divider";
-import {SharedModule} from "../../../core/shared.module";
-import {AdminAreaComponent} from "./admin-area/admin-area.component";
-import {AuthGuard} from "../../../core/auth-guard";
+import {SharedModule} from "../../../../../core/shared.module";
+import {AdminHomeAreaComponent} from "./admin-home-area/admin-home-area.component";
+import {AdminHomeComponent} from "./admin-home/admin-home.component";
 
 const routes: Routes = [
     {
         path: '',
-        component: AdminAreaComponent
-    },
-    {
-        path: 'audit-trail',
-        loadChildren: () => import('./areas/admin-audit-trail-area/admin-audit-trail-area.module')
-            .then(m => m.AdminAuditTrailAreaModule),
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'home',
-        loadChildren: () => import('./areas/admin-home-area/admin-home-area.module')
-            .then(m => m.AdminHomeAreaModule),
-        canActivate: [AuthGuard]
-    },
+        component: AdminHomeAreaComponent,
+        children: [
+            {path: 'admin', pathMatch: 'full', redirectTo: 'home'},
+            {path: '', component: AdminHomeComponent},
+        ]
+    }
 ];
 
 @NgModule({
     declarations: [
-        AdminAreaComponent,
+        AdminHomeAreaComponent,
+        AdminHomeComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -72,5 +60,5 @@ const routes: Routes = [
         RouterModule
     ]
 })
-export class AdminAreaModule {
+export class AdminHomeAreaModule {
 }

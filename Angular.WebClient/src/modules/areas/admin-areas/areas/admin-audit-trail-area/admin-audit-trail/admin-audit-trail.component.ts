@@ -5,8 +5,7 @@ import {BaseFilterComponent} from "../../../../../../core/base-components/base-f
 import {
     AuditTrailActionEnum,
     AuditTrailEntityEnum, AuditTrailEnum, ExceptionEnum,
-    FilteredListResponseOfAuditTrailResponse,
-    FilteredListResponseOfExpenseResponse,
+    FilteredListResponseOfAuditTrailResponse
 } from "../../../../../../core/api-models/common.models";
 import {BaseGraphQlFilteredModel} from "../../../../../../core/models/common/base-graphql.model";
 import {createUserProjectExpensesHeader, ITableHeaderItem} from "../../../../../../core/models/table.model";
