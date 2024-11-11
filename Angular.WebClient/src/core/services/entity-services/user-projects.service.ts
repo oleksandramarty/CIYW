@@ -9,8 +9,8 @@ import {selectExpensesState} from "../../store/selectors/expenses.selectors";
 import {finalize, Subject, switchMap, take, takeUntil, tap} from "rxjs";
 import {handleApiError} from "../../helpers/rxjs.helper";
 import {
-    CreateUpdateUserProjectComponent
-} from "../../../modules/dialogs/create-update-user-project/create-update-user-project.component";
+    CreateUpdateUserProjectDialogComponent
+} from "../../../modules/dialogs/create-update-user-project-dialog/create-update-user-project-dialog.component";
 import {expenses_setUserAllowedProjects, expenses_setUserProjects} from "../../store/actions/expenses.actions";
 import {GraphQlExpensesService} from "../../graph-ql/services/graph-ql-expenses.service";
 import {
@@ -60,7 +60,7 @@ export class UserProjectsService {
     }
 
     public openCreateUserProjectDialog(ngUnsubscribe: Subject<void>): void {
-        const dialogRef = this.dialog.open(CreateUpdateUserProjectComponent, {
+        const dialogRef = this.dialog.open(CreateUpdateUserProjectDialogComponent, {
             width: '400px',
             maxWidth: '80vw',
             data: {}

@@ -36,3 +36,16 @@ export const createUserProjectExpensesHeader = (): ITableHeaderItem[] => {
     new TableHeaderItem('COMMON.CATEGORY', undefined, false, undefined),
   ];
 }
+
+export const createAdminAuditTrailHeader = (): ITableHeaderItem[] => {
+  return [
+    new TableHeaderItem('', undefined, false, undefined),
+    new TableHeaderItem('AUDIT_TRAIL.TYPE', undefined, false, undefined),
+    new TableHeaderItem('AUDIT_TRAIL.ACTION', undefined, false, undefined),
+    new TableHeaderItem('AUDIT_TRAIL.EXCEPTION_TYPE', undefined, false, undefined),
+    new TableHeaderItem('AUDIT_TRAIL.MESSAGE', undefined, false, undefined),
+    new TableHeaderItem('AUDIT_TRAIL.URI', undefined, false, undefined),
+    new TableHeaderItem('AUDIT_TRAIL.ENTITY_TYPE', undefined, false, undefined),
+    new TableHeaderItem('AUDIT_TRAIL.CREATED_AT', undefined, true, ColumnEnum.CreatedAt),
+  ];
+}

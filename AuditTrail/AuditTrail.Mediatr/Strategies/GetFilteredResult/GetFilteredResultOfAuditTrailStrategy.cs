@@ -46,6 +46,31 @@ public class GetFilteredResultOfAuditTrailStrategy :
                     )
                 )
             ) &&
+            (
+                string.IsNullOrEmpty(request.TranslationKey) ||
+                (
+                    e.Message != null && (
+                        EF.Functions.Like(e.Message, $"{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Message, $"%{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Message, $"%{request.TranslationKey}")
+                    ) ||
+                    e.OldValue != null && (
+                        EF.Functions.Like(e.Uri, $"{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Uri, $"%{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Uri, $"%{request.TranslationKey}")
+                    ) ||
+                    e.NewValue != null && (
+                        EF.Functions.Like(e.Uri, $"{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Uri, $"%{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Uri, $"%{request.TranslationKey}")
+                    ) ||
+                    e.Payload != null && (
+                        EF.Functions.Like(e.Uri, $"{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Uri, $"%{request.TranslationKey}%") ||
+                        EF.Functions.Like(e.Uri, $"%{request.TranslationKey}")
+                    )
+                )
+            ) &&
             (request.EntityType == null || e.EntityType != null && e.EntityType == request.EntityType) &&
             (request.Action == null || e.Action != null && e.Action == request.Action) &&
             (request.Type == null || e.Type == request.Type) &&

@@ -14,8 +14,7 @@
             <td class="mat-td">
                 <ng-container *ngFor="let balance of userProject.balances; let j=index">
                     <span
-                            class="amount"
-                            style="margin-right: 0.5rem;"
+                            class="amount mr-0-5rem"
                             [ngClass]="{'negative': balance.amount < 0}">
                         {{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}
                     </span>

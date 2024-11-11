@@ -1,0 +1,116 @@
+<section class="user-project-section">
+    <div class="section-header mb-0-5rem">
+        <h1 [translation]="'ADMIN.MENU.AUDIT_TRAIL'"></h1>
+    </div>
+
+    <div class="filter-container" *ngIf="filterFormGroup" [formGroup]="filterFormGroup">
+        <div class="filter-input-item">
+            <app-input type="autocomplete" [dataItems]="translationsDataItems"
+                       label="Translations" [formGroup]="filterFormGroup" controlName="translationKey">
+            </app-input>
+        </div>
+        <div class="filter-input-container mb-1-5rem">
+            <div class="filter-input-item">
+                <app-input type="select" [dataItems]="exceptionTypeDataItems"
+                                 label="Exception Type" [formGroup]="filterFormGroup" controlName="exceptionType">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input type="select" [dataItems]="auditTrailEntityDataItems"
+                                 label="Entity type" [formGroup]="filterFormGroup" controlName="entityType">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input type="select" [dataItems]="auditTrailActionTypeDataItems"
+                                 label="Action" [formGroup]="filterFormGroup" controlName="action">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input type="select" [dataItems]="auditTrailTypeDataItems"
+                                 label="Log type" [formGroup]="filterFormGroup" controlName="type">
+                </app-input>
+            </div>
+        </div>
+        <div class="filter-input-container">
+            <div class="filter-input-item">
+                <app-input
+                        type="input"
+                        label="Search"
+                        [formGroup]="filterFormGroup"
+                        controlName="query">
+                </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input type="input" label="Entity Id" [formGroup]="filterFormGroup" controlName="entityId"> </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input type="input" label="User Id" [formGroup]="filterFormGroup" controlName="userId"> </app-input>
+            </div>
+            <div class="filter-input-item">
+                <app-input type="rangedatapicker" label="Date"
+                                 [formGroup]="filterFormGroup" controlName="dateRange">
+                </app-input>
+            </div>
+        </div>
+        <div class="filter-button-container">
+            <div>
+                <div class="filter-button-item">
+                </div>
+            </div>
+            <div>
+                <div class="filter-button-item">
+                    <button mat-button color="warn" [translation]="'FILTER.RESET'" (click)="resetFilter()"></button>
+                    <button mat-flat-button color="primary" [translation]="'COMMON.FILTER.SEARCH'"
+                            (click)="getFilteredItems()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-generic-table
+            *ngIf="!!filteredResult"
+            [totalCount]="filteredResult?.totalCount"
+            [paginator]="paginator"
+            (pageChanged)="pageChanged($event)"
+    >
+        <ng-container header>
+            <ng-container *ngFor="let headerItem of tableHeaderItems">
+                <th class="mat-th" *ngIf="!headerItem.isSortable">{{ headerItem.title }}</th>
+                <th class="mat-th pointer" *ngIf="headerItem.isSortable && headerItem.column" (click)="sortItems(headerItem.column)">
+                    {{ headerItem.title }}
+                    <i
+                            [ngClass]="{
+              'fa-solid': true,
+              'fa-arrow-down-wide-short': sort!.direction === directions.Desc,
+              'fa-arrow-down-short-wide': sort!.direction === directions.Asc,
+              'opacity-07': sort!.column !== headerItem.column
+            }"></i>
+                </th>
+            </ng-container>
+        </ng-container>
+        <ng-container body>
+            <tr class="mat-tr" *ngFor="let entity of filteredResult.entities; let i=index">
+                <td class="mat-td"><i class="fa-solid fa-eye"
+                                      (click)="openDetails(entity)"></i></td>
+                <td class="mat-td"
+                    [ngClass]="{'amount negative': !!entity.exceptionType}"
+                >{{ entity.type }}</td>
+                <td class="mat-td"
+                    [ngClass]="{'amount negative': !!entity.exceptionType}"
+                >{{ entity.action }}</td>
+                <td class="mat-td"
+                    [ngClass]="{'amount negative': !!entity.exceptionType}"
+                >{{ entity.exceptionType }}</td>
+                <td class="mat-td">{{ entity.message | translation }}</td>
+                <td class="mat-td">{{ entity.uri }}</td>
+                <td class="mat-td">{{ entity.entityType }}</td>
+                <td class="mat-td">
+                    <span class="row-item-container">
+                        {{ entity.createdAt | localDate:'MMMM dd, yyyy HH:mm' }} <span
+                            class="row-subitem">{{ utcTimeShift }}</span>
+                    </span>
+                </td>
+            </tr>
+        </ng-container>
+    </app-generic-table>
+</section>

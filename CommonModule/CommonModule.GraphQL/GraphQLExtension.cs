@@ -32,7 +32,8 @@ public static class GraphQLExtension
             new QueryArgument<StringGraphType> { Name = "type" },
             new QueryArgument<StringGraphType> { Name = "exceptionType" },
             new QueryArgument<IdGraphType> { Name = "entityId" },
-            new QueryArgument<IdGraphType> { Name = "userId" }
+            new QueryArgument<IdGraphType> { Name = "userId" },
+            new QueryArgument<StringGraphType> { Name = "translationKey" }
         );
     }
 
@@ -129,6 +130,7 @@ public static class GraphQLExtension
             auditTrailRequest.ExceptionType = context.GetArgument<ExceptionEnum?>("exceptionType");
             auditTrailRequest.EntityId = context.GetArgument<Guid?>("entityId");
             auditTrailRequest.UserId = context.GetArgument<Guid?>("userId");
+            auditTrailRequest.TranslationKey = context.GetArgument<string?>("translationKey");
 
             return (TFilter)(object)auditTrailRequest;
         }

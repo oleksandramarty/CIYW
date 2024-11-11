@@ -5,6 +5,7 @@ using CommonModule.GraphQL.Types.InputTypes.AuthGateway;
 using CommonModule.GraphQL.Types.Responses.AuditTrail.AuditTrail;
 using CommonModule.GraphQL.Types.Responses.AuthGateway;
 using CommonModule.GraphQL.Types.Responses.AuthGateway.Users;
+using CommonModule.GraphQL.Types.Responses.Base;
 using CommonModule.GraphQL.Types.Responses.Dictionaries;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Balances;
 using CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Categories;
@@ -138,6 +139,6 @@ public class GraphQLQueryHelper: GraphQLQueryResolver
             JwtTokenResponse
         >(GraphQLEndpoints.SignIn);
         
-        this.ExecuteForEmptyCommand<AuthSignOutRequest, bool>(GraphQLEndpoints.SignOut);
+        this.ExecuteForEmptyCommand<BaseBoolResponseType, AuthSignOutRequest, BaseBoolResponse>(GraphQLEndpoints.SignOut);
     }
 }

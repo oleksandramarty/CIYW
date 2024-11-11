@@ -56,7 +56,7 @@
                 <th class="mat-th" *ngIf="!headerItem.isSortable">{{ headerItem.title }}</th>
                 <th class="mat-th pointer" *ngIf="headerItem.isSortable && headerItem.column" (click)="sortItems(headerItem.column)">
                     {{ headerItem.title }}
-                    <i *ngIf="true"
+                    <i
                        [ngClass]="{
               'fa-solid': true,
               'fa-arrow-down-wide-short': sort!.direction === directions.Desc,
@@ -87,4 +87,3 @@
         </ng-container>
     </app-generic-table>
 </section>
-

@@ -53,10 +53,23 @@
   font-size: 1.1rem;
 }
 
+.menu-button-container {
+  display: block;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-center {
     display: none; /* Hide navigation links on smaller screens */
+  }
+
+  .menu-button-container {
+    display: block; /* Show burger menu button on smaller screens */
   }
 
   .user-info {
@@ -87,4 +100,10 @@
     justify-content: space-between;
     width: fit-content;
   }
+}
+
+.header-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }

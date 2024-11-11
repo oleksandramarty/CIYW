@@ -7,6 +7,7 @@ import { SiteSettingsService } from './site-settings.service';
 import { LocalizationsResponse, SiteSettingsResponse, LocalizationResponse, LocalizationItemResponse } from '../api-models/common.models';
 import { GraphQlLocalizationsService } from '../graph-ql/services/graph-ql-localizations.service';
 import {LoaderService} from "./loader.service";
+import {DataItem} from "../models/common/data-item.model";
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +40,16 @@ export class LocalizationService {
     set publicLocalizations(value: LocalizationsResponse | undefined) {
         this._publicLocalizations = value;
         this.localStorageService.setItem('localization_public', value);
+    }
+
+    get getAllLocalizationsDataItems(): DataItem[] {
+        const dataItems: DataItem[] = [];
+        this.getAllLocalizations?.data.forEach(locale => {
+            locale.items.forEach(localeItem => {
+                dataItems.push(new DataItem(undefined, localeItem.key, localeItem.value, localeItem.key));
+            });
+        });
+        return dataItems;
     }
 
     get getAllLocalizations(): LocalizationsResponse | undefined {

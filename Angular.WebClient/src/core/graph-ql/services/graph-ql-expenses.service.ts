@@ -109,7 +109,8 @@ export class GraphQlExpensesService {
         type: AuditTrailEnum,
         exceptionType: ExceptionEnum,
         entityId: string,
-        userId: string
+        userId: string,
+        translationKey: string
     ): Observable<ApolloQueryResult<{
         audit_trail_get_filtered_audit_trail: FilteredListResponseOfAuditTrailResponse | undefined
     }>> {
@@ -123,7 +124,8 @@ export class GraphQlExpensesService {
                     type,
                     exceptionType,
                     entityId,
-                    userId
+                    userId,
+                    translationKey
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{

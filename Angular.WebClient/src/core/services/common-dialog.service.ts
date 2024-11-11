@@ -1,30 +1,34 @@
 import {Injectable} from "@angular/core";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {ConfirmationMessageComponent} from "../../modules/dialogs/confirmation-message/confirmation-message.component";
+import {ConfirmationMessageDialogComponent} from "../../modules/dialogs/confirmation-message-dialog/confirmation-message-dialog.component";
 import {Observable, take, takeUntil} from "rxjs";
 import {tap} from "rxjs/operators";
 import {handleApiError} from "../helpers/rxjs.helper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LocalizationService} from "./localization.service";
 import {
-    CreateUpdateExpenseComponent
-} from "../../modules/dialogs/create-update-expense/create-update-expense.component";
+    CreateUpdateExpenseDialogComponent
+} from "../../modules/dialogs/create-update-expense-dialog/create-update-expense-dialog.component";
 import {
-    CreateUpdatePlannedExpenseComponent
-} from "../../modules/dialogs/create-update-planned-expense/create-update-planned-expense.component";
+    CreateUpdatePlannedExpenseDialogComponent
+} from "../../modules/dialogs/create-update-planned-expense-dialog/create-update-planned-expense-dialog.component";
 import {
+    AuditTrailResponse,
     BalanceResponse,
     ExpenseResponse, FavoriteExpenseResponse,
     PlannedExpenseResponse,
     UserProjectResponse
 } from "../api-models/common.models";
 import {
-    CreateUpdateBalanceComponent
-} from "../../modules/dialogs/create-update-balance/create-update-balance.component";
-import {IconPickerComponent} from "../../modules/dialogs/icon-picker/icon-picker.component";
+    CreateUpdateBalanceDialogComponent
+} from "../../modules/dialogs/create-update-balance-dialog/create-update-balance-dialog.component";
+import {IconPickerDialogComponent} from "../../modules/dialogs/icon-picker-dialog/icon-picker-dialog.component";
 import {
-    CreateUpdateFavoriteExpenseComponent
-} from "../../modules/dialogs/create-update-favorite-expense/create-update-favorite-expense.component";
+    CreateUpdateFavoriteExpenseDialogComponent
+} from "../../modules/dialogs/create-update-favorite-expense-dialog/create-update-favorite-expense-dialog.component";
+import {
+    AuditTrailDetailsDialogComponent
+} from "../../modules/dialogs/audit-trail-details-dialog/audit-trail-details-dialog.component";
 
 @Injectable({
     providedIn: 'root'
@@ -38,11 +42,11 @@ export class CommonDialogService {
     }
 
     public showNoComplaintDialog(executableAction: () => void): void {
-        this._handeExecutableAction<ConfirmationMessageComponent>(this._getNoComplaintDialog(), executableAction);
+        this._handeExecutableAction<ConfirmationMessageDialogComponent>(this._getNoComplaintDialog(), executableAction);
     }
 
-    private _getNoComplaintDialog(): MatDialogRef<ConfirmationMessageComponent, any> {
-        return this.dialog.open(ConfirmationMessageComponent, {
+    private _getNoComplaintDialog(): MatDialogRef<ConfirmationMessageDialogComponent, any> {
+        return this.dialog.open(ConfirmationMessageDialogComponent, {
             width: '400px',
             maxWidth: '80vw',
             data: {
@@ -58,10 +62,10 @@ export class CommonDialogService {
     }
 
     public showRemoveExpenseConfirmationDialog(executableAction: () => void): void {
-        this._handeExecutableAction<ConfirmationMessageComponent>(this._getRemoveExpenseConfirmationDialog(), executableAction);
+        this._handeExecutableAction<ConfirmationMessageDialogComponent>(this._getRemoveExpenseConfirmationDialog(), executableAction);
     }
 
-    private _getRemoveExpenseConfirmationDialog(): MatDialogRef<ConfirmationMessageComponent, any> {
+    private _getRemoveExpenseConfirmationDialog(): MatDialogRef<ConfirmationMessageDialogComponent, any> {
         return this._getConfirmationDialog();
     }
 
@@ -69,8 +73,8 @@ export class CommonDialogService {
         title: string = 'DIALOG.DELETE_TITLE',
         descriptions: string[] = ['DIALOG.DELETE_DESCRIPTION'],
         yesBtn: string = 'COMMON.YES',
-        noBtn: string = 'COMMON.NO'): MatDialogRef<ConfirmationMessageComponent, any> {
-        return this.dialog.open(ConfirmationMessageComponent, {
+        noBtn: string = 'COMMON.NO'): MatDialogRef<ConfirmationMessageDialogComponent, any> {
+        return this.dialog.open(ConfirmationMessageDialogComponent, {
             width: '400px',
             maxWidth: '80vw',
             data: {
@@ -97,31 +101,35 @@ export class CommonDialogService {
     }
 
     public showCreateOrUpdateExpenseDialog(executableAction: () => void, expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateExpenseComponent>(this._getCreateUpdateExpenseDialog(expense, userProject), executableAction);
+        this._handeExecutableAction<CreateUpdateExpenseDialogComponent>(this._getCreateUpdateExpenseDialog(expense, userProject), executableAction);
     }
 
     public showCreateOrUpdateExpenseByFavoriteDialog(executableAction: () => void, balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateExpenseComponent>(this._getCreateUpdateExpenseByFavoriteDialog(balance, favoriteExpense, userProject), executableAction);
+        this._handeExecutableAction<CreateUpdateExpenseDialogComponent>(this._getCreateUpdateExpenseByFavoriteDialog(balance, favoriteExpense, userProject), executableAction);
     }
 
     public showCreateOrUpdatePlannedExpenseDialog(executableAction: () => void, plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdatePlannedExpenseComponent>(this._getCreateUpdatePlannedExpenseDialog(plannedExpense, userProject), executableAction);
+        this._handeExecutableAction<CreateUpdatePlannedExpenseDialogComponent>(this._getCreateUpdatePlannedExpenseDialog(plannedExpense, userProject), executableAction);
     }
 
     public showCreateOrUpdateUserBalanceDialog(executableAction: () => void, balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateBalanceComponent>(this._getCreateUpdateUserBalanceDialog(balance, userProject), executableAction);
+        this._handeExecutableAction<CreateUpdateBalanceDialogComponent>(this._getCreateUpdateUserBalanceDialog(balance, userProject), executableAction);
     }
 
     public showCreateOrUpdateFavoriteExpenseDialog(executableAction: () => void, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateFavoriteExpenseComponent>(this._getCreateUpdateFavoriteExpenseDialog(favoriteExpense, userProject), executableAction);
+        this._handeExecutableAction<CreateUpdateFavoriteExpenseDialogComponent>(this._getCreateUpdateFavoriteExpenseDialog(favoriteExpense, userProject), executableAction);
     }
 
     public showIconPickerDialog(): Observable<any> {
         return this._getIconPickerDialog().afterClosed();
     }
 
-    private _getCreateUpdateExpenseDialog(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
-        return this.dialog.open(CreateUpdateExpenseComponent, {
+    public showAuditTrailDetailsDialog(executableAction: () => void, auditTrails: AuditTrailResponse | undefined): void {
+        this._handeExecutableAction<AuditTrailDetailsDialogComponent>(this._getAuditTrailDetailsDialog(auditTrails), executableAction);
+    }
+
+    private _getCreateUpdateExpenseDialog(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseDialogComponent, any> {
+        return this.dialog.open(CreateUpdateExpenseDialogComponent, {
             width: '600px',
             maxWidth: '80vw',
             data: {
@@ -133,8 +141,8 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdateExpenseByFavoriteDialog(balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseComponent, any> {
-        return this.dialog.open(CreateUpdateExpenseComponent, {
+    private _getCreateUpdateExpenseByFavoriteDialog(balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseDialogComponent, any> {
+        return this.dialog.open(CreateUpdateExpenseDialogComponent, {
             width: '600px',
             maxWidth: '80vw',
             data: {
@@ -146,8 +154,8 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdatePlannedExpenseDialog(plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdatePlannedExpenseComponent, any> {
-        return this.dialog.open(CreateUpdatePlannedExpenseComponent, {
+    private _getCreateUpdatePlannedExpenseDialog(plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdatePlannedExpenseDialogComponent, any> {
+        return this.dialog.open(CreateUpdatePlannedExpenseDialogComponent, {
             width: '600px',
             maxWidth: '80vw',
             data: {
@@ -157,8 +165,8 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdateUserBalanceDialog(balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateBalanceComponent, any> {
-        return this.dialog.open(CreateUpdateBalanceComponent, {
+    private _getCreateUpdateUserBalanceDialog(balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateBalanceDialogComponent, any> {
+        return this.dialog.open(CreateUpdateBalanceDialogComponent, {
             width: '600px',
             maxWidth: '80vw',
             data: {
@@ -168,8 +176,8 @@ export class CommonDialogService {
         });
     }
 
-    private _getCreateUpdateFavoriteExpenseDialog(favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateFavoriteExpenseComponent, any> {
-        return this.dialog.open(CreateUpdateFavoriteExpenseComponent, {
+    private _getCreateUpdateFavoriteExpenseDialog(favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateFavoriteExpenseDialogComponent, any> {
+        return this.dialog.open(CreateUpdateFavoriteExpenseDialogComponent, {
             width: '600px',
             maxWidth: '80vw',
             data: {
@@ -179,11 +187,21 @@ export class CommonDialogService {
         });
     }
 
-    private _getIconPickerDialog(): MatDialogRef<IconPickerComponent, any> {
-        return this.dialog.open(IconPickerComponent, {
+    private _getIconPickerDialog(): MatDialogRef<IconPickerDialogComponent, any> {
+        return this.dialog.open(IconPickerDialogComponent, {
             width: '800px',
             maxWidth: '80vw',
             data: {}
+        });
+    }
+
+    private _getAuditTrailDetailsDialog(auditTrail: AuditTrailResponse | undefined): MatDialogRef<AuditTrailDetailsDialogComponent, any> {
+        return this.dialog.open(AuditTrailDetailsDialogComponent, {
+            width: '600px',
+            maxWidth: '80vw',
+            data: {
+                auditTrail
+            }
         });
     }
 }

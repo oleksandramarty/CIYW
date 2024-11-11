@@ -1,4 +1,5 @@
 import {
+  AuditTrailEntityEnum,
   BalanceResponse, BalanceTypeResponse, CategoryResponse, CountryResponse, CurrencyResponse,
   FrequencyResponse,
   IBalanceResponse, IBalanceTypeResponse, ICategoryResponse, ICountryResponse,
@@ -60,4 +61,13 @@ export class DataItem implements IDataItem {
     this.originalValue = originalValue;
     this.filteredFields = filteredFields;
   }
+}
+
+export function createEnumDataItems(enumType: any): DataItem[] {
+  const dataItems: DataItem[] = [];
+  const enumItems = Object.values(enumType).filter(value => typeof value === 'number');
+  enumItems.forEach(entity => {
+    dataItems.push(new DataItem(undefined, String(entity), enumType[Number(entity)], enumType[Number(entity)], undefined, undefined, [], true, false, []));
+  });
+  return dataItems;
 }

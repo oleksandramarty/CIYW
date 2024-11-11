@@ -1,6 +1,7 @@
 .project-menu-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  margin: 1rem 0;
 }
 
 @media (min-width: 769px) {

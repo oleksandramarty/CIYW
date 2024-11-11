@@ -1,4 +1,5 @@
 using CommonModule.Interfaces;
+using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemoveFavoriteExpenseCommand, bool>
+public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemoveFavoriteExpenseCommand, BaseBoolResponse>
 {
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
     private readonly IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository;
@@ -23,7 +24,7 @@ public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
         this.favoriteExpenseRepository = favoriteExpenseRepository;
     }
     
-    public async Task<bool> Handle(RemoveFavoriteExpenseCommand command, CancellationToken cancellationToken)
+    public async Task<BaseBoolResponse> Handle(RemoveFavoriteExpenseCommand command, CancellationToken cancellationToken)
     {
         FavoriteExpense favoriteExpense = await this.favoriteExpenseRepository.GetByIdAsync(command.Id, cancellationToken);
         this.entityValidator.IsEntityExist(favoriteExpense);
@@ -32,6 +33,6 @@ public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
 
         await this.favoriteExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
 
-        return true;
+        return new BaseBoolResponse();
     }
 }

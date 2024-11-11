@@ -28,7 +28,6 @@ const routes: Routes = [
         path: '',
         component: AuthAreaComponent,
         children: [
-            {path: '', pathMatch: 'full', redirectTo: 'sign-in'},
             {path: 'sign-in', component: AuthSignInComponent},
             {path: 'sign-up', component: AuthSignUpComponent},
             {path: 'forgot', component: AuthForgotComponent},

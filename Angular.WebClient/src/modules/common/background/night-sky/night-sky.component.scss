@@ -4,6 +4,7 @@
   width: 100vw;
   overflow: hidden;
   z-index: -1;
+  top: 0;
 }
 
 .sky {
@@ -159,13 +160,7 @@
 }
 
 .blink {
-  animation: blink ease-in-out infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
+  animation: blink-animation ease-in-out infinite;
 }
 
 .star-0 {
@@ -229,4 +224,28 @@
   filter: blur(15px);
   width: 5px;
   height: 10px;
+}
+
+@keyframes blink-animation {
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
+}
+
+@-webkit-keyframes blink-animation {
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
 }

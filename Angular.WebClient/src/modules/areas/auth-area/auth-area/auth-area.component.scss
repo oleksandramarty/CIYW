@@ -1,16 +1,9 @@
 .auth-container {
+  position: relative;
+  background-color: unset;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-}
-@media (min-height: 860px) and (min-width: 900px) {
-  .auth-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+  justify-content: center;
 }
 
 .auth-box {
@@ -30,7 +23,7 @@
 
 h2 {
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #333;
 }
 

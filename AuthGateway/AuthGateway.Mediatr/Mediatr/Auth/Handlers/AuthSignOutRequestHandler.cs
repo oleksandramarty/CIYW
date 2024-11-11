@@ -4,11 +4,12 @@ using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using CommonModule.Core.Exceptions;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Responses.Base;
 using MediatR;
 
 namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
-public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSignOutRequest, bool>
+public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSignOutRequest, BaseBoolResponse>
 {
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
     private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
@@ -26,7 +27,7 @@ public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSig
     }
     
     
-    public async Task<bool> Handle(AuthSignOutRequest request, CancellationToken cancellationToken)
+    public async Task<BaseBoolResponse> Handle(AuthSignOutRequest request, CancellationToken cancellationToken)
     {
         Guid userId = await this.GetCurrentUserIdAsync();
         User user = await this.userRepository.GetByIdAsync(userId, cancellationToken);
@@ -35,6 +36,6 @@ public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSig
 
         await this.tokenService.RemoveUserTokenAsync(user.Id);
 
-        return true;
+        return new BaseBoolResponse();
     }
 }

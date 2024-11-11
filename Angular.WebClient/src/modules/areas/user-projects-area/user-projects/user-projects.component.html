@@ -1,6 +1,8 @@
 <div class="dashboard-container">
     <section *ngIf="userProjects">
-        <h1 [translation]="'USER_PROJECTS'"></h1>
+        <div class="section-header">
+            <h1 [translation]="'USER_PROJECTS'"></h1>
+        </div>
         <mat-divider></mat-divider>
         <div class="user-project-cards">
             <div class="user-project-card" *ngFor="let userProject of userProjects" (click)="openUserProject(userProject.id)">
@@ -9,8 +11,8 @@
                 </div>
                 <div class="user-project-details">
                     <ng-container *ngFor="let balance of userProject.balances">
-                        <div class="currency-title mb-0p">{{ balance.title }}</div>
-                        <div class="currency-title mb-0p">{{ balanceTypesMap?.get(balance.balanceTypeId)?.title }}</div>
+                        <div class="currency-title mb-0-0rem">{{ balance.title }}</div>
+                        <div class="currency-title mb-0-0rem">{{ balanceTypesMap?.get(balance.balanceTypeId)?.title }}</div>
                         <div class="balance">
                             <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
                             <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
@@ -33,7 +35,9 @@
     </section>
 
     <section *ngIf="userAllowedProjects">
-        <h1 [translation]="'USER_PROJECTS.USER_ALLOWED_PROJECTS'"></h1>
+        <div class="section-header">
+            <h1 [translation]="'USER_PROJECTS.USER_ALLOWED_PROJECTS'"></h1>
+        </div>
         <mat-divider></mat-divider>
         <div *ngIf="userAllowedProjects.length === 0" class="no-user-projects">
             <p [translation]="'USER_PROJECTS.NO_USER_ALLOWED_PROJECTS'"></p>

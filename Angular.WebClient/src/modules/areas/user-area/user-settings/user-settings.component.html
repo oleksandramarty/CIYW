@@ -1,9 +1,11 @@
-<section *ngIf="currentUser" class="user-settings-container">
-    <h1 [translation]="'USER.MENU.SETTINGS'"></h1>
+<section *ngIf="currentUser">
+    <div class="section-header">
+        <h1 [translation]="'USER.MENU.SETTINGS'"></h1>
+    </div>
     <mat-divider></mat-divider>
 
-    <div *ngIf="userSettingsForm" [formGroup]="userSettingsForm">
-        <div class="grid-input-container-three mt-25p">
+    <div *ngIf="userSettingsForm" [formGroup]="userSettingsForm" class="user-settings-container">
+        <div class="grid-input-container-three mt-1-5rem">
             <app-input className="grid-input-item" type="select" [label]="'USER_SETTINGS.CURRENT_LANGUAGE'"
                        [dataItems]="locales ?? []"
                        [formGroup]="userSettingsForm" controlName="defaultLocale"></app-input>
@@ -26,7 +28,7 @@
         <h1 [translation]="'USER.MENU.SETTINGS.CHANGE_PASSWORD'"></h1>
         <mat-divider></mat-divider>
 
-        <div class="grid-input-container-two mt-25p">
+        <div class="grid-input-container-two mt-1-5rem">
             <app-input className="grid-input-item" type="password" [label]="'USER_SETTINGS.NEW_PASSWORD'"
                        [formGroup]="userSettingsForm" controlName="newPassword"></app-input>
             <app-input className="grid-input-item" type="password" [label]="'USER_SETTINGS.NEW_CONFIRM_PASSWORD'"

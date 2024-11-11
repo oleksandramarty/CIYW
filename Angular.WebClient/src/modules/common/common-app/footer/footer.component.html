@@ -1,27 +1,43 @@
 <footer class="footer">
-    <div class="t-align-center pt-20p pb-10p">
+
+    <div class="t-align-center pt-1-0rem pb-0-5rem">
         <span class="opacity-07" [translation]="'FOOTER.HONKING_SINCE'"></span>
     </div>
-    <div class="social-links pb-20p">
+
+    <div class="social-links pb-1-5rem">
         <a href="https://www.linkedin.com/in/oleksandr-martynin/" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-linkedin"></i> LinkedIn
         </a>
         <a href="https://github.com/oleksandramarty/" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-github"></i> GitHub
         </a>
-        <a href="https://leetcode.com/u/oleksandramartycv/" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-code"></i> LeetCode
-        </a>
-        <a href="https://www.npmjs.com/~amarty/" target="_blank" rel="noopener noreferrer">
-            <i class="fa-brands fa-npm"></i> NPM
-        </a>
-        <div class="version-wrapper">
+    </div>
+
+    <div class="footer-mobile" *ngIf="(isAuthorized$ | async)">
+        <div class="footer-mobile footer-mobile-wrapper">
+            <div class="footer-mobile-item pointer" (click)="goto('projects')">
+                <i class="fa-solid fa-diagram-project"></i>
+                <span>{{ 'USER_PROJECTS' | translation }}</span>
+            </div>
+            <div class="footer-mobile-item pointer" (click)="goto('analytics')">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>{{ 'USER.MENU.ANALYTICS' | translation }}</span>
+            </div>
+            <div class="footer-mobile-item pointer toggle-menu-button" (click)="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+                <span>{{ 'USER.MENU' | translation }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="version-wrapper">
             <span
                     class="opacity-07"
                     style="color: #f44336;
                     text-transform: uppercase;">
                 [<strong [translation]="'COMMON.DO_NOT_STORE_ANY_SENSITIVE_DATA_HERE'"></strong>]
             </span>
+        <div *ngIf="(isAdminAreaAvailable$ | async)" class="footer-full d-inline">
             <span class="opacity-07"> | </span>
             <span class="opacity-07 pointer"
                   style="color: #ffc107;"

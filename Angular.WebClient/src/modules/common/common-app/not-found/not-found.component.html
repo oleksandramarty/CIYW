@@ -1,7 +1,11 @@
-<div class="container">
+<div class="container" [ngClass]="{'color-white': !(isAuthorized$ | async)}">
   <div>
     <h1>404</h1>
     <p translation="PAGE_NOT_FOUND.PAGE_NOT_FOUND"></p>
     <p translation="PAGE_NOT_FOUND.PAGE_UNAVAILABLE"></p>
+    <h2 class="pointer-underline" *ngIf="(isAuthorized$ | async); else loginLink" routerLink="/dashboard">{{ 'MENU.DASHBOARD' | translation }}</h2>
+    <ng-template #loginLink>
+        <h2 class="pointer-underline" routerLink="/auth/sign-in">{{ 'AUTH.BACK_TO_LOGIN' | translation }}</h2>
+    </ng-template>
   </div>
 </div>

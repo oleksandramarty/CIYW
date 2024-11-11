@@ -53,7 +53,7 @@ export abstract class BaseFilterComponent<TFilteredResponse, TFilterRequest> ext
         return this.dictionaryService.dataItems?.categories ?? [];
     }
 
-    constructor(
+    protected constructor(
         protected readonly dictionaryService: DictionaryService,
         protected readonly localizationService: LocalizationService,
         protected readonly loaderService: LoaderService,

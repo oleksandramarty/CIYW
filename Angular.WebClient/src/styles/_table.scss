@@ -31,6 +31,10 @@ tr.mat-tr:hover {
   background-color: #f1f1f1;
 }
 
+tr {
+  border-radius: 8px;
+}
+
 @media (max-width: 600px) {
   th.mat-th, td.mat-td {
     padding: 8px;

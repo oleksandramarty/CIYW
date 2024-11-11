@@ -1,5 +1,7 @@
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Enums.AuditTrail;
+using CommonModule.Shared.Responses.AuthGateway.Users;
+using CommonModule.Shared.Responses.Expenses.Models.Projects;
 
 namespace CommonModule.Shared.Responses.AuditTrail;
 
@@ -62,6 +64,11 @@ public class AuditTrailResponse: BaseDateTimeEntity<Guid>
     /// UserId of the entity
     /// </summary>
     public Guid? UserId { get; set; }
+    
+    /// <summary>
+    /// User of the entity
+    /// </summary>
+    public UserResponse? User { get; set; }
     
     /// <summary>
     /// ArchiveDate of the entity

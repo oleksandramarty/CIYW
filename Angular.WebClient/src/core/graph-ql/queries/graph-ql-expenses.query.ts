@@ -18,6 +18,7 @@ export const GET_FILTERED_AUDIT_TRAIL = gql`
         $exceptionType: String,
         $entityId: ID,
         $userId: ID,
+        $translationKey: String
     ) {
         audit_trail_get_filtered_audit_trail(
             isFull: $isFull,
@@ -35,7 +36,8 @@ export const GET_FILTERED_AUDIT_TRAIL = gql`
             type: $type,
             exceptionType: $exceptionType,
             entityId: $entityId,
-            userId: $userId
+            userId: $userId,
+            translationKey: $translationKey
         ) {
             entities {
                 id

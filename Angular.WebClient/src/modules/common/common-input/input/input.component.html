@@ -32,11 +32,14 @@
                     [required]="isRequired"
                     [multiple]="type === 'multiselect'"
                     [formControlName]="controlName">
-                <ng-container *ngTemplateOutlet="recursiveOptions; context: { $implicit: dataItems, isFirst: true }"></ng-container>
+                <ng-container
+                        *ngTemplateOutlet="recursiveOptions; context: { $implicit: dataItems, isFirst: true }"></ng-container>
                 <ng-template #recursiveOptions let-items let-isFirst>
-                    <div *ngFor="let item of items" [ngStyle]="{'padding-left': isFirst ? '0rem' : '1rem'}">
-                        <mat-option [value]="item.id" #matOption (click)="toggleChildrenSelection(item, matOption.selected)">
-                            <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant || item.children.length > 0}"></span>
+                    <div *ngFor="let item of items" [ngClass]="{'pl-1-0rem': isFirst}">
+                        <mat-option [value]="item.id" #matOption
+                                    (click)="toggleChildrenSelection(item, matOption.selected)">
+                            <span class="word-break-all" [translation]="item.name"
+                                  [ngClass]="{'f-bold': item.isImportant || item.children.length > 0}"></span>
                         </mat-option>
                         <ng-container *ngIf="item.children.length">
                             <ng-container
@@ -106,7 +109,7 @@
         <mat-form-field [appearance]="appearance" [formGroup]="internalFormGroup!">
             <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
             <mat-date-range-input [rangePicker]="picker" [required]="isRequired" [min]="minDate" [max]="maxDate"
-                                  >
+            >
                 <input
                         matStartDate
                         [translation]="placeholder" [translationAttr]="'placeholder'"
@@ -161,21 +164,29 @@
             <input matSliderEndThumb [formControlName]="'right'">
         </mat-slider>
     </ng-container>
-
+<h1>{{(filteredDataItems | async)?.length}}</h1>
     <ng-container *ngIf="type === 'autocomplete' || type === 'multiautocomplete'">
         <mat-form-field [appearance]="appearance" [formGroup]="internalFormGroup!">
             <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>
             <input type="text" matInput [formControlName]="'autocomplete'" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                               (optionSelected)="onAutoCompleteChecked();">
-                <mat-option *ngFor="let item of filteredDataItems | async" [value]="item">
-                    <div class="autocomplete-item-container">
-                        <i *ngIf="item.iconId" [ngClass]="iconMap?.get(item.iconId)?.title"></i>
-                        <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant}"></span>
-                        <span class="autocomplete-item" *ngIf="item.color" [style]="'background-color: ' + item.color + ';'"></span>
-                        <span class="select-description-hint" [translation]="item.description"></span>
-                    </div>
-                </mat-option>
+                <ng-container *ngIf="(filteredDataItems | async)?.length <= 150 else toManyItems">
+                    <mat-option *ngFor="let item of filteredDataItems | async" [value]="item">
+                        <div class="autocomplete-item-container">
+                            <i *ngIf="item.iconId" [ngClass]="iconMap?.get(item.iconId)?.title"></i>
+                            <span [translation]="item.name" [ngClass]="{'f-bold': item.isImportant}"></span>
+                            <span class="autocomplete-item" *ngIf="item.color"
+                                  [style]="'background-color: ' + item.color + ';'"></span>
+                            <span class="select-description-hint" [translation]="item.description"></span>
+                        </div>
+                    </mat-option>
+                </ng-container>
+                <ng-template #toManyItems>
+                    <mat-option disabled>
+                        {{ 'INPUT.TO_MANY_ITEMS.START_TYPING' | translation }}...
+                    </mat-option>
+                </ng-template>
             </mat-autocomplete>
             <mat-hint align="end" *ngIf="!!multiMaxCount && type === 'multiautocomplete'"
                       [ngClass]="{'error': selectedDataItems.length > multiMaxCount}">

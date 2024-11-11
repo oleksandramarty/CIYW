@@ -1,4 +1,5 @@
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Responses.Base;
 using GraphQL;
 using GraphQL.Types;
 using MediatR;
@@ -51,7 +52,7 @@ public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
     
     public void DeleteEntity<TCommand, TEntityTypeId, TEntityId>(GraphQLEndpoint endpoint)
         where TEntityTypeId : ScalarGraphType
-        where TCommand : IBaseIdEntity<TEntityId>, IRequest<bool>, new()
+        where TCommand : IBaseIdEntity<TEntityId>, IRequest<BaseBoolResponse>, new()
     {
         Field<BooleanGraphType>(endpoint.Name)
             .Arguments(new QueryArguments(
@@ -64,7 +65,7 @@ public class GraphQLMutationResolver: ObjectGraphType, IGraphQLMutationResolver
                 TCommand command = new TCommand();
                 command.Id = context.GetArgument<TEntityId>("id");
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                await ExecuteCommandAsync<bool>(mediator, command, cancellationToken, context);
+                await ExecuteCommandAsync<BaseBoolResponse>(mediator, command, cancellationToken, context);
                 return true;
             });
     }

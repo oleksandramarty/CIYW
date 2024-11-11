@@ -106,7 +106,7 @@ export class InputComponent extends BaseUnsubscribeComponent {
                 debounceTime(300),
                 map(value => {
                     const name = typeof value === 'string' ? value : value?.name;
-                    return name ? this._filterAutoComplete(name as string) : this.dataItems?.slice();
+                    return name && name.length >= 2 ? this._filterAutoComplete(name as string) : this.dataItems?.slice();
                 }),
             );
         }

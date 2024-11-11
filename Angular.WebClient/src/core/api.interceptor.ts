@@ -33,6 +33,11 @@ export class BaseUrlInterceptor implements HttpInterceptor {
       request: HttpRequest<any>,
       next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    // Check if the URL is from the assets folder
+    if (request.url.includes('assets')) {
+      return next.handle(request);
+    }
+
     return this.store.select(selectToken)
         .pipe(
             take(1),
@@ -69,8 +74,4 @@ export class BaseUrlInterceptor implements HttpInterceptor {
             })
         );
   }
-}
-
-export declare class HttpErrorCustomResponse extends HttpErrorResponse {
-  fields: any;
 }

@@ -64,8 +64,25 @@ export const routes: Routes = [
   { path: 'notifications', pathMatch: 'full', redirectTo: 'in-development' },
   {
     path: 'admin',
-    loadChildren: () => import('../admin-areas/admin-area.module')
-        .then(m => m.AdminAreaModule),
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
+        path: 'home',
+        loadChildren: () => import('../admin-areas/admin-home-area/admin-home-area.module')
+            .then(m => m.AdminHomeAreaModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'audit-trail',
+        loadChildren: () => import('../admin-areas/admin-audit-trail-area/admin-audit-trail-area.module')
+            .then(m => m.AdminAuditTrailAreaModule),
+        canActivate: [AuthGuard]
+      },
+    ],
     // TODO only admins
     canActivate: [AuthGuard]
   },
@@ -95,7 +112,6 @@ export const routes: Routes = [
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'not-found' },
 ];
-
 @NgModule({
   declarations: [
     AppComponent

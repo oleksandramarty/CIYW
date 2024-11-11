@@ -45,6 +45,7 @@ public static class GraphQLModelExtension
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<CategoryResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<BalanceTypeResponse>>());
             config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<VersionedListResponse<IconCategoryResponse>>());
+            config.DocumentProcessors.Add(new AddAdditionalTypeProcessor<BaseBoolResponse>());
         }
     }
 }

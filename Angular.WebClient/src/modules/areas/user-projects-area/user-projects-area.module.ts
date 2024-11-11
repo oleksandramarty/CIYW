@@ -9,7 +9,7 @@ import { CommonLoaderComponent } from "../../common/common-loader/common-loader.
 import { UserProjectComponent } from "./user-project/user-project.component";
 import { AppCommonInputModule } from "../../common/common-input/app-common-input.module";
 import { MatButtonModule } from "@angular/material/button";
-import { ConfirmationMessageComponent } from "../../dialogs/confirmation-message/confirmation-message.component";
+import { ConfirmationMessageDialogComponent } from "../../dialogs/confirmation-message-dialog/confirmation-message-dialog.component";
 import { SharedModule } from "../../../core/shared.module";
 import {CommonTopMenuComponent} from "../../common/common-top-menu/common-top-menu/common-top-menu.component";
 import {UserProjectExpensesComponent} from "./user-project/user-project-expenses/user-project-expenses.component";
@@ -44,7 +44,7 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
         CommonLoaderComponent,
-        ConfirmationMessageComponent,
+        ConfirmationMessageDialogComponent,
         SharedModule,
         MatDividerModule,
         AppCommonInputModule,

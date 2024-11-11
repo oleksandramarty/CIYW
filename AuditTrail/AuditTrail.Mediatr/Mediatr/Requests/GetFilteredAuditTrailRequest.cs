@@ -42,4 +42,8 @@ public class GetFilteredAuditTrailRequest: MediatrBaseFilteredRequest<AuditTrail
     /// </summary>
     public Guid? UserId { get; set; }
     
+    /// <summary>
+    /// Translation key
+    /// </summary>
+    public string? TranslationKey { get; set; }
 }

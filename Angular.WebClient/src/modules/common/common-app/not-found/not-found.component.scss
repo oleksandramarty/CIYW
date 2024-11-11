@@ -31,3 +31,13 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.color-white {
+  h1, p, a {
+    color: #ffffff;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}

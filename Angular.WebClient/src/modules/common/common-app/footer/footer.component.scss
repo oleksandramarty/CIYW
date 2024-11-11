@@ -32,3 +32,35 @@
   color: white;
   z-index: 1000000;
 }
+
+.footer-mobile {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  height: 4rem;
+}
+
+.footer-mobile-wrapper {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+
+.footer-mobile-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #000;
+}
+
+.footer-mobile-item i {
+  font-size: 1.5rem;
+}
+
+.footer-mobile-item span {
+  font-size: 0.75rem;
+  margin-top: 5px;
+}

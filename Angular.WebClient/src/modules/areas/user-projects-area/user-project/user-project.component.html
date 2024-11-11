@@ -1,9 +1,11 @@
 <section *ngIf="!!userProject" class="user-project-section">
 
+    <div class="section-header">
+        <h1 class="user-project-title">{{ userProject.title }}</h1>
+    </div>
+
     <app-common-top-menu type="menuUserProject"
                          (activeTabChanged)="activeTab = $event"></app-common-top-menu>
-
-    <h1 class="user-project-title">{{ userProject.title }}</h1>
 
     <ng-container *ngIf="activeTab === 0">
         <app-user-project-favorites [userProject]="userProject"

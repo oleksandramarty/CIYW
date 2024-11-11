@@ -1,5 +1,6 @@
 using CommonModule.Shared;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Responses.Base;
 using GraphQL.Types;
 using MediatR;
 
@@ -18,6 +19,6 @@ public interface IGraphQLMutationResolver
 
     void DeleteEntity<TCommand, TEntityTypeId, TEntityId>(GraphQLEndpoint endpoint)
         where TEntityTypeId : ScalarGraphType
-        where TCommand : IBaseIdEntity<TEntityId>, IRequest<bool>, new();
+        where TCommand : IBaseIdEntity<TEntityId>, IRequest<BaseBoolResponse>, new();
 
 }

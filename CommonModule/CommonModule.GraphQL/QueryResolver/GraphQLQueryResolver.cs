@@ -104,17 +104,17 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
             });
     }
 
-    public void ExecuteForEmptyCommand<TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
+    public void ExecuteForEmptyCommand<TEntityType, TCommand, TCommandResponse>(GraphQLEndpoint endpoint)
+        where TEntityType : ObjectGraphType<TCommandResponse>
         where TCommand : IRequest<TCommandResponse>, new()
     {
-        Field<BooleanGraphType>(endpoint.Name)
+        Field<TEntityType>(endpoint.Name)
             .ResolveAsync(async context =>
             {
                 context.IsAuthenticated(endpoint.IsAuthenticated);
                 var cancellationToken = context.CancellationToken;
                 var mediator = context.RequestServices.GetRequiredService<IMediator>();
-                await ExecuteCommandAsync(mediator, new TCommand(), cancellationToken, context);
-                return true;
+                return await ExecuteCommandAsync<TCommandResponse>(mediator, new TCommand(), cancellationToken, context);;
             });
     }
 
@@ -140,5 +140,10 @@ public class GraphQLQueryResolver : ObjectGraphType, IGraphQLQueryResolver
     public async Task<TCommandResponse?> ExecuteCommandAsync<TCommandResponse>(IMediator mediator, IRequest<TCommandResponse> command, CancellationToken cancellationToken, IResolveFieldContext context)
     {
         return await mediator.Send(command, cancellationToken);
+    }
+    
+    public async Task ExecuteCommandAsync(IMediator mediator, IRequest command, CancellationToken cancellationToken, IResolveFieldContext context)
+    {
+        await mediator.Send(command, cancellationToken);
     }
 }

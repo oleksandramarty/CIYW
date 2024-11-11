@@ -1,4 +1,5 @@
 using CommonModule.Interfaces;
+using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class RemovePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemovePlannedExpenseCommand, bool>
+public class RemovePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemovePlannedExpenseCommand, BaseBoolResponse>
 {
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
     private readonly IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository;
@@ -23,7 +24,7 @@ public class RemovePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
         this.plannedExpenseRepository = plannedExpenseRepository;
     }
     
-    public async Task<bool> Handle(RemovePlannedExpenseCommand command, CancellationToken cancellationToken)
+    public async Task<BaseBoolResponse> Handle(RemovePlannedExpenseCommand command, CancellationToken cancellationToken)
     {
         PlannedExpense plannedExpense = await this.plannedExpenseRepository.GetByIdAsync(command.Id, cancellationToken);
         this.entityValidator.IsEntityExist(plannedExpense);
@@ -32,6 +33,6 @@ public class RemovePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
 
         await this.plannedExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
 
-        return true;
+        return new BaseBoolResponse();
     }
 }

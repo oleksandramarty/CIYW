@@ -1,0 +1,77 @@
+<div class="base-modal-container" *ngIf="auditTrail">
+    <div class="base-modal-header-container">
+        <h2 mat-dialog-title>Log ID {{ auditTrail.id }}</h2>
+        <span class="base-modal-close-icon" (click)="dialogRef.close()">
+      <i class="fa-solid fa-xmark"></i>
+    </span>
+    </div>
+    <div class="base-modal-body-container">
+        <div class="details-container">
+            <div class="details-item">
+                <span class="label">Date:</span>
+                <span class="value">{{ auditTrail.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Archive Date:</span>
+                <span class="value">{{ auditTrail.archiveDate | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">AuditTrailActionType:</span>
+                <span class="value">{{ auditTrail.action  }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">AuditTrailType:</span>
+                <span class="value">{{ auditTrail.type  }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">ExceptionType:</span>
+                <span class="value">{{ auditTrail.exceptionType  }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Message:</span>
+                <span class="value">{{ auditTrail.message | translation }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Old Value:</span>
+                <span class="value">{{ auditTrail.oldValue }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">New Value:</span>
+                <span class="value">{{ auditTrail.newValue }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Payload:</span>
+                <span class="value">{{ auditTrail.payload }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Initiator ID:</span>
+                <span class="value">{{ auditTrail.userId }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Initiator:</span>
+                <span class="value">
+                    <button mat-button color="accent" *ngIf="!!auditTrail.userId"
+                            (click)="openInitiatorInfoDialog()">{{ auditTrail.userId }}</button></span>
+            </div>
+            <div class="details-item">
+                <span class="label">AuditTrailEntityType:</span>
+                <span class="value">{{ auditTrail.entityType  }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Entity ID:</span>
+                <span class="value">{{ auditTrail.entityId }}</span>
+            </div>
+            <div class="details-item">
+                <span class="label">Entity {{ auditTrail.entityType  }}:</span>
+                <span class="value">
+                    <button mat-button color="accent" *ngIf="!!auditTrail.entityId"
+                            (click)="openEntityInfoDialog()">Show entity</button></span>
+            </div>
+        </div>
+    </div>
+    <div class="base-modal-actions-container">
+        <div class="mat-dialog-actions-container">
+            <button mat-button (click)="dialogRef.close(false)">Close</button>
+        </div>
+    </div>
+</div>

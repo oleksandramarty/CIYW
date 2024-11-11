@@ -75,3 +75,46 @@ FROM "Locales"."Localizations" AS Localizations
          LEFT JOIN "Locales"."Locales" AS Locales ON Locales."Id" = Localizations."LocaleId"
 WHERE "LocaleId" = 1;
 ```
+
+## Copilot locale promt
+```plaintext
+# Copilot locale promt
+Based on this example:
+550e8400-e29b-41d4-a716-100000000286;en;FAVORITE_EXPENSES.CREATE_NEW;Create New Favorite Expense;Create New Favorite Expense;
+and this pattern:
+id;locale;key;valueEn;value;
+
+create the same records for locales:
+en, es, fr, ua, ru, de, it
+
+for each record increment GUID id +1
+like 1 new record will be 550e8400-e29b-41d4-a716-100000000287
+2 new - 550e8400-e29b-41d4-a716-100000000288 etc
+
+also keep in mind that:
+for en we use GUID pattern 550e8400-e29b-41d4-a716-100000000286
+for fr - 550e8400-e29b-41d4-a716-200000000287
+etc
+for each new locale we use different digit
+
+keep in mind that for each locale we have GUID LOCALE CODE KEY TRANSLATION_EN TRANSLATION_CURRENT_LOCALE
+
+do it for:
+I will provide you KEY and English TRANSLATIONS use this translation for english for all and translate only my provided translation to all locales
+
+for example: USER.MENU = Menu
+in this example KEY is USER.MENU
+translation is Menu
+Please use translation for all locales
+if you dont see translation after = create your own
+
+START from 288
+
+USER.MENU = Menu
+USER.MENU.ANALYTICS = Analytics
+
+do all for en after all for es etc
+do without empty lines
+
+do it in one file
+```

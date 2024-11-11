@@ -1617,6 +1617,7 @@ export class AuditTrailResponse extends BaseDateTimeEntityOfGuid implements IAud
     payload?: string | undefined;
     uri?: string | undefined;
     userId?: string | undefined;
+    user?: UserResponse | undefined;
     archiveDate?: Date | undefined;
 
     constructor(data?: IAuditTrailResponse) {
@@ -1637,6 +1638,7 @@ export class AuditTrailResponse extends BaseDateTimeEntityOfGuid implements IAud
             this.payload = _data["payload"];
             this.uri = _data["uri"];
             this.userId = _data["userId"];
+            this.user = _data["user"] ? UserResponse.fromJS(_data["user"]) : <any>undefined;
             this.archiveDate = _data["archiveDate"] ? new Date(_data["archiveDate"].toString()) : <any>undefined;
         }
     }
@@ -1661,6 +1663,7 @@ export class AuditTrailResponse extends BaseDateTimeEntityOfGuid implements IAud
         data["payload"] = this.payload;
         data["uri"] = this.uri;
         data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         data["archiveDate"] = this.archiveDate ? this.archiveDate.toISOString() : <any>undefined;
         super.toJSON(data);
         return data;
@@ -1679,6 +1682,7 @@ export interface IAuditTrailResponse extends IBaseDateTimeEntityOfGuid {
     payload?: string | undefined;
     uri?: string | undefined;
     userId?: string | undefined;
+    user?: UserResponse | undefined;
     archiveDate?: Date | undefined;
 }
 
@@ -2487,5 +2491,41 @@ export interface IIconResponse extends IBaseIdEntityOfInteger {
     title: string;
     isActive: boolean;
     iconCategoryId: number;
+}
+
+export class BaseBoolResponse implements IBaseBoolResponse {
+    success!: boolean;
+
+    constructor(data?: IBaseBoolResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+        }
+    }
+
+    static fromJS(data: any): BaseBoolResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseBoolResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        return data;
+    }
+}
+
+export interface IBaseBoolResponse {
+    success: boolean;
 }
 
