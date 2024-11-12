@@ -1,4 +1,5 @@
 using AutoMapper;
+using CommonModule.Core.Extensions;
 using CommonModule.Shared.Responses.Expenses.Models.Balances;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
@@ -24,10 +25,12 @@ public class MappingExpensesProfile : Profile
         this.CreateMap<UpdateUserBalanceCommand, Balance>();
 
         this.CreateMap<CreateExpenseCommand, Expense>();
-        this.CreateMap<CreatePlannedExpenseCommand, PlannedExpense>();
-        this.CreateMap<CreateFavoriteExpenseCommand, FavoriteExpense>();
         this.CreateMap<UpdateExpenseCommand, Expense>();
-        this.CreateMap<UpdatePlannedExpenseCommand, PlannedExpense>();
+        this.CreateMap<CreatePlannedExpenseCommand, PlannedExpense>()
+            .ForMember(dest => dest.NextDate, opt => opt.MapFrom(src => src.StartDate.GetNextDate(src.FrequencyId)));
+        this.CreateMap<UpdatePlannedExpenseCommand, PlannedExpense>()
+            .ForMember(dest => dest.NextDate, opt => opt.MapFrom(src => src.StartDate.GetNextDate(src.FrequencyId)));
+        this.CreateMap<CreateFavoriteExpenseCommand, FavoriteExpense>();
         this.CreateMap<UpdateFavoriteExpenseCommand, FavoriteExpense>();
 
         this.CreateMap<UserProject, UserProjectResponse>()

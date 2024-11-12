@@ -115,7 +115,7 @@ export class CreateUpdatePlannedExpenseDialogComponent extends BaseUnsubscribeCo
             balanceId: [this.plannedExpense?.balanceId ?? this.balancesDataItems![0]?.id, Validators.required],
             categoryId: [String(this.plannedExpense?.categoryId), Validators.required],
             isActive: [this.plannedExpense?.isActive ?? true, Validators.required],
-            frequencyId: [this.plannedExpense?.frequencyId ?? null, Validators.required]
+            frequencyId: [String(this.plannedExpense?.frequencyId) ?? null, Validators.required]
         });
     }
 
@@ -161,6 +161,6 @@ export class CreateUpdatePlannedExpenseDialogComponent extends BaseUnsubscribeCo
             ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintDialog(createOrUpdatePlannedExpenseAction);
+        this.commonDialogService.showNoComplaintDialog(createOrUpdatePlannedExpenseAction, () => {});
     }
 }

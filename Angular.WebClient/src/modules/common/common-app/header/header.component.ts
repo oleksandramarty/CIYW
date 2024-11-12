@@ -36,7 +36,8 @@ export class HeaderComponent extends BaseAuthorizeComponent {
 
     public menuAdminItems: { url: string, title: string }[] = [
         {url: 'admin/home', title: 'MENU.HOME'},
-        {url: 'admin/audit-trail', title: 'MENU.AUDIT_TRAIL'},
+        {url: 'admin/users', title: 'ADMIN.MENU.USERS'},
+        {url: 'admin/audit-trail', title: 'ADMIN.MENU.AUDIT_TRAIL'},
     ];
 
     get locales(): LocaleResponse[] | undefined {
@@ -67,7 +68,7 @@ export class HeaderComponent extends BaseAuthorizeComponent {
     }
 
     public logout() {
-        this.authService.logout()
+        this.authService.logout(() => {})
     }
 
     public toggleMenu(): void {

@@ -621,6 +621,7 @@ export enum ColumnEnum {
     NextDate = 7,
     CurrentAmount = 8,
     EndDate = 9,
+    StartDate = 10,
 }
 
 export enum OrderDirectionEnum {
@@ -944,6 +945,8 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
     userProjectId!: string;
     createdUserId!: string;
     version!: string;
+    favoriteExpenseId?: string | undefined;
+    favoriteExpense?: FavoriteExpenseResponse | undefined;
 
     constructor(data?: IExpenseResponse) {
         super(data);
@@ -961,6 +964,8 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
             this.userProjectId = _data["userProjectId"];
             this.createdUserId = _data["createdUserId"];
             this.version = _data["version"];
+            this.favoriteExpenseId = _data["favoriteExpenseId"];
+            this.favoriteExpense = _data["favoriteExpense"] ? FavoriteExpenseResponse.fromJS(_data["favoriteExpense"]) : <any>undefined;
         }
     }
 
@@ -982,6 +987,8 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
         data["userProjectId"] = this.userProjectId;
         data["createdUserId"] = this.createdUserId;
         data["version"] = this.version;
+        data["favoriteExpenseId"] = this.favoriteExpenseId;
+        data["favoriteExpense"] = this.favoriteExpense ? this.favoriteExpense.toJSON() : <any>undefined;
         super.toJSON(data);
         return data;
     }
@@ -997,6 +1004,100 @@ export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
     userProjectId: string;
     createdUserId: string;
     version: string;
+    favoriteExpenseId?: string | undefined;
+    favoriteExpense?: FavoriteExpenseResponse | undefined;
+}
+
+export class FavoriteExpenseResponse extends BaseDateTimeEntityOfGuid implements IFavoriteExpenseResponse {
+    title!: string;
+    description?: string | undefined;
+    limit?: number | undefined;
+    currentAmount?: number | undefined;
+    categoryId?: number | undefined;
+    frequencyId?: number | undefined;
+    currencyId!: number;
+    endDate?: Date | undefined;
+    userProjectId!: string;
+    iconId!: number;
+    createdUserId!: string;
+    version!: string;
+    expenses!: ExpenseResponse[];
+
+    constructor(data?: IFavoriteExpenseResponse) {
+        super(data);
+        if (!data) {
+            this.expenses = [];
+        }
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.limit = _data["limit"];
+            this.currentAmount = _data["currentAmount"];
+            this.categoryId = _data["categoryId"];
+            this.frequencyId = _data["frequencyId"];
+            this.currencyId = _data["currencyId"];
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.userProjectId = _data["userProjectId"];
+            this.iconId = _data["iconId"];
+            this.createdUserId = _data["createdUserId"];
+            this.version = _data["version"];
+            if (Array.isArray(_data["expenses"])) {
+                this.expenses = [] as any;
+                for (let item of _data["expenses"])
+                    this.expenses!.push(ExpenseResponse.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): FavoriteExpenseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new FavoriteExpenseResponse();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["limit"] = this.limit;
+        data["currentAmount"] = this.currentAmount;
+        data["categoryId"] = this.categoryId;
+        data["frequencyId"] = this.frequencyId;
+        data["currencyId"] = this.currencyId;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["userProjectId"] = this.userProjectId;
+        data["iconId"] = this.iconId;
+        data["createdUserId"] = this.createdUserId;
+        data["version"] = this.version;
+        if (Array.isArray(this.expenses)) {
+            data["expenses"] = [];
+            for (let item of this.expenses)
+                data["expenses"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IFavoriteExpenseResponse extends IBaseDateTimeEntityOfGuid {
+    title: string;
+    description?: string | undefined;
+    limit?: number | undefined;
+    currentAmount?: number | undefined;
+    categoryId?: number | undefined;
+    frequencyId?: number | undefined;
+    currencyId: number;
+    endDate?: Date | undefined;
+    userProjectId: string;
+    iconId: number;
+    createdUserId: string;
+    version: string;
+    expenses: ExpenseResponse[];
 }
 
 export class FilteredListResponseOfPlannedExpenseResponse implements IFilteredListResponseOfPlannedExpenseResponse {
@@ -1471,83 +1572,6 @@ export interface IFilteredListResponseOfFavoriteExpenseResponse {
     entities: FavoriteExpenseResponse[];
     paginator?: PaginatorEntity | undefined;
     totalCount: number;
-}
-
-export class FavoriteExpenseResponse extends BaseDateTimeEntityOfGuid implements IFavoriteExpenseResponse {
-    title!: string;
-    description?: string | undefined;
-    limit?: number | undefined;
-    currentAmount?: number | undefined;
-    categoryId?: number | undefined;
-    frequencyId?: number | undefined;
-    currencyId!: number;
-    endDate?: Date | undefined;
-    userProjectId!: string;
-    iconId!: number;
-    createdUserId!: string;
-    version!: string;
-
-    constructor(data?: IFavoriteExpenseResponse) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.limit = _data["limit"];
-            this.currentAmount = _data["currentAmount"];
-            this.categoryId = _data["categoryId"];
-            this.frequencyId = _data["frequencyId"];
-            this.currencyId = _data["currencyId"];
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
-            this.userProjectId = _data["userProjectId"];
-            this.iconId = _data["iconId"];
-            this.createdUserId = _data["createdUserId"];
-            this.version = _data["version"];
-        }
-    }
-
-    static override fromJS(data: any): FavoriteExpenseResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new FavoriteExpenseResponse();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["limit"] = this.limit;
-        data["currentAmount"] = this.currentAmount;
-        data["categoryId"] = this.categoryId;
-        data["frequencyId"] = this.frequencyId;
-        data["currencyId"] = this.currencyId;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        data["userProjectId"] = this.userProjectId;
-        data["iconId"] = this.iconId;
-        data["createdUserId"] = this.createdUserId;
-        data["version"] = this.version;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IFavoriteExpenseResponse extends IBaseDateTimeEntityOfGuid {
-    title: string;
-    description?: string | undefined;
-    limit?: number | undefined;
-    currentAmount?: number | undefined;
-    categoryId?: number | undefined;
-    frequencyId?: number | undefined;
-    currencyId: number;
-    endDate?: Date | undefined;
-    userProjectId: string;
-    iconId: number;
-    createdUserId: string;
-    version: string;
 }
 
 export class FilteredListResponseOfAuditTrailResponse implements IFilteredListResponseOfAuditTrailResponse {

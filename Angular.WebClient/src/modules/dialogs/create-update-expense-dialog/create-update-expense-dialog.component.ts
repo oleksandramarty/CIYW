@@ -162,7 +162,8 @@ export class CreateUpdateExpenseDialogComponent extends BaseUnsubscribeComponent
                 this.expenseFormGroup.value.balanceId,
                 this.expenseFormGroup.value.date,
                 Number(this.expenseFormGroup.value.categoryId),
-                !this.expense ? this.userProject?.id : undefined
+                !this.expense ? this.userProject?.id : undefined,
+                !this.expense ? this.favoriteExpense?.id : undefined
             ).pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap(() => {
@@ -174,6 +175,6 @@ export class CreateUpdateExpenseDialogComponent extends BaseUnsubscribeComponent
             ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintDialog(createOrUpdateExpenseAction);
+        this.commonDialogService.showNoComplaintDialog(createOrUpdateExpenseAction, () => {});
     }
 }

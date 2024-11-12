@@ -37,6 +37,19 @@ export const createUserProjectExpensesHeader = (): ITableHeaderItem[] => {
   ];
 }
 
+export const createUserProjectPlannedExpensesHeader = (): ITableHeaderItem[] => {
+  return [
+    new TableHeaderItem('', undefined, false, undefined),
+    new TableHeaderItem('', undefined, false, undefined),
+    new TableHeaderItem('COMMON.START_DATE', undefined, true, ColumnEnum.StartDate),
+    new TableHeaderItem('COMMON.TITLE', undefined, true, ColumnEnum.Title),
+    new TableHeaderItem('COMMON.AMOUNT', undefined, true, ColumnEnum.Amount),
+    new TableHeaderItem('COMMON.CATEGORY', undefined, false, undefined),
+    new TableHeaderItem('COMMON.NEXT_DATE', undefined, false, undefined),
+    new TableHeaderItem('COMMON.FREQUENCY', undefined, false, undefined)
+  ];
+}
+
 export const createAdminAuditTrailHeader = (): ITableHeaderItem[] => {
   return [
     new TableHeaderItem('', undefined, false, undefined),

@@ -98,6 +98,9 @@ namespace Expenses.Domain.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<Guid?>("FavoriteExpenseId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -114,6 +117,8 @@ namespace Expenses.Domain.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FavoriteExpenseId");
 
                     b.HasIndex("UserProjectId");
 
@@ -154,7 +159,7 @@ namespace Expenses.Domain.Migrations
                     b.Property<int>("IconId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Limit")
+                    b.Property<decimal?>("Limit")
                         .HasColumnType("numeric");
 
                     b.Property<string>("Title")
@@ -311,11 +316,17 @@ namespace Expenses.Domain.Migrations
 
             modelBuilder.Entity("Expenses.Domain.Models.Expenses.Expense", b =>
                 {
+                    b.HasOne("Expenses.Domain.Models.Expenses.FavoriteExpense", "FavoriteExpense")
+                        .WithMany("Expenses")
+                        .HasForeignKey("FavoriteExpenseId");
+
                     b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
                         .WithMany("Expenses")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("FavoriteExpense");
 
                     b.Navigation("UserProject");
                 });
@@ -351,6 +362,11 @@ namespace Expenses.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("UserProject");
+                });
+
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpense", b =>
+                {
+                    b.Navigation("Expenses");
                 });
 
             modelBuilder.Entity("Expenses.Domain.Models.Projects.UserProject", b =>

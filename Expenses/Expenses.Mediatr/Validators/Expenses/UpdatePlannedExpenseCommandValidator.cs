@@ -18,8 +18,7 @@ public class UpdatePlannedExpenseCommandValidator: AbstractValidator<UpdatePlann
             .GreaterThan(0).WithMessage("Amount must be greater than 0.");
         
         RuleFor(x => x.StartDate)
-            .GreaterThanOrEqualTo(DateTime.Today).WithMessage("Start date must be today or in the future.")
-            .LessThanOrEqualTo(DateTime.Today.AddMonths(1)).WithMessage("Start date must be within one month from today.");
+            .NotEmpty().WithMessage("Start date is required.");
         
         RuleFor(x => x.EndDate)
             .GreaterThan(x => x.StartDate).When(x => x.EndDate.HasValue).WithMessage("End date must be greater than start date if it is provided.");

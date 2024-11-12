@@ -54,27 +54,10 @@ export class MenuModel implements IMenuModel {
         ];
     }
 
-    createSideMenu(isAdminArea: boolean): void {
+    createSideMenu(): void {
         this.menuItems = [
             {
-                isOpen: isAdminArea,
-                title: 'ADMIN.ADMIN_AREA',
-                icon: 'fa-solid fa-screwdriver-wrench',
-                menuItems: [
-                    {
-                        title: 'MENU.DASHBOARD',
-                        url: '/admin/home',
-                        icon: 'fa-solid fa-table-columns',
-                    },
-                    {
-                        title: 'ADMIN.MENU.AUDIT_TRAIL',
-                        url: '/admin/audit-trail',
-                        icon: 'fa-solid fa-chart-pie',
-                    }
-                ]
-            },
-            {
-                isOpen: !isAdminArea,
+                isOpen: true,
                 title: 'MENU.HOME',
                 icon: 'fa-solid fa-house',
                 menuItems: [
@@ -123,5 +106,35 @@ export class MenuModel implements IMenuModel {
                 url: '/contact-us'
             },
         ];
+    }
+
+    createAdminSideMenu(): void {
+        if (!this.menuItems) {
+            this.createSideMenu();
+        }
+
+        this.menuItems?.forEach(menuItem => { menuItem.isOpen = false; });
+        this.menuItems?.unshift({
+            isOpen: true,
+            title: 'ADMIN.ADMIN_AREA',
+            icon: 'fa-solid fa-screwdriver-wrench',
+            menuItems: [
+                {
+                    title: 'MENU.DASHBOARD',
+                    url: '/admin/home',
+                    icon: 'fa-solid fa-table-columns',
+                },
+                {
+                    title: 'ADMIN.MENU.USERS',
+                    url: '/admin/users',
+                    icon: 'fa-solid fa-users',
+                },
+                {
+                    title: 'ADMIN.MENU.AUDIT_TRAIL',
+                    url: '/admin/audit-trail',
+                    icon: 'fa-solid fa-chart-pie',
+                }
+            ]
+        });
     }
 }

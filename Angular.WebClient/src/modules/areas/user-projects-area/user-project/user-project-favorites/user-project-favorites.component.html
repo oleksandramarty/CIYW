@@ -33,8 +33,8 @@
 
     <div class="category-items-container">
 
-        <ng-container *ngIf="favoriteExpenses?.entities?.length > 0">
-            <div class="category-item-container" *ngFor="let favoriteExpense of favoriteExpenses?.entities; let i=index"
+        <ng-container *ngIf="filteredResult?.entities?.length > 0">
+            <div class="category-item-container" *ngFor="let favoriteExpense of filteredResult?.entities; let i=index"
                  (click)="openFavoriteExpenseDialog(favoriteExpense)">
                 <div
                         (dragover)="onDragOver($event)"
@@ -44,12 +44,12 @@
                     <span>{{ currenciesMap?.get(favoriteExpense.currencyId)?.code }}</span>
                 </div>
                 <div class="category-item-title">
+                    <div class="amount" *ngIf="favoriteExpense.limit">
+                        {{ favoriteExpense.limit ?? 0 | currency:currenciesMap?.get(favoriteExpense.currencyId)?.code }}
+                    </div>
                     <div class="amount"
-                         [ngClass]="{'negative': favoriteExpense.limit - favoriteExpense.currentAmount < 0}">
+                         [ngClass]="{'negative': (favoriteExpense.limit - favoriteExpense.currentAmount) < 0}">
                         {{ favoriteExpense.currentAmount ?? 0 | currency:currenciesMap?.get(favoriteExpense.currencyId)?.code }}
-                        <ng-container *ngIf="favoriteExpense.limit">
-                            {{ favoriteExpense.limit ?? 0 | currency:currenciesMap?.get(favoriteExpense.currencyId)?.code }}
-                        </ng-container>
                     </div>
                     <div>
                         {{ favoriteExpense.title }}

@@ -80,6 +80,7 @@ export class UserProjectExpensesComponent extends BaseFilterComponent<FilteredLi
         this.commonDialogService.showCreateOrUpdateExpenseDialog(() => {
             this.getFilteredItems();
             this.expanseChanged.emit();
+        }, () => {
         }, expense, this.userProject);
     }
 
@@ -97,13 +98,14 @@ export class UserProjectExpensesComponent extends BaseFilterComponent<FilteredLi
                     )
                     .subscribe();
             }
-            this.commonDialogService.showRemoveExpenseConfirmationDialog(removeExpenseActionProceed);
+            this.commonDialogService.showRemoveExpenseConfirmationDialog(removeExpenseActionProceed, () => {
+            });
         }
-        this.commonDialogService.showNoComplaintDialog(removeExpenseAction);
+        this.commonDialogService.showNoComplaintDialog(removeExpenseAction, () => {
+        });
     }
 
     protected createFilterParams(): [BaseGraphQlFilteredModel, string, number[]] {
-
         return [
             this.filterBaseModel,
             this.userProject!.id,

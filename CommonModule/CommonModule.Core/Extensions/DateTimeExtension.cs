@@ -1,3 +1,5 @@
+using CommonModule.Shared.Enums.Expenses;
+
 namespace CommonModule.Core.Extensions;
 
 public static class DateTimeExtension
@@ -50,6 +52,44 @@ public static class DateTimeExtension
         if (date.HasValue)
         {
             date = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 0, 0, 0);
+        }
+    }
+
+    public static DateTime GetNextDate(this DateTime startDate, int frequencyId)
+    {
+        FrequencyEnum frequency = (FrequencyEnum)frequencyId;
+        DateTime nextDate = startDate;
+
+        nextDate = AddFrequency(nextDate, frequency);
+
+        while (nextDate <= DateTime.UtcNow)
+        {
+            nextDate = AddFrequency(nextDate, frequency);
+        }
+
+        return nextDate.ToUniversalTime();
+    }
+
+    private static DateTime AddFrequency(DateTime date, FrequencyEnum frequency)
+    {
+        switch (frequency)
+        {
+            case FrequencyEnum.Daily:
+                return date.AddDays(1);
+            case FrequencyEnum.Weekly:
+                return date.AddDays(7);
+            case FrequencyEnum.BiWeekly:
+                return date.AddDays(14);
+            case FrequencyEnum.Monthly:
+                return date.AddMonths(1);
+            case FrequencyEnum.Quarterly:
+                return date.AddMonths(3);
+            case FrequencyEnum.SemiAnnual:
+                return date.AddMonths(6);
+            case FrequencyEnum.Annual:
+                return date.AddYears(1);
+            default:
+                return date;
         }
     }
 }

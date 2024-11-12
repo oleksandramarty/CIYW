@@ -164,7 +164,7 @@
             <input matSliderEndThumb [formControlName]="'right'">
         </mat-slider>
     </ng-container>
-<h1>{{(filteredDataItems | async)?.length}}</h1>
+
     <ng-container *ngIf="type === 'autocomplete' || type === 'multiautocomplete'">
         <mat-form-field [appearance]="appearance" [formGroup]="internalFormGroup!">
             <mat-label *ngIf="!!label"><span [translation]="label"></span></mat-label>

@@ -1,5 +1,8 @@
 using AutoMapper;
+using CommonModule.Core.Exceptions;
+using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Constants;
 using Expenses.Business;
 using Expenses.Domain;
 using Expenses.Domain.Models.Expenses;
@@ -40,6 +43,17 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
         this.entityValidator.ValidateVoidRequest<CreateExpenseCommand>(command, () => new CreateExpenseCommandValidator());
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+
+        DateTime currentMonth = DateTimeExtension.GetStartOfCurrentMonth();
+        
+        if (await this.expenseRepository.GetQueryable(fe => 
+                    fe.UserProjectId == command.UserProjectId &&
+                    fe.CreatedAt >= currentMonth
+                    )
+                .CountAsync(cancellationToken) >= 50)
+        {
+            throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
+        }
 
         Expense toAdd = this.mapper.Map<Expense>(command);
         await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);

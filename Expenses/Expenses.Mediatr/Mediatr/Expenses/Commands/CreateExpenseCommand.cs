@@ -13,4 +13,5 @@ public class CreateExpenseCommand: IRequest
     public int CategoryId { get; set; }
     public Guid UserProjectId { get; set; }
     public Guid BalanceId { get; set; }
+    public Guid? FavoriteExpenseId { get; set; }
 }

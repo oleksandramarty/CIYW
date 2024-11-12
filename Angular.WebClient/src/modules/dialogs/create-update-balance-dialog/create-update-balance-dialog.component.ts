@@ -124,7 +124,7 @@ export class CreateUpdateBalanceDialogComponent extends BaseUnsubscribeComponent
                 ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction)
+        this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction, () => {})
     }
 
     public removeBalance(): void {

@@ -96,6 +96,6 @@ export class CreateUpdateUserProjectDialogComponent extends BaseUnsubscribeCompo
           ).subscribe();
     }
 
-    this.commonDialogService.showNoComplaintDialog(createUserProjectAction)
+    this.commonDialogService.showNoComplaintDialog(createUserProjectAction, () => {})
   }
 }

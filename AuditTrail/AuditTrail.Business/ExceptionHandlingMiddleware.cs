@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text;
 using CommonModule.Core.Exceptions;
 using CommonModule.Core.Exceptions.Errors;
 using CommonModule.Shared.Constants;
@@ -70,7 +71,14 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.Exception, ex.Message);
+            StringBuilder messageSb = new StringBuilder();
+            messageSb.AppendLine(ex.Message);
+            if (ex.InnerException != null)
+            {
+                messageSb.AppendLine(ex.InnerException.Message);
+            }
+            
+            await this.CreateAuditTrailAsync(context, ExceptionEnum.Exception, messageSb.ToString());
             await HandleExceptionAsync(context, ex, HttpStatusCode.InternalServerError);
         }
     }

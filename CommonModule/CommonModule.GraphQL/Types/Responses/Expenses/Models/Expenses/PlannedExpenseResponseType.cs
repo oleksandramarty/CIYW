@@ -17,6 +17,7 @@ public class PlannedExpenseResponseType : ObjectGraphType<PlannedExpenseResponse
         Field(x => x.BalanceId);
         Field(x => x.StartDate);
         Field(x => x.EndDate, nullable: true);
+        Field(x => x.NextDate, nullable: true);
         Field(x => x.UserId);
         Field(x => x.UserProjectId);
         Field(x => x.FrequencyId);

@@ -114,10 +114,10 @@ export class AuthService {
             ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintDialog(loginActon);
+        this.commonDialogService.showNoComplaintDialog(loginActon, () => {});
     }
 
-    public logout(): void {
+    public logout(executableCancelAction: () => void): void {
         const logoutAction = () => {
             this.graphQlAuthService.signOut()
                 .pipe(
@@ -130,7 +130,7 @@ export class AuthService {
                 ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintDialog(logoutAction);
+        this.commonDialogService.showNoComplaintDialog(logoutAction, executableCancelAction);
     }
 
     private getCurrentUser(): void {

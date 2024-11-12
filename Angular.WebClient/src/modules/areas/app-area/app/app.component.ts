@@ -59,10 +59,22 @@ export class AppComponent extends BaseAuthorizeComponent {
                 tap(isSideMenuVisible => {
                     if (!this.sideMenu && isSideMenuVisible !== undefined) {
                         this.sideMenu = new MenuModel();
-                        this.sideMenu.createSideMenu(!!isSideMenuVisible);
+                        this.sideMenu.createSideMenu();
                     }
                 }))
             .subscribe();
+
+        this.isAdminAreaAvailable$
+            ?.pipe(
+                takeUntil(this.ngUnsubscribe),
+                tap(isAdminAreaAvailable => {
+                    if (!this.sideMenu && isAdminAreaAvailable !== undefined && !!isAdminAreaAvailable) {
+                        this.sideMenu = new MenuModel();
+                        this.sideMenu.createAdminSideMenu();
+                    }
+                }))
+            .subscribe();
+
         document.addEventListener('click', this.onDocumentClick.bind(this));
     }
 
@@ -85,7 +97,8 @@ export class AppComponent extends BaseAuthorizeComponent {
     }
 
     public logout() {
-        this.store.dispatch(menu_toggle());
-        this.authService.logout()
+        this.authService.logout(() => {
+            this.store.dispatch(menu_toggle());
+        })
     }
 }

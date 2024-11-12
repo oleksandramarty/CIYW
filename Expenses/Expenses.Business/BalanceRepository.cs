@@ -108,13 +108,38 @@ public class BalanceRepository: IBalanceRepository
         string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, expense.CategoryId);
         this.entityValidator.IsEntityExist(currentCategory);
         
+        FavoriteExpense? favoriteExpense = expense.FavoriteExpenseId.HasValue ?
+            await this.dataContext.FavoriteExpenses
+                .FirstOrDefaultAsync(fe => fe.Id == expense.FavoriteExpenseId, cancellationToken) :
+            null;
+
+        if (favoriteExpense != null && favoriteExpense.CurrentAmount == null)
+        {
+            favoriteExpense.CurrentAmount = 0.0m;
+        }
+        
         if (isRefund)
         {
-            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":1") ? balance.Amount - expense.Amount : balance.Amount + expense.Amount;
+            bool isNegative = currentCategory.ToLower().Contains("\"ispositive\":1");
+            balance.Amount = isNegative ? balance.Amount - expense.Amount : balance.Amount + expense.Amount;
+            if (favoriteExpense != null)
+            {
+                favoriteExpense.CurrentAmount = isNegative ? favoriteExpense.CurrentAmount - expense.Amount : favoriteExpense.CurrentAmount + expense.Amount;
+            }
         }
         else
         {
-            balance.Amount = currentCategory.ToLower().Contains("\"ispositive\":true") ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
+            bool isPositive = currentCategory.ToLower().Contains("\"ispositive\":true");
+            balance.Amount = isPositive ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
+            if (favoriteExpense != null)
+            {
+                favoriteExpense.CurrentAmount = isPositive ? favoriteExpense.CurrentAmount + expense.Amount : favoriteExpense.CurrentAmount - expense.Amount;
+            }
+        }
+        
+        if (favoriteExpense != null)
+        {
+            this.dataContext.FavoriteExpenses.Update(favoriteExpense);
         }
         
         this.dataContext.Balances.Update(balance);

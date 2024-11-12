@@ -41,8 +41,8 @@ export class CommonDialogService {
     ) {
     }
 
-    public showNoComplaintDialog(executableAction: () => void): void {
-        this._handeExecutableAction<ConfirmationMessageDialogComponent>(this._getNoComplaintDialog(), executableAction);
+    public showNoComplaintDialog(executableAction: () => void, executableCancelAction: () => void): void {
+        this._handeExecutableAction<ConfirmationMessageDialogComponent>(this._getNoComplaintDialog(), executableAction, executableCancelAction);
     }
 
     private _getNoComplaintDialog(): MatDialogRef<ConfirmationMessageDialogComponent, any> {
@@ -61,8 +61,8 @@ export class CommonDialogService {
         });
     }
 
-    public showRemoveExpenseConfirmationDialog(executableAction: () => void): void {
-        this._handeExecutableAction<ConfirmationMessageDialogComponent>(this._getRemoveExpenseConfirmationDialog(), executableAction);
+    public showRemoveExpenseConfirmationDialog(executableAction: () => void, executableCancelAction: () => void): void {
+        this._handeExecutableAction<ConfirmationMessageDialogComponent>(this._getRemoveExpenseConfirmationDialog(), executableAction, executableCancelAction);
     }
 
     private _getRemoveExpenseConfirmationDialog(): MatDialogRef<ConfirmationMessageDialogComponent, any> {
@@ -86,13 +86,15 @@ export class CommonDialogService {
         });
     }
 
-    private _handeExecutableAction<TDialogRef>(dialogRef: MatDialogRef<TDialogRef, any>, executableAction: () => void): void {
+    private _handeExecutableAction<TDialogRef>(dialogRef: MatDialogRef<TDialogRef, any>, executableAction: () => void, executableCancelAction: () => void): void {
         dialogRef.afterClosed()
             .pipe(
                 take(1),
                 tap((result) => {
                     if (result) {
                         executableAction();
+                    } else {
+                        executableCancelAction();
                     }
                 }),
                 handleApiError(this.snackBar)
@@ -100,32 +102,32 @@ export class CommonDialogService {
             .subscribe();
     }
 
-    public showCreateOrUpdateExpenseDialog(executableAction: () => void, expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateExpenseDialogComponent>(this._getCreateUpdateExpenseDialog(expense, userProject), executableAction);
+    public showCreateOrUpdateExpenseDialog(executableAction: () => void, executableCancelAction: () => void, expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateExpenseDialogComponent>(this._getCreateUpdateExpenseDialog(expense, userProject), executableAction, executableCancelAction);
     }
 
-    public showCreateOrUpdateExpenseByFavoriteDialog(executableAction: () => void, balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateExpenseDialogComponent>(this._getCreateUpdateExpenseByFavoriteDialog(balance, favoriteExpense, userProject), executableAction);
+    public showCreateOrUpdateExpenseByFavoriteDialog(executableAction: () => void, executableCancelAction: () => void, balance: BalanceResponse | undefined, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateExpenseDialogComponent>(this._getCreateUpdateExpenseByFavoriteDialog(balance, favoriteExpense, userProject), executableAction, executableCancelAction);
     }
 
-    public showCreateOrUpdatePlannedExpenseDialog(executableAction: () => void, plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdatePlannedExpenseDialogComponent>(this._getCreateUpdatePlannedExpenseDialog(plannedExpense, userProject), executableAction);
+    public showCreateOrUpdatePlannedExpenseDialog(executableAction: () => void, executableCancelAction: () => void, plannedExpense: PlannedExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdatePlannedExpenseDialogComponent>(this._getCreateUpdatePlannedExpenseDialog(plannedExpense, userProject), executableAction, executableCancelAction);
     }
 
-    public showCreateOrUpdateUserBalanceDialog(executableAction: () => void, balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateBalanceDialogComponent>(this._getCreateUpdateUserBalanceDialog(balance, userProject), executableAction);
+    public showCreateOrUpdateUserBalanceDialog(executableAction: () => void, executableCancelAction: () => void, balance: BalanceResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateBalanceDialogComponent>(this._getCreateUpdateUserBalanceDialog(balance, userProject), executableAction, executableCancelAction);
     }
 
-    public showCreateOrUpdateFavoriteExpenseDialog(executableAction: () => void, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
-        this._handeExecutableAction<CreateUpdateFavoriteExpenseDialogComponent>(this._getCreateUpdateFavoriteExpenseDialog(favoriteExpense, userProject), executableAction);
+    public showCreateOrUpdateFavoriteExpenseDialog(executableAction: () => void, executableCancelAction: () => void, favoriteExpense: FavoriteExpenseResponse | undefined, userProject: UserProjectResponse | undefined): void {
+        this._handeExecutableAction<CreateUpdateFavoriteExpenseDialogComponent>(this._getCreateUpdateFavoriteExpenseDialog(favoriteExpense, userProject), executableAction, executableCancelAction);
     }
 
     public showIconPickerDialog(): Observable<any> {
         return this._getIconPickerDialog().afterClosed();
     }
 
-    public showAuditTrailDetailsDialog(executableAction: () => void, auditTrails: AuditTrailResponse | undefined): void {
-        this._handeExecutableAction<AuditTrailDetailsDialogComponent>(this._getAuditTrailDetailsDialog(auditTrails), executableAction);
+    public showAuditTrailDetailsDialog(executableAction: () => void, executableCancelAction: () => void, auditTrails: AuditTrailResponse | undefined): void {
+        this._handeExecutableAction<AuditTrailDetailsDialogComponent>(this._getAuditTrailDetailsDialog(auditTrails), executableAction, executableCancelAction);
     }
 
     private _getCreateUpdateExpenseDialog(expense: ExpenseResponse | undefined, userProject: UserProjectResponse | undefined): MatDialogRef<CreateUpdateExpenseDialogComponent, any> {
@@ -197,8 +199,8 @@ export class CommonDialogService {
 
     private _getAuditTrailDetailsDialog(auditTrail: AuditTrailResponse | undefined): MatDialogRef<AuditTrailDetailsDialogComponent, any> {
         return this.dialog.open(AuditTrailDetailsDialogComponent, {
-            width: '600px',
-            maxWidth: '80vw',
+            width: auditTrail?.message?.length ?? 0 > 400 ? '90vw' : '600px',
+            maxWidth: auditTrail?.message?.length ?? 0 > 400 ? '90vw' : '80vw',
             data: {
                 auditTrail
             }

@@ -12,7 +12,11 @@
         <a *ngIf="(isAdminAreaAvailable$ | async)"
                 mat-button
                 (click)="isUserMenu = !isUserMenu">
-            {{ (isUserMenu ? 'MENU.GO_TO_ADMIN_MENU' : 'MENU.GO_TO_USER_MENU') | translation}}</a>
+            <i class="fa-solid fa-bolt"></i>
+            {{ (isUserMenu ? 'MENU.USER' : 'MENU.ADMIN') | translation}}
+            {{ 'USER.MENU' | translation}}
+            <i class="fa-solid fa-bolt"></i></a>
+
         <ng-container *ngIf="isUserMenu">
             <a
                     *ngFor="let item of menuItems; let i=index"

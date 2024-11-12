@@ -1,12 +1,15 @@
 using AutoMapper;
 using CommonModule.Core.Exceptions;
+using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Constants;
 using Expenses.Domain;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
 using Expenses.Mediatr.Mediatr.Expenses.Commands;
 using Expenses.Mediatr.Validators.Expenses;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
@@ -34,6 +37,12 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
         this.entityValidator.ValidateVoidRequest<CreatePlannedExpenseCommand>(command, () => new CreatePlannedExpenseCommandValidator());
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        
+        if (await this.plannedExpenseRepository.GetQueryable(fe => fe.UserProjectId == command.UserProjectId)
+                .CountAsync(cancellationToken) >= 10)
+        {
+            throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
+        }
 
         PlannedExpense toAdd = this.mapper.Map<PlannedExpense>(command);
             

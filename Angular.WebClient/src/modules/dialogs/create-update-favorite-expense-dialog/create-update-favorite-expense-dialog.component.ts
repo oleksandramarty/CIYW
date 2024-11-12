@@ -129,7 +129,7 @@ export class CreateUpdateFavoriteExpenseDialogComponent extends BaseUnsubscribeC
                 ).subscribe();
         }
 
-        this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction)
+        this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction, () => {})
     }
 
     get inputParams(): [

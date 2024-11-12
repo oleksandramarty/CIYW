@@ -4,7 +4,7 @@ import {ApolloQueryResult} from "@apollo/client";
 import {GraphQlService} from "../graph-ql.service";
 import {
     CREATE_EXPENSE, CREATE_FAVORITE_EXPENSE, CREATE_PLANNED_EXPENSE, CREATE_USER_BALANCE,
-    CREATE_USER_PROJECT, GET_FILTERED_AUDIT_TRAIL,
+    CREATE_USER_PROJECT,
     GET_FILTERED_EXPENSES, GET_FILTERED_FAVORITE_EXPENSES,
     GET_FILTERED_PLANNED_EXPENSES,
     GET_FILTERED_USER_ALLOWED_PROJECTS,
@@ -25,6 +25,7 @@ import {
     UserProjectResponse
 } from "../../api-models/common.models";
 import {ApolloBase} from "apollo-angular";
+import {GET_FILTERED_AUDIT_TRAIL} from "../queries/graph-ql-audit-trail.query";
 
 @Injectable({
     providedIn: 'root',
@@ -141,7 +142,8 @@ export class GraphQlExpensesService {
         balanceId: string | undefined,
         date: Date | undefined,
         categoryId: number | undefined,
-        userProjectId: string | undefined
+        userProjectId: string | undefined,
+        favoriteExpenseId: string | undefined
     ): Observable<ApolloQueryResult<{ success: boolean }>> {
         return this.apolloClient
             .mutate({
@@ -154,7 +156,7 @@ export class GraphQlExpensesService {
                     balanceId,
                     date,
                     categoryId,
-                    ...(!id && {userProjectId})
+                    ...(!id && {userProjectId, favoriteExpenseId})
                 },
             }) as Observable<ApolloQueryResult<{ success: boolean }>>;
     }
@@ -386,7 +388,7 @@ export class GraphQlExpensesService {
                     column: ColumnEnum.CreatedAt.toString(),
                     direction: OrderDirectionEnum.Desc.toString()
                 },
-                fetchPolicy: 'network-only',
+                fetchPolicy: 'cache-first',
             }).valueChanges as Observable<ApolloQueryResult<{
             expenses_get_filtered_user_projects: FilteredListResponseOfUserProjectResponse
         }>>;

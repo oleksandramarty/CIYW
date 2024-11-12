@@ -1,21 +1,11 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {finalize, Subject, take, takeUntil, tap} from "rxjs";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Observable, take, takeUntil, tap} from "rxjs";
 import {
-  BaseSortableRequest,
-  CategoryResponse,
-  ColumnEnum,
-  CurrencyResponse,
-  FilteredListResponseOfPlannedExpenseResponse,
-  FrequencyResponse,
-  OrderDirectionEnum,
-  PaginatorEntity,
-  PlannedExpenseResponse,
-  UserProjectResponse
+    FilteredListResponseOfPlannedExpenseResponse,
+    PlannedExpenseResponse,
+    UserProjectResponse
 } from "../../../../../core/api-models/common.models";
-import {getUTCString, handleBaseDateRangeFilter} from "../../../../../core/helpers/date-time.helper";
-import {FormControl, FormGroup} from "@angular/forms";
-import {DictionaryMap} from "../../../../../core/models/common/dictionary.model";
-import {DataItem} from "../../../../../core/models/common/data-item.model";
+import {FormControl} from "@angular/forms";
 import {DictionaryService} from "../../../../../core/services/dictionary.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Store} from "@ngrx/store";
@@ -24,173 +14,107 @@ import {GraphQlExpensesService} from "../../../../../core/graph-ql/services/grap
 import {CommonDialogService} from "../../../../../core/services/common-dialog.service";
 import {handleApiError} from "../../../../../core/helpers/rxjs.helper";
 import {BaseGraphQlFilteredModel} from "../../../../../core/models/common/base-graphql.model";
-import {
-  selectPlannedExpensesSnapshot
-} from "../../../../../core/store/selectors/expenses.selectors";
+import {selectPlannedExpensesSnapshot} from "../../../../../core/store/selectors/expenses.selectors";
 import {expenses_setUserProject_plannedExpensesSnapshot} from "../../../../../core/store/actions/expenses.actions";
-import {BaseUnsubscribeComponent} from "../../../../../core/base-components/base-unsubscribe.compoinent";
+import {BaseFilterComponent} from "../../../../../core/base-components/base-filter.component";
+import {LocalizationService} from "../../../../../core/services/localization.service";
+import {map} from "rxjs/operators";
+import {createUserProjectPlannedExpensesHeader, ITableHeaderItem} from "../../../../../core/models/table.model";
 
 @Component({
-  selector: 'app-user-project-planned-expenses',
-  templateUrl: './user-project-planned-expenses.component.html',
-  styleUrl: '../user-project.component.scss'
+    selector: 'app-user-project-planned-expenses',
+    templateUrl: './user-project-planned-expenses.component.html',
+    styleUrl: '../user-project.component.scss'
 })
-export class UserProjectPlannedExpensesComponent extends BaseUnsubscribeComponent {
-  @Input() userProject: UserProjectResponse | undefined;
-  @Output() plannedExpenseChanged: EventEmitter<void> = new EventEmitter();
-  plannedExpenses: FilteredListResponseOfPlannedExpenseResponse | undefined;
-  paginator: PaginatorEntity = new PaginatorEntity({pageSize: 10, pageNumber: 0, isFull: false});
-  sort: BaseSortableRequest = new BaseSortableRequest({
-    column: ColumnEnum.Date,
-    direction: OrderDirectionEnum.Desc
-  });
+export class UserProjectPlannedExpensesComponent extends BaseFilterComponent<FilteredListResponseOfPlannedExpenseResponse, [BaseGraphQlFilteredModel, string, number[]]> {
+    @Input() userProject: UserProjectResponse | undefined;
+    @Output() plannedExpenseChanged: EventEmitter<void> = new EventEmitter();
 
-  public utcTimeShift: string = getUTCString();
+    public tableHeaderItems: ITableHeaderItem[] = createUserProjectPlannedExpensesHeader();
 
-  filterFormGroup: FormGroup = new FormGroup({
-    dateRange: new FormControl(),
-    query: new FormControl(),
-    categoryIds: new FormControl(),
-  });
+    constructor(
+        protected override readonly dictionaryService: DictionaryService,
+        protected override readonly localizationService: LocalizationService,
+        protected override readonly loaderService: LoaderService,
+        protected override readonly snackBar: MatSnackBar,
+        private readonly store: Store,
+        private readonly graphQlExpensesService: GraphQlExpensesService,
+        private readonly commonDialogService: CommonDialogService
+    ) {
+        super(dictionaryService, localizationService, loaderService, snackBar);
+    }
 
-  get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {
-    return this.dictionaryService.currenciesMap;
-  }
+    override ngOnInit(): void {
+        this.filterFormGroup.addControl('categoryIds', new FormControl([]));
 
-  get frequenciesMap(): DictionaryMap<number, FrequencyResponse> | undefined {
-    return this.dictionaryService.frequenciesMap;
-  }
+        this.initializeFilterForm(this.store.select(selectPlannedExpensesSnapshot));
 
-  get categoriesMap(): DictionaryMap<number, CategoryResponse> | undefined {
-    return this.dictionaryService.categoriesMap;
-  }
-
-  get categoriesDataItems(): DataItem[] {
-    return this.dictionaryService.dataItems?.categories ?? [];
-  }
-
-  constructor(
-      private readonly dictionaryService: DictionaryService,
-      private readonly snackBar: MatSnackBar,
-      private readonly store: Store,
-      private readonly loaderService: LoaderService,
-      private readonly graphQlExpensesService: GraphQlExpensesService,
-      private readonly commonDialogService: CommonDialogService
-  ) {
-    super();
-  }
-
-  override ngOnInit(): void {
-    this.store.select(selectPlannedExpensesSnapshot)
-        .pipe(
-            take(1),
-            tap((result) => {
-              if (result) {
-                if (result.filteredResult) {
-                  this.plannedExpenses = result.filteredResult;
-                }
-                if (result.paginator) {
-                  this.paginator = result.paginator;
-                }
-                if (result.sort) {
-                  this.sort = result.sort;
-                }
-                if (result.dateRange) {
-                  this.filterFormGroup.get('dateRange')?.setValue(result.dateRange);
-                }
-                if (result.query) {
-                  this.filterFormGroup.get('query')?.setValue(result.query);
-                }
-                if (result.categoryIds) {
-                  this.filterFormGroup.get('categoryIds')?.setValue(result.categoryIds);
-                }
-              } else {
-                this.getFilteredItems();
-              }
-            }),
-            handleApiError(this.snackBar)
-        )
-        .subscribe();
-  }
-
-  override ngOnDestroy(): void {
-    this.store.dispatch(expenses_setUserProject_plannedExpensesSnapshot({
-      filteredResult: this.plannedExpenses!,
-      paginator: this.paginator,
-      sort: this.sort,
-      dateRange: this.filterFormGroup.value.dateRange,
-      query: this.filterFormGroup.value.query,
-      categoryIds: this.filterFormGroup.value.categoryIds
-    }));
-    super.ngOnDestroy();
-  }
-
-  public openCreateUpdatePlannedExpenseDialog(plannedExpense: PlannedExpenseResponse | undefined): void {
-    this.commonDialogService.showCreateOrUpdatePlannedExpenseDialog(() => {
-      this.getFilteredItems();
-      this.plannedExpenseChanged.emit();
-    }, plannedExpense, this.userProject);
-  }
-
-  public removePlannedExpense(plannedExpense: PlannedExpenseResponse): void {
-    const removePlannedExpenseAction = () => {
-      const removePlannedExpenseActionProceed = () => {
-        this.graphQlExpensesService.removePlannedExpense(plannedExpense.id!)
+        this.store.select(selectPlannedExpensesSnapshot)
             .pipe(
-                takeUntil(this.ngUnsubscribe),
+                take(1),
                 tap((result) => {
-                  this.getFilteredItems();
+                    if (result && result.categoryIds) {
+                        this.filterFormGroup.get('categoryIds')?.setValue(result.categoryIds);
+                    } else {
+                        this.getFilteredItems();
+                    }
                 }),
                 handleApiError(this.snackBar)
             )
             .subscribe();
-      }
-      this.commonDialogService.showRemoveExpenseConfirmationDialog(removePlannedExpenseActionProceed);
     }
-    this.commonDialogService.showNoComplaintDialog(removePlannedExpenseAction);
-  }
 
-  public resetFilter(): void {
-    this.filterFormGroup.reset();
-    this.getFilteredItems();
-  }
+    override ngOnDestroy(): void {
+        this.store.dispatch(expenses_setUserProject_plannedExpensesSnapshot({
+            filteredResult: this.filteredResult!,
+            paginator: this.paginator,
+            sort: this.sort,
+            dateRange: this.filterFormGroup.value.dateRange,
+            query: this.filterFormGroup.value.query,
+            categoryIds: this.filterFormGroup.value.categoryIds
+        }));
+        super.ngOnDestroy();
+    }
 
-  get filterParams(): [BaseGraphQlFilteredModel, string, number[]] {
-    const dateRange = handleBaseDateRangeFilter(this.filterFormGroup!.value?.dateRange);
+    public openCreateUpdatePlannedExpenseDialog(plannedExpense: PlannedExpenseResponse | undefined): void {
+        this.commonDialogService.showCreateOrUpdatePlannedExpenseDialog(() => {
+            this.getFilteredItems();
+            this.plannedExpenseChanged.emit();
+        }, () => {
+        }, plannedExpense, this.userProject);
+    }
 
-    return [
-      {
-        dateFrom: dateRange?.startDate,
-        dateTo: dateRange?.endDate,
-        amountFrom: undefined,
-        amountTo: undefined,
-        isFull: this.paginator?.isFull ?? false,
-        pageNumber: this.paginator?.pageNumber ?? 1,
-        pageSize: this.paginator?.pageSize ?? 10,
-        column: this.sort?.column?.toString() ?? ColumnEnum.NextDate.toString(),
-        direction: this.sort?.direction?.toString() ?? OrderDirectionEnum.Desc.toString(),
-        query: this.filterFormGroup?.value?.query ?? '',
-      },
-      this.userProject!.id,
-      this.filterFormGroup?.value.categoryIds?.map(Number) ?? []
-    ];
-  }
+    public removePlannedExpense(plannedExpense: PlannedExpenseResponse): void {
+        const removePlannedExpenseAction = () => {
+            const removePlannedExpenseActionProceed = () => {
+                this.graphQlExpensesService.removePlannedExpense(plannedExpense.id!)
+                    .pipe(
+                        takeUntil(this.ngUnsubscribe),
+                        tap((result) => {
+                            this.getFilteredItems();
+                        }),
+                        handleApiError(this.snackBar)
+                    )
+                    .subscribe();
+            }
+            this.commonDialogService.showRemoveExpenseConfirmationDialog(removePlannedExpenseActionProceed, () => {
+            });
+        }
+        this.commonDialogService.showNoComplaintDialog(removePlannedExpenseAction, () => {
+        });
+    }
 
-  public getFilteredItems(): void {
-    this.loaderService.isBusy = true;
+    protected createFilterParams(): [BaseGraphQlFilteredModel, string, number[]] {
+        return [
+            this.filterBaseModel,
+            this.userProject!.id,
+            this.filterFormGroup?.value.categoryIds?.map(Number) ?? []
+        ];
+    }
 
-    this.graphQlExpensesService.getFilteredPlannedExpenses(...this.filterParams).pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap((result) => {
-          this.plannedExpenses = result?.data?.expenses_get_filtered_planned_expenses as FilteredListResponseOfPlannedExpenseResponse;
-          this.loaderService.isBusy = false;
-        }),
-        handleApiError(this.snackBar),
-        finalize(() => this.loaderService.isBusy = false)
-    ).subscribe();
-  }
-
-  public getCurrencyCode(balanceId: string | undefined): string {
-    return this.currenciesMap?.get(Number(balanceId))?.code ?? 'USD';
-  }
+    protected getFilteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfPlannedExpenseResponse> {
+        return this.graphQlExpensesService.getFilteredPlannedExpenses(...filterRequest).pipe(
+            map(result => result.data.expenses_get_filtered_planned_expenses!)
+        );
+    }
 }

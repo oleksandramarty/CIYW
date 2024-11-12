@@ -18,4 +18,6 @@ public class FavoriteExpenseResponse: BaseDateTimeEntity<Guid>, IBaseVersionEnti
     
     public Guid CreatedUserId { get; set; }
     public string Version { get; set; }
+    
+    public ICollection<ExpenseResponse> Expenses { get; set; }
 }

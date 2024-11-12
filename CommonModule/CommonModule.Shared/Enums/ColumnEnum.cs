@@ -10,5 +10,6 @@ public enum ColumnEnum
     Amount = 6,
     NextDate = 7,
     CurrentAmount = 8,
-    EndDate = 9
+    EndDate = 9,
+    StartDate = 10,
 }

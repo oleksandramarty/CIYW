@@ -20,4 +20,8 @@ public class ExpenseResponse: BaseDateTimeEntity<Guid>, IBaseVersionEntity
     
     public Guid CreatedUserId { get; set; }
     public string Version { get; set; }
+    
+    public Guid? FavoriteExpenseId { get; set; }
+    
+    public FavoriteExpenseResponse? FavoriteExpense { get; set; }
 }

@@ -1,6 +1,8 @@
 using AutoMapper;
+using CommonModule.Core.Exceptions;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Constants;
 using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Projects;
@@ -29,7 +31,12 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     
     public async Task Handle(CreateUserBalanceCommand command, CancellationToken cancellationToken)
     {
-        await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        UserProject userProject = await this.GetUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+
+        if (userProject.Balances.Count >= 3)
+        {
+            throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
+        }
         
         Balance balance = this.mapper.Map<CreateUserBalanceCommand, Balance>(command);
         balance.UserId = await this.GetCurrentUserIdAsync();

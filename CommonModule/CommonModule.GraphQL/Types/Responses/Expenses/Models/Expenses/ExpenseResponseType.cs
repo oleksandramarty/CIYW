@@ -19,5 +19,7 @@ public class ExpenseResponseType : ObjectGraphType<ExpenseResponse>
         Field(x => x.UserProjectId);
         Field(x => x.CreatedUserId);
         Field(x => x.Version);
+        Field(x => x.FavoriteExpenseId, nullable: true);
+        Field(x => x.FavoriteExpense, type: typeof(FavoriteExpenseResponseType), nullable: true);
     }
 }

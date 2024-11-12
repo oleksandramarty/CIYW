@@ -18,7 +18,7 @@ import {LoaderService} from "../../../../../core/services/loader.service";
 import {GraphQlExpensesService} from "../../../../../core/graph-ql/services/graph-ql-expenses.service";
 import {CommonDialogService} from "../../../../../core/services/common-dialog.service";
 import {FormControl} from "@angular/forms";
-import {filter, Observable, take, takeUntil, tap} from "rxjs";
+import {debounceTime, filter, Observable, take, takeUntil, tap} from "rxjs";
 import {map} from "rxjs/operators";
 import {
     createEnumDataItems,
@@ -75,7 +75,9 @@ export class AdminAuditTrailComponent extends BaseFilterComponent<FilteredListRe
                 filter((state) => !!state),
                 take(1),
                 tap(() => {
-                    this.translationsDataItems = this.localizationService.getAllLocalizationsDataItems;
+                    setTimeout(() => {
+                        this.translationsDataItems = this.localizationService.getAllLocalizationsDataItems;
+                    }, 1000);
                 })
             )
             .subscribe();
@@ -121,6 +123,6 @@ export class AdminAuditTrailComponent extends BaseFilterComponent<FilteredListRe
     }
 
     public openDetails(entity: AuditTrailResponse): void {
-        this.commonDialogService.showAuditTrailDetailsDialog(() => {}, entity);
+        this.commonDialogService.showAuditTrailDetailsDialog(() => {}, () => {}, entity);
     }
 }

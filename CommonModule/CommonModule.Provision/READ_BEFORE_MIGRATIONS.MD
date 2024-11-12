@@ -110,8 +110,7 @@ if you dont see translation after = create your own
 
 START from 288
 
-USER.MENU = Menu
-USER.MENU.ANALYTICS = Analytics
+ERROR.FAVORITE_EXPENSE_LIMIT_REACHED = You have reached the limit of favorite expenses
 
 do all for en after all for es etc
 do without empty lines

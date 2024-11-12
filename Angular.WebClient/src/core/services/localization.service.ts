@@ -138,9 +138,9 @@ export class LocalizationService {
                         handleApiError(this.snackBar)
                     ).subscribe();
             }
+        } else {
+            this.localeChangedSub.next(true);
         }
-
-        this.localeChangedSub.next(true);
     }
 
     public getTranslation(key: string | undefined): string | undefined {

@@ -1,71 +1,5 @@
 import {gql} from "@apollo/client";
 
-export const GET_FILTERED_AUDIT_TRAIL = gql`
-    query GetFilteredAuditTrail(
-        $isFull: Boolean,
-        $pageNumber: Int,
-        $pageSize: Int,
-        $dateFrom: DateTime,
-        $dateTo: DateTime,
-        $column: String,
-        $direction: String,
-        $query: String,
-        $amountFrom: Decimal,
-        $amountTo: Decimal,
-        $entityType: String,
-        $action: String,
-        $type: String,
-        $exceptionType: String,
-        $entityId: ID,
-        $userId: ID,
-        $translationKey: String
-    ) {
-        audit_trail_get_filtered_audit_trail(
-            isFull: $isFull,
-            pageNumber: $pageNumber,
-            pageSize: $pageSize,
-            dateFrom: $dateFrom,
-            dateTo: $dateTo,
-            column: $column,
-            direction: $direction,
-            query: $query,
-            amountFrom: $amountFrom,
-            amountTo: $amountTo,
-            entityType: $entityType,
-            action: $action,
-            type: $type,
-            exceptionType: $exceptionType,
-            entityId: $entityId,
-            userId: $userId,
-            translationKey: $translationKey
-        ) {
-            entities {
-                id
-                createdAt
-                entityType
-                action
-                type
-                exceptionType
-                message
-                entityId
-                oldValue
-                newValue
-                payload
-                uri
-                userId
-                archiveDate
-            }
-            paginator {
-                pageNumber
-                pageSize
-                isFull
-            }
-            totalCount
-        }
-    }
-`;
-
-
 export const GET_FILTERED_EXPENSES = gql`
     query GetFilteredExpenses(
         $isFull: Boolean,
@@ -108,6 +42,20 @@ export const GET_FILTERED_EXPENSES = gql`
                 userProjectId
                 createdUserId
                 version
+                favoriteExpenseId
+                favoriteExpense {
+                    id
+                    title
+                    description
+                    limit
+                    categoryId
+                    frequencyId
+                    currencyId
+                    userProjectId
+                    iconId
+                    createdUserId
+                    version
+                }
             }
             paginator {
                 pageNumber
@@ -159,6 +107,7 @@ export const GET_FILTERED_PLANNED_EXPENSES = gql`
                 balanceId
                 startDate
                 endDate
+                nextDate
                 userId
                 userProjectId
                 frequencyId
@@ -240,6 +189,7 @@ export const CREATE_EXPENSE = gql`
         $categoryId: Int!,
         $userProjectId: ID!,
         $balanceId: ID!
+        $favoriteExpenseId: ID
     ) {
         expenses_create_expense(
             input: {
@@ -249,7 +199,8 @@ export const CREATE_EXPENSE = gql`
                 date: $date,
                 categoryId: $categoryId,
                 userProjectId: $userProjectId,
-                balanceId: $balanceId
+                balanceId: $balanceId,
+                favoriteExpenseId: $favoriteExpenseId
             }
         )
     }

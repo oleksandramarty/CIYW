@@ -77,6 +77,12 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'users',
+        loadChildren: () => import('../admin-areas/admin-users-area/admin-users-area.module')
+            .then(m => m.AdminUsersAreaModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'audit-trail',
         loadChildren: () => import('../admin-areas/admin-audit-trail-area/admin-audit-trail-area.module')
             .then(m => m.AdminAuditTrailAreaModule),

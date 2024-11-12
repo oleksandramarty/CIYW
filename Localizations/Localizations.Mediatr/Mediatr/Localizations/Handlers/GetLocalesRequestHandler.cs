@@ -9,7 +9,23 @@ using MediatR;
 
 namespace Localizations.Mediatr.Mediatr.Localizations.Handlers;
 
-public class GetLocalesRequestHandler(
-    IDictionaryRepository<int, Locale, LocaleResponse, LocalizationsDataContext> dictionaryRepository)
-    : MediatrDictionaryBase<GetLocalesRequest, int, Locale, LocaleResponse, LocalizationsDataContext>(
-        dictionaryRepository), IRequestHandler<GetLocalesRequest, VersionedListResponse<LocaleResponse>>;
+public class GetLocalesRequestHandler : IRequestHandler<GetLocalesRequest, VersionedListResponse<LocaleResponse>>
+{
+    private readonly IDictionaryRepository<int, Locale, LocaleResponse, LocalizationsDataContext> dictionaryRepository;
+    
+    public GetLocalesRequestHandler(
+        IDictionaryRepository<int, Locale, LocaleResponse, LocalizationsDataContext> dictionaryRepository
+        )
+    {
+        this.dictionaryRepository = dictionaryRepository;
+    }
+    
+    public async Task<VersionedListResponse<LocaleResponse>> Handle(GetLocalesRequest request, CancellationToken cancellationToken)
+    {
+        VersionedListResponse<LocaleResponse> response = await this.dictionaryRepository.GetDictionaryAsync(request.Version, cancellationToken);
+
+        response.Items = response.Items.OrderBy(i => i.Id).ToList();
+        
+        return response;
+    }
+}

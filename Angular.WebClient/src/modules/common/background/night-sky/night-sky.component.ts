@@ -20,7 +20,7 @@ export class NightSkyComponent implements OnInit {
 
     // Maximum number of stars per type
     // Not greater than 5
-    private _starsMultiplier = 0.1;
+    private _starsMultiplier = 1;
 
     private generateStars(): void {
         const starsContainer = this.renderer.selectRootElement('.stars', true);

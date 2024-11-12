@@ -24,4 +24,6 @@ public class FavoriteExpense: BaseDateTimeEntity<Guid>, IBaseVersionEntity
     
     public Guid CreatedUserId { get; set; }
     public string Version { get; set; }
+    
+    public ICollection<Expense> Expenses { get; set; }
 }

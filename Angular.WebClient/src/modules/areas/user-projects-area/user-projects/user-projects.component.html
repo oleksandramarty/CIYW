@@ -12,10 +12,11 @@
                 <div class="user-project-details">
                     <ng-container *ngFor="let balance of userProject.balances">
                         <div class="currency-title mb-0-0rem">{{ balance.title }}</div>
-                        <div class="currency-title mb-0-0rem">{{ balanceTypesMap?.get(balance.balanceTypeId)?.title }}</div>
+                        <div class="currency-title mb-0-0rem">{{ balanceTypesMap?.get(balance.balanceTypeId)?.title | translation }}</div>
                         <div class="balance">
                             <span class="currency">{{ currenciesMap?.get(balance.currencyId)?.code }}</span>
-                            <span class="amount">{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
+                            <span class="amount" [ngClass]="{'negative': balance.amount < 0}"
+                            >{{ balance.amount | currency:currenciesMap?.get(balance.currencyId)?.code }}</span>
                         </div>
                         <div class="currency-title">{{ currenciesMap?.get(balance.currencyId)?.title }}</div>
                     </ng-container>

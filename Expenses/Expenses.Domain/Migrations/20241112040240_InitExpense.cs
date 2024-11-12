@@ -69,36 +69,6 @@ namespace Expenses.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Expenses",
-                schema: "Expenses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    BalanceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CategoryId = table.Column<int>(type: "integer", nullable: false),
-                    UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Version = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Expenses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Expenses_UserProjects_UserProjectId",
-                        column: x => x.UserProjectId,
-                        principalSchema: "Projects",
-                        principalTable: "UserProjects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FavoriteExpenses",
                 schema: "Expenses",
                 columns: table => new
@@ -106,7 +76,7 @@ namespace Expenses.Domain.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    Limit = table.Column<decimal>(type: "numeric", nullable: false),
+                    Limit = table.Column<decimal>(type: "numeric", nullable: true),
                     CurrentAmount = table.Column<decimal>(type: "numeric", nullable: true),
                     CategoryId = table.Column<int>(type: "integer", nullable: true),
                     FrequencyId = table.Column<int>(type: "integer", nullable: true),
@@ -188,11 +158,54 @@ namespace Expenses.Domain.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Expenses",
+                schema: "Expenses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    BalanceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false),
+                    FavoriteExpenseId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expenses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Expenses_FavoriteExpenses_FavoriteExpenseId",
+                        column: x => x.FavoriteExpenseId,
+                        principalSchema: "Expenses",
+                        principalTable: "FavoriteExpenses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Expenses_UserProjects_UserProjectId",
+                        column: x => x.UserProjectId,
+                        principalSchema: "Projects",
+                        principalTable: "UserProjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Balances_UserProjectId",
                 schema: "Balance",
                 table: "Balances",
                 column: "UserProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expenses_FavoriteExpenseId",
+                schema: "Expenses",
+                table: "Expenses",
+                column: "FavoriteExpenseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Expenses_UserProjectId",
@@ -231,16 +244,16 @@ namespace Expenses.Domain.Migrations
                 schema: "Expenses");
 
             migrationBuilder.DropTable(
-                name: "FavoriteExpenses",
-                schema: "Expenses");
-
-            migrationBuilder.DropTable(
                 name: "PlannedExpenses",
                 schema: "Expenses");
 
             migrationBuilder.DropTable(
                 name: "UserAllowedProjects",
                 schema: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "FavoriteExpenses",
+                schema: "Expenses");
 
             migrationBuilder.DropTable(
                 name: "UserProjects",

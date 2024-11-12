@@ -33,6 +33,9 @@ public class ExpensesDataContext : DbSaveChangeContext
             entity.HasOne(e => e.UserProject)
                 .WithMany(uc => uc.Expenses)
                 .HasForeignKey(e => e.UserProjectId);
+            entity.HasOne(e => e.FavoriteExpense)
+                .WithMany(uc => uc.Expenses)
+                .HasForeignKey(e => e.FavoriteExpenseId);
             entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
             entity.Property(c => c.Description).HasMaxLength(100);
             entity.Property(c => c.Amount).IsRequired();
@@ -55,7 +58,6 @@ public class ExpensesDataContext : DbSaveChangeContext
                 .HasForeignKey(e => e.UserProjectId);
             entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
             entity.Property(c => c.Description).HasMaxLength(100);
-            entity.Property(c => c.Limit).IsRequired();
         });
         modelBuilder.Entity<UserProject>(entity => { entity.ToTable("UserProjects", "Projects"); });
 

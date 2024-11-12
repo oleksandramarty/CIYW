@@ -14,5 +14,6 @@ public class CreateExpenseInputType : InputObjectGraphType
         Field<NonNullGraphType<IntGraphType>>("categoryId");
         Field<NonNullGraphType<IdGraphType>>("userProjectId");
         Field<NonNullGraphType<IdGraphType>>("balanceId");
+        Field<IdGraphType>("favoriteExpenseId");
     }
 }

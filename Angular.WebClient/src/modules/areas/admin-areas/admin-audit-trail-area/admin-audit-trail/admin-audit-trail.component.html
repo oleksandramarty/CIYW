@@ -4,12 +4,12 @@
     </div>
 
     <div class="filter-container" *ngIf="filterFormGroup" [formGroup]="filterFormGroup">
-        <div class="filter-input-item">
-            <app-input type="autocomplete" [dataItems]="translationsDataItems"
-                       label="Translations" [formGroup]="filterFormGroup" controlName="translationKey">
-            </app-input>
-        </div>
         <div class="filter-input-container mb-1-5rem">
+            <div class="filter-input-item">
+                <app-input type="autocomplete" [dataItems]="translationsDataItems"
+                           label="Translations" [formGroup]="filterFormGroup" controlName="translationKey">
+                </app-input>
+            </div>
             <div class="filter-input-item">
                 <app-input type="select" [dataItems]="exceptionTypeDataItems"
                                  label="Exception Type" [formGroup]="filterFormGroup" controlName="exceptionType">
@@ -20,18 +20,18 @@
                                  label="Entity type" [formGroup]="filterFormGroup" controlName="entityType">
                 </app-input>
             </div>
+        </div>
+        <div class="filter-input-container mb-1-5rem">
             <div class="filter-input-item">
                 <app-input type="select" [dataItems]="auditTrailActionTypeDataItems"
-                                 label="Action" [formGroup]="filterFormGroup" controlName="action">
+                           label="Action" [formGroup]="filterFormGroup" controlName="action">
                 </app-input>
             </div>
             <div class="filter-input-item">
                 <app-input type="select" [dataItems]="auditTrailTypeDataItems"
-                                 label="Log type" [formGroup]="filterFormGroup" controlName="type">
+                           label="Log type" [formGroup]="filterFormGroup" controlName="type">
                 </app-input>
             </div>
-        </div>
-        <div class="filter-input-container">
             <div class="filter-input-item">
                 <app-input
                         type="input"
@@ -40,6 +40,8 @@
                         controlName="query">
                 </app-input>
             </div>
+        </div>
+        <div class="filter-input-container">
             <div class="filter-input-item">
                 <app-input type="input" label="Entity Id" [formGroup]="filterFormGroup" controlName="entityId"> </app-input>
             </div>
@@ -77,7 +79,7 @@
             <ng-container *ngFor="let headerItem of tableHeaderItems">
                 <th class="mat-th" *ngIf="!headerItem.isSortable">{{ headerItem.title }}</th>
                 <th class="mat-th pointer" *ngIf="headerItem.isSortable && headerItem.column" (click)="sortItems(headerItem.column)">
-                    {{ headerItem.title }}
+                    {{ headerItem.title | translation }}
                     <i
                             [ngClass]="{
               'fa-solid': true,

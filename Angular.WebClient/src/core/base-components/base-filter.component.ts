@@ -7,7 +7,7 @@ import {
     BaseDateRangeFilterRequest,
     BaseSortableRequest, CategoryResponse,
     ColumnEnum,
-    CurrencyResponse,
+    CurrencyResponse, FrequencyResponse, IconResponse,
     OrderDirectionEnum,
     PaginatorEntity
 } from '../api-models/common.models';
@@ -51,6 +51,14 @@ export abstract class BaseFilterComponent<TFilteredResponse, TFilterRequest> ext
 
     get categoriesDataItems(): DataItem[] {
         return this.dictionaryService.dataItems?.categories ?? [];
+    }
+
+    get frequenciesMap(): DictionaryMap<number, FrequencyResponse> | undefined {
+        return this.dictionaryService.frequenciesMap;
+    }
+
+    get iconMap(): DictionaryMap<number, IconResponse> | undefined {
+        return this.dictionaryService.iconMap;
     }
 
     protected constructor(

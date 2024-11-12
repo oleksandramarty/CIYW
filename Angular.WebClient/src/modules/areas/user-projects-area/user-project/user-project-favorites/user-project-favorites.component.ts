@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {finalize, Subject, take, takeUntil, tap} from "rxjs";
+import {finalize, Observable, Subject, take, takeUntil, tap} from "rxjs";
 import {
     BalanceResponse,
     BaseSortableRequest,
@@ -32,65 +32,43 @@ import {
 import {BaseGraphQlFilteredModel} from "../../../../../core/models/common/base-graphql.model";
 import {handleBaseDateRangeFilter} from "../../../../../core/helpers/date-time.helper";
 import {BaseUnsubscribeComponent} from "../../../../../core/base-components/base-unsubscribe.compoinent";
+import {BaseFilterComponent} from "../../../../../core/base-components/base-filter.component";
+import {LocalizationService} from "../../../../../core/services/localization.service";
+import {FormControl} from "@angular/forms";
+import {map} from "rxjs/operators";
 
 @Component({
     selector: 'app-user-project-favorites',
     templateUrl: './user-project-favorites.component.html',
     styleUrl: '../user-project.component.scss'
 })
-export class UserProjectFavoritesComponent extends BaseUnsubscribeComponent {
+export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredListResponseOfFavoriteExpenseResponse, [BaseGraphQlFilteredModel, string, number[]]> {
     @Input() userProject: UserProjectResponse | undefined;
     @Output() favoritesChanged: EventEmitter<void> = new EventEmitter();
-    favoriteExpenses: FilteredListResponseOfFavoriteExpenseResponse | undefined;
-    paginator: PaginatorEntity = new PaginatorEntity({pageSize: 10, pageNumber: 0, isFull: false});
-    sort: BaseSortableRequest = new BaseSortableRequest({
-        column: ColumnEnum.CreatedAt,
-        direction: OrderDirectionEnum.Desc
-    });
-
-    get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {
-        return this.dictionaryService.currenciesMap;
-    }
-
-    get iconMap(): DictionaryMap<number, IconResponse> | undefined {
-        return this.dictionaryService.iconMap;
-    }
 
     constructor(
-        private readonly dictionaryService: DictionaryService,
+        protected override readonly dictionaryService: DictionaryService,
+        protected override readonly localizationService: LocalizationService,
+        protected override readonly loaderService: LoaderService,
+        protected override readonly snackBar: MatSnackBar,
         private readonly commonDialogService: CommonDialogService,
-        private readonly snackBar: MatSnackBar,
-        private readonly loaderService: LoaderService,
         private readonly store: Store,
         private readonly graphQlExpensesService: GraphQlExpensesService
     ) {
-        super();
+        super(dictionaryService, localizationService, loaderService, snackBar);
     }
 
     override ngOnInit(): void {
-        this.store.select(selectFavoriteExpensesSnapshot)
+        this.filterFormGroup.addControl('categoryIds', new FormControl([]));
+
+        this.initializeFilterForm(this.store.select(selectExpensesSnapshot));
+
+        this.store.select(selectExpensesSnapshot)
             .pipe(
                 take(1),
                 tap((result) => {
-                    if (result) {
-                        if (result.filteredResult) {
-                            this.favoriteExpenses = result.filteredResult;
-                        }
-                        if (result.paginator) {
-                            this.paginator = result.paginator;
-                        }
-                        if (result.sort) {
-                            this.sort = result.sort;
-                        }
-                        // if (result.dateRange) {
-                        //   this.filterFormGroup.get('dateRange')?.setValue(result.dateRange);
-                        // }
-                        // if (result.query) {
-                        //   this.filterFormGroup.get('query')?.setValue(result.query);
-                        // }
-                        // if (result.categoryIds) {
-                        //   this.filterFormGroup.get('categoryIds')?.setValue(result.categoryIds);
-                        // }
+                    if (result && result.categoryIds) {
+                        this.filterFormGroup.get('categoryIds')?.setValue(result.categoryIds);
                     } else {
                         this.getFilteredItems();
                     }
@@ -102,7 +80,7 @@ export class UserProjectFavoritesComponent extends BaseUnsubscribeComponent {
 
     override ngOnDestroy(): void {
         this.store.dispatch(expenses_setUserProject_favoriteExpensesSnapshot({
-            filteredResult: this.favoriteExpenses!,
+            filteredResult: this.filteredResult!,
             paginator: this.paginator,
             sort: this.sort,
             dateRange: undefined, // this.filterFormGroup.value.dateRange,
@@ -115,48 +93,27 @@ export class UserProjectFavoritesComponent extends BaseUnsubscribeComponent {
     public openBalanceDialog(balance: BalanceResponse | undefined): void {
         this.commonDialogService.showCreateOrUpdateUserBalanceDialog(() => {
             this.favoritesChanged.emit();
-        }, balance, this.userProject);
+        }, () => {}, balance, this.userProject);
     }
 
     public openFavoriteExpenseDialog(favoriteExpense: FavoriteExpenseResponse | undefined): void {
         this.commonDialogService.showCreateOrUpdateFavoriteExpenseDialog(() => {
             this.getFilteredItems();
-        }, favoriteExpense, this.userProject);
+        }, () => {}, favoriteExpense, this.userProject);
     }
 
-    get filterParams(): [BaseGraphQlFilteredModel, string, number[]] {
-        // const dateRange = handleBaseDateRangeFilter(this.filterFormGroup!.value?.dateRange);
-
+    protected createFilterParams(): [BaseGraphQlFilteredModel, string, number[]] {
         return [
-            {
-                dateFrom: undefined, //dateRange?.startDate,
-                dateTo: undefined, //dateRange?.endDate,
-                amountFrom: undefined,
-                amountTo: undefined,
-                isFull: this.paginator?.isFull ?? false,
-                pageNumber: this.paginator?.pageNumber ?? 1,
-                pageSize: this.paginator?.pageSize ?? 10,
-                column: this.sort?.column?.toString() ?? ColumnEnum.Date.toString(),
-                direction: this.sort?.direction?.toString() ?? OrderDirectionEnum.Desc.toString(),
-                query: '' // this.filterFormGroup?.value?.query ?? '',
-            },
+            this.filterBaseModel,
             this.userProject!.id,
-            [] //this.filterFormGroup?.value.categoryIds?.map(Number) ?? []
+            this.filterFormGroup?.value.categoryIds?.map(Number) ?? []
         ];
     }
 
-    public getFilteredItems(): void {
-        this.loaderService.isBusy = true;
-
-        this.graphQlExpensesService.getFilteredFavoriteExpenses(...this.filterParams).pipe(
-            takeUntil(this.ngUnsubscribe),
-            tap((result) => {
-                this.favoriteExpenses = result?.data?.expenses_get_filtered_favorite_expenses as FilteredListResponseOfFavoriteExpenseResponse;
-                this.loaderService.isBusy = false;
-            }),
-            handleApiError(this.snackBar),
-            finalize(() => this.loaderService.isBusy = false)
-        ).subscribe();
+    protected getFilteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfFavoriteExpenseResponse> {
+        return this.graphQlExpensesService.getFilteredFavoriteExpenses(...filterRequest).pipe(
+            map(result => result.data.expenses_get_filtered_favorite_expenses!)
+        );
     }
 
     private _dragIndex: number = -1;
@@ -179,11 +136,13 @@ export class UserProjectFavoritesComponent extends BaseUnsubscribeComponent {
 
     private _triggerActionOnDrop() {
         this.commonDialogService.showCreateOrUpdateExpenseByFavoriteDialog(() => {
+                this.favoritesChanged.emit();
+                this.getFilteredItems();
                 this._dragIndex = -1;
                 this._dropIndex = -1;
-            },
+            }, () => {},
             this.userProject?.balances[this._dragIndex],
-            this.favoriteExpenses?.entities[this._dropIndex],
+            this.filteredResult?.entities[this._dropIndex],
             this.userProject);
     }
 }
