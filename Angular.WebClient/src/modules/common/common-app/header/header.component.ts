@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {Observable, takeUntil, tap} from 'rxjs';
+import {tap} from 'rxjs';
 import {LocalizationService} from '../../../../core/services/localization.service';
 import {selectUser} from '../../../../core/store/selectors/auth.selectors';
 import {handleApiError} from "../../../../core/helpers/rxjs.helper";
@@ -8,11 +8,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
 import {DictionaryService} from "../../../../core/services/dictionary.service";
-import {LocaleResponse, UserResponse} from "../../../../core/api-models/common.models";
+import {LocaleResponse, UserResponse, UserRoleEnum} from "../../../../core/api-models/common.models";
 import {BaseAuthorizeComponent} from "../../../../core/base-components/base-authorize.component";
-import {auth_setUser} from "../../../../core/store/actions/auth.actions";
-import {selectMenuState} from "../../../../core/store/selectors/site.selectors";
 import {menu_toggle} from "../../../../core/store/actions/site.actions";
+import {MenuModel, MenuModelItem} from "../../../../core/models/common/menu.model";
 
 @Component({
     selector: 'app-header',
@@ -26,7 +25,8 @@ export class HeaderComponent extends BaseAuthorizeComponent {
         ['it', '🇮🇹'],
     ]);
 
-    public isUserMenu: boolean = true;
+    public currentUser: UserResponse | undefined;
+    public headerMenu: MenuModel | undefined;
 
     public menuItems: { url: string, title: string }[] = [
         {url: 'dashboard', title: 'MENU.DASHBOARD'},
@@ -57,10 +57,33 @@ export class HeaderComponent extends BaseAuthorizeComponent {
         private readonly dictionaryService: DictionaryService,
     ) {
         super(authService, store, snackBar);
+
+        this.store.select(selectUser)
+            .pipe(
+                tap((user) => {
+                    if (!!user) {
+                        this.currentUser = user;
+                        this.headerMenu = new MenuModel();
+                        this.headerMenu.createHeaderMenu(this.currentUser.roles.findIndex(role =>
+                            role.id === UserRoleEnum.Admin ||
+                            role.id === UserRoleEnum.SuperAdmin ||
+                            role.id === UserRoleEnum.TechnicalSupport) > -1);
+                    }
+                }),
+                handleApiError(this.snackBar)
+            ).subscribe();
     }
 
     public goto(url: string | undefined): void {
         this.router.navigate([`/${url ?? ''}`]);
+    }
+
+    public headerGoto(event: any, menuItem: MenuModelItem): void {
+        if (menuItem.url) {
+            this.router.navigate([`/${menuItem.url}`]);
+        } else {
+            event.preventDefault();
+        }
     }
 
     public localeChanged(code: string | undefined): void {
@@ -68,7 +91,8 @@ export class HeaderComponent extends BaseAuthorizeComponent {
     }
 
     public logout() {
-        this.authService.logout(() => {})
+        this.authService.logout(() => {
+        })
     }
 
     public toggleMenu(): void {

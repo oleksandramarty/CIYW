@@ -11,10 +11,10 @@ namespace Dictionaries.Mediatr.Mediatr.Handlers;
 
 public class GetIconCategoriesRequestHandler: IRequestHandler<GetIconCategoriesRequest, VersionedListResponse<IconCategoryResponse>>
 {
-    private readonly IDictionaryRepository<int, IconCategory, IconCategoryResponse, DictionariesDataContext> dictionaryRepository;
+    private readonly IDictionaryRepository<int, IconCategoryEntity, IconCategoryResponse, DictionariesDataContext> dictionaryRepository;
     
     public GetIconCategoriesRequestHandler(
-        IDictionaryRepository<int, IconCategory, IconCategoryResponse, DictionariesDataContext> dictionaryRepository
+        IDictionaryRepository<int, IconCategoryEntity, IconCategoryResponse, DictionariesDataContext> dictionaryRepository
         )
     {
         this.dictionaryRepository = dictionaryRepository;

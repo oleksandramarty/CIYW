@@ -22,7 +22,7 @@ namespace AuthGateway.Domain.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.Role", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.RoleEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace AuthGateway.Domain.Migrations
                     b.ToTable("Roles", "Users");
                 });
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.User", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +105,7 @@ namespace AuthGateway.Domain.Migrations
                     b.ToTable("Users", "Users");
                 });
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserRole", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserRoleEntity", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -123,7 +123,7 @@ namespace AuthGateway.Domain.Migrations
                     b.ToTable("UserRoles", "Users");
                 });
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserSetting", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserSettingEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,15 +166,15 @@ namespace AuthGateway.Domain.Migrations
                     b.ToTable("UserSettings", "Users");
                 });
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserRole", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserRoleEntity", b =>
                 {
-                    b.HasOne("AuthGateway.Domain.Models.Users.Role", "Role")
+                    b.HasOne("AuthGateway.Domain.Models.Users.RoleEntity", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AuthGateway.Domain.Models.Users.User", "User")
+                    b.HasOne("AuthGateway.Domain.Models.Users.UserEntity", "User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -185,23 +185,23 @@ namespace AuthGateway.Domain.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserSetting", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserSettingEntity", b =>
                 {
-                    b.HasOne("AuthGateway.Domain.Models.Users.User", "User")
+                    b.HasOne("AuthGateway.Domain.Models.Users.UserEntity", "User")
                         .WithOne("UserSetting")
-                        .HasForeignKey("AuthGateway.Domain.Models.Users.UserSetting", "UserId")
+                        .HasForeignKey("AuthGateway.Domain.Models.Users.UserSettingEntity", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.Role", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.RoleEntity", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("AuthGateway.Domain.Models.Users.User", b =>
+            modelBuilder.Entity("AuthGateway.Domain.Models.Users.UserEntity", b =>
                 {
                     b.Navigation("Roles");
 

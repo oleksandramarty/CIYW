@@ -12,13 +12,13 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSignOutRequest, BaseBoolResponse>
 {
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
     private readonly ITokenRepository tokenService;
     
     public AuthSignOutRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<AuthGatewayDataContext> entityValidator,
-        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
         ITokenRepository tokenService): base(currentUserRepository)
     {
         this.entityValidator = entityValidator;
@@ -30,11 +30,11 @@ public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSig
     public async Task<BaseBoolResponse> Handle(AuthSignOutRequest request, CancellationToken cancellationToken)
     {
         Guid userId = await this.GetCurrentUserIdAsync();
-        User user = await this.userRepository.GetByIdAsync(userId, cancellationToken);
-        this.entityValidator.IsEntityExist(user);
-        this.entityValidator.IsEntityActive(user);
+        UserEntity userEntity = await this.userRepository.GetByIdAsync(userId, cancellationToken);
+        this.entityValidator.IsEntityExist(userEntity);
+        this.entityValidator.IsEntityActive(userEntity);
 
-        await this.tokenService.RemoveUserTokenAsync(user.Id);
+        await this.tokenService.RemoveUserTokenAsync(userEntity.Id);
 
         return new BaseBoolResponse();
     }

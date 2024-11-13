@@ -19,16 +19,16 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
     private readonly IMapper mapper;
     private readonly IBalanceRepository balanceRepository;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository;
-    private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
+    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository;
+    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
 
     public CreateExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IBalanceRepository balanceRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
@@ -55,7 +55,7 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
 
-        Expense toAdd = this.mapper.Map<Expense>(command);
+        ExpenseEntity toAdd = this.mapper.Map<ExpenseEntity>(command);
         await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
         return;
     }

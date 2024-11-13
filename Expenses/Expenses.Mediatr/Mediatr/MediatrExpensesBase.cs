@@ -10,12 +10,12 @@ namespace Expenses.Mediatr.Mediatr;
 public class MediatrExpensesBase: MediatrAuthBase
 {
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
+    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
     
     public MediatrExpensesBase(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ) : base(currentUserRepository)
     {
         this.entityValidator = entityValidator;
@@ -26,35 +26,35 @@ public class MediatrExpensesBase: MediatrAuthBase
     {
         Guid userId = await this.GetCurrentUserIdAsync();
         
-        UserProject userProject =
+        UserProjectEntity userProjectEntity =
             await this.userProjectRepository.GetAsync(
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.IsEntityExist(userProject);
+        this.entityValidator.IsEntityExist(userProjectEntity);
         
-        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
+        if (userProjectEntity.CreatedUserId != userId && userProjectEntity.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
     }
 
-    public async Task<UserProject> GetUserProjectByIdAsync(Guid userProjectId, CancellationToken cancellationToken)
+    public async Task<UserProjectEntity> GetUserProjectByIdAsync(Guid userProjectId, CancellationToken cancellationToken)
     {
         Guid userId = await this.GetCurrentUserIdAsync();
         
-        UserProject userProject =
+        UserProjectEntity userProjectEntity =
             await this.userProjectRepository.GetAsync(
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.IsEntityExist(userProject);
+        this.entityValidator.IsEntityExist(userProjectEntity);
         
-        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
+        if (userProjectEntity.CreatedUserId != userId && userProjectEntity.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
 
-        return userProject;
+        return userProjectEntity;
     }
 }

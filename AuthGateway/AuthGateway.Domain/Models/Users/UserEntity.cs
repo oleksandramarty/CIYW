@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums;
 
 namespace AuthGateway.Domain.Models.Users;
 
-public class User: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
+public class UserEntity: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
 {
     public string Login { get; set; }
     public string LoginNormalized { get; set; }
@@ -19,10 +19,10 @@ public class User: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEnt
     public DateTime? LastForgotPassword { get; set; }
     public DateTime? LastForgotPasswordRequest { get; set; }
     
-    public ICollection<UserRole> Roles { get; set; }
+    public ICollection<UserRoleEntity> Roles { get; set; }
     
     // TODO make non nullable after migration
     public Guid? UserSettingId { get; set; }
-    public UserSetting UserSetting { get; set; }
+    public UserSettingEntity UserSetting { get; set; }
     public string Version { get; set; }
 }

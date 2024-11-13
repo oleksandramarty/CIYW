@@ -11,7 +11,7 @@ public class MappingAuthProfile: Profile
 {
     public MappingAuthProfile()
     {
-        this.CreateMap<User, UserResponse>()
+        this.CreateMap<UserEntity, UserResponse>()
             .ForMember(dest => 
                 dest.Roles, 
                 opt => 
@@ -24,10 +24,10 @@ public class MappingAuthProfile: Profile
                                     Title = r.Role.Title,
                                     UserRole = r.Role.UserRole
                                 }).ToList() : new List<RoleResponse>()));
-        this.CreateMap<Role, RoleResponse>();
-        this.CreateMap<UserSetting, UserSettingResponse>();
+        this.CreateMap<RoleEntity, RoleResponse>();
+        this.CreateMap<UserSettingEntity, UserSettingResponse>();
         
-        this.CreateMap<AuthSignUpCommand, User>()
+        this.CreateMap<AuthSignUpCommand, UserEntity>()
             .AfterMap((src, dest) =>
             {
                 dest.Id = Guid.NewGuid();
@@ -38,7 +38,7 @@ public class MappingAuthProfile: Profile
                 dest.AuthType = UserAuthMethodEnum.Base;
             });
 
-        this.CreateMap<CreateUserSettingCommand, UserSetting>();
-        this.CreateMap<UpdateUserSettingCommand, UserSetting>();
+        this.CreateMap<CreateUserSettingCommand, UserSettingEntity>();
+        this.CreateMap<UpdateUserSettingCommand, UserSettingEntity>();
     }
 }

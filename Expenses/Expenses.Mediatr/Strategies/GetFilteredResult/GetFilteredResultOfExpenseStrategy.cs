@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Strategies.GetFilteredResult;
 
-public class GetFilteredResultOfExpenseStrategy: GetFilteredResultStrategyResponseContext<GetFilteredExpensesRequest, Expense, ExpenseResponse>, IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>
+public class GetFilteredResultOfExpenseStrategy: GetFilteredResultStrategyResponseContext<GetFilteredExpensesRequest, ExpenseEntity, ExpenseResponse>, IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>
 {
-    private readonly IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository;
+    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository;
 
     public GetFilteredResultOfExpenseStrategy(
         IMapper mapper,
-        IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository
+        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository
         ): base(mapper)
     {
         this.expenseRepository = expenseRepository;

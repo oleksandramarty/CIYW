@@ -7,12 +7,12 @@ using Dictionaries.Domain.Models.Icons;
 
 namespace Dictionaries.Domain.Models.Categories;
 
-public class Category : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, IActivatableEntity
+public class CategoryEntity : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, IActivatableEntity
 {
     public string Title { get; set; }
     public int IconId { get; set; }
     [JsonIgnore]
-    public Icon Icon { get; set; }
+    public IconEntity Icon { get; set; }
     public string Color { get; set; }
     
     public bool IsActive { get; set; }
@@ -23,5 +23,5 @@ public class Category : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, IActiva
     public bool IsPositive { get; set; }
 
     [JsonIgnore]
-    public ICollection<Category> Children { get; set; } = new List<Category>();
+    public ICollection<CategoryEntity> Children { get; set; } = new List<CategoryEntity>();
 }

@@ -10,10 +10,10 @@ namespace AuthGateway.Domain;
 
 public class AuthGatewayDataContext : DbSaveChangeContext
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<UserRole> UserRoles { get; set; }
-    public DbSet<UserSetting> UserSettings { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
+    public DbSet<RoleEntity> Roles { get; set; }
+    public DbSet<UserRoleEntity> UserRoles { get; set; }
+    public DbSet<UserSettingEntity> UserSettings { get; set; }
 
     public AuthGatewayDataContext(DbContextOptions<AuthGatewayDataContext> options)
         : base(options)
@@ -22,7 +22,7 @@ public class AuthGatewayDataContext : DbSaveChangeContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<UserEntity>(entity =>
         {
             entity.ToTable("Users", "Users");
             entity.HasMany(u => u.Roles)
@@ -30,10 +30,10 @@ public class AuthGatewayDataContext : DbSaveChangeContext
                 .HasForeignKey(ur => ur.UserId);
             entity.HasOne(u => u.UserSetting)
                 .WithOne(us => us.User)
-                .HasForeignKey<UserSetting>(us => us.UserId);
+                .HasForeignKey<UserSettingEntity>(us => us.UserId);
         });
 
-        modelBuilder.Entity<Role>(entity =>
+        modelBuilder.Entity<RoleEntity>(entity =>
         {
             entity.ToTable("Roles", "Users");
             entity.HasMany(r => r.Users)
@@ -41,13 +41,13 @@ public class AuthGatewayDataContext : DbSaveChangeContext
                 .HasForeignKey(ur => ur.RoleId);
         });
 
-        modelBuilder.Entity<UserRole>(entity =>
+        modelBuilder.Entity<UserRoleEntity>(entity =>
         {
             entity.ToTable("UserRoles", "Users");
             entity.HasKey(ur => new { ur.UserId, ur.RoleId });
         });
         
-        modelBuilder.Entity<UserSetting>(entity =>
+        modelBuilder.Entity<UserSettingEntity>(entity =>
         {
             entity.ToTable("UserSettings", "Users");
         });

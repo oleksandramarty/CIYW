@@ -1,0 +1,20 @@
+<div #quickActionsContainer
+    class="quick-actions-container"
+    [ngClass]="{'active': quickActionsOpen}">
+
+    <nav class="quick-actions"
+         [ngClass]="{'active': quickActionsOpen}">
+        <div class="quick-action"
+             *ngFor="let action of quickActionsList">
+            <i [class]="action.icon"></i>
+            <span>{{action.title}}</span>
+        </div>
+    </nav>
+
+    <div
+            class="quick-action-button"
+            (click)="toggleQuickActions()"
+            [ngClass]="{'active': quickActionsOpen}">
+        <i #icon class="fa-solid fa-bolt main-icon"></i>
+    </div>
+</div>

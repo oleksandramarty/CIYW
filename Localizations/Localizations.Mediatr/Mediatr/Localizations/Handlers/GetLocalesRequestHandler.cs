@@ -11,10 +11,10 @@ namespace Localizations.Mediatr.Mediatr.Localizations.Handlers;
 
 public class GetLocalesRequestHandler : IRequestHandler<GetLocalesRequest, VersionedListResponse<LocaleResponse>>
 {
-    private readonly IDictionaryRepository<int, Locale, LocaleResponse, LocalizationsDataContext> dictionaryRepository;
+    private readonly IDictionaryRepository<int, LocaleEntity, LocaleResponse, LocalizationsDataContext> dictionaryRepository;
     
     public GetLocalesRequestHandler(
-        IDictionaryRepository<int, Locale, LocaleResponse, LocalizationsDataContext> dictionaryRepository
+        IDictionaryRepository<int, LocaleEntity, LocaleResponse, LocalizationsDataContext> dictionaryRepository
         )
     {
         this.dictionaryRepository = dictionaryRepository;

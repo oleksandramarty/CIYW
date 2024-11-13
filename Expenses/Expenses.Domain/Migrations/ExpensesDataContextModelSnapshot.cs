@@ -22,7 +22,7 @@ namespace Expenses.Domain.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Expenses.Domain.Models.Balances.Balance", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Balances.BalanceEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("Balances", "Balance");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Expenses.Expense", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.ExpenseEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,7 +125,7 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("Expenses", "Expenses");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpense", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpenseEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -184,7 +184,7 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("FavoriteExpenses", "Expenses");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpense", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpenseEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -246,7 +246,7 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("PlannedExpenses", "Expenses");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserAllowedProject", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserAllowedProjectEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -272,7 +272,7 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("UserAllowedProjects", "Projects");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserProject", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserProjectEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,9 +303,9 @@ namespace Expenses.Domain.Migrations
                     b.ToTable("UserProjects", "Projects");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Balances.Balance", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Balances.BalanceEntity", b =>
                 {
-                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", "UserProject")
                         .WithMany("Balances")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -314,13 +314,13 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("UserProject");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Expenses.Expense", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.ExpenseEntity", b =>
                 {
-                    b.HasOne("Expenses.Domain.Models.Expenses.FavoriteExpense", "FavoriteExpense")
+                    b.HasOne("Expenses.Domain.Models.Expenses.FavoriteExpenseEntity", "FavoriteExpense")
                         .WithMany("Expenses")
                         .HasForeignKey("FavoriteExpenseId");
 
-                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", "UserProject")
                         .WithMany("Expenses")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -331,9 +331,9 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("UserProject");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpense", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpenseEntity", b =>
                 {
-                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", "UserProject")
                         .WithMany("FavoriteExpenses")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -342,9 +342,9 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("UserProject");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpense", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.PlannedExpenseEntity", b =>
                 {
-                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", "UserProject")
                         .WithMany("PlannedExpenses")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -353,9 +353,9 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("UserProject");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserAllowedProject", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserAllowedProjectEntity", b =>
                 {
-                    b.HasOne("Expenses.Domain.Models.Projects.UserProject", "UserProject")
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", "UserProject")
                         .WithMany("AllowedUsers")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -364,12 +364,12 @@ namespace Expenses.Domain.Migrations
                     b.Navigation("UserProject");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpense", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Expenses.FavoriteExpenseEntity", b =>
                 {
                     b.Navigation("Expenses");
                 });
 
-            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserProject", b =>
+            modelBuilder.Entity("Expenses.Domain.Models.Projects.UserProjectEntity", b =>
                 {
                     b.Navigation("AllowedUsers");
 

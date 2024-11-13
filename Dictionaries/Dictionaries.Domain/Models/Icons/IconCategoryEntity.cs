@@ -4,10 +4,10 @@ using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace Dictionaries.Domain.Models.Icons;
 
-public class IconCategory : BaseIdEntity<int>, IActivatableEntity
+public class IconCategoryEntity : BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }
     
-    public ICollection<Icon> Icons { get; set; }
+    public ICollection<IconEntity> Icons { get; set; }
 }

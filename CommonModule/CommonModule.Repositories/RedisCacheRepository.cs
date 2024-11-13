@@ -18,7 +18,7 @@ public class RedisCacheRepository<TId, TEntity> : ICacheRepository<TId, TEntity>
         )
     {
         this.cacheBaseRepository = cacheBaseRepository;
-        this.dictionaryName = typeof(TEntity).Name.ToLower();
+        this.dictionaryName = typeof(TEntity).Name.Replace("Entity", "").ToLower();
     }
 
     public async Task<List<TEntity>> GetItemsFromCacheAsync()

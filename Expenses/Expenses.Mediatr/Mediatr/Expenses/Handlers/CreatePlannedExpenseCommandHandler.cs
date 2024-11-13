@@ -17,14 +17,14 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository;
+    private readonly IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository;
 
     public CreatePlannedExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
@@ -44,7 +44,7 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
 
-        PlannedExpense toAdd = this.mapper.Map<PlannedExpense>(command);
+        PlannedExpenseEntity toAdd = this.mapper.Map<PlannedExpenseEntity>(command);
             
         await this.plannedExpenseRepository.AddAsync(toAdd, cancellationToken);
         return;

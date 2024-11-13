@@ -1,7 +1,7 @@
 <footer class="footer">
 
     <div class="t-align-center pt-1-0rem pb-0-5rem">
-        <span class="opacity-07" [translation]="'FOOTER.HONKING_SINCE'"></span>
+        <span class="opacity-07">{{ 'FOOTER.HONKING_SINCE' | translation }}</span>
     </div>
 
     <div class="social-links pb-1-5rem">
@@ -37,19 +37,17 @@
                     text-transform: uppercase;">
                 [<strong [translation]="'COMMON.DO_NOT_STORE_ANY_SENSITIVE_DATA_HERE'"></strong>]
             </span>
-        <span class="opacity-07"> | </span>
-        <span class="opacity-07 pointer"
-              style="color: #ffc107;"
-              (click)="turnOffLoader()">[<strong>Turn off loader</strong>]</span>
-        <span class="opacity-07"> | </span>
-        <span class="opacity-07">[build: <strong>{{ buildVersion }}</strong>]</span>
-        <span class="opacity-07"> | </span>
-        <span class="opacity-07 pointer"
-              style="color: #ffc107;"
-              (click)="clearCache()">[<strong>Clear Cache</strong>]</span>
-        <span class="opacity-07"> | </span>
-        <span class="opacity-07 pointer"
-              style="color: #f44336;"
-              (click)="resetSite()">[<strong>Hard reset</strong>]</span>
+        <ng-container *ngIf="(isAdminAreaAvailable$ | async) || buildVersion === 'monolith'">
+            <span class="opacity-07"> | </span>
+            <span class="opacity-07 pointer"
+                  style="color: #ffc107;"
+                  (click)="turnOffLoader()">[<strong>Turn off loader</strong>]</span>
+            <span class="opacity-07"> | </span>
+            <span class="opacity-07">[<strong>{{ buildVersion }}</strong>]</span>
+            <span class="opacity-07"> | </span>
+            <span class="opacity-07 pointer"
+                  style="color: #f44336;"
+                  (click)="resetSite()">[<strong>Hard reset</strong>]</span>
+        </ng-container>
     </div>
 </footer>

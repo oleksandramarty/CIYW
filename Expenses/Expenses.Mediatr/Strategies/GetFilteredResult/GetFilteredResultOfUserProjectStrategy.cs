@@ -14,15 +14,15 @@ using Microsoft.EntityFrameworkCore;
 namespace Expenses.Mediatr.Strategies.GetFilteredResult;
 
 public class
-    GetFilteredResultOfUserProjectStrategy : GetFilteredResultStrategyResponseContext<GetFilteredUserProjectsRequest, UserProject, UserProjectResponse>, IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>
+    GetFilteredResultOfUserProjectStrategy : GetFilteredResultStrategyResponseContext<GetFilteredUserProjectsRequest, UserProjectEntity, UserProjectResponse>, IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>
 {
     private ICurrentUserRepository currentUserRepository;
-    private readonly IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
+    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
 
     public GetFilteredResultOfUserProjectStrategy(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
     ): base(mapper)
     {
         this.currentUserRepository = currentUserRepository;

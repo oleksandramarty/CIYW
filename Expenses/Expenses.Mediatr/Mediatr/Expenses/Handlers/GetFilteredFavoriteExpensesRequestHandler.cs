@@ -19,7 +19,7 @@ public class GetFilteredFavoriteExpensesRequestHandler: MediatrExpensesBase, IRe
     public GetFilteredFavoriteExpensesRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository,
         IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse> strategy
     ): base(currentUserRepository, entityValidator, userProjectRepository)
     {

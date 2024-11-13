@@ -8,29 +8,17 @@
         <span class="app-title" (click)="goto('dashboard')">CIYW</span>
     </div>
 
-    <nav class="header-center" *ngIf="!!isAuthorized$ && (isAuthorized$ | async) && currentUser">
-        <a *ngIf="(isAdminAreaAvailable$ | async)"
-                mat-button
-                (click)="isUserMenu = !isUserMenu">
-            <i class="fa-solid fa-bolt"></i>
-            {{ (isUserMenu ? 'MENU.USER' : 'MENU.ADMIN') | translation}}
-            {{ 'USER.MENU' | translation}}
-            <i class="fa-solid fa-bolt"></i></a>
-
-        <ng-container *ngIf="isUserMenu">
-            <a
-                    *ngFor="let item of menuItems; let i=index"
-                    mat-button
-                    (click)="goto(item.url)"
-                    [translation]="item.title"></a>
-        </ng-container>
-        <ng-container *ngIf="!isUserMenu && (isAdminAreaAvailable$ | async)">
-            <a
-                    *ngFor="let item of menuAdminItems; let i=index"
-                    mat-button
-                    (click)="goto(item.url)"
-                    [translation]="item.title"></a>
-        </ng-container>
+    <nav class="header-center" *ngIf="!!isAuthorized$ && (isAuthorized$ | async) && currentUser && headerMenu">
+        <ul class="nav-menu" *ngIf="headerMenu">
+            <li *ngFor="let menuItem of headerMenu.menuItems">
+                <a (click)="headerGoto($event, menuItem)">{{ menuItem.title | translation }}</a>
+                <ul class="sub-menu" *ngIf="menuItem.menuItems && menuItems.length > 0">
+                    <li *ngFor="let subMenuItem of menuItem.menuItems">
+                        <a (click)="headerGoto($event, subMenuItem)">{{ subMenuItem.title | translation }}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </nav>
 
     <div class="header-right">
@@ -59,10 +47,6 @@
                 <span class="user-full-name">{{ currentUser.login }}</span>
             </div>
             <mat-menu #menu="matMenu" class="custom-menu-header-position">
-                <button *ngIf="(isAdminAreaAvailable$ | async)" mat-menu-item (click)="goto('admin/home')">
-                    <i class="fa-solid fa-screwdriver-wrench mr-0-5rem"></i>
-                    <span translation="ADMIN.ADMIN_AREA"></span>
-                </button>
                 <button mat-menu-item (click)="goto('users/notifications')">
                     <i class="fa-solid fa-bell mr-0-5rem"></i>
                     <span translation="USER.MENU.NOTIFICATIONS"></span>
@@ -79,3 +63,4 @@
         </ng-container>
     </div>
 </mat-toolbar>
+

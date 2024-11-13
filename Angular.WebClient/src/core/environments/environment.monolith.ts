@@ -1,5 +1,5 @@
 export const environment = {
-  name: '',
+  name: 'monolith',
   production: false,
   apiAuthGatewayUrl: 'https://localhost:7097',
   apiLocalizationsUrl: 'https://localhost:7097',

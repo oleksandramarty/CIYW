@@ -5,15 +5,15 @@ namespace Expenses.Business;
 public interface IBalanceRepository
 {
     Task AddExpenseAsync(
-        Expense expense,
+        ExpenseEntity expenseEntity,
         CancellationToken cancellationToken);
 
     Task UpdateExpenseAsync(
-        Expense currentExpense,
-        Expense newExpense,
+        ExpenseEntity currentExpenseEntity,
+        ExpenseEntity newExpenseEntity,
         CancellationToken cancellationToken);
     
     Task RemoveExpenseAsync(
-        Expense expense,
+        ExpenseEntity expenseEntity,
         CancellationToken cancellationToken);
 }

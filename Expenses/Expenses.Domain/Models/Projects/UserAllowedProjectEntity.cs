@@ -3,10 +3,10 @@ using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace Expenses.Domain.Models.Projects;
 
-public class UserAllowedProject: BaseIdEntity<Guid>, IBaseVersionEntity
+public class UserAllowedProjectEntity: BaseIdEntity<Guid>, IBaseVersionEntity
 {
     public Guid UserProjectId { get; set; }
-    public UserProject UserProject { get; set; }
+    public UserProjectEntity UserProject { get; set; }
     
     public Guid UserId { get; set; }
     

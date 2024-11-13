@@ -1,0 +1,110 @@
+.quick-actions-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 2rem;
+  background-color: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 100001;
+  //transition: all 0.3s ease-in-out;
+
+  &.active {
+    width: 90vw;
+    height: 3.5rem;
+  }
+}
+
+.quick-action-button {
+  width: 3rem;
+  height: 3rem;
+  background-color: #3f51b5;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100001;
+  //transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  &.active {
+    margin-right: 0.5rem;
+  }
+
+  i.rotate {
+    animation: rotate-animation 500ms ease-in-out;
+  }
+}
+
+@keyframes rotate-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.quick-action-button:hover {
+  background-color: #303f9f;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 100ms ease-in-out;
+}
+
+.quick-actions {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 1rem;
+  transition: all 500ms ease-in-out;
+  margin-right: 3rem;
+
+  &.active {
+    display: flex;
+  }
+
+  .quick-action {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    cursor: pointer;
+    transition: transform 500ms ease-in-out;
+    opacity: 0;
+    animation: show-action 0.5s forwards;
+  }
+
+  .quick-action:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .quick-action:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .quick-action:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .quick-action:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  &:not(.active) .quick-action {
+    opacity: 0;
+  }
+
+  &:not(.active) .quick-action {
+    animation: none;
+  }
+
+  @keyframes show-action {
+    to {
+      opacity: 1;
+    }
+  }
+}

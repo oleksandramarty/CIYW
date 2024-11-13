@@ -12,14 +12,14 @@ public class UpdateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, Balance, ExpensesDataContext> balanceRepository;
+    private readonly IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository;
     
     public UpdateUserBalanceCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, Balance, ExpensesDataContext> balanceRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
@@ -31,9 +31,9 @@ public class UpdateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     {
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
         
-        Balance balance = await this.balanceRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(balance);
-        this.mapper.Map(command, balance);
-        await this.balanceRepository.UpdateAsync(balance, cancellationToken);
+        BalanceEntity balanceEntity = await this.balanceRepository.GetByIdAsync(command.Id, cancellationToken);
+        this.entityValidator.IsEntityExist(balanceEntity);
+        this.mapper.Map(command, balanceEntity);
+        await this.balanceRepository.UpdateAsync(balanceEntity, cancellationToken);
     }
 }

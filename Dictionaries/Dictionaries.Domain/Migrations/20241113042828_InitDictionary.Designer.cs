@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dictionaries.Domain.Migrations
 {
     [DbContext(typeof(DictionariesDataContext))]
-    [Migration("20241112040250_InitDictionary")]
+    [Migration("20241113042828_InitDictionary")]
     partial class InitDictionary
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace Dictionaries.Domain.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Balances.BalanceType", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Balances.BalanceTypeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -47,7 +47,7 @@ namespace Dictionaries.Domain.Migrations
                     b.ToTable("BalanceTypes", "Dictionaries");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.Category", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.CategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,25 @@ namespace Dictionaries.Domain.Migrations
                     b.ToTable("Categories", "Dictionaries");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.Country", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.CountryCurrencyEntity", b =>
+                {
+                    b.Property<int>("CountryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CountryId", "CurrencyId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("CountryId", "CurrencyId")
+                        .IsUnique();
+
+                    b.ToTable("CountryCurrencies", "Dictionaries");
+                });
+
+            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.CountryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,25 +132,7 @@ namespace Dictionaries.Domain.Migrations
                     b.ToTable("Countries", "Dictionaries");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.CountryCurrency", b =>
-                {
-                    b.Property<int>("CountryId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CurrencyId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("CountryId", "CurrencyId");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("CountryId", "CurrencyId")
-                        .IsUnique();
-
-                    b.ToTable("CountryCurrencies", "Dictionaries");
-                });
-
-            modelBuilder.Entity("Dictionaries.Domain.Models.Currencies.Currency", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Currencies.CurrencyEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -164,7 +164,7 @@ namespace Dictionaries.Domain.Migrations
                     b.ToTable("Currencies", "Dictionaries");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Expenses.Frequency", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Expenses.FrequencyEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,7 +191,27 @@ namespace Dictionaries.Domain.Migrations
                     b.ToTable("Frequencies", "Dictionaries");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.Icon", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.IconCategoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IconCategories", "Dictionaries");
+                });
+
+            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.IconEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -216,50 +236,30 @@ namespace Dictionaries.Domain.Migrations
                     b.ToTable("Icons", "Dictionaries");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.IconCategory", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.CategoryEntity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IconCategories", "Dictionaries");
-                });
-
-            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.Category", b =>
-                {
-                    b.HasOne("Dictionaries.Domain.Models.Icons.Icon", "Icon")
+                    b.HasOne("Dictionaries.Domain.Models.Icons.IconEntity", "Icon")
                         .WithMany("Categories")
                         .HasForeignKey("IconId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Dictionaries.Domain.Models.Categories.Category", null)
+                    b.HasOne("Dictionaries.Domain.Models.Categories.CategoryEntity", null)
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Icon");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.CountryCurrency", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.CountryCurrencyEntity", b =>
                 {
-                    b.HasOne("Dictionaries.Domain.Models.Countries.Country", "Country")
+                    b.HasOne("Dictionaries.Domain.Models.Countries.CountryEntity", "Country")
                         .WithMany("Currencies")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Dictionaries.Domain.Models.Currencies.Currency", "Currency")
+                    b.HasOne("Dictionaries.Domain.Models.Currencies.CurrencyEntity", "Currency")
                         .WithMany("Countries")
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -270,9 +270,9 @@ namespace Dictionaries.Domain.Migrations
                     b.Navigation("Currency");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.Icon", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.IconEntity", b =>
                 {
-                    b.HasOne("Dictionaries.Domain.Models.Icons.IconCategory", "IconCategory")
+                    b.HasOne("Dictionaries.Domain.Models.Icons.IconCategoryEntity", "IconCategory")
                         .WithMany("Icons")
                         .HasForeignKey("IconCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -281,29 +281,29 @@ namespace Dictionaries.Domain.Migrations
                     b.Navigation("IconCategory");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.Category", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Categories.CategoryEntity", b =>
                 {
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.Country", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Countries.CountryEntity", b =>
                 {
                     b.Navigation("Currencies");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Currencies.Currency", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Currencies.CurrencyEntity", b =>
                 {
                     b.Navigation("Countries");
                 });
 
-            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.Icon", b =>
-                {
-                    b.Navigation("Categories");
-                });
-
-            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.IconCategory", b =>
+            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.IconCategoryEntity", b =>
                 {
                     b.Navigation("Icons");
+                });
+
+            modelBuilder.Entity("Dictionaries.Domain.Models.Icons.IconEntity", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

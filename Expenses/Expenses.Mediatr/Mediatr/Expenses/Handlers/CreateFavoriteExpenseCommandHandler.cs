@@ -16,14 +16,14 @@ public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository;
+    private readonly IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository;
 
     public CreateFavoriteExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
@@ -43,7 +43,7 @@ public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
 
-        FavoriteExpense toAdd = this.mapper.Map<FavoriteExpense>(command);
+        FavoriteExpenseEntity toAdd = this.mapper.Map<FavoriteExpenseEntity>(command);
         toAdd.CreatedUserId = await this.GetCurrentUserIdAsync();
             
         await this.favoriteExpenseRepository.AddAsync(toAdd, cancellationToken);

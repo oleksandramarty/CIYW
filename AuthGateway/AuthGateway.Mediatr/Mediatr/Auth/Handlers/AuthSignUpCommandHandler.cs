@@ -14,16 +14,16 @@ public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
     private readonly IMapper mapper;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
     private readonly IJwtTokenFactory jwtTokenFactory;
-    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
-    private readonly IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
+    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository;
 
     public AuthSignUpCommandHandler(
         IMediator mediator,
         IMapper mapper, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         IJwtTokenFactory jwtTokenFactory,
-        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
-        IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
+        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository)
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;
@@ -36,21 +36,21 @@ public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
     {
         this.entityValidator.ValidateVoidRequest<AuthSignUpCommand>(command, () => new AuthSignUpCommandValidator());
         
-        await this.entityValidator.ValidateExistParamAsync<User>(
+        await this.entityValidator.ValidateExistParamAsync<UserEntity>(
             u => u.Email == command.Email, 
             ErrorMessages.EntityWithEmailAlreadyExists, 
             cancellationToken);
 
-        User user = this.mapper.Map<AuthSignUpCommand, User>(command);
+        UserEntity userEntity = this.mapper.Map<AuthSignUpCommand, UserEntity>(command);
         
-        user.Salt = this.jwtTokenFactory.GenerateSalt();
-        user.PasswordHash = this.jwtTokenFactory.HashPassword(command.Password, user.Salt);
+        userEntity.Salt = this.jwtTokenFactory.GenerateSalt();
+        userEntity.PasswordHash = this.jwtTokenFactory.HashPassword(command.Password, userEntity.Salt);
         
-        await this.userRepository.AddAsync(user, cancellationToken);
-        await this.userRoleRepository.AddAsync(new UserRole
+        await this.userRepository.AddAsync(userEntity, cancellationToken);
+        await this.userRoleRepository.AddAsync(new UserRoleEntity
         {
             RoleId = (int)command.Role,
-            UserId = user.Id
+            UserId = userEntity.Id
         }, cancellationToken);
     }
 }

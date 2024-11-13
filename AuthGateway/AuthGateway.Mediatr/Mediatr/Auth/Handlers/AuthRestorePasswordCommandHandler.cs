@@ -15,16 +15,16 @@ public class AuthRestorePasswordCommandHandler: IRequestHandler<AuthRestorePassw
     private readonly IMapper mapper;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
     private readonly IJwtTokenFactory jwtTokenFactory;
-    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
-    private readonly IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
+    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository;
 
     public AuthRestorePasswordCommandHandler(
         IMediator mediator,
         IMapper mapper, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         IJwtTokenFactory jwtTokenFactory,
-        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
-        IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
+        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository)
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;

@@ -13,11 +13,11 @@ namespace Localizations.Mediatr.Mediatr.Localizations.Handlers;
 public class GetLocalizationsRequestHandler : IRequestHandler<GetLocalizationsRequest, LocalizationsResponse>
 {
     private readonly ILocalizationRepository localizationCacheRepository;
-    private readonly IReadGenericRepository<Guid, Locale, LocalizationsDataContext> localeRepository;
+    private readonly IReadGenericRepository<Guid, LocaleEntity, LocalizationsDataContext> localeRepository;
 
     public GetLocalizationsRequestHandler(
         ILocalizationRepository localizationCacheRepository,
-        IReadGenericRepository<Guid, Locale, LocalizationsDataContext> localeRepository
+        IReadGenericRepository<Guid, LocaleEntity, LocalizationsDataContext> localeRepository
     )
     {
         this.localizationCacheRepository = localizationCacheRepository;

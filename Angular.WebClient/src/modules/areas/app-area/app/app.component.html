@@ -5,69 +5,7 @@
 </section>
 <app-footer></app-footer>
 <app-common-loader></app-common-loader>
-
-<div
-        *ngIf="(isAuthorized$ | async) && sideMenu"
-        class="side-menu"
-        [ngClass]="{'open': (isSideMenuVisible$ | async)}"
-        [@slideInFromLeft]="(isSideMenuVisible$ | async) ? 'open' : 'closed'">
-    <div class="side-menu-header">
-        <div class="side-menu-header-title">
-            Cash in your wallet
-        </div>
-    </div>
-    <div class="side-menu-body">
-        <div class="side-menu-body-group">
-            <ng-container *ngFor="let menuItem of sideMenu.menuItems" [ngTemplateOutlet]="recursiveList" [ngTemplateOutletContext]="{ $implicit: menuItem, isChild: false }"></ng-container>
-            <div class="side-menu-body-item"
-                 (click)="logout()">
-                <div class="side-menu-body-item-icon">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                </div>
-                <div class="side-menu-body-item-title">
-                    {{ 'USER.MENU.LOGOUT' | translation }}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="side-menu-footer">
-        <div class="t-align-center pb-0-5rem">
-            <span class="opacity-07" [translation]="'FOOTER.HONKING_SINCE'"></span>
-        </div>
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/oleksandr-martynin/" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-linkedin"></i> LinkedIn
-            </a>
-            <a href="https://github.com/oleksandramarty/" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-github"></i> GitHub
-            </a>
-        </div>
-    </div>
-
-    <ng-template #recursiveList let-menuItem let-isChild="isChild">
-        <div class="side-menu-body-item"
-             [ngClass]="{'pl-2-0rem': isChild}"
-             (click)="toggleMenuItem(menuItem)">
-            <div class="side-menu-body-item-icon">
-                <i [class]="menuItem.icon"></i>
-            </div>
-            <div class="side-menu-body-item-title">
-                {{ menuItem.title | translation }}
-            </div>
-            <div *ngIf="menuItem.menuItems?.length"
-                 class="side-menu-body-item-arrow">
-                <i [ngClass]="{
-        'fa-solid opacity-07': true,
-        'fa-chevron-up': menuItem.isOpen,
-        'fa-chevron-down': !menuItem.isOpen
-      }"></i>
-            </div>
-        </div>
-        <ng-container *ngIf="menuItem.menuItems?.length">
-            <div class="side-menu-body-group" [@slideInOut]="menuItem.isOpen ? 'in' : 'out'">
-                <ng-container *ngFor="let subMenuItem of menuItem.menuItems" [ngTemplateOutlet]="recursiveList"
-                              [ngTemplateOutletContext]="{ $implicit: subMenuItem, isChild: true }"></ng-container>
-            </div>
-        </ng-container>
-    </ng-template>
-</div>
+<ng-container *ngIf="(isAuthorized$ | async)">
+    <app-common-side-menu></app-common-side-menu>
+    <app-common-quick-actions></app-common-quick-actions>
+</ng-container>

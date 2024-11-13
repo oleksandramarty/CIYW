@@ -1,5 +1,5 @@
 export const environment = {
-  name: '',
+  name: 'local',
   production: false,
   apiAuthGatewayUrl: 'https://localhost:7203',
   apiLocalizationsUrl: 'https://localhost:7082',

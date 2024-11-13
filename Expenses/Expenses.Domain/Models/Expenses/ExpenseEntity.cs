@@ -5,25 +5,24 @@ using Expenses.Domain.Models.Projects;
 
 namespace Expenses.Domain.Models.Expenses;
 
-public class FavoriteExpense: BaseDateTimeEntity<Guid>, IBaseVersionEntity
+public class ExpenseEntity: BaseDateTimeEntity<Guid>, IBaseVersionEntity
 {
     [MaxLength(50)]
     public string Title { get; set; }
     [MaxLength(100)]
     public string? Description { get; set; }
     [Range(0.01, double.MaxValue)]
-    public decimal? Limit { get; set; }
-    public decimal? CurrentAmount { get; set; }
-    public int? CategoryId { get; set; }
-    public int? FrequencyId { get; set; }
-    public int CurrencyId { get; set; }
-    public DateTime? EndDate { get; set; }
+    public decimal Amount { get; set; }
+    public Guid BalanceId { get; set; }
+    public DateTime Date { get; set; }
+    public int CategoryId { get; set; }
     public Guid UserProjectId { get; set; }
-    public int IconId { get; set; }
-    public UserProject UserProject { get; set; }
+    public UserProjectEntity UserProject { get; set; }
     
     public Guid CreatedUserId { get; set; }
     public string Version { get; set; }
     
-    public ICollection<Expense> Expenses { get; set; }
+    public Guid? FavoriteExpenseId { get; set; }
+    
+    public FavoriteExpenseEntity? FavoriteExpense { get; set; }
 }

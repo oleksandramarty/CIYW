@@ -14,14 +14,14 @@ namespace Dictionaries.Domain;
 
 public class DictionariesDataContext : DbSaveChangeContext
 {
-    public DbSet<Frequency> Frequencies { get; set; }
-    public DbSet<Country> Countries { get; set; }
-    public DbSet<Models.Currencies.Currency> Currencies { get; set; }
-    public DbSet<CountryCurrency> CountryCurrencies { get; set; }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<BalanceType> BalanceTypes { get; set; }
-    public DbSet<IconCategory> IconCategories { get; set; }
-    public DbSet<Icon> Icons { get; set; }
+    public DbSet<FrequencyEntity> Frequencies { get; set; }
+    public DbSet<CountryEntity> Countries { get; set; }
+    public DbSet<Models.Currencies.CurrencyEntity> Currencies { get; set; }
+    public DbSet<CountryCurrencyEntity> CountryCurrencies { get; set; }
+    public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<BalanceTypeEntity> BalanceTypes { get; set; }
+    public DbSet<IconCategoryEntity> IconCategories { get; set; }
+    public DbSet<IconEntity> Icons { get; set; }
 
     public DictionariesDataContext(DbContextOptions<DictionariesDataContext> options) : base(options)
     {
@@ -29,7 +29,7 @@ public class DictionariesDataContext : DbSaveChangeContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Country>(entity =>
+        modelBuilder.Entity<CountryEntity>(entity =>
         {
             entity.ToTable("Countries", "Dictionaries");
             entity.HasMany(c => c.Currencies)
@@ -37,7 +37,7 @@ public class DictionariesDataContext : DbSaveChangeContext
                 .HasForeignKey(cc => cc.CountryId);
         });
 
-        modelBuilder.Entity<Models.Currencies.Currency>(entity =>
+        modelBuilder.Entity<Models.Currencies.CurrencyEntity>(entity =>
         {
             entity.ToTable("Currencies", "Dictionaries");
             entity.HasMany(c => c.Countries)
@@ -45,21 +45,21 @@ public class DictionariesDataContext : DbSaveChangeContext
                 .HasForeignKey(cc => cc.CurrencyId);
         });
 
-        modelBuilder.Entity<CountryCurrency>()
+        modelBuilder.Entity<CountryCurrencyEntity>()
             .HasIndex(l => new { l.CountryId, l.CurrencyId })
             .IsUnique();
 
-        modelBuilder.Entity<CountryCurrency>(entity =>
+        modelBuilder.Entity<CountryCurrencyEntity>(entity =>
         {
             entity.ToTable("CountryCurrencies", "Dictionaries");
             entity.HasKey(cc => new { cc.CountryId, cc.CurrencyId });
         });
 
-        modelBuilder.Entity<Frequency>(entity => { entity.ToTable("Frequencies", "Dictionaries"); });
+        modelBuilder.Entity<FrequencyEntity>(entity => { entity.ToTable("Frequencies", "Dictionaries"); });
 
-        modelBuilder.Entity<BalanceType>(entity => { entity.ToTable("BalanceTypes", "Dictionaries"); });
+        modelBuilder.Entity<BalanceTypeEntity>(entity => { entity.ToTable("BalanceTypes", "Dictionaries"); });
 
-        modelBuilder.Entity<Category>(entity =>
+        modelBuilder.Entity<CategoryEntity>(entity =>
         {
             entity.ToTable("Categories", "Dictionaries");
             entity.HasKey(c => c.Id);
@@ -72,7 +72,7 @@ public class DictionariesDataContext : DbSaveChangeContext
                 .HasForeignKey(c => c.ParentId);
         });
 
-        modelBuilder.Entity<Icon>(entity =>
+        modelBuilder.Entity<IconEntity>(entity =>
         {
             entity.ToTable("Icons", "Dictionaries");
             entity.HasMany(c => c.Categories)
@@ -80,7 +80,7 @@ public class DictionariesDataContext : DbSaveChangeContext
                 .HasForeignKey(cc => cc.IconId);
         });
 
-        modelBuilder.Entity<IconCategory>(entity =>
+        modelBuilder.Entity<IconCategoryEntity>(entity =>
         {
             entity.ToTable("IconCategories", "Dictionaries");
             entity.HasMany(c => c.Icons)

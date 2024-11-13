@@ -11,6 +11,6 @@ using MediatR;
 namespace Dictionaries.Mediatr.Mediatr.Handlers;
 
 public class GetCurrenciesRequestHandler(
-    IDictionaryRepository<int, Currency, CurrencyResponse, DictionariesDataContext> dictionaryRepository)
-    : MediatrDictionaryBase<GetCurrenciesRequest, int, Currency, CurrencyResponse, DictionariesDataContext>(
+    IDictionaryRepository<int, CurrencyEntity, CurrencyResponse, DictionariesDataContext> dictionaryRepository)
+    : MediatrDictionaryBase<GetCurrenciesRequest, int, CurrencyEntity, CurrencyResponse, DictionariesDataContext>(
         dictionaryRepository), IRequestHandler<GetCurrenciesRequest, VersionedListResponse<CurrencyResponse>>;

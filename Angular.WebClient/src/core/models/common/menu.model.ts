@@ -54,6 +54,46 @@ export class MenuModel implements IMenuModel {
         ];
     }
 
+    createHeaderMenu(isAdminAreaAvailable: boolean): void {
+        if (this.menuItems?.length ?? 0 > 0) {
+            return;
+        }
+
+        this.menuItems = [
+            {
+                title: 'MENU.DASHBOARD',
+                url: '/dashboard'
+            },
+            {
+                title: 'USER_PROJECTS',
+                url: '/projects'
+            },
+            {
+                title: 'USER.MENU.ANALYTICS',
+                url: '/analytics'
+            }
+        ];
+        if (isAdminAreaAvailable) {
+            this.menuItems.push({
+                title: 'ADMIN.ADMIN_AREA',
+                menuItems: [
+                    {
+                        title: 'MENU.DASHBOARD',
+                        url: '/admin/home'
+                    },
+                    {
+                        title: 'ADMIN.MENU.USERS',
+                        url: '/admin/users',
+                    },
+                    {
+                        title: 'ADMIN.MENU.AUDIT_TRAIL',
+                        url: '/admin/audit-trail'
+                    }
+                ]
+            });
+        }
+    }
+
     createSideMenu(): void {
         this.menuItems = [
             {

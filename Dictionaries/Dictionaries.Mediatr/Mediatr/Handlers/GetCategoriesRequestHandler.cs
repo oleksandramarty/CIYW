@@ -11,6 +11,6 @@ using MediatR;
 namespace Dictionaries.Mediatr.Mediatr.Handlers;
 
 public class GetCategoriesRequestHandler(
-    ITreeDictionaryRepository<int, int?, Category, CategoryResponse, DictionariesDataContext> treeDictionaryRepository)
-    : MediatrTreeDictionaryBase<GetCategoriesRequest, int, int?, Category, CategoryResponse, DictionariesDataContext>(
+    ITreeDictionaryRepository<int, int?, CategoryEntity, CategoryResponse, DictionariesDataContext> treeDictionaryRepository)
+    : MediatrTreeDictionaryBase<GetCategoriesRequest, int, int?, CategoryEntity, CategoryResponse, DictionariesDataContext>(
         treeDictionaryRepository);

@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums.Expenses;
 
 namespace Dictionaries.Domain.Models.Balances;
 
-public class BalanceType : BaseIdEntity<int>, IActivatableEntity
+public class BalanceTypeEntity : BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public bool IsActive { get; set; }

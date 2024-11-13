@@ -10,6 +10,6 @@ using MediatR;
 namespace Dictionaries.Mediatr.Mediatr.Handlers;
 
 public class GetFrequenciesRequestHandler(
-    IDictionaryRepository<int, Frequency, FrequencyResponse, DictionariesDataContext> dictionaryRepository)
-    : MediatrDictionaryBase<GetFrequenciesRequest, int, Frequency, FrequencyResponse, DictionariesDataContext>(
+    IDictionaryRepository<int, FrequencyEntity, FrequencyResponse, DictionariesDataContext> dictionaryRepository)
+    : MediatrDictionaryBase<GetFrequenciesRequest, int, FrequencyEntity, FrequencyResponse, DictionariesDataContext>(
         dictionaryRepository), IRequestHandler<GetFrequenciesRequest, VersionedListResponse<FrequencyResponse>>;

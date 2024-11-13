@@ -14,14 +14,14 @@ public class UpdatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository;
+    private readonly IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository;
 
     public UpdatePlannedExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, PlannedExpense, ExpensesDataContext> plannedExpenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
@@ -33,13 +33,13 @@ public class UpdatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
     {        
         this.entityValidator.ValidateVoidRequest<UpdatePlannedExpenseCommand>(command, () => new UpdatePlannedExpenseCommandValidator());
         
-        PlannedExpense currentPlannedExpense = await this.plannedExpenseRepository.GetAsync(
+        PlannedExpenseEntity currentPlannedExpenseEntity = await this.plannedExpenseRepository.GetAsync(
             e => e.Id == command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(currentPlannedExpense);
+        this.entityValidator.IsEntityExist(currentPlannedExpenseEntity);
         
-        await this.CheckUserProjectByIdAsync(currentPlannedExpense.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(currentPlannedExpenseEntity.UserProjectId, cancellationToken);
         
         await this.plannedExpenseRepository.UpdateAsync(
-            this.mapper.Map<UpdatePlannedExpenseCommand, PlannedExpense>(command, currentPlannedExpense), cancellationToken);
+            this.mapper.Map<UpdatePlannedExpenseCommand, PlannedExpenseEntity>(command, currentPlannedExpenseEntity), cancellationToken);
     }
 }

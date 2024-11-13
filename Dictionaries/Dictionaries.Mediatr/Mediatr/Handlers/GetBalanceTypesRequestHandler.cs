@@ -10,6 +10,6 @@ using MediatR;
 namespace Dictionaries.Mediatr.Mediatr.Handlers;
 
 public class GetBalanceTypesRequestHandler(
-    IDictionaryRepository<int, BalanceType, BalanceTypeResponse, DictionariesDataContext> dictionaryRepository)
-    : MediatrDictionaryBase<GetBalanceTypesRequest, int, BalanceType, BalanceTypeResponse, DictionariesDataContext>(
+    IDictionaryRepository<int, BalanceTypeEntity, BalanceTypeResponse, DictionariesDataContext> dictionaryRepository)
+    : MediatrDictionaryBase<GetBalanceTypesRequest, int, BalanceTypeEntity, BalanceTypeResponse, DictionariesDataContext>(
         dictionaryRepository), IRequestHandler<GetBalanceTypesRequest, VersionedListResponse<BalanceTypeResponse>>;

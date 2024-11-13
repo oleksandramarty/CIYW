@@ -18,7 +18,7 @@ public class GetFilteredExpensesRequestHandler : MediatrExpensesBase,
     public GetFilteredExpensesRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository,
         IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse> strategy
     ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {

@@ -14,14 +14,14 @@ public class UpdateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository;
+    private readonly IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository;
 
     public UpdateFavoriteExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
@@ -33,13 +33,13 @@ public class UpdateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
     {        
         this.entityValidator.ValidateVoidRequest<UpdateFavoriteExpenseCommand>(command, () => new UpdateFavoriteExpenseCommandValidator());
         
-        FavoriteExpense currentFavoriteExpense = await this.favoriteExpenseRepository.GetAsync(
+        FavoriteExpenseEntity currentFavoriteExpenseEntity = await this.favoriteExpenseRepository.GetAsync(
             e => e.Id == command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(currentFavoriteExpense);
+        this.entityValidator.IsEntityExist(currentFavoriteExpenseEntity);
         
-        await this.CheckUserProjectByIdAsync(currentFavoriteExpense.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(currentFavoriteExpenseEntity.UserProjectId, cancellationToken);
         
         await this.favoriteExpenseRepository.UpdateAsync(
-            this.mapper.Map<UpdateFavoriteExpenseCommand, FavoriteExpense>(command, currentFavoriteExpense), cancellationToken);
+            this.mapper.Map<UpdateFavoriteExpenseCommand, FavoriteExpenseEntity>(command, currentFavoriteExpenseEntity), cancellationToken);
     }
 }

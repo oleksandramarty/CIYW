@@ -18,14 +18,14 @@ public class RemoveExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<R
 {
     private readonly IBalanceRepository balanceRepository;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository;
+    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository;
 
     public RemoveExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IBalanceRepository balanceRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, Expense, ExpensesDataContext> expenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
     ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.balanceRepository = balanceRepository;
@@ -35,12 +35,12 @@ public class RemoveExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<R
     
     public async Task<BaseBoolResponse> Handle(RemoveExpenseCommand command, CancellationToken cancellationToken)
     {
-        Expense expense = await this.expenseRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(expense);
+        ExpenseEntity expenseEntity = await this.expenseRepository.GetByIdAsync(command.Id, cancellationToken);
+        this.entityValidator.IsEntityExist(expenseEntity);
 
-        await this.CheckUserProjectByIdAsync(expense.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(expenseEntity.UserProjectId, cancellationToken);
 
-        await this.balanceRepository.RemoveExpenseAsync(expense, cancellationToken);
+        await this.balanceRepository.RemoveExpenseAsync(expenseEntity, cancellationToken);
 
         return new BaseBoolResponse();
     }

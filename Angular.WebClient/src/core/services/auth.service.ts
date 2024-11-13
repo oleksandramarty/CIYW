@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, finalize, Observable, of, Subject, switchMap, take, takeUntil} from 'rxjs';
+import {BehaviorSubject, filter, finalize, Observable, of, Subject, switchMap, take, takeUntil} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {auth_clearAll, auth_setToken, auth_setUser} from "../store/actions/auth.actions";
 import {LocalizationService} from "./localization.service";
@@ -37,27 +37,40 @@ export class AuthService {
     }
 
     get isAuthorized$(): Observable<boolean> | undefined {
-        return this._token$?.pipe(map(token => !!token)) ?? of(false);
+        return this._token$?.pipe(
+            filter(token => token !== undefined),
+            map(token => !!token));
     }
 
     get isUser$(): Observable<boolean> | undefined {
-        return this._isUser$?.pipe(map(isUser => !!isUser)) ?? of(false);
+        return this._isUser$?.pipe(
+            filter(isUser => isUser !== undefined),
+            map(isUser => !!isUser));
     }
 
-    get isAdmin$(): Observable<boolean> {
-        return this._isAdmin$?.pipe(map(isAdmin => !!isAdmin)) ?? of(false);
+    get isAdmin$(): Observable<boolean> | undefined {
+        return this._isAdmin$?.pipe(
+            filter(isAdmin => isAdmin !== undefined),
+            map(isAdmin => !!isAdmin));
     }
 
     get isSuperAdmin$(): Observable<boolean> | undefined {
-        return this._isSuperAdmin$?.pipe(map(isSuperAdmin => !!isSuperAdmin)) ?? of(false);
+        return this._isSuperAdmin$?.pipe(
+            filter(isSuperAdmin => isSuperAdmin !== undefined),
+            map(isSuperAdmin => !!isSuperAdmin));
     }
 
     get isTechnicalSupport$(): Observable<boolean> | undefined {
-        return this._isTechnicalSupport$?.pipe(map(isTechnicalSupport => !!isTechnicalSupport)) ?? of(false);
+        return this._isTechnicalSupport$?.pipe(
+            filter(isTechnicalSupport => isTechnicalSupport !== undefined),
+            map(isTechnicalSupport => !!isTechnicalSupport));
     }
 
     get isAdminAreaAvailable$(): Observable<boolean> | undefined {
-        return this._isAdminAreaAvailable$?.pipe(map(isAdminAreaAvailable => !!isAdminAreaAvailable)) ?? of(false);
+        return this._isAdminAreaAvailable$?.
+        pipe(
+            filter(isAdminAreaAvailable => isAdminAreaAvailable !== undefined),
+            map(isAdminAreaAvailable => !!isAdminAreaAvailable));
     }
 
     constructor(

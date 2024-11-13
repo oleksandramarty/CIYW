@@ -2,11 +2,11 @@ using CommonModule.Shared.Common;
 
 namespace Dictionaries.Domain.Models.Countries;
 
-public class CountryCurrency
+public class CountryCurrencyEntity
 {
     public int CountryId { get; set; }
-    public Country Country { get; set; }
+    public CountryEntity Country { get; set; }
     
     public int CurrencyId { get; set; }
-    public Currencies.Currency Currency { get; set; }
+    public Currencies.CurrencyEntity Currency { get; set; }
 }

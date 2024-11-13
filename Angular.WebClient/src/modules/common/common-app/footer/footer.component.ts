@@ -6,9 +6,10 @@ import {LoaderService} from "../../../../core/services/loader.service";
 import {Router} from "@angular/router";
 import {menu_toggle} from "../../../../core/store/actions/site.actions";
 import {AuthService} from "../../../../core/services/auth.service";
-import {Observable} from "rxjs";
 import {BaseAuthorizeComponent} from "../../../../core/base-components/base-authorize.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {environment} from "../../../../core/environments/environment";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-footer',
@@ -27,11 +28,7 @@ export class FooterComponent extends BaseAuthorizeComponent{
   }
 
   get buildVersion(): string {
-    return 'honk';
-  }
-
-  public clearCache(): void {
-    this.localStorageService.clearLocalStorageAndRefresh();
+    return environment.name;
   }
 
   public resetSite(): void {

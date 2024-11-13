@@ -14,14 +14,14 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandler<CreateUserBalanceCommand>
 {
     private readonly IMapper mapper;
-    private readonly IGenericRepository<Guid, Balance, ExpensesDataContext> balanceRepository;
+    private readonly IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository;
     
     
     public CreateUserBalanceCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, Balance, ExpensesDataContext> balanceRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository,
+        IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository,
         IMapper mapper
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
@@ -31,15 +31,15 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     
     public async Task Handle(CreateUserBalanceCommand command, CancellationToken cancellationToken)
     {
-        UserProject userProject = await this.GetUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        UserProjectEntity userProjectEntity = await this.GetUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
-        if (userProject.Balances.Count >= 3)
+        if (userProjectEntity.Balances.Count >= 3)
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
         
-        Balance balance = this.mapper.Map<CreateUserBalanceCommand, Balance>(command);
-        balance.UserId = await this.GetCurrentUserIdAsync();
-        await this.balanceRepository.AddAsync(balance, cancellationToken);
+        BalanceEntity balanceEntity = this.mapper.Map<CreateUserBalanceCommand, BalanceEntity>(command);
+        balanceEntity.UserId = await this.GetCurrentUserIdAsync();
+        await this.balanceRepository.AddAsync(balanceEntity, cancellationToken);
     }
 }

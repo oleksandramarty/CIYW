@@ -12,13 +12,13 @@ public class UpdateUserSettingCommandHandler: IRequestHandler<UpdateUserSettingC
     private readonly IMapper mapper;
     private readonly ICurrentUserRepository currentUserRepository;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, UserSetting, AuthGatewayDataContext> userSettingRepository;
+    private readonly IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository;
     
     public UpdateUserSettingCommandHandler(
         IMapper mapper,
         ICurrentUserRepository currentUserRepository, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
-        IGenericRepository<Guid, UserSetting, AuthGatewayDataContext> userSettingRepository
+        IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository
         )
     {
         this.mapper = mapper;
@@ -32,11 +32,11 @@ public class UpdateUserSettingCommandHandler: IRequestHandler<UpdateUserSettingC
         Guid? userId = await currentUserRepository.GetCurrentUserIdAsync();
         this.entityValidator.IsEntityExist(userId);
 
-        UserSetting userSetting = await userSettingRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(userSetting);
+        UserSettingEntity userSettingEntity = await userSettingRepository.GetByIdAsync(command.Id, cancellationToken);
+        this.entityValidator.IsEntityExist(userSettingEntity);
             
         await this.userSettingRepository.UpdateAsync(
-            this.mapper.Map(command, userSetting),
+            this.mapper.Map(command, userSettingEntity),
             cancellationToken
         );
     }

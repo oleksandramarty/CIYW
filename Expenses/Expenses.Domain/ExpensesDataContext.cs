@@ -12,14 +12,14 @@ namespace Expenses.Domain;
 
 public class ExpensesDataContext : DbSaveChangeContext
 {
-    public DbSet<Expense> Expenses { get; set; }
-    public DbSet<PlannedExpense> PlannedExpenses { get; set; }
-    public DbSet<FavoriteExpense> FavoriteExpenses { get; set; }
+    public DbSet<ExpenseEntity> Expenses { get; set; }
+    public DbSet<PlannedExpenseEntity> PlannedExpenses { get; set; }
+    public DbSet<FavoriteExpenseEntity> FavoriteExpenses { get; set; }
 
-    public DbSet<UserProject> UserProjects { get; set; }
-    public DbSet<UserAllowedProject> UserAllowedProjects { get; set; }
+    public DbSet<UserProjectEntity> UserProjects { get; set; }
+    public DbSet<UserAllowedProjectEntity> UserAllowedProjects { get; set; }
 
-    public DbSet<Balance> Balances { get; set; }
+    public DbSet<BalanceEntity> Balances { get; set; }
 
     public ExpensesDataContext(DbContextOptions<ExpensesDataContext> options) : base(options)
     {
@@ -27,7 +27,7 @@ public class ExpensesDataContext : DbSaveChangeContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Expense>(entity =>
+        modelBuilder.Entity<ExpenseEntity>(entity =>
         {
             entity.ToTable("Expenses", "Expenses");
             entity.HasOne(e => e.UserProject)
@@ -40,7 +40,7 @@ public class ExpensesDataContext : DbSaveChangeContext
             entity.Property(c => c.Description).HasMaxLength(100);
             entity.Property(c => c.Amount).IsRequired();
         });
-        modelBuilder.Entity<PlannedExpense>(entity =>
+        modelBuilder.Entity<PlannedExpenseEntity>(entity =>
         {
             entity.ToTable("PlannedExpenses", "Expenses");
             entity.HasOne(e => e.UserProject)
@@ -50,7 +50,7 @@ public class ExpensesDataContext : DbSaveChangeContext
             entity.Property(c => c.Description).HasMaxLength(100);
             entity.Property(c => c.Amount).IsRequired();
         });
-        modelBuilder.Entity<FavoriteExpense>(entity =>
+        modelBuilder.Entity<FavoriteExpenseEntity>(entity =>
         {
             entity.ToTable("FavoriteExpenses", "Expenses");
             entity.HasOne(e => e.UserProject)
@@ -59,9 +59,9 @@ public class ExpensesDataContext : DbSaveChangeContext
             entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
             entity.Property(c => c.Description).HasMaxLength(100);
         });
-        modelBuilder.Entity<UserProject>(entity => { entity.ToTable("UserProjects", "Projects"); });
+        modelBuilder.Entity<UserProjectEntity>(entity => { entity.ToTable("UserProjects", "Projects"); });
 
-        modelBuilder.Entity<UserAllowedProject>(entity =>
+        modelBuilder.Entity<UserAllowedProjectEntity>(entity =>
         {
             entity.ToTable("UserAllowedProjects", "Projects");
             entity.HasOne(e => e.UserProject)
@@ -69,7 +69,7 @@ public class ExpensesDataContext : DbSaveChangeContext
                 .HasForeignKey(e => e.UserProjectId);
         });
 
-        modelBuilder.Entity<Balance>(entity => { entity.ToTable("Balances", "Balance"); });
+        modelBuilder.Entity<BalanceEntity>(entity => { entity.ToTable("Balances", "Balance"); });
 
         var cascadeFKs = modelBuilder.Model.GetEntityTypes()
             .SelectMany(t => t.GetForeignKeys())

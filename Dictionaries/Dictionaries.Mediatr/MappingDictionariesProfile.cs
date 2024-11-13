@@ -22,21 +22,21 @@ public class MappingDictionariesProfile : Profile
         CreateCountryMappings();
         CreateCurrencyMappings();
 
-        CreateMap<Frequency, FrequencyResponse>();
-        CreateMap<BalanceType, BalanceTypeResponse>();
-        CreateMap<Icon, IconResponse>();
-        CreateMap<IconCategory, IconCategoryResponse>();
+        CreateMap<FrequencyEntity, FrequencyResponse>();
+        CreateMap<BalanceTypeEntity, BalanceTypeResponse>();
+        CreateMap<IconEntity, IconResponse>();
+        CreateMap<IconCategoryEntity, IconCategoryResponse>();
     }
 
     private void CreateCategoryMappings()
     {
-        CreateMap<Category, CategoryResponse>()
+        CreateMap<CategoryEntity, CategoryResponse>()
             .ForMember(dest => dest.Children, opt => opt.Ignore());
     }
 
     private void CreateCountryMappings()
     {
-        CreateMap<Country, CountryResponse>()
+        CreateMap<CountryEntity, CountryResponse>()
             .ForMember(dest => dest.Currencies, opt => opt.MapFrom(src =>
                 src.Currencies != null
                     ? src.Currencies.Select(r => new CurrencyResponse
@@ -53,7 +53,7 @@ public class MappingDictionariesProfile : Profile
 
     private void CreateCurrencyMappings()
     {
-        CreateMap<Currency, CurrencyResponse>()
+        CreateMap<CurrencyEntity, CurrencyResponse>()
             .ForMember(dest => dest.Countries, opt => opt.MapFrom(src =>
                 src.Countries != null
                     ? src.Countries.Select(r => new CountryResponse

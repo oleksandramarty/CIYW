@@ -11,13 +11,13 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemoveFavoriteExpenseCommand, BaseBoolResponse>
 {
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository;
+    private readonly IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository;
 
     public RemoveFavoriteExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, FavoriteExpense, ExpensesDataContext> favoriteExpenseRepository,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
     ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.entityValidator = entityValidator;
@@ -26,10 +26,10 @@ public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
     
     public async Task<BaseBoolResponse> Handle(RemoveFavoriteExpenseCommand command, CancellationToken cancellationToken)
     {
-        FavoriteExpense favoriteExpense = await this.favoriteExpenseRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(favoriteExpense);
+        FavoriteExpenseEntity favoriteExpenseEntity = await this.favoriteExpenseRepository.GetByIdAsync(command.Id, cancellationToken);
+        this.entityValidator.IsEntityExist(favoriteExpenseEntity);
 
-        await this.CheckUserProjectByIdAsync(favoriteExpense.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(favoriteExpenseEntity.UserProjectId, cancellationToken);
 
         await this.favoriteExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
 

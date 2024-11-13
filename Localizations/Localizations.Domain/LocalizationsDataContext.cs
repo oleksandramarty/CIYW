@@ -10,8 +10,8 @@ namespace Localizations.Domain;
 
 public class LocalizationsDataContext: DbSaveChangeContext
 {
-    public DbSet<Locale> Locales { get; set; }
-    public DbSet<Localization> Localizations { get; set; }
+    public DbSet<LocaleEntity> Locales { get; set; }
+    public DbSet<LocalizationEntity> Localizations { get; set; }
     
     
     public LocalizationsDataContext(DbContextOptions<LocalizationsDataContext> options)
@@ -23,16 +23,16 @@ public class LocalizationsDataContext: DbSaveChangeContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configuring the Contact entity to map to the "Contacts.Contact" table
-        modelBuilder.Entity<Locale>(entity => 
+        modelBuilder.Entity<LocaleEntity>(entity => 
         { 
             entity.ToTable("Locales", "Locales"); 
         });
-        modelBuilder.Entity<Localization>(entity => 
+        modelBuilder.Entity<LocalizationEntity>(entity => 
         { 
             entity.ToTable("Localizations", "Locales"); 
         });
         
-        modelBuilder.Entity<Localization>()
+        modelBuilder.Entity<LocalizationEntity>()
             .HasIndex(l => new { l.LocaleId, l.Key })
             .IsUnique();
 

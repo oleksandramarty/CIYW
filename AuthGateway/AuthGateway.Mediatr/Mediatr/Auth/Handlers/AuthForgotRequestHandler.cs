@@ -15,12 +15,12 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
 {
     private readonly ICurrentUserRepository currentUserRepository;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
 
     public AuthForgotRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<AuthGatewayDataContext> entityValidator,
-        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository
     ) : base(currentUserRepository)
     {
         this.entityValidator = entityValidator;
@@ -30,24 +30,24 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
     public async Task Handle(AuthForgotRequest request, CancellationToken cancellationToken)
     {
         Guid userId = await this.GetCurrentUserIdAsync();
-        User user = await this.userRepository.GetByIdAsync(userId, cancellationToken);
-        this.entityValidator.IsEntityExist(user);
-        this.entityValidator.IsEntityActive(user);
+        UserEntity userEntity = await this.userRepository.GetByIdAsync(userId, cancellationToken);
+        this.entityValidator.IsEntityExist(userEntity);
+        this.entityValidator.IsEntityActive(userEntity);
 
-        if (user.LastForgotPasswordRequest.HasValue &&
-            user.LastForgotPasswordRequest.Value.AddMinutes(30) > DateTime.UtcNow)
+        if (userEntity.LastForgotPasswordRequest.HasValue &&
+            userEntity.LastForgotPasswordRequest.Value.AddMinutes(30) > DateTime.UtcNow)
         {
             throw new BusinessException(ErrorMessages.ForgotPasswordRequestTooSoon, StatusCodes.Status409Conflict);
         }
 
-        user.LastForgotPasswordRequest = DateTime.UtcNow;
-        await this.userRepository.UpdateAsync(user, cancellationToken);
+        userEntity.LastForgotPasswordRequest = DateTime.UtcNow;
+        await this.userRepository.UpdateAsync(userEntity, cancellationToken);
 
         // TODO Send email
         string restoreLink =
             $"{StringExtension.InterleaveStrings(userId.ToString("N"), Guid.NewGuid().ToString("N"))}" +
             $"&honkler={StringExtension.InterleaveStrings(
-                (new DateTimeOffset(user.LastForgotPasswordRequest.Value).ToUnixTimeSeconds()).ToString(),
-                (new DateTimeOffset(user.CreatedAt).ToUnixTimeSeconds()).ToString())}";
+                (new DateTimeOffset(userEntity.LastForgotPasswordRequest.Value).ToUnixTimeSeconds()).ToString(),
+                (new DateTimeOffset(userEntity.CreatedAt).ToUnixTimeSeconds()).ToString())}";
     }
 }

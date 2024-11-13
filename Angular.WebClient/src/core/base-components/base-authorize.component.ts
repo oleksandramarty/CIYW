@@ -10,8 +10,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Directive()
 export abstract class BaseAuthorizeComponent extends BaseUnsubscribeComponent {
-    public currentUser: UserResponse | undefined;
-
     protected constructor(
         protected readonly authService: AuthService,
         protected readonly store: Store,
@@ -42,15 +40,5 @@ export abstract class BaseAuthorizeComponent extends BaseUnsubscribeComponent {
 
     get isAdminAreaAvailable$(): Observable<boolean> | undefined {
         return this.authService.isAdminAreaAvailable$;
-    }
-
-    override ngOnInit(): void {
-        this.store.select(selectUser)
-            .pipe(
-                tap((user) => {
-                    this.currentUser = user;
-                }),
-                handleApiError(this.snackBar)
-            ).subscribe();
     }
 }

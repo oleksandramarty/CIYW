@@ -20,7 +20,7 @@ public class GetUserProjectByIdRequestHandler: MediatrExpensesBase, IRequestHand
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
         ): base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
@@ -29,13 +29,13 @@ public class GetUserProjectByIdRequestHandler: MediatrExpensesBase, IRequestHand
     public async Task<UserProjectResponse> Handle(GetUserProjectByIdRequest command, CancellationToken cancellationToken)
     {
         Guid userId = await this.GetCurrentUserIdAsync();
-        UserProject userProject = await this.GetUserProjectByIdAsync(command.Id, cancellationToken);
+        UserProjectEntity userProjectEntity = await this.GetUserProjectByIdAsync(command.Id, cancellationToken);
         
-        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
+        if (userProjectEntity.CreatedUserId != userId && userProjectEntity.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
         
-        return mapper.Map<UserProjectResponse>(userProject);
+        return mapper.Map<UserProjectResponse>(userProjectEntity);
     }
 }

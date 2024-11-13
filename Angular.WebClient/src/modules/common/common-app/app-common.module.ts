@@ -11,12 +11,16 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {FooterComponent} from "./footer/footer.component";
 import {SharedModule} from "../../../core/shared.module";
 import {RouterLink} from "@angular/router";
+import {CommonSideMenuComponent} from "./common-side-menu/common-side-menu.component";
+import {CommonQuickActionsComponent} from "./common-quick-actions/common-quick-actions.component";
 
 @NgModule({
     declarations: [
         NotFoundComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
+        CommonSideMenuComponent,
+        CommonQuickActionsComponent
     ],
     imports: [
         CommonModule,
@@ -32,7 +36,9 @@ import {RouterLink} from "@angular/router";
     exports: [
         NotFoundComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
+        CommonSideMenuComponent,
+        CommonQuickActionsComponent
     ]
 })
 export class AppCommonModule {

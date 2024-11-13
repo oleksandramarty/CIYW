@@ -27,15 +27,15 @@ public class BalanceRepository: IBalanceRepository
     }
 
     public async Task AddExpenseAsync(
-        Expense expense,
+        ExpenseEntity expenseEntity,
         CancellationToken cancellationToken)
     {
         using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(expense, false, cancellationToken);
+            await this.UpdateBalanceAsync(expenseEntity, false, cancellationToken);
             
-            await this.dataContext.Expenses.AddAsync(expense, cancellationToken);
+            await this.dataContext.Expenses.AddAsync(expenseEntity, cancellationToken);
             await this.dataContext.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
@@ -48,24 +48,24 @@ public class BalanceRepository: IBalanceRepository
     }
     
     public async Task UpdateExpenseAsync(
-        Expense currentExpense,
-        Expense newExpense,
+        ExpenseEntity currentExpenseEntity,
+        ExpenseEntity newExpenseEntity,
         CancellationToken cancellationToken)
     {
         using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(currentExpense, true, cancellationToken);
-            await this.UpdateBalanceAsync(newExpense, false, cancellationToken);
+            await this.UpdateBalanceAsync(currentExpenseEntity, true, cancellationToken);
+            await this.UpdateBalanceAsync(newExpenseEntity, false, cancellationToken);
             
-            currentExpense.Title = newExpense.Title;
-            currentExpense.CategoryId = newExpense.CategoryId;
-            currentExpense.Date = newExpense.Date;
-            currentExpense.Description = newExpense.Description;
-            currentExpense.Amount = newExpense.Amount;
-            currentExpense.BalanceId = newExpense.BalanceId;
+            currentExpenseEntity.Title = newExpenseEntity.Title;
+            currentExpenseEntity.CategoryId = newExpenseEntity.CategoryId;
+            currentExpenseEntity.Date = newExpenseEntity.Date;
+            currentExpenseEntity.Description = newExpenseEntity.Description;
+            currentExpenseEntity.Amount = newExpenseEntity.Amount;
+            currentExpenseEntity.BalanceId = newExpenseEntity.BalanceId;
             
-            this.dataContext.Expenses.Update(currentExpense);
+            this.dataContext.Expenses.Update(currentExpenseEntity);
             await this.dataContext.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
@@ -78,15 +78,15 @@ public class BalanceRepository: IBalanceRepository
     }
 
     public async Task RemoveExpenseAsync(
-        Expense expense,
+        ExpenseEntity expenseEntity,
         CancellationToken cancellationToken)
     {
         using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(expense, true, cancellationToken);
+            await this.UpdateBalanceAsync(expenseEntity, true, cancellationToken);
             
-            this.dataContext.Expenses.Remove(expense);
+            this.dataContext.Expenses.Remove(expenseEntity);
             await this.dataContext.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
@@ -99,18 +99,18 @@ public class BalanceRepository: IBalanceRepository
     }
 
     private async Task UpdateBalanceAsync(
-        Expense expense,
+        ExpenseEntity expenseEntity,
         bool isRefund,
         CancellationToken cancellationToken)
     {
-        Balance? balance = await this.dataContext.Balances.FirstOrDefaultAsync(b => b.Id == expense.BalanceId, cancellationToken);
+        BalanceEntity? balance = await this.dataContext.Balances.FirstOrDefaultAsync(b => b.Id == expenseEntity.BalanceId, cancellationToken);
         this.entityValidator.IsEntityExist(balance);
-        string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, expense.CategoryId);
+        string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, expenseEntity.CategoryId);
         this.entityValidator.IsEntityExist(currentCategory);
         
-        FavoriteExpense? favoriteExpense = expense.FavoriteExpenseId.HasValue ?
+        FavoriteExpenseEntity? favoriteExpense = expenseEntity.FavoriteExpenseId.HasValue ?
             await this.dataContext.FavoriteExpenses
-                .FirstOrDefaultAsync(fe => fe.Id == expense.FavoriteExpenseId, cancellationToken) :
+                .FirstOrDefaultAsync(fe => fe.Id == expenseEntity.FavoriteExpenseId, cancellationToken) :
             null;
 
         if (favoriteExpense != null && favoriteExpense.CurrentAmount == null)
@@ -121,19 +121,19 @@ public class BalanceRepository: IBalanceRepository
         if (isRefund)
         {
             bool isNegative = currentCategory.ToLower().Contains("\"ispositive\":1");
-            balance.Amount = isNegative ? balance.Amount - expense.Amount : balance.Amount + expense.Amount;
+            balance.Amount = isNegative ? balance.Amount - expenseEntity.Amount : balance.Amount + expenseEntity.Amount;
             if (favoriteExpense != null)
             {
-                favoriteExpense.CurrentAmount = isNegative ? favoriteExpense.CurrentAmount - expense.Amount : favoriteExpense.CurrentAmount + expense.Amount;
+                favoriteExpense.CurrentAmount = isNegative ? favoriteExpense.CurrentAmount - expenseEntity.Amount : favoriteExpense.CurrentAmount + expenseEntity.Amount;
             }
         }
         else
         {
             bool isPositive = currentCategory.ToLower().Contains("\"ispositive\":true");
-            balance.Amount = isPositive ? balance.Amount + expense.Amount : balance.Amount - expense.Amount;
+            balance.Amount = isPositive ? balance.Amount + expenseEntity.Amount : balance.Amount - expenseEntity.Amount;
             if (favoriteExpense != null)
             {
-                favoriteExpense.CurrentAmount = isPositive ? favoriteExpense.CurrentAmount + expense.Amount : favoriteExpense.CurrentAmount - expense.Amount;
+                favoriteExpense.CurrentAmount = isPositive ? favoriteExpense.CurrentAmount + expenseEntity.Amount : favoriteExpense.CurrentAmount - expenseEntity.Amount;
             }
         }
         

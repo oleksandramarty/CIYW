@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums;
 
 namespace Localizations.Domain.Models.Locales;
 
-public class Locale: BaseIdEntity<int>, IActivatableEntity
+public class LocaleEntity: BaseIdEntity<int>, IActivatableEntity
 {
     public string IsoCode { get; set; }
     public string Title { get; set; }
@@ -16,5 +16,5 @@ public class Locale: BaseIdEntity<int>, IActivatableEntity
     public LocaleEnum LocaleEnum { get; set; }
     public string Culture { get; set; }
     
-    public ICollection<Localization> Localizations { get; set; }
+    public ICollection<LocalizationEntity> Localizations { get; set; }
 }

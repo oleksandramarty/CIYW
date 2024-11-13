@@ -12,13 +12,13 @@ public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingC
     private readonly IMapper mapper;
     private readonly ICurrentUserRepository currentUserRepository;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, UserSetting, AuthGatewayDataContext> userSettingRepository;
+    private readonly IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository;
     
     public CreateUserSettingCommandHandler(
         IMapper mapper,
         ICurrentUserRepository currentUserRepository, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
-        IGenericRepository<Guid, UserSetting, AuthGatewayDataContext> userSettingRepository
+        IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository
         )
     {
         this.mapper = mapper;
@@ -32,7 +32,7 @@ public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingC
         Guid? userId = await currentUserRepository.GetCurrentUserIdAsync();
         this.entityValidator.IsEntityExist(userId);
         
-        UserSetting toAdd = this.mapper.Map<UserSetting>(command);
+        UserSettingEntity toAdd = this.mapper.Map<UserSettingEntity>(command);
         
         await this.userSettingRepository.AddAsync(
             toAdd,

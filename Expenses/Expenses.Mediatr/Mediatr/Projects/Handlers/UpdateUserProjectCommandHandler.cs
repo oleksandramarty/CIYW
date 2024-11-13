@@ -17,13 +17,13 @@ public class UpdateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<U
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository;
+    private readonly IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
     
     public UpdateUserProjectCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, UserProject, ExpensesDataContext> userProjectRepository): base(currentUserRepository)
+        IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository): base(currentUserRepository)
     {
         this.mapper = mapper;
         this.entityValidator = entityValidator;
@@ -36,10 +36,10 @@ public class UpdateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<U
         
         Guid userId = await this.GetCurrentUserIdAsync();
         
-        UserProject userProject = await this.userProjectRepository.GetByIdAsync(command.Id, cancellationToken);
+        UserProjectEntity userProjectEntity = await this.userProjectRepository.GetByIdAsync(command.Id, cancellationToken);
         
-        this.mapper.Map<UpdateUserProjectCommand, UserProject>(command, userProject);
+        this.mapper.Map<UpdateUserProjectCommand, UserProjectEntity>(command, userProjectEntity);
         
-        await this.userProjectRepository.UpdateAsync(userProject, cancellationToken);
+        await this.userProjectRepository.UpdateAsync(userProjectEntity, cancellationToken);
     }
 }

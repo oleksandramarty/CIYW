@@ -4,7 +4,7 @@ using CommonModule.Shared.Enums.Expenses;
 
 namespace Dictionaries.Domain.Models.Expenses;
 
-public class Frequency: BaseIdEntity<int>, IActivatableEntity
+public class FrequencyEntity: BaseIdEntity<int>, IActivatableEntity
 {
     public string Title { get; set; }
     public string Description { get; set; }

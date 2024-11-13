@@ -15,16 +15,16 @@ public class GetCurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<GetC
     private readonly IMediator mediator;
     private readonly IMapper mapper;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository;
-    private readonly IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
+    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository;
 
     public GetCurrentUserRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IMediator mediator,
         IMapper mapper, 
         IEntityValidator<AuthGatewayDataContext> entityValidator, 
-        IGenericRepository<Guid, User, AuthGatewayDataContext> userRepository,
-        IGenericRepository<Guid, UserRole, AuthGatewayDataContext> userRoleRepository): base(currentUserRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
+        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository): base(currentUserRepository)
     {
         this.mediator = mediator;
         this.mapper = mapper;
@@ -37,16 +37,16 @@ public class GetCurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<GetC
     {
         Guid userId = await this.GetCurrentUserIdAsync();
         
-        User user = await this.userRepository.GetByIdAsync(userId, cancellationToken, 
+        UserEntity userEntity = await this.userRepository.GetByIdAsync(userId, cancellationToken, 
             user => 
                 user
                     .Include(u => u.Roles)
                     .ThenInclude(ur => ur.Role)
                     .Include(u => u.UserSetting));
-        this.entityValidator.IsEntityExist(user);
-        this.entityValidator.IsEntityActive(user);
+        this.entityValidator.IsEntityExist(userEntity);
+        this.entityValidator.IsEntityActive(userEntity);
         
-        UserResponse response = this.mapper.Map<User, UserResponse>(user);
+        UserResponse response = this.mapper.Map<UserEntity, UserResponse>(userEntity);
 
         return response;
     }
