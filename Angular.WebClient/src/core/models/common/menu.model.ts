@@ -9,6 +9,7 @@ export interface IMenuModelItem {
     isOpen?: boolean;
     icon?: string;
     url?: string;
+    executableAction?: () => void;
     menuItems?: IMenuModelItem[] | undefined;
 }
 
@@ -18,6 +19,7 @@ export class MenuModelItem implements IMenuModelItem {
     isOpen?: boolean;
     icon?: string;
     url?: string;
+    executableAction?: () => void;
     menuItems?: IMenuModelItem[] | undefined;
 
     constructor(data?: IMenuModelItem) {
@@ -36,7 +38,8 @@ export class MenuModel implements IMenuModel {
     activeTab?: number | undefined;
     menuItems: MenuModelItem[] | undefined;
 
-    executableAction: () => void = () => {};
+    executableAction: () => void = () => {
+    };
 
     constructor(data?: IMenuModel) {
         if (data) {
@@ -52,6 +55,35 @@ export class MenuModel implements IMenuModel {
             new MenuModelItem({index: 1, title: 'MENU.EXPENSES'}),
             new MenuModelItem({index: 2, title: 'MENU.PLANNED_EXPENSES'}),
         ];
+    }
+
+    createQuickActionsMenu(
+        isAdminAreaAvailable: boolean,
+        printCurrentPageAction: () => void
+    ): void {
+        if (this.menuItems?.length ?? 0 > 0) {
+            return;
+        }
+
+        this.menuItems = [
+            {
+                title: 'COMMON.PRINT',
+                icon: 'fa-solid fa-print',
+                executableAction: printCurrentPageAction
+            }
+        ];
+        if (isAdminAreaAvailable) {
+            this.menuItems.push({
+                title: 'ADMIN.MENU.USERS',
+                url: '/admin/users',
+                icon: 'fa-solid fa-users'
+            });
+            this.menuItems.push({
+                title: 'ADMIN.MENU.AUDIT_TRAIL',
+                url: '/admin/audit-trail',
+                icon: 'fa-solid fa-table-columns'
+            });
+        }
     }
 
     createHeaderMenu(isAdminAreaAvailable: boolean): void {
@@ -83,7 +115,7 @@ export class MenuModel implements IMenuModel {
                     },
                     {
                         title: 'ADMIN.MENU.USERS',
-                        url: '/admin/users',
+                        url: '/admin/users'
                     },
                     {
                         title: 'ADMIN.MENU.AUDIT_TRAIL',
@@ -153,7 +185,9 @@ export class MenuModel implements IMenuModel {
             this.createSideMenu();
         }
 
-        this.menuItems?.forEach(menuItem => { menuItem.isOpen = false; });
+        this.menuItems?.forEach(menuItem => {
+            menuItem.isOpen = false;
+        });
         this.menuItems?.unshift({
             isOpen: true,
             title: 'ADMIN.ADMIN_AREA',

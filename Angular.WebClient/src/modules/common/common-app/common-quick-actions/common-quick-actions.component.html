@@ -2,13 +2,15 @@
     class="quick-actions-container"
     [ngClass]="{'active': quickActionsOpen}">
 
-    <nav class="quick-actions"
+    <nav class="quick-actions" *ngIf="!!quickActionsMenu"
          [ngClass]="{'active': quickActionsOpen}">
-        <div class="quick-action"
-             *ngFor="let action of quickActionsList">
-            <i [class]="action.icon"></i>
-            <span>{{action.title}}</span>
-        </div>
+        <ng-container *ngFor="let action of quickActionsMenu.menuItems">
+            <div class="quick-action" (click)="!!action.executableAction && action.executableAction() || !!action.url && goto(action.url)">
+                <i [class]="action.icon"></i>
+                <span class="quick-action-title">{{action.title | translation}}</span>
+            </div>
+        </ng-container>
+
     </nav>
 
     <div

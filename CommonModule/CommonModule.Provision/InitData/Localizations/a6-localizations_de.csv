@@ -303,3 +303,4 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-600000000304;de;INPUT.TO_MANY_ITEMS.START_TYPING;Start typing to filter items;Beginnen Sie zu tippen, um Elemente zu filtern;
 550e8400-e29b-41d4-a716-600000000305;de;TOTAL_ITEMS;Total items;Gesamtanzahl der Elemente;
 550e8400-e29b-41d4-a716-600000000306;de;ADMIN.MENU.USERS;Users;Benutzer;
+550e8400-e29b-41d4-a716-600000000307;de;COMMON.PRINT;Print;Tabelle;

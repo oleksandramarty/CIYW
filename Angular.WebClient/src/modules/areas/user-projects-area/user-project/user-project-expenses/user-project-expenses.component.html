@@ -78,8 +78,8 @@
                 </span>
                 </td>
                 <td class="mat-td">{{ entity.title }}</td>
-                <td class="mat-td amount"
-                    [ngClass]="{'negative': !categoriesMap?.get(entity.categoryId)?.isPositive}">
+                <td class="mat-td"
+                    [ngClass]="{'error': !categoriesMap?.get(entity.categoryId)?.isPositive, 'success': categoriesMap?.get(entity.categoryId)?.isPositive}">
                     {{ entity.amount | currency:getCurrencyCode(entity.balanceId) }}
                 </td>
                 <td class="mat-td"><span [translation]="categoriesMap?.get(entity.categoryId)?.title"></span></td>

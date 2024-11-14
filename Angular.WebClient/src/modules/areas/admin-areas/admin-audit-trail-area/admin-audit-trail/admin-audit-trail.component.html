@@ -1,6 +1,6 @@
 <section class="user-project-section">
     <div class="section-header mb-0-5rem">
-        <h1 [translation]="'ADMIN.MENU.AUDIT_TRAIL'"></h1>
+        <h1>{{ 'ADMIN.MENU.AUDIT_TRAIL' | translation }}</h1>
     </div>
 
     <div class="filter-container" *ngIf="filterFormGroup" [formGroup]="filterFormGroup">
@@ -77,7 +77,7 @@
     >
         <ng-container header>
             <ng-container *ngFor="let headerItem of tableHeaderItems">
-                <th class="mat-th" *ngIf="!headerItem.isSortable">{{ headerItem.title }}</th>
+                <th class="mat-th" *ngIf="!headerItem.isSortable">{{ headerItem.title | translation }}</th>
                 <th class="mat-th pointer" *ngIf="headerItem.isSortable && headerItem.column" (click)="sortItems(headerItem.column)">
                     {{ headerItem.title | translation }}
                     <i
@@ -95,15 +95,15 @@
                 <td class="mat-td"><i class="fa-solid fa-eye"
                                       (click)="openDetails(entity)"></i></td>
                 <td class="mat-td"
-                    [ngClass]="{'amount negative': !!entity.exceptionType}"
+                    [ngClass]="{'error': !!entity.exceptionType}"
                 >{{ entity.type }}</td>
                 <td class="mat-td"
-                    [ngClass]="{'amount negative': !!entity.exceptionType}"
+                    [ngClass]="{'error': !!entity.exceptionType}"
                 >{{ entity.action }}</td>
                 <td class="mat-td"
-                    [ngClass]="{'amount negative': !!entity.exceptionType}"
+                    [ngClass]="{'error': !!entity.exceptionType}"
                 >{{ entity.exceptionType }}</td>
-                <td class="mat-td">{{ entity.message | translation }}</td>
+                <td class="mat-td table-cell-dots">{{ entity.message | translation }}</td>
                 <td class="mat-td">{{ entity.uri }}</td>
                 <td class="mat-td">{{ entity.entityType }}</td>
                 <td class="mat-td">

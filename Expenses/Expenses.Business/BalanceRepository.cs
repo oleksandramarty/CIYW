@@ -124,7 +124,7 @@ public class BalanceRepository: IBalanceRepository
             balance.Amount = isNegative ? balance.Amount - expenseEntity.Amount : balance.Amount + expenseEntity.Amount;
             if (favoriteExpense != null)
             {
-                favoriteExpense.CurrentAmount = isNegative ? favoriteExpense.CurrentAmount - expenseEntity.Amount : favoriteExpense.CurrentAmount + expenseEntity.Amount;
+                favoriteExpense.CurrentAmount -= expenseEntity.Amount;
             }
         }
         else
@@ -133,7 +133,7 @@ public class BalanceRepository: IBalanceRepository
             balance.Amount = isPositive ? balance.Amount + expenseEntity.Amount : balance.Amount - expenseEntity.Amount;
             if (favoriteExpense != null)
             {
-                favoriteExpense.CurrentAmount = isPositive ? favoriteExpense.CurrentAmount + expenseEntity.Amount : favoriteExpense.CurrentAmount - expenseEntity.Amount;
+                favoriteExpense.CurrentAmount += expenseEntity.Amount;
             }
         }
         

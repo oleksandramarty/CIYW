@@ -1,19 +1,11 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {finalize, Observable, Subject, take, takeUntil, tap} from "rxjs";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Observable, take, tap} from "rxjs";
 import {
     BalanceResponse,
-    BaseSortableRequest,
-    ColumnEnum,
-    CurrencyResponse,
     FavoriteExpenseResponse,
     FilteredListResponseOfFavoriteExpenseResponse,
-    FilteredListResponseOfPlannedExpenseResponse,
-    IconResponse,
-    OrderDirectionEnum,
-    PaginatorEntity,
     UserProjectResponse
 } from "../../../../../core/api-models/common.models";
-import {DictionaryMap} from "../../../../../core/models/common/dictionary.model";
 import {DictionaryService} from "../../../../../core/services/dictionary.service";
 import {CommonDialogService} from "../../../../../core/services/common-dialog.service";
 import {handleApiError} from "../../../../../core/helpers/rxjs.helper";
@@ -21,17 +13,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoaderService} from "../../../../../core/services/loader.service";
 import {Store} from "@ngrx/store";
 import {GraphQlExpensesService} from "../../../../../core/graph-ql/services/graph-ql-expenses.service";
-import {
-    selectExpensesSnapshot,
-    selectFavoriteExpensesSnapshot
-} from "../../../../../core/store/selectors/expenses.selectors";
-import {
-    expenses_setUserProject_expensesSnapshot,
-    expenses_setUserProject_favoriteExpensesSnapshot
-} from "../../../../../core/store/actions/expenses.actions";
+import {selectExpensesSnapshot} from "../../../../../core/store/selectors/expenses.selectors";
+import {expenses_setUserProject_favoriteExpensesSnapshot} from "../../../../../core/store/actions/expenses.actions";
 import {BaseGraphQlFilteredModel} from "../../../../../core/models/common/base-graphql.model";
-import {handleBaseDateRangeFilter} from "../../../../../core/helpers/date-time.helper";
-import {BaseUnsubscribeComponent} from "../../../../../core/base-components/base-unsubscribe.compoinent";
 import {BaseFilterComponent} from "../../../../../core/base-components/base-filter.component";
 import {LocalizationService} from "../../../../../core/services/localization.service";
 import {FormControl} from "@angular/forms";
@@ -116,11 +100,21 @@ export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredL
         );
     }
 
-    private _dragIndex: number = -1;
-    private _dropIndex: number = -1;
+    private _dragId: string | undefined;
+    private _dropId: string | undefined;
+    private _isBalanceDragged: boolean | undefined;
 
-    onDragStart(event: DragEvent, index: number) {
-        this._dragIndex = index;
+    get isDropForBalance(): boolean {
+        return this._isBalanceDragged !== undefined && !this._isBalanceDragged;
+    }
+
+    get isDropForExpense(): boolean {
+        return this._isBalanceDragged !== undefined && this._isBalanceDragged;
+    }
+
+    onDragStart(event: DragEvent, dragId: string, isBalanceDragged: boolean) {
+        this._dragId = dragId;
+        this._isBalanceDragged = isBalanceDragged;
         event.dataTransfer?.setData('text/plain', (event.target as HTMLElement).id);
     }
 
@@ -128,21 +122,24 @@ export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredL
         event.preventDefault();
     }
 
-    onDrop(event: DragEvent, index: number) {
+    onDrop(event: DragEvent, dropId: string) {
         event.preventDefault();
-        this._dropIndex = index;
+        this._dropId = dropId;
         this._triggerActionOnDrop();
     }
 
     private _triggerActionOnDrop() {
+        const balanceIndex = this.userProject?.balances.findIndex(b => b.id === (this._isBalanceDragged ? this._dragId : this._dropId))
+        const expenseIndex = this.filteredResult?.entities.findIndex(e => e.id === (this._isBalanceDragged ? this._dropId : this._dragId))
         this.commonDialogService.showCreateOrUpdateExpenseByFavoriteDialog(() => {
                 this.favoritesChanged.emit();
                 this.getFilteredItems();
-                this._dragIndex = -1;
-                this._dropIndex = -1;
+                this._dragId = undefined;
+                this._dropId = undefined;
+                this._isBalanceDragged = undefined;
             }, () => {},
-            this.userProject?.balances[this._dragIndex],
-            this.filteredResult?.entities[this._dropIndex],
+            balanceIndex !== -1 ? this.userProject?.balances[balanceIndex!] : undefined,
+            expenseIndex !== -1 ? this.filteredResult?.entities[expenseIndex!] : undefined,
             this.userProject);
     }
 }

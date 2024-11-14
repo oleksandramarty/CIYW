@@ -52,3 +52,41 @@ tr {
   height: 4rem;
   line-height: 4rem;
 }
+
+.table-cell-dots {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 12rem;
+  height: 1.5rem;
+  white-space: nowrap;
+}
+
+@media print {
+  body * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  .page-content-wrapper {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    padding: 0 !important;
+    box-shadow: unset !important;
+  }
+
+  .section-header {
+    border-radius: 0 !important;
+  }
+
+  .print-content {
+    -webkit-print-color-adjust: exact;
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 100002;
+  }
+}

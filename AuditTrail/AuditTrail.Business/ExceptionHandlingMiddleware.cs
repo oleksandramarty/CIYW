@@ -77,6 +77,14 @@ public class ExceptionHandlingMiddleware
             {
                 messageSb.AppendLine(ex.InnerException.Message);
             }
+            if (ex.StackTrace != null)
+            {
+                messageSb.AppendLine(ex.StackTrace);
+            }
+            if (ex.InnerException != null && ex.InnerException.StackTrace != null)
+            {
+                messageSb.AppendLine(ex.InnerException.StackTrace);
+            }
             
             await this.CreateAuditTrailAsync(context, ExceptionEnum.Exception, messageSb.ToString());
             await HandleExceptionAsync(context, ex, HttpStatusCode.InternalServerError);

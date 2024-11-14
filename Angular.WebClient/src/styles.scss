@@ -55,7 +55,7 @@ body {
     font-size: #{$font-size}rem;
   }
 }
-@for $i from 0 through 10 {
+@for $i from 0 through 50 {
   @for $j from 0 through 9 {
     $value: $i + $j * 0.1;
     .ml-#{$i}-#{$j}rem {
@@ -257,6 +257,7 @@ mat-grid-tile {
     margin-bottom: 1rem;
   }
 }
+
 .amount {
   color: #4caf50;
   &.negative {
@@ -328,6 +329,10 @@ mat-grid-tile {
 .color-white {
   color: #ffffff;
 }
-.word-break-all {
-  word-break: break-all;
+.word-break {
+    word-break: break-word;
+
+  &-all {
+    word-break: break-all;
+  }
 }

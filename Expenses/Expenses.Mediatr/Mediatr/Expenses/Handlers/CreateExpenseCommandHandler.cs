@@ -54,7 +54,7 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
-
+    
         ExpenseEntity toAdd = this.mapper.Map<ExpenseEntity>(command);
         await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
         return;

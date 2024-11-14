@@ -119,7 +119,7 @@ export class CreateUpdateExpenseDialogComponent extends BaseUnsubscribeComponent
 
     public createExpenseForm(): void {
         this.expenseFormGroup = this.fb.group({
-            title: [this.expense?.title, [Validators.required, Validators.maxLength(100)]],
+            title: [this.expense?.title ?? this.favoriteExpense?.title, [Validators.required, Validators.maxLength(100)]],
             description: [this.expense?.description, Validators.maxLength(300)],
             amount: [this.expense?.amount, [Validators.required, Validators.min(0)]],
             date: [this.expense?.date ?? new Date(), Validators.required],

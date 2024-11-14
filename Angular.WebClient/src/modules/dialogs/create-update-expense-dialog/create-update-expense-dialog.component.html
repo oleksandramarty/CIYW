@@ -8,7 +8,7 @@
     </div>
     <div class="balance-expense-hint">
         <span [translation]="'BALANCE.BALANCE_AFTER_TRANSACTION'"></span> -
-        <span class="amount" [ngClass]="{'negative': predictedBalance < 0}">
+        <span [ngClass]="{'error': predictedBalance < 0, 'sucess': predictedBalance >= 0}">
             <strong>
                 {{predictedBalance | currency: 'USD': 'symbol-narrow': '1.2-2'}}
             </strong>

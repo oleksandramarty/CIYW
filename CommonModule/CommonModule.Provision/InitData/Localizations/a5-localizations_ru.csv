@@ -303,3 +303,4 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-500000000304;ru;INPUT.TO_MANY_ITEMS.START_TYPING;Start typing to filter items;Начните вводить, чтобы отфильтровать элементы;
 550e8400-e29b-41d4-a716-500000000305;ru;TOTAL_ITEMS;Total items;Общее количество элементов;
 550e8400-e29b-41d4-a716-500000000306;ru;ADMIN.MENU.USERS;Users;Пользователи;
+550e8400-e29b-41d4-a716-500000000307;ru;COMMON.PRINT;Print;Печать;

@@ -1,7 +1,7 @@
 <section *ngIf="!!userProject" class="user-project-section">
 
     <div class="section-header">
-        <h1 class="user-project-title">{{ userProject.title }}</h1>
+        <h1 class="user-project-title">{{ userProject.title | translation }}</h1>
     </div>
 
     <app-common-top-menu type="menuUserProject"

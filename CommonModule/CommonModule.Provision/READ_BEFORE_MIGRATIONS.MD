@@ -93,7 +93,7 @@ like 1 new record will be 550e8400-e29b-41d4-a716-100000000287
 
 also keep in mind that:
 for en we use GUID pattern 550e8400-e29b-41d4-a716-100000000286
-for fr - 550e8400-e29b-41d4-a716-200000000287
+for es - 550e8400-e29b-41d4-a716-200000000287
 etc
 for each new locale we use different digit
 

@@ -24,8 +24,10 @@ public class MappingExpensesProfile : Profile
         this.CreateMap<CreateUserBalanceCommand, BalanceEntity>();
         this.CreateMap<UpdateUserBalanceCommand, BalanceEntity>();
 
-        this.CreateMap<CreateExpenseCommand, ExpenseEntity>();
-        this.CreateMap<UpdateExpenseCommand, ExpenseEntity>();
+        this.CreateMap<CreateExpenseCommand, ExpenseEntity>()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.ToUniversalTime()));
+        this.CreateMap<UpdateExpenseCommand, ExpenseEntity>()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.ToUniversalTime()));
         this.CreateMap<CreatePlannedExpenseCommand, PlannedExpenseEntity>()
             .ForMember(dest => dest.NextDate, opt => opt.MapFrom(src => src.StartDate.GetNextDate(src.FrequencyId)));
         this.CreateMap<UpdatePlannedExpenseCommand, PlannedExpenseEntity>()

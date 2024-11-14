@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {ApolloQueryResult} from "@apollo/client";
+import {ApolloQueryResult, WatchQueryFetchPolicy} from "@apollo/client";
 import {GraphQlService} from "../graph-ql.service";
 import {
     CREATE_EXPENSE, CREATE_FAVORITE_EXPENSE, CREATE_PLANNED_EXPENSE, CREATE_USER_BALANCE,
@@ -375,7 +375,7 @@ export class GraphQlExpensesService {
             }).valueChanges as Observable<ApolloQueryResult<{ expenses_get_user_project_by_id: UserProjectResponse }>>;
     }
 
-    public getFilteredUserProjects(): Observable<ApolloQueryResult<{
+    public getFilteredUserProjects(fetchPolicy: WatchQueryFetchPolicy | undefined): Observable<ApolloQueryResult<{
         expenses_get_filtered_user_projects: FilteredListResponseOfUserProjectResponse
     }>> {
         return this.apolloClient
@@ -388,13 +388,13 @@ export class GraphQlExpensesService {
                     column: ColumnEnum.CreatedAt.toString(),
                     direction: OrderDirectionEnum.Desc.toString()
                 },
-                fetchPolicy: 'cache-first',
+                fetchPolicy,
             }).valueChanges as Observable<ApolloQueryResult<{
             expenses_get_filtered_user_projects: FilteredListResponseOfUserProjectResponse
         }>>;
     }
 
-    public getFilteredUserAllowedProjects(): Observable<ApolloQueryResult<{
+    public getFilteredUserAllowedProjects(fetchPolicy: WatchQueryFetchPolicy | undefined): Observable<ApolloQueryResult<{
         expenses_get_filtered_user_allowed_projects: FilteredListResponseOfUserAllowedProjectResponse
     }>> {
         return this.apolloClient
@@ -407,7 +407,7 @@ export class GraphQlExpensesService {
                     column: ColumnEnum.CreatedAt.toString(),
                     direction: OrderDirectionEnum.Desc.toString()
                 },
-                fetchPolicy: 'network-only',
+                fetchPolicy,
             }).valueChanges as Observable<ApolloQueryResult<{
             expenses_get_filtered_user_allowed_projects: FilteredListResponseOfUserAllowedProjectResponse
         }>>;

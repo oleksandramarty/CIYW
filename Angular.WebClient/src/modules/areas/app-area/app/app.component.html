@@ -1,6 +1,6 @@
 <app-night-sky></app-night-sky>
 <app-header></app-header>
-<section class="page-content-wrapper" [ngClass]="{'auth-section': !(isAuthorized$ | async)}">
+<section class="print-content page-content-wrapper" [ngClass]="{'auth-section': !(isAuthorized$ | async)}">
     <router-outlet></router-outlet>
 </section>
 <app-footer></app-footer>

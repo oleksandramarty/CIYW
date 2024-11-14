@@ -303,3 +303,4 @@ id;locale;key;valueEn;value;isPublic;
 550e8400-e29b-41d4-a716-400000000304;ua;INPUT.TO_MANY_ITEMS.START_TYPING;Start typing to filter items;Почніть вводити, щоб відфільтрувати елементи;
 550e8400-e29b-41d4-a716-400000000305;ua;TOTAL_ITEMS;Total items;Загальна кількість елементів;
 550e8400-e29b-41d4-a716-400000000306;ua;ADMIN.MENU.USERS;Users;Користувачі;
+550e8400-e29b-41d4-a716-400000000307;ua;COMMON.PRINT;Print;Друкувати;

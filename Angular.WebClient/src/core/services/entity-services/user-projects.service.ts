@@ -17,6 +17,7 @@ import {
     FilteredListResponseOfUserAllowedProjectResponse,
     FilteredListResponseOfUserProjectResponse, UserAllowedProjectResponse, UserProjectResponse
 } from "../../api-models/common.models";
+import {WatchQueryFetchPolicy} from "@apollo/client";
 
 @Injectable({
     providedIn: "root"
@@ -52,7 +53,7 @@ export class UserProjectsService {
                         this._userProjects = expensesState.userProjects;
                         this._userAllowedProjects = expensesState.userAllowedProjects;
                     } else {
-                        this.getUserProjects(ngUnsubscribe);
+                        this.getUserProjects(ngUnsubscribe, 'cache-first');
                     }
                 }),
                 handleApiError(this.snackBar)
@@ -71,7 +72,7 @@ export class UserProjectsService {
                 takeUntil(ngUnsubscribe),
                 tap((result) => {
                     if (!!result) {
-                        this.getUserProjects(ngUnsubscribe);
+                        this.getUserProjects(ngUnsubscribe, 'network-only');
                     }
                 })
             )
@@ -86,16 +87,16 @@ export class UserProjectsService {
         this.router.navigate(['/projects', id]);
     }
 
-    private getUserProjects(ngUnsubscribe: Subject<void>): void {
+    private getUserProjects(ngUnsubscribe: Subject<void>, fetchPolicy: WatchQueryFetchPolicy | undefined): void {
         this.loaderService.isBusy = true;
-        this.graphQlExpensesService.getFilteredUserProjects()
+        this.graphQlExpensesService.getFilteredUserProjects(fetchPolicy)
             .pipe(
                 takeUntil(ngUnsubscribe),
                 switchMap((result) => {
                     const userProjects = result?.data?.expenses_get_filtered_user_projects as FilteredListResponseOfUserProjectResponse;
                     this._userProjects = userProjects;
                     this.store.dispatch(expenses_setUserProjects({ userProjects }));
-                    return this.graphQlExpensesService.getFilteredUserAllowedProjects();
+                    return this.graphQlExpensesService.getFilteredUserAllowedProjects(fetchPolicy);
                 }),
                 tap((result) => {
                     const userAllowedProjects = result?.data?.expenses_get_filtered_user_allowed_projects as FilteredListResponseOfUserAllowedProjectResponse;

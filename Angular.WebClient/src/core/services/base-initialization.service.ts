@@ -4,7 +4,7 @@ import {LocalizationService} from "./localization.service";
 import {SiteSettingsService} from "./site-settings.service";
 import {DictionaryService} from "./dictionary.service";
 import {AuthService} from "./auth.service";
-import {take, tap} from "rxjs";
+import {filter, take, tap} from "rxjs";
 import {handleApiError} from "../helpers/rxjs.helper";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
 import {SiteSettingsResponse} from "../api-models/common.models";
@@ -35,11 +35,12 @@ export class BaseInitializationService {
     }
 
     private initializeCache(): void {
+        this.localizationService.initialize(true);
+        this.dictionaryService.initializePublic();
         this.authService.isAuthorized$
             ?.pipe(
+                filter(isAuthorized => isAuthorized !== undefined),
                 tap(isAuthorized => {
-                    this.localizationService.initialize(true);
-                    this.dictionaryService.initializePublic();
                     if (isAuthorized) {
                         this.dictionaryService.initializeNonPublic();
                         this.localizationService.initialize(false);
