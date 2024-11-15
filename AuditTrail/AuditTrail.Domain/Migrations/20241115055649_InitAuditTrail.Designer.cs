@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuditTrail.Domain.Migrations
 {
     [DbContext(typeof(AuditTrailDataContext))]
-    [Migration("20241114033706_InitAuditTrail")]
+    [Migration("20241115055649_InitAuditTrail")]
     partial class InitAuditTrail
     {
         /// <inheritdoc />

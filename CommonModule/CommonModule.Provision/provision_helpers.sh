@@ -32,3 +32,11 @@ getDbNameUser() {
 getDbNameAuditTrail() {
   echo "$auditTrail_db"
 }
+
+getDbNameAuditTrailTests() {
+  echo "$auditTrail_db_tests"
+}
+
+getDbNameTests() {
+  echo "$db_name_tests"
+}

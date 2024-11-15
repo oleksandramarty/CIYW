@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthGateway.Domain.Migrations
 {
     [DbContext(typeof(AuthGatewayDataContext))]
-    [Migration("20241114033654_InitUser")]
+    [Migration("20241115055640_InitUser")]
     partial class InitUser
     {
         /// <inheritdoc />
@@ -132,7 +132,7 @@ namespace AuthGateway.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("CountryId")
+                    b.Property<int?>("CountryId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -142,13 +142,13 @@ namespace AuthGateway.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("DefaultUserProjectCurrencyId")
+                    b.Property<int?>("DefaultUserProjectCurrencyId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("DefaultUserProjectId")
+                    b.Property<Guid?>("DefaultUserProjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TimeZone")
+                    b.Property<int?>("TimeZone")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")

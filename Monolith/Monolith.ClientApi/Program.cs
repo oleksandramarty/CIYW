@@ -29,101 +29,134 @@ using Localizations.Domain;
 using Localizations.Mediatr;
 using Monolith.GraphQL;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace Monolith;
 
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "DevelopmentMonolith")
+public class Program
 {
-    builder.Configuration.AddUserSecrets<Program>();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "DevelopmentMonolith")
+        {
+            builder.Configuration.AddUserSecrets<Program>();
+        }
+
+        builder.AddDatabaseContext<ExpensesDataContext>();
+        builder.AddDatabaseContext<LocalizationsDataContext>();
+        builder.AddDatabaseContext<DictionariesDataContext>();
+        builder.AddDatabaseContext<AuthGatewayDataContext>();
+        builder.AddDatabaseContext<AuditTrailDataContext>("Logs");
+        builder.AddDynamoDB();
+        builder.AddSwagger(true);
+        builder.AddCorsPolicy();
+        builder.Services.AddControllers();
+        builder.AddAuthorization();
+
+        builder.AddJwtAuthentication();
+        builder.AddDependencyInjection();
+
+        // Fluent validation starts
+        builder.Services.AddValidatorsFromAssemblyContaining<CreateFavoriteExpenseCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<UpdateFavoriteExpenseCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<UpdateExpenseCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<CreatePlannedExpenseCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<UpdatePlannedExpenseCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProjectCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserProjectCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<AuthSignUpCommandValidator>();
+        // Fluent validation ends
+
+        // GraphQL schema
+        builder.Services.AddSingleton<ISchema, MonolithGraphQLSchema>(services =>
+            new MonolithGraphQLSchema(new SelfActivatingServiceProvider(services)));
+        // GraphQL schema ends
+
+        builder.AddGraphQL();
+
+        // Custom DI
+        builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+        builder.Services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
+        // Custom DI ends
+
+        // AutoMapper
+        builder.Services.AddAutoMapper(config =>
+        {
+            config.AddProfile(new MappingExpensesProfile());
+            config.AddProfile(new MappingLocalizationsProfile());
+            config.AddProfile(new MappingDictionariesProfile());
+            config.AddProfile(new MappingAuthProfile());
+            config.AddProfile(new MappingAuditTrailProfile());
+        });
+        // AutoMapper ends
+
+        builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+        // MediatR modules
+        builder.Host.ConfigureContainer<ContainerBuilder>(opts =>
+        {
+            opts.RegisterModule(new MediatrExpensesModule());
+        });
+        builder.Host.ConfigureContainer<ContainerBuilder>(opts =>
+        {
+            opts.RegisterModule(new MediatorLocalizationsModule());
+        });
+        builder.Host.ConfigureContainer<ContainerBuilder>(opts =>
+        {
+            opts.RegisterModule(new MediatrDictionariesModule());
+        });
+        builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrAuthModule()); });
+        builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrCommonModule()); });
+        builder.Host.ConfigureContainer<ContainerBuilder>(opts =>
+        {
+            opts.RegisterModule(new MediatrAuditTrailModule());
+        });
+        // MediatR modules ends
+
+        // Strategies
+        builder.Services
+            .AddScoped<IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>,
+                GetFilteredResultOfExpenseStrategy>();
+        builder.Services
+            .AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse>,
+                GetFilteredResultOfPlannedExpenseStrategy>();
+        builder.Services
+            .AddScoped<IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse>,
+                GetFilteredResultOfFavoriteExpenseStrategy>();
+        builder.Services
+            .AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>,
+                GetFilteredResultOfUserProjectStrategy>();
+        builder.Services
+            .AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>,
+                GetFilteredResultOfUserAllowedProjectStrategy>();
+        builder.Services
+            .AddScoped<IGetFilteredResultStrategy<GetFilteredAuditTrailRequest, AuditTrailResponse>,
+                GetFilteredResultOfAuditTrailStrategy>();
+        // Strategies end
+
+        var app = builder.Build();
+
+        app.AddMiddlewares();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "DevelopmentMonolith")
+        {
+            app.UseSwaggerUI(builder);
+            app.UseGraphQLPlayground("/graphql/playground");
+        }
+
+        app.UseCors("AllowSpecificOrigins");
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseHttpsRedirection();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseTokenValidator();
+        app.MapControllers();
+        app.UseGraphQL();
+
+        app.Run();
+    }
 }
-
-builder.AddDatabaseContext<ExpensesDataContext>();
-builder.AddDatabaseContext<LocalizationsDataContext>();
-builder.AddDatabaseContext<DictionariesDataContext>();
-builder.AddDatabaseContext<AuthGatewayDataContext>();
-builder.AddDatabaseContext<AuditTrailDataContext>("Logs");
-builder.AddDynamoDB();
-builder.AddSwagger(true);
-builder.AddCorsPolicy();
-builder.Services.AddControllers();
-builder.AddAuthorization();
-
-builder.AddJwtAuthentication();
-builder.AddDependencyInjection();
-
-// Fluent validation starts
-builder.Services.AddValidatorsFromAssemblyContaining<CreateFavoriteExpenseCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UpdateFavoriteExpenseCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UpdateExpenseCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreatePlannedExpenseCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UpdatePlannedExpenseCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProjectCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserProjectCommandValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<AuthSignUpCommandValidator>();
-// Fluent validation ends
-
-// GraphQL schema
-builder.Services.AddSingleton<ISchema, MonolithGraphQLSchema>(services => new MonolithGraphQLSchema(new SelfActivatingServiceProvider(services)));
-// GraphQL schema ends
-
-builder.AddGraphQL();
-
-// Custom DI
-builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
-builder.Services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
-// Custom DI ends
-
-// AutoMapper
-builder.Services.AddAutoMapper(config => 
-{
-    config.AddProfile(new MappingExpensesProfile());
-    config.AddProfile(new MappingLocalizationsProfile());
-    config.AddProfile(new MappingDictionariesProfile());
-    config.AddProfile(new MappingAuthProfile());
-    config.AddProfile(new MappingAuditTrailProfile());
-});
-// AutoMapper ends
-
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
-// MediatR modules
-builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrExpensesModule()); });
-builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatorLocalizationsModule()); });
-builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrDictionariesModule()); });
-builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrAuthModule()); });
-builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrCommonModule()); });
-builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(new MediatrAuditTrailModule()); });
-// MediatR modules ends
-
-// Strategies
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>, GetFilteredResultOfExpenseStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse>, GetFilteredResultOfPlannedExpenseStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse>, GetFilteredResultOfFavoriteExpenseStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>, GetFilteredResultOfUserProjectStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>, GetFilteredResultOfUserAllowedProjectStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredAuditTrailRequest, AuditTrailResponse>, GetFilteredResultOfAuditTrailStrategy>();
-// Strategies end
-
-var app = builder.Build();
-
-app.AddMiddlewares();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "DevelopmentMonolith")
-{
-    app.UseSwaggerUI(builder);
-    app.UseGraphQLPlayground("/graphql/playground");
-}
-
-app.UseCors("AllowSpecificOrigins");
-app.UseStaticFiles();
-app.UseRouting();
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseTokenValidator();
-app.MapControllers();
-app.UseGraphQL();
-
-app.Run();

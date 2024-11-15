@@ -135,4 +135,12 @@ public static class StringExtension
 
         throw new InvalidOperationException($"Conversion to {typeof(TTarget).Name} failed.");
     }
+    
+    public static string GenerateRandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new Random();
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
 }

@@ -94,6 +94,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.GraphQL", "Audit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Mediatr", "AuditTrail\AuditTrail.Mediatr\AuditTrail.Mediatr.csproj", "{25548B80-289E-4E0F-84BA-D625EBF7F1A1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "A1-Tests", "A1-Tests", "{13074645-34EC-48DA-BE95-CE39131B7E5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIYW.IntegrationTests", "Tests\CIYW.IntegrationTests\CIYW.IntegrationTests.csproj", "{FD2F58A6-BCC9-4652-9118-09FC39B7A682}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -140,6 +144,7 @@ Global
 		{5B5ED4FF-6DA0-456C-98EE-516903353101} = {85C34A9F-C82A-4F34-964F-0759B616FDE8}
 		{B1808633-F3E9-480E-AB0E-E7E2AE59CC5F} = {85C34A9F-C82A-4F34-964F-0759B616FDE8}
 		{25548B80-289E-4E0F-84BA-D625EBF7F1A1} = {85C34A9F-C82A-4F34-964F-0759B616FDE8}
+		{FD2F58A6-BCC9-4652-9118-09FC39B7A682} = {13074645-34EC-48DA-BE95-CE39131B7E5F}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3CBEF98E-1366-4763-8AAB-955A2DA5E201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -278,5 +283,9 @@ Global
 		{25548B80-289E-4E0F-84BA-D625EBF7F1A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25548B80-289E-4E0F-84BA-D625EBF7F1A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25548B80-289E-4E0F-84BA-D625EBF7F1A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD2F58A6-BCC9-4652-9118-09FC39B7A682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2F58A6-BCC9-4652-9118-09FC39B7A682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2F58A6-BCC9-4652-9118-09FC39B7A682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2F58A6-BCC9-4652-9118-09FC39B7A682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
