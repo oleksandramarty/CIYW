@@ -7,5 +7,12 @@ namespace CIYW.IntegrationTests.Core;
 /// </summary>
 public class HttpContextAccessorForTesting : IHttpContextAccessor
 {
+    public HttpContextAccessorForTesting()
+    {
+        HttpContext = new DefaultHttpContext
+        {
+            User = null
+        };
+    }
     public HttpContext HttpContext { get; set; }
 }

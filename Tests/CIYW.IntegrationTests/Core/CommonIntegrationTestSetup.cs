@@ -1,3 +1,4 @@
+using CIYW.IntegrationTests.Shared;
 using CommonModule.Shared.Enums;
 using NUnit.Framework;
 
@@ -45,12 +46,23 @@ public class CommonIntegrationTestSetup: IDisposable
     /// Create factory and client
     /// </summary>
     [OneTimeSetUp]
-    public void OneTimeSetup()
+    public async Task OneTimeSetup()
     {
         this.testApplicationFactory = new IntegrationTestBase(this.options);
         this.Client = this.testApplicationFactory.CreateClient();
         
-        this.options.InitializeUser(this.testApplicationFactory).Wait();
+        await this.options.InitializeUser(this.testApplicationFactory);
+    }
+    
+    /// <summary>
+    /// Create test user
+    /// </summary>
+    /// <param name="role">User role</param>
+    /// <param name="withSignIn">Sign in user flag</param>
+    /// <returns></returns>
+    public async Task<IntegrationTestUserEntity> CreateTestUser(UserRoleEnum role, bool withSignIn = true)
+    {
+        return await this.options.CreateUser(this.testApplicationFactory, role, withSignIn);
     }
     
     /// <summary>
@@ -58,7 +70,6 @@ public class CommonIntegrationTestSetup: IDisposable
     /// </summary>
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
-    
     {
         await this.options.Dispose(this.testApplicationFactory);
         this.Dispose();

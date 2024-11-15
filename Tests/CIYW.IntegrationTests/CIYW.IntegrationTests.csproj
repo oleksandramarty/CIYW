@@ -55,4 +55,8 @@
       <ProjectReference Include="..\..\Monolith\Monolith.ClientApi\Monolith.ClientApi.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Mediatr\AuthGateway\" />
+    </ItemGroup>
+
 </Project>
