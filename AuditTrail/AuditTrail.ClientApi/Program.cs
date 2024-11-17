@@ -3,13 +3,14 @@ using AuditTrail.Domain;
 using AuditTrail.GraphQL;
 using AuditTrail.Mediatr;
 using AuditTrail.Mediatr.Mediatr.Requests;
+using AuditTrail.Mediatr.Strategies.FilteredResult;
 using AuthGateway.Mediatr;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using CommonModule.Core.Strategies.GetFilteredResult;
+using CommonModule.Core.Strategies.FilteredResult;
 using CommonModule.Facade;
 using CommonModule.Shared.Responses.AuditTrail;
-using Expenses.Mediatr.Strategies.GetFilteredResult;
+using Expenses.Mediatr.Strategies.FilteredResult;
 using GraphQL.MicrosoftDI;
 using GraphQL.Types;
 
@@ -21,7 +22,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.AddDatabaseContext<AuditTrailDataContext>("Logs");
-builder.AddDynamoDB();
+builder.AddDynamoDb();
 builder.AddSwagger();
 builder.AddCorsPolicy();
 builder.Services.AddControllers();
@@ -37,7 +38,7 @@ builder.AddDependencyInjection();
 builder.Services.AddSingleton<ISchema, AuditTrailGraphQLSchema>(services => new AuditTrailGraphQLSchema(new SelfActivatingServiceProvider(services)));
 // GraphQL schema ends
 
-builder.AddGraphQL();
+builder.AddGraphQl();
 
 // Custom DI
 builder.Services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
@@ -56,7 +57,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(
 // MediatR modules ends
 
 // Strategies
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredAuditTrailRequest, AuditTrailResponse>, GetFilteredResultOfAuditTrailStrategy>();
+builder.Services.AddScoped<IFilteredResultStrategy<FilteredAuditTrailRequest, AuditTrailResponse>, FilteredResultOfAuditTrailStrategy>();
 // Strategies end
 
 var app = builder.Build();
@@ -66,7 +67,7 @@ app.AddMiddlewares();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUI(builder);
+    app.UseSwaggerUi(builder);
     app.UseGraphQLPlayground("/graphql/playground");
 }
 

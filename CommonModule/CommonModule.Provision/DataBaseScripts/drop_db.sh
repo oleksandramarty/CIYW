@@ -25,7 +25,7 @@ if [ "$ASPNETCORE_ENVIRONMENT" = "Development" ]; then
     sql="DROP DATABASE IF EXISTS \"$db_name\";"
     
     # Execute the SQL command
-    psql -h $db_host -p $db_port -U $db_user -c "$sql"
+    psql -h $db_host -p $db_port -U $db_user -c "$sql" > /dev/null
   done
 else     
     # Array of database names
@@ -38,7 +38,7 @@ else
       sql="DROP DATABASE IF EXISTS \"$db_name\";"
           
       # Execute the SQL command
-      psql -h $db_host -p $db_port -U $db_user -c "$sql"
+      psql -h $db_host -p $db_port -U $db_user -c "$sql" > /dev/null
     done
 fi
 

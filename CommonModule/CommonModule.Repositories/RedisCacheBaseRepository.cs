@@ -1,18 +1,16 @@
-using System.Text.RegularExpressions;
-using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
-using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Common;
+using CommonModule.Shared.Core;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
 namespace CommonModule.Repositories;
 
-public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId> 
-    where TId : notnull
+public class RedisCacheBaseRepository<TEntity>: AuditableNonNullableKey, ICacheBaseRepository<TEntity> 
+    where TEntity : notnull
 {
     private readonly IConnectionMultiplexer connectionMultiplexer;
     private readonly IDatabase database;
-    private readonly string instanceName;
 
     public RedisCacheBaseRepository(
         IConnectionMultiplexer connectionMultiplexer,
@@ -21,12 +19,12 @@ public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId>
     {
         this.connectionMultiplexer = connectionMultiplexer;
         this.database = connectionMultiplexer.GetDatabase();
-        this.instanceName = configuration["Redis:InstanceNameDictionary"];
+        this.Key = configuration["Redis:InstanceNameDictionary"];
     }
 
-    public async Task<IEnumerable<string>> GetItemsFromCacheAsync(string dictionaryName)
+    public async Task<IEnumerable<string>> ItemsFromCacheAsync(string dictionaryName)
     {
-        var keys = await GetAllKeysAsync(dictionaryName);
+        var keys = AllKeys(dictionaryName);
         var tasks = keys.Select(key => database.StringGetAsync(key)).ToList();
         var results = await Task.WhenAll(tasks);
         
@@ -35,7 +33,7 @@ public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId>
             .Select(r => r.ToString());
     }
 
-    public async Task<IEnumerable<RedisKey>> GetAllKeysAsync(string dictionaryName)
+    public IEnumerable<RedisKey> AllKeys(string dictionaryName)
     {
         var endpoints = connectionMultiplexer.GetEndPoints();
         var keys = new List<RedisKey>();
@@ -43,26 +41,26 @@ public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId>
         foreach (var endpoint in endpoints)
         {
             var server = connectionMultiplexer.GetServer(endpoint);
-            keys.AddRange(server.Keys(database.Database, $"{instanceName}:{dictionaryName}:*"));
+            keys.AddRange(server.Keys(database.Database, $"{this.Key}:{dictionaryName}:*"));
         }
 
         return keys;
     }
 
-    public async Task ReinitializeDictionaryAsync(string dictionaryName, Dictionary<TId, string> dictionary)
+    public async Task ReinitializeDictionaryAsync(string dictionaryName, Dictionary<TEntity, string> dictionary)
     {
-        await database.KeyDeleteAsync($"{instanceName}:{dictionaryName}:*");
+        await database.KeyDeleteAsync($"{this.Key}:{dictionaryName}:*");
 
         var tasks = dictionary.Select(item =>
         {
-            var redisKey = $"{instanceName}:{dictionaryName}:{item.Key}";
+            var redisKey = $"{this.Key}:{dictionaryName}:{item.Key}";
             return database.StringSetAsync(redisKey, item.Value);
         });
 
         await Task.WhenAll(tasks);
     }
 
-    public async Task<string?> GetCacheVersionAsync(string dictionaryName)
+    public async Task<string?> CacheVersionAsync(string dictionaryName)
     {
         var redisKey = $"version:{dictionaryName.ToLower()}";
         string? version = await database.StringGetAsync(redisKey);
@@ -73,12 +71,12 @@ public class RedisCacheBaseRepository<TId>: ICacheBaseRepository<TId>
     public async Task SetCacheVersionAsync(string dictionaryName)
     {
         var redisKey = $"version:{dictionaryName.ToLower()}";
-        await database.StringSetAsync(redisKey, Guid.NewGuid().ToString("N").ToUpper());
+        await database.StringSetAsync(redisKey, VersionExtension.GenerateVersion());
     }
 
-    public async Task<string> GetItemFromCacheAsync(string dictionaryName, TId key)
+    public async Task<string?> ItemFromCacheAsync(string dictionaryName, TEntity key)
     {
-        var redisKey = $"{instanceName}:{dictionaryName}:{key}";
+        var redisKey = $"{this.Key}:{dictionaryName}:{key}";
         return await database.StringGetAsync(redisKey);
     }
 }

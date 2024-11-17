@@ -7,6 +7,6 @@ namespace CIYW.IntegrationTests.Shared;
 public class IntegrationTestUserEntity
 {
     public UserEntity? User { get; set; }
-    public List<UserProjectEntity> UserProjects { get; set; }
+    public List<UserProjectEntity>? UserProjects { get; set; }
     public UserRoleEnum? Role { get; set; }
 }

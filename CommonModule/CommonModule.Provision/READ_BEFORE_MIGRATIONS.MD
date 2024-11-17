@@ -108,9 +108,9 @@ translation is Menu
 Please use translation for all locales
 if you dont see translation after = create your own
 
-START from 288
+START from 312
 
-ERROR.FAVORITE_EXPENSE_LIMIT_REACHED = You have reached the limit of favorite expenses
+MENU.FAVORITES
 
 do all for en after all for es etc
 do without empty lines

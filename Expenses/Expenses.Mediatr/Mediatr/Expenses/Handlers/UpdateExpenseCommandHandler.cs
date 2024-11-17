@@ -1,4 +1,5 @@
 using AutoMapper;
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using Expenses.Business;
 using Expenses.Domain;
@@ -38,13 +39,16 @@ public class UpdateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<U
     {        
         this.entityValidator.ValidateVoidRequest<UpdateExpenseCommand>(command, () => new UpdateExpenseCommandValidator());
 
-        ExpenseEntity currentExpenseEntity = await this.expenseRepository.GetAsync(
+        ExpenseEntity? currentExpense = await this.expenseRepository.Async(
             e => e.Id == command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(currentExpenseEntity);
+        if (currentExpense == null)
+        {
+            throw new EntityNotFoundException();
+        }
         
-        await this.CheckUserProjectByIdAsync(currentExpenseEntity.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(currentExpense.UserProjectId, cancellationToken);
         
-        await this.balanceRepository.UpdateExpenseAsync(currentExpenseEntity,
+        await this.balanceRepository.UpdateExpenseAsync(currentExpense,
             this.mapper.Map<ExpenseEntity>(command), cancellationToken);
     }
 }

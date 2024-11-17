@@ -9,10 +9,7 @@ public class HttpContextAccessorForTesting : IHttpContextAccessor
 {
     public HttpContextAccessorForTesting()
     {
-        HttpContext = new DefaultHttpContext
-        {
-            User = null
-        };
+        HttpContext = new DefaultHttpContext();
     }
-    public HttpContext HttpContext { get; set; }
+    public HttpContext? HttpContext { get; set; }
 }

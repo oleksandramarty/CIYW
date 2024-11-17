@@ -17,28 +17,20 @@ public class CommonIntegrationTestSetup: IDisposable
     /// <summary>
     /// Test application factory
     /// </summary>
-    protected IntegrationTestBase testApplicationFactory;
-    
+    protected IntegrationTestBase TestApplicationFactory;
+
     /// <summary>
     /// Options for integration tests
     /// </summary>
-    protected IntegrationTestOptions options { get;}
-    
-    /// <summary>
-    /// Default start without user
-    /// </summary>
-    public CommonIntegrationTestSetup()
-    {
-        this.options = new IntegrationTestOptions();
-    }
+    protected IntegrationTestOptions Options { get; }
 
     /// <summary>
     /// Start with specific user or without user
     /// </summary>
     /// <param name="role">User role</param>
-    public CommonIntegrationTestSetup(UserRoleEnum role)
+    public CommonIntegrationTestSetup(UserRoleEnum? role)
     {
-        this.options = new IntegrationTestOptions(role);
+        Options = role.HasValue ? new IntegrationTestOptions(role.Value) : new IntegrationTestOptions();
     }
 
     /// <summary>
@@ -48,10 +40,10 @@ public class CommonIntegrationTestSetup: IDisposable
     [OneTimeSetUp]
     public async Task OneTimeSetup()
     {
-        this.testApplicationFactory = new IntegrationTestBase(this.options);
-        this.Client = this.testApplicationFactory.CreateClient();
+       TestApplicationFactory = new IntegrationTestBase(Options);
+        this.Client = TestApplicationFactory.CreateClient();
         
-        await this.options.InitializeUser(this.testApplicationFactory);
+        await Options.InitializeUser(TestApplicationFactory);
     }
     
     /// <summary>
@@ -62,7 +54,7 @@ public class CommonIntegrationTestSetup: IDisposable
     /// <returns></returns>
     public async Task<IntegrationTestUserEntity> CreateTestUser(UserRoleEnum role, bool withSignIn = true)
     {
-        return await this.options.CreateUser(this.testApplicationFactory, role, withSignIn);
+        return await Options.CreateUser(TestApplicationFactory, role, withSignIn);
     }
     
     /// <summary>
@@ -71,7 +63,7 @@ public class CommonIntegrationTestSetup: IDisposable
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        await this.options.Dispose(this.testApplicationFactory);
+        await Options.Dispose(TestApplicationFactory);
         this.Dispose();
         
     }

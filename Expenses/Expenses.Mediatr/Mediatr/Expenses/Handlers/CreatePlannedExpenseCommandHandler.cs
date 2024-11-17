@@ -38,7 +38,7 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
         
-        if (await this.plannedExpenseRepository.GetQueryable(fe => fe.UserProjectId == command.UserProjectId)
+        if (await this.plannedExpenseRepository.Queryable(fe => fe.UserProjectId == command.UserProjectId)
                 .CountAsync(cancellationToken) >= 10)
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);

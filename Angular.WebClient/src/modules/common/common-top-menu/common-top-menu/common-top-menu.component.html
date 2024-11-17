@@ -10,8 +10,9 @@
         <button class="w-100"
                 mat-button
                 [color]="activeTab === menuItem.index ? 'primary' : 'secondary'"
-                [translation]="menuItem.title"
-                (click)="tabChanged(menuItem.index)"></button>
+                (click)="tabChanged(menuItem.index)">
+            {{ menuItem.title | translation}}
+        </button>
     </div>
 
     <div class="mobile-tab-item">

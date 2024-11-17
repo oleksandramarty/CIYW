@@ -6,12 +6,12 @@ namespace CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 
 public class CategoryResponse : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, ITreeChildrenEntity<CategoryResponse>, IActivatableEntity
 {
-    public string Title { get; set; }
+    public string? Title { get; set; }
     public int IconId { get; set; }
-    public string Color { get; set; }
+    public string? Color { get; set; }
     public bool IsActive { get; set; }
     public bool IsPositive { get; set; }
     public int? ParentId { get; set; }
 
-    public ICollection<CategoryResponse> Children { get; set; } = new List<CategoryResponse>();
+    public ICollection<CategoryResponse> Children { get; set; }
 }

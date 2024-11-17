@@ -1,6 +1,6 @@
 <section *ngIf="currentUser">
     <div class="section-header">
-        <h1>{{ 'USER.MENU.SETTINGS' | translation }}</h1>
+        <app-common-favorite title="USER.MENU.SETTINGS" [favorite]="false"></app-common-favorite>
     </div>
     <mat-divider></mat-divider>
 

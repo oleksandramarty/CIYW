@@ -54,7 +54,7 @@ export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredL
                     if (result && result.categoryIds) {
                         this.filterFormGroup.get('categoryIds')?.setValue(result.categoryIds);
                     } else {
-                        this.getFilteredItems();
+                        this.filteredItems();
                     }
                 }),
                 handleApiError(this.snackBar)
@@ -82,7 +82,7 @@ export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredL
 
     public openFavoriteExpenseDialog(favoriteExpense: FavoriteExpenseResponse | undefined): void {
         this.commonDialogService.showCreateOrUpdateFavoriteExpenseDialog(() => {
-            this.getFilteredItems();
+            this.filteredItems();
         }, () => {}, favoriteExpense, this.userProject);
     }
 
@@ -94,9 +94,9 @@ export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredL
         ];
     }
 
-    protected getFilteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfFavoriteExpenseResponse> {
-        return this.graphQlExpensesService.getFilteredFavoriteExpenses(...filterRequest).pipe(
-            map(result => result.data.expenses_get_filtered_favorite_expenses!)
+    protected filteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfFavoriteExpenseResponse> {
+        return this.graphQlExpensesService.filteredFavoriteExpenses(...filterRequest).pipe(
+            map(result => result.data.expenses_filtered_favorite_expenses!)
         );
     }
 
@@ -133,7 +133,7 @@ export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredL
         const expenseIndex = this.filteredResult?.entities.findIndex(e => e.id === (this._isBalanceDragged ? this._dropId : this._dragId))
         this.commonDialogService.showCreateOrUpdateExpenseByFavoriteDialog(() => {
                 this.favoritesChanged.emit();
-                this.getFilteredItems();
+                this.filteredItems();
                 this._dragId = undefined;
                 this._dropId = undefined;
                 this._isBalanceDragged = undefined;

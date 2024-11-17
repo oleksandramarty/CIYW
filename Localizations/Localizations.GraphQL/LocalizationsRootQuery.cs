@@ -2,7 +2,7 @@ using CommonModule.GraphQL.QueryResolver;
 
 namespace Localizations.GraphQL;
 
-public class LocalizationsRootQuery : GraphQLQueryHelper
+public class LocalizationsRootQuery : GraphQlQueryHelper
 {
     public LocalizationsRootQuery()
     {

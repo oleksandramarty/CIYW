@@ -5,22 +5,20 @@ namespace CommonModule.Core.Exceptions.Errors;
 
 public class ErrorMessageModel
 {
-    public ErrorMessageModel() { }
-
     public ErrorMessageModel(string message, int statuscode)
     {
         Message = message;
         StatusCode = statuscode;
     }
 
-    public ErrorMessageModel(string message, int statuscode, IReadOnlyCollection<InvalidFieldInfoModel> invalidFields)
+    public ErrorMessageModel(string message, int statuscode, IReadOnlyCollection<InvalidFieldInfoModel>? invalidFields)
     {
         Message = message;
         StatusCode = statuscode;
         InvalidFields = invalidFields;
     }
 
-    public IReadOnlyCollection<InvalidFieldInfoModel> InvalidFields { get; set; }
+    public IReadOnlyCollection<InvalidFieldInfoModel>? InvalidFields { get; set; }
     public string Message { get; set; }
     public int StatusCode { get; set; }
 

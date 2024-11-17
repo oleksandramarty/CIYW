@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
 import {catchError, forkJoin, of, take, tap} from "rxjs";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { handleApiError } from "../helpers/rxjs.helper";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {handleApiError} from "../helpers/rxjs.helper";
 import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionary.model";
 import {LocalStorageService} from "./local-storage.service";
 import {SiteSettingsService} from "./site-settings.service";
@@ -206,8 +206,7 @@ export class DictionaryService {
     }
 
     get currentLocale(): LocaleResponse | undefined {
-        return this?.dictionaries?.locales?.items?.
-        find(locale => locale.isoCode === this.siteSettingsService?.siteSettings?.locale);
+        return this?.dictionaries?.locales?.items?.find(locale => locale.isoCode === this.siteSettingsService?.siteSettings?.locale);
     }
 
     get balanceTypesMap(): DictionaryMap<number, BalanceTypeResponse> | undefined {
@@ -251,14 +250,14 @@ export class DictionaryService {
             this.loaderService.isBusy = true;
             forkJoin({
                 result_locales: !this.siteSettingsService.version ||
-                    this.siteSettingsService.version.country !== this.dictionaries?.countries?.version ?
-                    this.graphQlLocalizationsService.getDictionaryLocales(
-                    this.dictionaries?.locales?.version).pipe(take(1)) : of(undefined),
+                this.siteSettingsService.version.country !== this.dictionaries?.countries?.version ?
+                    this.graphQlLocalizationsService.dictionaryLocales(
+                        this.dictionaries?.locales?.version).pipe(take(1)) : of(undefined),
             }).pipe(
-                tap(({ result_locales }) => {
+                tap(({result_locales}) => {
                     if (this._dictionaries) {
                         if (!!result_locales) {
-                            const locales = result_locales?.data?.localizations_get_locales_dictionary as VersionedListResponseOfLocaleResponse;
+                            const locales = result_locales?.data?.localizations_locales_dictionary as VersionedListResponseOfLocaleResponse;
                             this._dictionaries.locales = locales;
                             this.localesMap = locales;
                         }
@@ -285,7 +284,7 @@ export class DictionaryService {
             this.siteSettingsService.version.iconCategory !== this.dictionaries?.iconCategories?.version
         ) {
             this.loaderService.isBusy = true;
-            this.graphQlDictionariesService.getNonPublicDictionaries(
+            this.graphQlDictionariesService.nonPublicDictionaries(
                 this.dictionaries?.iconCategories?.version,
                 this.dictionaries?.categories?.version,
                 this.dictionaries?.balanceTypes?.version,
@@ -295,41 +294,41 @@ export class DictionaryService {
             )
                 .pipe(
                     take(1),
-                    tap(({ data }) => {
+                    tap(({data}) => {
                         if (this._dictionaries) {
-                            if (!!data.dictionaries_get_icon_categories_dictionary) {
-                                const iconCategoriesDictionary = data!.dictionaries_get_icon_categories_dictionary as VersionedListResponseOfIconCategoryResponse;
+                            if (!!data.dictionaries_icon_categories_dictionary) {
+                                const iconCategoriesDictionary = data!.dictionaries_icon_categories_dictionary as VersionedListResponseOfIconCategoryResponse;
                                 this._dictionaries.iconCategories = iconCategoriesDictionary;
                                 this.iconCategoryMap = iconCategoriesDictionary;
                                 this.iconMap = iconCategoriesDictionary;
                             }
 
-                            if (!!data.dictionaries_get_categories_dictionary) {
-                                const categoriesDictionary = data!.dictionaries_get_categories_dictionary as VersionedListResponseOfCategoryResponse;
+                            if (!!data.dictionaries_categories_dictionary) {
+                                const categoriesDictionary = data!.dictionaries_categories_dictionary as VersionedListResponseOfCategoryResponse;
                                 this._dictionaries.categories = categoriesDictionary;
                                 this.categoriesMap = categoriesDictionary;
                             }
 
-                            if (!!data.dictionaries_get_balance_types_dictionary) {
-                                const balanceTypesDictionary = data!.dictionaries_get_balance_types_dictionary as VersionedListResponseOfBalanceTypeResponse;
+                            if (!!data.dictionaries_balance_types_dictionary) {
+                                const balanceTypesDictionary = data!.dictionaries_balance_types_dictionary as VersionedListResponseOfBalanceTypeResponse;
                                 this._dictionaries.balanceTypes = balanceTypesDictionary;
                                 this.balanceTypesMap = balanceTypesDictionary;
                             }
 
-                            if (!!data.dictionaries_get_frequencies_dictionary) {
-                                const frequenciesDictionary = data!.dictionaries_get_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
+                            if (!!data.dictionaries_frequencies_dictionary) {
+                                const frequenciesDictionary = data!.dictionaries_frequencies_dictionary as VersionedListResponseOfFrequencyResponse;
                                 this._dictionaries.frequencies = frequenciesDictionary;
                                 this.frequenciesMap = frequenciesDictionary;
                             }
 
-                            if (!!data.dictionaries_get_currencies_dictionary) {
-                                const currenciesDictionary = data!.dictionaries_get_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
+                            if (!!data.dictionaries_currencies_dictionary) {
+                                const currenciesDictionary = data!.dictionaries_currencies_dictionary as VersionedListResponseOfCurrencyResponse;
                                 this._dictionaries.currencies = currenciesDictionary;
                                 this.currenciesMap = currenciesDictionary;
                             }
 
-                            if (!!data.dictionaries_get_countries_dictionary) {
-                                const countriesDictionary = data!.dictionaries_get_countries_dictionary as VersionedListResponseOfCountryResponse;
+                            if (!!data.dictionaries_countries_dictionary) {
+                                const countriesDictionary = data!.dictionaries_countries_dictionary as VersionedListResponseOfCountryResponse;
                                 this._dictionaries.countries = countriesDictionary;
                                 this.countriesMap = countriesDictionary;
                             }
@@ -369,15 +368,15 @@ export class DictionaryService {
                         `${currency.code} - ${currency.title}`,
                         undefined,
                         undefined,
-                        [currency.titleEn, currency.code, currency.title],
+                        [currency.titleEn ?? '', currency.code ?? '', currency.title ?? ''],
                         true,
-                        this._importantCurrencies.includes(currency.code)
+                        currency.code ? this._importantCurrencies.includes(currency.code) : false
                     )
                 );
             this._dataItems.currencies = tempCurrencies?.sort((a, b) => {
                 const importantCurrencies = this._importantCurrencies;
-                const aIsImportant = importantCurrencies.includes((a.originalValue as CurrencyResponse).code);
-                const bIsImportant = importantCurrencies.includes((b.originalValue as CurrencyResponse).code);
+                const aIsImportant = importantCurrencies.includes((a.originalValue as CurrencyResponse).code ?? '');
+                const bIsImportant = importantCurrencies.includes((b.originalValue as CurrencyResponse).code ?? '');
 
                 if (aIsImportant && !bIsImportant) return -1;
                 if (!aIsImportant && bIsImportant) return 1;

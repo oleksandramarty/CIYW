@@ -17,7 +17,7 @@ export const AUTH_GATEWAY_SIGN_OUT = gql`
 `;
 
 export const AUTH_GATEWAY_CURRENT_USER = gql`
-    query GetUserDetails {
+    query UserDetails {
         auth_gateway_current_user {
             id
             login

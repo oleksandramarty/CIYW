@@ -35,12 +35,15 @@ public class RemoveExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<R
     
     public async Task<BaseBoolResponse> Handle(RemoveExpenseCommand command, CancellationToken cancellationToken)
     {
-        ExpenseEntity expenseEntity = await this.expenseRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(expenseEntity);
+        ExpenseEntity? expense = await this.expenseRepository.ByIdAsync(command.Id, cancellationToken);
+        if (expense == null)
+        {
+            throw new EntityNotFoundException();
+        }
 
-        await this.CheckUserProjectByIdAsync(expenseEntity.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(expense.UserProjectId, cancellationToken);
 
-        await this.balanceRepository.RemoveExpenseAsync(expenseEntity, cancellationToken);
+        await this.balanceRepository.RemoveExpenseAsync(expense, cancellationToken);
 
         return new BaseBoolResponse();
     }

@@ -35,6 +35,9 @@ public class DictionariesDataContext : DbSaveChangeContext
             entity.HasMany(c => c.Currencies)
                 .WithOne(cc => cc.Country)
                 .HasForeignKey(cc => cc.CountryId);
+            entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
+            entity.Property(c => c.Code).IsRequired().HasMaxLength(2).IsFixedLength();
+            entity.Property(c => c.TitleEn).IsRequired().HasMaxLength(50);
         });
 
         modelBuilder.Entity<Models.Currencies.CurrencyEntity>(entity =>
@@ -43,6 +46,11 @@ public class DictionariesDataContext : DbSaveChangeContext
             entity.HasMany(c => c.Countries)
                 .WithOne(cc => cc.Currency)
                 .HasForeignKey(cc => cc.CurrencyId);
+            entity.Property(c => c.Title).IsRequired().HasMaxLength(50);
+            entity.Property(c => c.Code).IsRequired().HasMaxLength(3);
+            entity.Property(c => c.Symbol).IsRequired().HasMaxLength(5);
+            entity.Property(c => c.TitleEn).IsRequired().HasMaxLength(50);
+            entity.Property(c => c.IsActive).IsRequired();
         });
 
         modelBuilder.Entity<CountryCurrencyEntity>()
@@ -55,16 +63,31 @@ public class DictionariesDataContext : DbSaveChangeContext
             entity.HasKey(cc => new { cc.CountryId, cc.CurrencyId });
         });
 
-        modelBuilder.Entity<FrequencyEntity>(entity => { entity.ToTable("Frequencies", "Dictionaries"); });
+        modelBuilder.Entity<FrequencyEntity>(entity =>
+        {
+            entity.ToTable("Frequencies", "Dictionaries");
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(20);
+            entity.Property(e => e.Description)
+                .IsRequired()
+                .HasMaxLength(40);
+        });
 
-        modelBuilder.Entity<BalanceTypeEntity>(entity => { entity.ToTable("BalanceTypes", "Dictionaries"); });
+        modelBuilder.Entity<BalanceTypeEntity>(entity =>
+        {
+            entity.ToTable("BalanceTypes", "Dictionaries");
+            entity.Property(e => e.Title).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.IsActive).IsRequired();
+            entity.Property(e => e.Type).IsRequired();
+        });
 
         modelBuilder.Entity<CategoryEntity>(entity =>
         {
             entity.ToTable("Categories", "Dictionaries");
             entity.HasKey(c => c.Id);
-            entity.Property(c => c.Title).IsRequired().HasMaxLength(255);
-            entity.Property(c => c.Color).HasMaxLength(50);
+            entity.Property(c => c.Title).IsRequired().HasMaxLength(70);
+            entity.Property(c => c.Color).HasMaxLength(7).IsFixedLength().IsRequired(false);
             entity.Property(c => c.IsActive).IsRequired();
             entity.Property(c => c.IsPositive).IsRequired();
             entity.HasMany(c => c.Children)
@@ -78,14 +101,19 @@ public class DictionariesDataContext : DbSaveChangeContext
             entity.HasMany(c => c.Categories)
                 .WithOne(cc => cc.Icon)
                 .HasForeignKey(cc => cc.IconId);
+            entity.Property(c => c.Title)
+                .IsRequired()
+                .HasMaxLength(50);
         });
-
         modelBuilder.Entity<IconCategoryEntity>(entity =>
         {
             entity.ToTable("IconCategories", "Dictionaries");
             entity.HasMany(c => c.Icons)
                 .WithOne(cc => cc.IconCategory)
                 .HasForeignKey(cc => cc.IconCategoryId);
+            entity.Property(c => c.Title)
+                .IsRequired()
+                .HasMaxLength(100);
         });
 
         var cascadeFKs = modelBuilder.Model.GetEntityTypes()

@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
 
-export const GET_SITE_SETTINGS = gql`
-    query GetSiteSettings {
+export const SITE_SETTINGS = gql`
+    query SiteSettings {
         dictionaries_site_settings {
             locale
             version {
@@ -19,9 +19,9 @@ export const GET_SITE_SETTINGS = gql`
     }
 `;
 
-export const GET_COUNTRIES_DICTIONARY = gql`
-    query GetCountries($version: String) {
-        dictionaries_get_countries_dictionary(version: $version) {
+export const COUNTRIES_DICTIONARY = gql`
+    query Countries($version: String) {
+        dictionaries_countries_dictionary(version: $version) {
             items {
                 id
                 title
@@ -34,9 +34,9 @@ export const GET_COUNTRIES_DICTIONARY = gql`
     }
 `;
 
-export const GET_CURRENCIES_DICTIONARY = gql`
-    query GetCurrencies($version: String) {
-        dictionaries_get_currencies_dictionary(version: $version) {
+export const CURRENCIES_DICTIONARY = gql`
+    query Currencies($version: String) {
+        dictionaries_currencies_dictionary(version: $version) {
             items {
                 id
                 title
@@ -50,9 +50,9 @@ export const GET_CURRENCIES_DICTIONARY = gql`
     }
 `;
 
-export const GET_FREQUENCIES_DICTIONARY = gql`
-    query GetFrequencies($version: String) {
-        dictionaries_get_frequencies_dictionary(version: $version) {
+export const FREQUENCIES_DICTIONARY = gql`
+    query Frequencies($version: String) {
+        dictionaries_frequencies_dictionary(version: $version) {
             items {
                 id
                 title
@@ -65,9 +65,9 @@ export const GET_FREQUENCIES_DICTIONARY = gql`
     }
 `;
 
-export const GET_BALANCE_TYPES_DICTIONARY = gql`
-    query GetBalanceTypesDictionary($version: String) {
-        dictionaries_get_balance_types_dictionary(version: $version) {
+export const BALANCE_TYPES_DICTIONARY = gql`
+    query BalanceTypesDictionary($version: String) {
+        dictionaries_balance_types_dictionary(version: $version) {
             items {
                 id
                 title
@@ -79,9 +79,9 @@ export const GET_BALANCE_TYPES_DICTIONARY = gql`
     }
 `;
 
-export const GET_CATEGORIES_DICTIONARY = gql`
-    query GetCategories($version: String) {
-        dictionaries_get_categories_dictionary(version: $version) {
+export const CATEGORIES_DICTIONARY = gql`
+    query Categories($version: String) {
+        dictionaries_categories_dictionary(version: $version) {
             items {
                 ...CategoryFields
                 children {
@@ -109,9 +109,9 @@ export const GET_CATEGORIES_DICTIONARY = gql`
     }
 `;
 
-export const GET_ICON_CATEGORIES_DICTIONARY = gql`
-    query GetIconCategories($version: String) {
-        dictionaries_get_icon_categories_dictionary(version: $version) {
+export const ICON_CATEGORIES_DICTIONARY = gql`
+    query IconCategories($version: String) {
+        dictionaries_icon_categories_dictionary(version: $version) {
             items {
                 id
                 title
@@ -128,8 +128,8 @@ export const GET_ICON_CATEGORIES_DICTIONARY = gql`
     }
 `;
 
-export const GET_NON_PUBLIC_DICTIONARIES = gql`
-    query GetNonPublicDictionaries(
+export const NON_PUBLIC_DICTIONARIES = gql`
+    query NonPublicDictionaries(
         $versionIconCategories: String,
         $versionCategories: String,
         $versionBalanceTypes: String,
@@ -137,7 +137,7 @@ export const GET_NON_PUBLIC_DICTIONARIES = gql`
         $versionCurrencies: String,
         $versionCountries: String
     ) {
-        dictionaries_get_icon_categories_dictionary(version: $versionIconCategories) {
+        dictionaries_icon_categories_dictionary(version: $versionIconCategories) {
             items {
                 id
                 title
@@ -151,7 +151,7 @@ export const GET_NON_PUBLIC_DICTIONARIES = gql`
             }
             version
         }
-        dictionaries_get_categories_dictionary(version: $versionCategories) {
+        dictionaries_categories_dictionary(version: $versionCategories) {
             items {
                 ...CategoryFields
                 children {
@@ -166,7 +166,7 @@ export const GET_NON_PUBLIC_DICTIONARIES = gql`
             }
             version
         }
-        dictionaries_get_balance_types_dictionary(version: $versionBalanceTypes) {
+        dictionaries_balance_types_dictionary(version: $versionBalanceTypes) {
             items {
                 id
                 title
@@ -175,7 +175,7 @@ export const GET_NON_PUBLIC_DICTIONARIES = gql`
             }
             version
         }
-        dictionaries_get_frequencies_dictionary(version: $versionFrequencies) {
+        dictionaries_frequencies_dictionary(version: $versionFrequencies) {
             items {
                 id
                 title
@@ -185,7 +185,7 @@ export const GET_NON_PUBLIC_DICTIONARIES = gql`
             }
             version
         }
-        dictionaries_get_currencies_dictionary(version: $versionCurrencies) {
+        dictionaries_currencies_dictionary(version: $versionCurrencies) {
             items {
                 id
                 title
@@ -196,7 +196,7 @@ export const GET_NON_PUBLIC_DICTIONARIES = gql`
             }
             version
         }
-        dictionaries_get_countries_dictionary(version: $versionCountries) {
+        dictionaries_countries_dictionary(version: $versionCountries) {
             items {
                 id
                 title

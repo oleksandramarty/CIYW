@@ -29,40 +29,56 @@ namespace AuditTrail.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int?>("Action")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Action");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("EntityId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("EntityId");
 
                     b.Property<int?>("EntityType")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityType");
 
                     b.Property<int?>("ExceptionType")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("ExceptionType");
 
                     b.Property<string>("Message")
-                        .HasColumnType("text");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("Message");
 
                     b.Property<string>("NewValue")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("NewValue");
 
                     b.Property<string>("OldValue")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("OldValue");
 
                     b.Property<string>("Payload")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("Payload");
 
                     b.Property<int>("Type")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Type");
 
                     b.Property<string>("Uri")
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("Uri");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("UserId");
 
                     b.HasKey("Id");
 

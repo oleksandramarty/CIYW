@@ -30,7 +30,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the category icon with the specific ID already exists
-    category_icon_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"IconCategories\" WHERE \"Id\" = $id;")
+    category_icon_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"IconCategories\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the category icon does not exist, prepare the SQL for insert
     if [ -z "$category_icon_exists" ]; then
@@ -41,7 +41,7 @@ do
       sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"IconCategories\"
       (\"Id\", \"Title\", \"IsActive\")
       VALUES ($id, '$title', $isActiveBool);"
-      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
         echo "Category icon with ID $id added successfully."
       else
         ((errorAdded++))

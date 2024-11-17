@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
 
-export const GET_FILTERED_AUDIT_TRAIL = gql`
-    query GetFilteredAuditTrail(
+export const FILTERED_AUDIT_TRAIL = gql`
+    query FilteredAuditTrail(
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
@@ -20,7 +20,7 @@ export const GET_FILTERED_AUDIT_TRAIL = gql`
         $userId: ID,
         $translationKey: String
     ) {
-        audit_trail_get_filtered_audit_trail(
+        audit_trail_filtered_audit_trail(
             isFull: $isFull,
             pageNumber: $pageNumber,
             pageSize: $pageSize,

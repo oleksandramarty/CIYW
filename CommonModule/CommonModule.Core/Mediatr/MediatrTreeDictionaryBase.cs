@@ -6,21 +6,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Core.Mediatr;
 
-public class MediatrTreeDictionaryBase<TRequest, TId, TParentId, TEntity, TResponse, TDataContext>: IRequestHandler<TRequest, VersionedListResponse<TResponse>>
+public class MediatrTreeDictionaryBase<TRequest, TEntityId, TParentId, TEntity, TResponse, TDataContext>: IRequestHandler<TRequest, VersionedListResponse<TResponse>>
+    where TEntityId : struct
     where TRequest : IBaseVersionEntity, IRequest<VersionedListResponse<TResponse>>
-    where TEntity : class, ITreeEntityEntity<TId, TParentId>, IActivatableEntity
+    where TEntity : class, ITreeEntityEntity<TEntityId, TParentId>, IActivatableEntity
     where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {
-    private readonly ITreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataContext> treeDictionaryRepository;
+    private readonly ITreeDictionaryRepository<TEntityId, TParentId, TEntity, TResponse, TDataContext> treeDictionaryRepository;
     
-    public MediatrTreeDictionaryBase(ITreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataContext> treeDictionaryRepository)
+    public MediatrTreeDictionaryBase(ITreeDictionaryRepository<TEntityId, TParentId, TEntity, TResponse, TDataContext> treeDictionaryRepository)
     {
         this.treeDictionaryRepository = treeDictionaryRepository;
     }
     
     public async Task<VersionedListResponse<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        return await this.treeDictionaryRepository.GetTreeDictionaryAsync(request.Version, cancellationToken);
+        return await this.treeDictionaryRepository.TreeDictionaryAsync(request.Version, cancellationToken);
     }
 }

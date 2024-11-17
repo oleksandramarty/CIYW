@@ -2,7 +2,7 @@ using CommonModule.GraphQL.MutationResolver;
 
 namespace AuthGateway.GraphQL;
 
-public class AuthGatewayRootMutation: GraphQLMutationHelper
+public class AuthGatewayRootMutation: GraphQlMutationHelper
 {
     public AuthGatewayRootMutation()
     {

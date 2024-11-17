@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Base;
 
-public class BaseBoolResponseType: ObjectGraphType<BaseBoolResponse>
+public sealed class BaseBoolResponseType: ObjectGraphType<BaseBoolResponse>
 {
     public BaseBoolResponseType()
     {

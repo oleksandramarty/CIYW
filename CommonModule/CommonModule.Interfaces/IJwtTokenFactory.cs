@@ -7,15 +7,15 @@ public interface IJwtTokenFactory
     string GenerateSalt();
     string HashPassword(string password, string salt);
     string GenerateJwtToken(
-        Guid userId,
+        Guid? userId,
         string login,
         string email,
         string roles,
         bool rememberMe = false, 
-        ClaimsIdentity additionalClaims = null);
+        ClaimsIdentity? additionalClaims = null);
 
     string GenerateNewJwtToken(ClaimsPrincipal user);
 
-    Guid GetUserIdFromToken(string token);
+    Guid UserIdFromToken(string token);
     bool IsTokenRefreshable(string token);
 }

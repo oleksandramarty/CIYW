@@ -88,11 +88,11 @@ export class UserProjectComponent extends BaseUnsubscribeComponent {
 
     public getUserProjectFromApi(): void {
         this.loaderService.isBusy = true;
-        this.graphQlExpensesService.getUserProjectById(this.userProjectId!)
+        this.graphQlExpensesService.userProjectById(this.userProjectId!)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap(result => {
-                    const userProject = result?.data?.expenses_get_user_project_by_id as UserProjectResponse;
+                    const userProject = result?.data?.expenses_user_project_by_id as UserProjectResponse;
                     this.userProject = userProject;
                     this.loaderService.isBusy = false;
                 }),

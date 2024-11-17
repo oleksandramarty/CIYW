@@ -10,17 +10,17 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 echo "Provision running..."
 
 # Set the environment variable to use the custom appsettings file
-export ASPNETCORE_ENVIRONMENT=${1:-DevelopmentMonolith}
+export ASPNETCORE_ENVIRONMENT=DevelopmentMonolith
 
 # Truncate the provision_logs.txt file
 truncate -s 0 "$SCRIPT_DIR/provision_logs.txt"
 
 # Set the dropMigrations parameter
-dropMigrations=${2:-true}
+dropMigrations=true 
 # Set the addNewMigration parameter
-addNewMigration=${3:-true}
+addNewMigration=true
 # Set the isBulkUpdate parameter
-isBulkUpdate=${4:-true}
+isBulkUpdate=true
 
 # Make each script executable and run it
 chmod +x "$SCRIPT_DIR/reinitialize_db.sh"

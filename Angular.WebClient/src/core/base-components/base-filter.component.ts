@@ -4,7 +4,6 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable, take, takeUntil, tap} from 'rxjs';
 import {BaseUnsubscribeComponent} from './base-unsubscribe.compoinent';
 import {
-    BaseDateRangeFilterRequest,
     BaseSortableRequest, CategoryResponse,
     ColumnEnum,
     CurrencyResponse, FrequencyResponse, IconResponse,
@@ -12,13 +11,13 @@ import {
     PaginatorEntity
 } from '../api-models/common.models';
 import {getUTCString, handleBaseDateRangeFilter} from '../helpers/date-time.helper';
-import {handleApiError} from '../helpers/rxjs.helper';
 import {LoaderService} from '../services/loader.service';
 import {LocalizationService} from '../services/localization.service';
 import {DictionaryMap} from "../models/common/dictionary.model";
 import {DataItem} from "../models/common/data-item.model";
 import {DictionaryService} from "../services/dictionary.service";
 import {BaseGraphQlFilteredModel} from "../models/common/base-graphql.model";
+import {handleApiError} from "../helpers/rxjs.helper";
 
 @Directive()
 export abstract class BaseFilterComponent<TFilteredResponse, TFilterRequest> extends BaseUnsubscribeComponent {
@@ -99,12 +98,12 @@ export abstract class BaseFilterComponent<TFilteredResponse, TFilterRequest> ext
     }
 
     override ngOnInit(): void {
-        this.getFilteredItems();
+        this.filteredItems();
     }
 
     public resetFilter(): void {
         this.filterFormGroup.reset();
-        this.getFilteredItems();
+        this.filteredItems();
     }
 
     get filterParams(): TFilterRequest {
@@ -134,11 +133,11 @@ export abstract class BaseFilterComponent<TFilteredResponse, TFilterRequest> ext
 
     protected abstract createFilterParams(): TFilterRequest;
 
-    protected abstract getFilteredItemsSub(filterRequest: TFilterRequest): Observable<TFilteredResponse>;
+    protected abstract filteredItemsSub(filterRequest: TFilterRequest): Observable<TFilteredResponse>;
 
-    public getFilteredItems(): void {
+    public filteredItems(): void {
         this.loaderService.isBusy = true;
-        this.getFilteredItemsSub(this.filterParams)
+        this.filteredItemsSub(this.filterParams)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
                 tap(filteredItems => {
@@ -151,7 +150,7 @@ export abstract class BaseFilterComponent<TFilteredResponse, TFilterRequest> ext
 
     public pageChanged(paginator: PaginatorEntity): void {
         this.paginator = paginator;
-        this.getFilteredItems();
+        this.filteredItems();
     }
 
     public sortItems(column: ColumnEnum): void {
@@ -163,6 +162,6 @@ export abstract class BaseFilterComponent<TFilteredResponse, TFilterRequest> ext
         } else {
             this.sort.column = column;
         }
-        this.getFilteredItems();
+        this.filteredItems();
     }
 }

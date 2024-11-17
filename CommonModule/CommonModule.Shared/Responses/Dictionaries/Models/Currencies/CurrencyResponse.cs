@@ -6,10 +6,10 @@ namespace CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 
 public class CurrencyResponse: BaseIdEntity<int>, IActivatableEntity
 {
-    public string Title { get; set; }
-    public string Code { get; set; }
-    public string Symbol { get; set; }
-    public string TitleEn { get; set; }
+    public string? Title { get; set; }
+    public string? Code { get; set; }
+    public string? Symbol { get; set; }
+    public string? TitleEn { get; set; }
     public bool IsActive { get; set; }
     
     public ICollection<CountryResponse> Countries { get; set; }

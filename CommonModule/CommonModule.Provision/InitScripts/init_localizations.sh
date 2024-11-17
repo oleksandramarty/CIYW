@@ -63,7 +63,7 @@ do
       if [ "$loc_id" != "id" ]; then
         ((totalRecords++))
         # Check if the localization with the specific ID already exists
-        localization_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Locales\".\"Localizations\" WHERE \"Id\" = '$loc_id';")
+        localization_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Locales\".\"Localizations\" WHERE \"Id\" = '$loc_id';" > /dev/null)
 
         # Determine if the key is public
         isPublicBool=false
@@ -80,7 +80,7 @@ do
 
             # If bulkCounter reaches 900, execute the bulk insert
             if [ $bulkCounter -ge 900 ]; then
-              if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+              if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
                 echo "Bulk insert of $bulkCounter localizations added successfully."
               else
                 ((errorAdded+=bulkCounter))
@@ -93,7 +93,7 @@ do
           else
             # Non-bulk insert
             sql="INSERT INTO \"$db_name\".\"Locales\".\"Localizations\" (\"Id\", \"Key\", \"ValueEn\", \"Value\", \"LocaleId\", \"IsPublic\") VALUES ('$loc_id', '$key', '$valueEn', '$value', $id, $isPublicBool);"
-            if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+            if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
               echo "Localization with ID $loc_id added successfully."
             else
               ((errorAdded++))
@@ -111,7 +111,7 @@ done < "$csv_file"
 
 # Insert any remaining localizations
 if [ $bulkCounter -gt 0 ]; then
-  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
     echo "Bulk insert of $bulkCounter remaining localizations added successfully."
   else
     ((errorAdded+=bulkCounter))
@@ -126,4 +126,4 @@ unset PGPASSWORD
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 chmod +x "$SCRIPT_DIR/add_logs.sh"
 "$SCRIPT_DIR/add_logs.sh" "LOCALIZATIONS" "$totalRecords" "$alreadyExist" "$errorAdded"
-echo "Users initialized."
+echo "Localizations initialized."

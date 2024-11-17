@@ -107,7 +107,7 @@ export class AdminAuditTrailComponent extends BaseFilterComponent<FilteredListRe
         ];
     }
 
-    protected getFilteredItemsSub(filterRequest: [
+    protected filteredItemsSub(filterRequest: [
         BaseGraphQlFilteredModel,
         AuditTrailEntityEnum,
         AuditTrailActionEnum,
@@ -117,8 +117,8 @@ export class AdminAuditTrailComponent extends BaseFilterComponent<FilteredListRe
         string,
         string
     ]): Observable<FilteredListResponseOfAuditTrailResponse> {
-        return this.graphQlExpensesService.getFilteredAuditTrail(...filterRequest).pipe(
-            map(result => result.data.audit_trail_get_filtered_audit_trail!)
+        return this.graphQlExpensesService.filteredAuditTrail(...filterRequest).pipe(
+            map(result => result.data.audit_trail_filtered_audit_trail!)
         );
     }
 

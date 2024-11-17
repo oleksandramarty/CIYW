@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Localizations;
 
-public class LocalizationsResponseType : ObjectGraphType<LocalizationsResponse>
+public sealed class LocalizationsResponseType : ObjectGraphType<LocalizationsResponse>
 {
     public LocalizationsResponseType()
     {
@@ -15,7 +15,7 @@ public class LocalizationsResponseType : ObjectGraphType<LocalizationsResponse>
     }
 }
 
-public class LocalizationResponseType : ObjectGraphType<LocalizationResponse>
+public sealed class LocalizationResponseType : ObjectGraphType<LocalizationResponse>
 {
     public LocalizationResponseType()
     {
@@ -27,7 +27,7 @@ public class LocalizationResponseType : ObjectGraphType<LocalizationResponse>
     }
 }
 
-public class LocalizationItemResponseType : ObjectGraphType<LocalizationItemResponse>
+public sealed class LocalizationItemResponseType : ObjectGraphType<LocalizationItemResponse>
 {
     public LocalizationItemResponseType()
     {

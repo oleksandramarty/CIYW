@@ -1,4 +1,4 @@
-using AutoMapper;
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
 using Expenses.Domain;
@@ -104,9 +104,16 @@ public class BalanceRepository: IBalanceRepository
         CancellationToken cancellationToken)
     {
         BalanceEntity? balance = await this.dataContext.Balances.FirstOrDefaultAsync(b => b.Id == expenseEntity.BalanceId, cancellationToken);
-        this.entityValidator.IsEntityExist(balance);
-        string currentCategory = await this.cacheBaseRepository.GetItemFromCacheAsync(CacheParams.DictionaryCategory, expenseEntity.CategoryId);
-        this.entityValidator.IsEntityExist(currentCategory);
+        if (balance == null)
+        {
+            throw new EntityNotFoundException();
+        }
+        
+        string? currentCategory = await this.cacheBaseRepository.ItemFromCacheAsync(CacheParams.DictionaryCategory, expenseEntity.CategoryId);
+        if (string.IsNullOrEmpty(currentCategory))
+        {
+            throw new EntityNotFoundException();
+        }
         
         FavoriteExpenseEntity? favoriteExpense = expenseEntity.FavoriteExpenseId.HasValue ?
             await this.dataContext.FavoriteExpenses

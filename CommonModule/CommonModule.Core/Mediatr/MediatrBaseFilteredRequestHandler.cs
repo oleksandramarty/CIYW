@@ -1,5 +1,5 @@
 using CommonModule.Core.Extensions;
-using CommonModule.Core.Strategies.GetFilteredResult;
+using CommonModule.Core.Strategies.FilteredResult;
 using CommonModule.Shared.Responses.Base;
 using MediatR;
 
@@ -14,14 +14,14 @@ namespace CommonModule.Core.Mediatr
         where TFilteredRequest : MediatrBaseFilteredRequest<TEntityResponse>
         where TEntityResponse : class
     {
-        private readonly IGetFilteredResultStrategy<TFilteredRequest, TEntityResponse> strategy;
+        private readonly IFilteredResultStrategy<TFilteredRequest, TEntityResponse> strategy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediatrBaseFilteredRequestHandler{TFilteredRequest, TEntityResponse}"/> class.
         /// </summary>
         /// <param name="strategy">The strategy for getting filtered results.</param>
         public MediatrBaseFilteredRequestHandler(
-            IGetFilteredResultStrategy<TFilteredRequest, TEntityResponse> strategy
+            IFilteredResultStrategy<TFilteredRequest, TEntityResponse> strategy
         )
         {
             this.strategy = strategy;
@@ -37,7 +37,7 @@ namespace CommonModule.Core.Mediatr
         {
             request.CheckBaseFilter();
 
-            return await this.strategy.GetFilteredResultAsync(request, cancellationToken);
+            return await this.strategy.FilteredResultAsync(request, cancellationToken);
         }
     }
 }

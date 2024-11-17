@@ -3,15 +3,26 @@ import {Observable} from "rxjs";
 import {ApolloQueryResult, WatchQueryFetchPolicy} from "@apollo/client";
 import {GraphQlService} from "../graph-ql.service";
 import {
-    CREATE_EXPENSE, CREATE_FAVORITE_EXPENSE, CREATE_PLANNED_EXPENSE, CREATE_USER_BALANCE,
+    CREATE_EXPENSE,
+    CREATE_FAVORITE_EXPENSE,
+    CREATE_PLANNED_EXPENSE,
+    CREATE_USER_BALANCE,
     CREATE_USER_PROJECT,
-    GET_FILTERED_EXPENSES, GET_FILTERED_FAVORITE_EXPENSES,
-    GET_FILTERED_PLANNED_EXPENSES,
-    GET_FILTERED_USER_ALLOWED_PROJECTS,
-    GET_FILTERED_USER_PROJECTS,
-    GET_USER_PROJECT_BY_ID,
-    REMOVE_EXPENSE, REMOVE_FAVORITE_EXPENSE, REMOVE_PLANNED_EXPENSE, REMOVE_USER_BALANCE,
-    UPDATE_EXPENSE, UPDATE_FAVORITE_EXPENSE, UPDATE_PLANNED_EXPENSE, UPDATE_USER_BALANCE, UPDATE_USER_PROJECT
+    FILTERED_EXPENSES,
+    FILTERED_FAVORITE_EXPENSES,
+    FILTERED_PLANNED_EXPENSES,
+    FILTERED_USER_ALLOWED_PROJECTS,
+    FILTERED_USER_PROJECTS,
+    USER_PROJECT_BY_ID,
+    REMOVE_EXPENSE,
+    REMOVE_FAVORITE_EXPENSE,
+    REMOVE_PLANNED_EXPENSE,
+    REMOVE_USER_BALANCE,
+    UPDATE_EXPENSE,
+    UPDATE_FAVORITE_EXPENSE,
+    UPDATE_PLANNED_EXPENSE,
+    UPDATE_USER_BALANCE,
+    UPDATE_USER_PROJECT
 } from "../queries/graph-ql-expenses.query";
 import {BaseGraphQlFilteredModel} from "../../models/common/base-graphql.model";
 import {
@@ -25,7 +36,7 @@ import {
     UserProjectResponse
 } from "../../api-models/common.models";
 import {ApolloBase} from "apollo-angular";
-import {GET_FILTERED_AUDIT_TRAIL} from "../queries/graph-ql-audit-trail.query";
+import {FILTERED_AUDIT_TRAIL} from "../queries/graph-ql-audit-trail.query";
 
 @Injectable({
     providedIn: 'root',
@@ -40,16 +51,16 @@ export class GraphQlExpensesService {
         return this.apollo.expenses;
     }
 
-    public getFilteredExpenses(
+    public filteredExpenses(
         baseFilter: BaseGraphQlFilteredModel,
         userProjectId: string = '',
         categoryIds: number[] = []
     ): Observable<ApolloQueryResult<{
-        expenses_get_filtered_expenses: FilteredListResponseOfExpenseResponse | undefined
+        expenses_filtered_expenses: FilteredListResponseOfExpenseResponse | undefined
     }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_FILTERED_EXPENSES,
+                query: FILTERED_EXPENSES,
                 variables: {
                     ...baseFilter,
                     userProjectId,
@@ -57,20 +68,20 @@ export class GraphQlExpensesService {
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{
-            expenses_get_filtered_expenses: FilteredListResponseOfExpenseResponse | undefined
+            expenses_filtered_expenses: FilteredListResponseOfExpenseResponse | undefined
         }>>;
     }
 
-    public getFilteredPlannedExpenses(
+    public filteredPlannedExpenses(
         baseFilter: BaseGraphQlFilteredModel,
         userProjectId: string = '',
         categoryIds: number[] = []
     ): Observable<ApolloQueryResult<{
-        expenses_get_filtered_planned_expenses: FilteredListResponseOfPlannedExpenseResponse | undefined
+        expenses_filtered_planned_expenses: FilteredListResponseOfPlannedExpenseResponse | undefined
     }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_FILTERED_PLANNED_EXPENSES,
+                query: FILTERED_PLANNED_EXPENSES,
                 variables: {
                     ...baseFilter,
                     userProjectId,
@@ -78,20 +89,20 @@ export class GraphQlExpensesService {
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{
-            expenses_get_filtered_planned_expenses: FilteredListResponseOfPlannedExpenseResponse | undefined
+            expenses_filtered_planned_expenses: FilteredListResponseOfPlannedExpenseResponse | undefined
         }>>;
     }
 
-    public getFilteredFavoriteExpenses(
+    public filteredFavoriteExpenses(
         baseFilter: BaseGraphQlFilteredModel,
         userProjectId: string = '',
         categoryIds: number[] = []
     ): Observable<ApolloQueryResult<{
-        expenses_get_filtered_favorite_expenses: FilteredListResponseOfFavoriteExpenseResponse | undefined
+        expenses_filtered_favorite_expenses: FilteredListResponseOfFavoriteExpenseResponse | undefined
     }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_FILTERED_FAVORITE_EXPENSES,
+                query: FILTERED_FAVORITE_EXPENSES,
                 variables: {
                     ...baseFilter,
                     userProjectId,
@@ -99,11 +110,11 @@ export class GraphQlExpensesService {
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{
-            expenses_get_filtered_favorite_expenses: FilteredListResponseOfFavoriteExpenseResponse | undefined
+            expenses_filtered_favorite_expenses: FilteredListResponseOfFavoriteExpenseResponse | undefined
         }>>;
     }
 
-    public getFilteredAuditTrail(
+    public filteredAuditTrail(
         baseFilter: BaseGraphQlFilteredModel,
         entityType: AuditTrailEntityEnum,
         action: AuditTrailActionEnum,
@@ -113,11 +124,11 @@ export class GraphQlExpensesService {
         userId: string,
         translationKey: string
     ): Observable<ApolloQueryResult<{
-        audit_trail_get_filtered_audit_trail: FilteredListResponseOfAuditTrailResponse | undefined
+        audit_trail_filtered_audit_trail: FilteredListResponseOfAuditTrailResponse | undefined
     }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_FILTERED_AUDIT_TRAIL,
+                query: FILTERED_AUDIT_TRAIL,
                 variables: {
                     ...baseFilter,
                     entityType,
@@ -130,7 +141,7 @@ export class GraphQlExpensesService {
                 },
                 fetchPolicy: 'network-only',
             }).valueChanges as Observable<ApolloQueryResult<{
-            audit_trail_get_filtered_audit_trail: FilteredListResponseOfAuditTrailResponse | undefined
+            audit_trail_filtered_audit_trail: FilteredListResponseOfAuditTrailResponse | undefined
         }>>;
     }
 
@@ -362,25 +373,25 @@ export class GraphQlExpensesService {
             }) as Observable<ApolloQueryResult<{ success: boolean }>>;
     }
 
-    public getUserProjectById(id: string): Observable<ApolloQueryResult<{
-        expenses_get_user_project_by_id: UserProjectResponse
+    public userProjectById(id: string): Observable<ApolloQueryResult<{
+        expenses_user_project_by_id: UserProjectResponse
     }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_USER_PROJECT_BY_ID,
+                query: USER_PROJECT_BY_ID,
                 variables: {
                     id
                 },
                 fetchPolicy: 'network-only',
-            }).valueChanges as Observable<ApolloQueryResult<{ expenses_get_user_project_by_id: UserProjectResponse }>>;
+            }).valueChanges as Observable<ApolloQueryResult<{ expenses_user_project_by_id: UserProjectResponse }>>;
     }
 
-    public getFilteredUserProjects(fetchPolicy: WatchQueryFetchPolicy | undefined): Observable<ApolloQueryResult<{
-        expenses_get_filtered_user_projects: FilteredListResponseOfUserProjectResponse
+    public filteredUserProjects(fetchPolicy: WatchQueryFetchPolicy | undefined): Observable<ApolloQueryResult<{
+        expenses_filtered_user_projects: FilteredListResponseOfUserProjectResponse
     }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_FILTERED_USER_PROJECTS,
+                query: FILTERED_USER_PROJECTS,
                 variables: {
                     isFull: false,
                     pageNumber: 1,
@@ -390,16 +401,16 @@ export class GraphQlExpensesService {
                 },
                 fetchPolicy,
             }).valueChanges as Observable<ApolloQueryResult<{
-            expenses_get_filtered_user_projects: FilteredListResponseOfUserProjectResponse
+            expenses_filtered_user_projects: FilteredListResponseOfUserProjectResponse
         }>>;
     }
 
-    public getFilteredUserAllowedProjects(fetchPolicy: WatchQueryFetchPolicy | undefined): Observable<ApolloQueryResult<{
-        expenses_get_filtered_user_allowed_projects: FilteredListResponseOfUserAllowedProjectResponse
+    public filteredUserAllowedProjects(fetchPolicy: WatchQueryFetchPolicy | undefined): Observable<ApolloQueryResult<{
+        expenses_filtered_user_allowed_projects: FilteredListResponseOfUserAllowedProjectResponse
     }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_FILTERED_USER_ALLOWED_PROJECTS,
+                query: FILTERED_USER_ALLOWED_PROJECTS,
                 variables: {
                     isFull: false,
                     pageNumber: 1,
@@ -409,7 +420,7 @@ export class GraphQlExpensesService {
                 },
                 fetchPolicy,
             }).valueChanges as Observable<ApolloQueryResult<{
-            expenses_get_filtered_user_allowed_projects: FilteredListResponseOfUserAllowedProjectResponse
+            expenses_filtered_user_allowed_projects: FilteredListResponseOfUserAllowedProjectResponse
         }>>;
     }
 }

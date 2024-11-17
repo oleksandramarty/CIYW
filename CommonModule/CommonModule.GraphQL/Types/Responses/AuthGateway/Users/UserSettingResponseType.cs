@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.AuthGateway.Users;
 
-public class UserSettingResponseType : ObjectGraphType<UserSettingResponse>
+public sealed class UserSettingResponseType : ObjectGraphType<UserSettingResponse>
 {
     public UserSettingResponseType()
     {

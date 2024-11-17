@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Expenses.Models.Expenses;
 
-public class ExpenseResponseType : ObjectGraphType<ExpenseResponse>
+public sealed class ExpenseResponseType : ObjectGraphType<ExpenseResponse>
 {
     public ExpenseResponseType()
     {

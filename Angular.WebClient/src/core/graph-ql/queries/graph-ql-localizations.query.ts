@@ -1,8 +1,8 @@
 import {gql} from "@apollo/client";
 
-export const GET_LOCALES_DICTIONARY = gql`
-    query GetLocales($version: String) {
-        localizations_get_locales_dictionary(version: $version) {
+export const LOCALES_DICTIONARY = gql`
+    query Locales($version: String) {
+        localizations_locales_dictionary(version: $version) {
             items {
                 id
                 isoCode
@@ -20,9 +20,9 @@ export const GET_LOCALES_DICTIONARY = gql`
     }
 `;
 
-export const GET_PUBLIC_LOCALIZATIONS = gql`
-    query GetPublicLocalizations($version: String) {
-        localizations_get_public_localizations(version: $version) {
+export const PUBLIC_LOCALIZATIONS = gql`
+    query PublicLocalizations($version: String) {
+        localizations_public_localizations(version: $version) {
             version
             data {
                 locale
@@ -35,9 +35,9 @@ export const GET_PUBLIC_LOCALIZATIONS = gql`
     }
 `;
 
-export const GET_LOCALIZATIONS = gql`
-    query GetLocalizations($version: String) {
-        localizations_get_localizations(version: $version) {
+export const LOCALIZATIONS = gql`
+    query Localizations($version: String) {
+        localizations_localizations(version: $version) {
             version
             data {
                 locale

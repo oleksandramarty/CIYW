@@ -19,6 +19,8 @@ import {MatDividerModule} from "@angular/material/divider";
 import {SharedModule} from "../../../../core/shared.module";
 import {AdminHomeAreaComponent} from "./admin-home-area/admin-home-area.component";
 import {AdminHomeComponent} from "./admin-home/admin-home.component";
+import {CommonTopMenuComponent} from "../../../common/common-top-menu/common-top-menu/common-top-menu.component";
+import {CommonFavoriteComponent} from "../../../common/common-favorite/common-favorite.component";
 
 const routes: Routes = [
     {
@@ -55,6 +57,8 @@ const routes: Routes = [
         AppCommonInputModule,
         MatDividerModule,
         SharedModule,
+        CommonTopMenuComponent,
+        CommonFavoriteComponent,
     ],
     exports: [
         RouterModule

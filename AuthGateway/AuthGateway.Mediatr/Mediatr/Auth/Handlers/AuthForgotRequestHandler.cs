@@ -1,3 +1,4 @@
+using System.Net;
 using AuthGateway.Domain;
 using AuthGateway.Domain.Models.Users;
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
@@ -29,25 +30,31 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
 
     public async Task Handle(AuthForgotRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetCurrentUserIdAsync();
-        UserEntity userEntity = await this.userRepository.GetByIdAsync(userId, cancellationToken);
-        this.entityValidator.IsEntityExist(userEntity);
-        this.entityValidator.IsEntityActive(userEntity);
+        Guid userId = await this.CurrentUserIdAsync();
+        UserEntity? user = await this.userRepository.ByIdAsync(userId, cancellationToken);
+        if (user == null)
+        {
+            throw new EntityNotFoundException();
+        }
+        if (user.IsActive == false)
+        {
+            throw new BusinessException(ErrorMessages.EntityBlocked, (int)HttpStatusCode.Conflict);
+        }
 
-        if (userEntity.LastForgotPasswordRequest.HasValue &&
-            userEntity.LastForgotPasswordRequest.Value.AddMinutes(30) > DateTime.UtcNow)
+        if (user.LastForgotPasswordRequest.HasValue &&
+            user.LastForgotPasswordRequest.Value.AddMinutes(30) > DateTime.UtcNow)
         {
             throw new BusinessException(ErrorMessages.ForgotPasswordRequestTooSoon, StatusCodes.Status409Conflict);
         }
 
-        userEntity.LastForgotPasswordRequest = DateTime.UtcNow;
-        await this.userRepository.UpdateAsync(userEntity, cancellationToken);
+        user.LastForgotPasswordRequest = DateTime.UtcNow;
+        await this.userRepository.UpdateAsync(user, cancellationToken);
 
         // TODO Send email
         string restoreLink =
             $"{StringExtension.InterleaveStrings(userId.ToString("N"), Guid.NewGuid().ToString("N"))}" +
             $"&honkler={StringExtension.InterleaveStrings(
-                (new DateTimeOffset(userEntity.LastForgotPasswordRequest.Value).ToUnixTimeSeconds()).ToString(),
-                (new DateTimeOffset(userEntity.CreatedAt).ToUnixTimeSeconds()).ToString())}";
+                (new DateTimeOffset(user.LastForgotPasswordRequest.Value).ToUnixTimeSeconds()).ToString(),
+                (new DateTimeOffset(user.CreatedAt).ToUnixTimeSeconds()).ToString())}";
     }
 }

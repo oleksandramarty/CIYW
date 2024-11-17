@@ -1,3 +1,4 @@
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
@@ -26,10 +27,13 @@ public class RemovePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
     
     public async Task<BaseBoolResponse> Handle(RemovePlannedExpenseCommand command, CancellationToken cancellationToken)
     {
-        PlannedExpenseEntity plannedExpenseEntity = await this.plannedExpenseRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(plannedExpenseEntity);
+        PlannedExpenseEntity? plannedExpense = await this.plannedExpenseRepository.ByIdAsync(command.Id, cancellationToken);
+        if (plannedExpense == null)
+        {
+            throw new EntityNotFoundException();
+        }
 
-        await this.CheckUserProjectByIdAsync(plannedExpenseEntity.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(plannedExpense.UserProjectId, cancellationToken);
 
         await this.plannedExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
 

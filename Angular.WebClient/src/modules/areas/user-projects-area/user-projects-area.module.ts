@@ -19,6 +19,7 @@ import {
 import {UserProjectFavoritesComponent} from "./user-project/user-project-favorites/user-project-favorites.component";
 import {GenericTableComponent} from "../../common/generic-table/generic-table.component";
 import {MatOption} from "@angular/material/core";
+import {CommonFavoriteComponent} from "../../common/common-favorite/common-favorite.component";
 
 const routes: Routes = [
     {
@@ -52,7 +53,8 @@ const routes: Routes = [
         MatButtonModule,
         CommonTopMenuComponent,
         GenericTableComponent,
-        MatOption
+        MatOption,
+        CommonFavoriteComponent
     ],
     exports: [
         RouterModule

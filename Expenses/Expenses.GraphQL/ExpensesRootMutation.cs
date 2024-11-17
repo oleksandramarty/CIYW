@@ -2,7 +2,7 @@ using CommonModule.GraphQL.MutationResolver;
 
 namespace Expenses.GraphQL;
 
-public class ExpensesRootMutation: GraphQLMutationHelper
+public class ExpensesRootMutation: GraphQlMutationHelper
 {
     public ExpensesRootMutation()
     {

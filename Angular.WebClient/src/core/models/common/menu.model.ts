@@ -67,6 +67,11 @@ export class MenuModel implements IMenuModel {
 
         this.menuItems = [
             {
+                title: 'MENU.FAVORITES',
+                icon: 'fa-solid fa-star',
+                url: '/favorites'
+            },
+            {
                 title: 'COMMON.PRINT',
                 icon: 'fa-solid fa-print',
                 executableAction: printCurrentPageAction
@@ -92,6 +97,10 @@ export class MenuModel implements IMenuModel {
         }
 
         this.menuItems = [
+            {
+                title: 'MENU.FAVORITES',
+                url: '/favorites'
+            },
             {
                 title: 'MENU.DASHBOARD',
                 url: '/dashboard'
@@ -128,6 +137,11 @@ export class MenuModel implements IMenuModel {
 
     createSideMenu(): void {
         this.menuItems = [
+            {
+                title: 'MENU.FAVORITES',
+                icon: 'fa-solid fa-star',
+                url: '/favorites'
+            },
             {
                 isOpen: true,
                 title: 'MENU.HOME',

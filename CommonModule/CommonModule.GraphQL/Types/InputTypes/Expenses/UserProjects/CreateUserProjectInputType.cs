@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.InputTypes.Expenses.UserProjects;
 
-public class CreateUserProjectInputType : InputObjectGraphType
+public sealed class CreateUserProjectInputType : InputObjectGraphType
 {
     public CreateUserProjectInputType()
     {

@@ -1,17 +1,20 @@
+using System.ComponentModel.DataAnnotations;
+using CommonModule.Core.Extensions;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Core;
 using CommonModule.Shared.Enums;
 
 namespace AuthGateway.Domain.Models.Users;
 
 public class UserEntity: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
 {
-    public string Login { get; set; }
-    public string LoginNormalized { get; set; }
-    public string Email { get; set; }
-    public string EmailNormalized { get; set; }
-    public string PasswordHash { get; set; }
-    public string Salt { get; set; }
+    [Required] [MaxLength(50)] public required string Login { get; set; }
+    [Required] [MaxLength(50)] public required string LoginNormalized { get; set; }
+    [Required] [MaxLength(50)] public required string Email { get; set; }
+    [Required] [MaxLength(50)] public required string EmailNormalized { get; set; }
+    [Required] [MaxLength(120)] public required string PasswordHash { get; set; }
+    [Required] [MaxLength(64)] public required string Salt { get; set; }
     public bool IsActive { get; set; }
     public bool IsTemporaryPassword { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
@@ -21,8 +24,10 @@ public class UserEntity: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVers
     
     public ICollection<UserRoleEntity> Roles { get; set; }
     
-    // TODO make non nullable after migration
     public Guid? UserSettingId { get; set; }
-    public UserSettingEntity UserSetting { get; set; }
-    public string Version { get; set; }
+    public UserSettingEntity? UserSetting { get; set; }
+    
+    [Required]
+    [StringLength(32, MinimumLength = 32)]
+    public string Version { get; set; } = VersionExtension.GenerateVersion();
 }

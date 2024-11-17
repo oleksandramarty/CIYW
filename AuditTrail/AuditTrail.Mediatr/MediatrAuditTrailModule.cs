@@ -12,6 +12,6 @@ public class MediatrAuditTrailModule: Autofac.Module
         builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
             .AsImplementedInterfaces();
         
-        builder.RegisterAssemblyTypes(typeof(GetFilteredAuditTrailRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
+        builder.RegisterAssemblyTypes(typeof(FilteredAuditTrailRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
     }
 }

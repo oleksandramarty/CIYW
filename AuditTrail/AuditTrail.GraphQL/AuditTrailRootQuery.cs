@@ -2,7 +2,7 @@ using CommonModule.GraphQL.QueryResolver;
 
 namespace AuditTrail.GraphQL;
 
-public class AuditTrailRootQuery: GraphQLQueryHelper
+public class AuditTrailRootQuery: GraphQlQueryHelper
 {
     public AuditTrailRootQuery()
     {

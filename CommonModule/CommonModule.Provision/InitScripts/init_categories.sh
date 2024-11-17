@@ -34,7 +34,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the category with the specific ID already exists
-    category_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Categories\" WHERE \"Id\" = $id;")
+    category_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Categories\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the category does not exist, prepare the SQL for bulk insert
     if [ -z "$category_exists" ]; then
@@ -56,7 +56,7 @@ do
 
         # If bulkCounter reaches 500, execute the bulk insert
         if [ $bulkCounter -ge 500 ]; then
-          if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+          if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
             echo "Bulk insert of $bulkCounter categories added successfully."
           else
             ((errorAdded+=bulkCounter))
@@ -71,7 +71,7 @@ do
         sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"Categories\" 
         (\"Id\", \"Title\", \"IconId\", \"Color\", \"IsActive\", \"ParentId\", \"IsPositive\") 
         VALUES ($id, '$title', '$iconId', '$color', $isActiveBool, $parentId, $isPositiveBool);"
-        if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+        if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
           echo "Category with ID $id added successfully."
         else
           ((errorAdded++))
@@ -87,7 +87,7 @@ done < "$csv_file"
 
 # Insert any remaining categories
 if [ $bulkCounter -gt 0 ]; then
-  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
     echo "Bulk insert of $bulkCounter remaining categories added successfully."
   else
     ((errorAdded+=bulkCounter))

@@ -31,7 +31,7 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     
     public async Task Handle(CreateUserBalanceCommand command, CancellationToken cancellationToken)
     {
-        UserProjectEntity userProjectEntity = await this.GetUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        UserProjectEntity userProjectEntity = await this.UserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
         if (userProjectEntity.Balances.Count >= 3)
         {
@@ -39,7 +39,7 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
         }
         
         BalanceEntity balanceEntity = this.mapper.Map<CreateUserBalanceCommand, BalanceEntity>(command);
-        balanceEntity.UserId = await this.GetCurrentUserIdAsync();
+        balanceEntity.UserId = await this.CurrentUserIdAsync();
         await this.balanceRepository.AddAsync(balanceEntity, cancellationToken);
     }
 }

@@ -1,5 +1,5 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using CommonModule.Core.JsonConverter;
 using CommonModule.Shared.Common;
  using CommonModule.Shared.Common.BaseInterfaces;
  using CommonModule.Shared.JsonConvertors;
@@ -8,9 +8,9 @@ using CommonModule.Shared.Common;
  
  public class CountryEntity: BaseIdEntity<int>, IActivatableEntity
  {
-     public string Title { get; set; }
-     public string Code { get; set; }
-     public string TitleEn { get; set; }
+     [Required] [MaxLength(50)] public required string Title { get; set; }
+     [Required] [MaxLength(2)] public required string Code { get; set; }
+     [Required] [MaxLength(50)] public required string TitleEn { get; set; }
      [JsonConverter(typeof(BooleanJsonConverter))]
      public bool IsActive { get; set; }
      

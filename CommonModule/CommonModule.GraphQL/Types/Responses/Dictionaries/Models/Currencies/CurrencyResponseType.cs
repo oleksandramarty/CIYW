@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Currencies;
 
-public class CurrencyResponseType : ObjectGraphType<CurrencyResponse>
+public sealed class CurrencyResponseType : ObjectGraphType<CurrencyResponse>
 {
     public CurrencyResponseType()
     {

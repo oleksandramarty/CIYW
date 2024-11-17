@@ -1,3 +1,4 @@
+using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace CommonModule.Shared.Responses.Base;

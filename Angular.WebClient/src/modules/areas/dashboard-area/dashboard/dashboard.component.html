@@ -1,10 +1,21 @@
-<div class="section-header mb-0-5rem">
-    <h1>{{ 'MENU.DASHBOARD' | translation }}</h1>
+<div class="content-area">
+    <div class="section-header">
+        <app-common-favorite title="MENU.DASHBOARD" [favorite]="false"></app-common-favorite>
+    </div>
+
+    <div class="content-area-body">
+        <app-dashboard-user-projects></app-dashboard-user-projects>
+    </div>
 </div>
 
-<div class="dashboard-container">
-    <app-dashboard-user-projects></app-dashboard-user-projects>
+<div class="content-area">
+    <div class="section-header">
+        <app-common-favorite title="EXPENSES.TOTAL_EXPENSE" [favorite]="false"></app-common-favorite>
+    </div>
 </div>
 
-<h1 [translation]="'EXPENSES.TOTAL_EXPENSE'"></h1>
-<h1 [translation]="'EXPENSES.MONTHLY_EXPENSE'"></h1>
+<div class="content-area">
+    <div class="section-header mb-0-5rem">
+        <app-common-favorite title="EXPENSES.MONTHLY_EXPENSE" [favorite]="false"></app-common-favorite>
+    </div>
+</div>

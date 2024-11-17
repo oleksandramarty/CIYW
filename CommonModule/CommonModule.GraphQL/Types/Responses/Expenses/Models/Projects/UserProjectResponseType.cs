@@ -5,7 +5,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Expenses.Models.Projects;
 
-public class UserProjectResponseType : ObjectGraphType<UserProjectResponse>
+public sealed class UserProjectResponseType : ObjectGraphType<UserProjectResponse>
 {
     public UserProjectResponseType()
     {

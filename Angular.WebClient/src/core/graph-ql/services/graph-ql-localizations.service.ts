@@ -7,9 +7,9 @@ import {
     VersionedListResponseOfLocaleResponse
 } from "../../api-models/common.models";
 import {
-    GET_LOCALES_DICTIONARY,
-    GET_LOCALIZATIONS,
-    GET_PUBLIC_LOCALIZATIONS
+    LOCALES_DICTIONARY,
+    LOCALIZATIONS,
+    PUBLIC_LOCALIZATIONS
 } from "../queries/graph-ql-localizations.query";
 import {ApolloBase} from "apollo-angular";
 
@@ -26,36 +26,36 @@ export class GraphQlLocalizationsService {
         return this.apollo.localizations;
     }
 
-    public getDictionaryLocales(version: string | undefined): Observable<ApolloQueryResult<{ localizations_get_locales_dictionary: VersionedListResponseOfLocaleResponse }>> {
+    public dictionaryLocales(version: string | undefined): Observable<ApolloQueryResult<{ localizations_locales_dictionary: VersionedListResponseOfLocaleResponse }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_LOCALES_DICTIONARY,
+                query: LOCALES_DICTIONARY,
                 variables: {
                     version,
                 },
                 fetchPolicy: 'network-only',
-            }).valueChanges as Observable<ApolloQueryResult<{ localizations_get_locales_dictionary: VersionedListResponseOfLocaleResponse }>>;
+            }).valueChanges as Observable<ApolloQueryResult<{ localizations_locales_dictionary: VersionedListResponseOfLocaleResponse }>>;
     }
 
-    public getLocalizations(version: string | undefined): Observable<ApolloQueryResult<{ localizations_get_localizations: LocalizationsResponse }>> {
+    public localizations(version: string | undefined): Observable<ApolloQueryResult<{ localizations_localizations: LocalizationsResponse }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_LOCALIZATIONS,
+                query: LOCALIZATIONS,
                 variables: {
                     version,
                 },
                 fetchPolicy: 'network-only',
-            }).valueChanges as Observable<ApolloQueryResult<{ localizations_get_localizations: LocalizationsResponse }>>;
+            }).valueChanges as Observable<ApolloQueryResult<{ localizations_localizations: LocalizationsResponse }>>;
     }
 
-    public getPublicLocalizations(version: string | undefined): Observable<ApolloQueryResult<{ localizations_get_public_localizations: LocalizationsResponse }>> {
+    public publicLocalizations(version: string | undefined): Observable<ApolloQueryResult<{ localizations_public_localizations: LocalizationsResponse }>> {
         return this.apolloClient
             .watchQuery({
-                query: GET_PUBLIC_LOCALIZATIONS,
+                query: PUBLIC_LOCALIZATIONS,
                 variables: {
                     version,
                 },
                 fetchPolicy: 'network-only',
-            }).valueChanges as Observable<ApolloQueryResult<{ localizations_get_public_localizations: LocalizationsResponse }>>;
+            }).valueChanges as Observable<ApolloQueryResult<{ localizations_public_localizations: LocalizationsResponse }>>;
     }
 }

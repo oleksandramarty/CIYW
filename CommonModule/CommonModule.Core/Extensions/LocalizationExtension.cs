@@ -2,7 +2,7 @@ namespace CommonModule.Core.Extensions;
 
 public static class LocalizationExtension
 {
-    public static int GetLocaleId(string locale)
+    public static int LocaleId(string locale)
     {
         return locale switch
         {
@@ -12,7 +12,8 @@ public static class LocalizationExtension
             "ua" => 4,
             "ru" => 5,
             "de" => 6,
-            "it" => 7
+            "it" => 7,
+            _ => 1
         };
     }
     

@@ -1,3 +1,4 @@
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
@@ -26,10 +27,13 @@ public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
     
     public async Task<BaseBoolResponse> Handle(RemoveFavoriteExpenseCommand command, CancellationToken cancellationToken)
     {
-        FavoriteExpenseEntity favoriteExpenseEntity = await this.favoriteExpenseRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(favoriteExpenseEntity);
+        FavoriteExpenseEntity? favoriteExpense = await this.favoriteExpenseRepository.ByIdAsync(command.Id, cancellationToken);
+        if (favoriteExpense == null)
+        {
+            throw new EntityNotFoundException();
+        }
 
-        await this.CheckUserProjectByIdAsync(favoriteExpenseEntity.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(favoriteExpense.UserProjectId, cancellationToken);
 
         await this.favoriteExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
 

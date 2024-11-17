@@ -18,7 +18,7 @@ public class UserInRoleAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = context.HttpContext.User;
-        if (user == null || !user.Identity.IsAuthenticated)
+        if (!user.Identity?.IsAuthenticated ?? false)
         {
             context.Result = new ForbidResult();
             return;

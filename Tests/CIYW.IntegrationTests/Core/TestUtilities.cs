@@ -22,7 +22,7 @@ public static class TestUtilities
     /// <typeparam name="TException"></typeparam>
     public static async Task Handle_InvalidCommand<TCommand, TResult, TException>(
         IRequestHandler<TCommand, TResult> handler, TCommand command, string errorMessage,
-        Func<Task> additionalAction = null)
+        Func<Task>? additionalAction = null)
         where TCommand : IRequest<TResult>
         where TException : Exception
     {
@@ -48,7 +48,7 @@ public static class TestUtilities
     /// <typeparam name="TException"></typeparam>
     public static async Task Handle_InvalidCommand<TCommand, TException>(
         IRequestHandler<TCommand> handler, TCommand command, string errorMessage,
-        Func<Task> additionalAction = null)
+        Func<Task>? additionalAction = null)
         where TCommand : IRequest
         where TException : Exception
     {

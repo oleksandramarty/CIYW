@@ -8,12 +8,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace Localizations.Domain;
 
-public class LocalizationsDataContext: DbSaveChangeContext
+public class LocalizationsDataContext : DbSaveChangeContext
 {
     public DbSet<LocaleEntity> Locales { get; set; }
     public DbSet<LocalizationEntity> Localizations { get; set; }
-    
-    
+
+
     public LocalizationsDataContext(DbContextOptions<LocalizationsDataContext> options)
         : base(options)
     {
@@ -23,15 +23,73 @@ public class LocalizationsDataContext: DbSaveChangeContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configuring the Contact entity to map to the "Contacts.Contact" table
-        modelBuilder.Entity<LocaleEntity>(entity => 
-        { 
-            entity.ToTable("Locales", "Locales"); 
+        modelBuilder.Entity<LocaleEntity>(entity =>
+        {
+            entity.ToTable("Locales", "Locales");
+
+            entity.Property(e => e.IsoCode)
+                .IsRequired()
+                .HasMaxLength(2)
+                .IsFixedLength();
+
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.TitleEn)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.TitleNormalized)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.TitleEnNormalized)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Culture)
+                .IsRequired()
+                .HasMaxLength(8);
+
+            entity.Property(e => e.IsDefault)
+                .IsRequired();
+
+            entity.Property(e => e.IsActive)
+                .IsRequired();
+
+            entity.Property(e => e.LocaleEnum)
+                .IsRequired();
+
+            entity.HasMany(e => e.Localizations)
+                .WithOne()
+                .HasForeignKey("LocaleId")
+                .OnDelete(DeleteBehavior.Restrict);
         });
-        modelBuilder.Entity<LocalizationEntity>(entity => 
-        { 
-            entity.ToTable("Localizations", "Locales"); 
+
+        modelBuilder.Entity<LocalizationEntity>(entity =>
+        {
+            entity.ToTable("Localizations", "Locales");
+
+            entity.Property(e => e.Key)
+                .IsRequired()
+                .HasMaxLength(80);
+
+            entity.Property(e => e.Value)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            entity.Property(e => e.ValueEn)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            entity.Property(e => e.LocaleId)
+                .IsRequired();
+
+            entity.Property(e => e.IsPublic)
+                .IsRequired();
         });
-        
+
         modelBuilder.Entity<LocalizationEntity>()
             .HasIndex(l => new { l.LocaleId, l.Key })
             .IsUnique();

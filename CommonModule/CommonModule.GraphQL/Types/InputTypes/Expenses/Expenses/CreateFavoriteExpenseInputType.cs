@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.InputTypes.Expenses.Expenses;
 
-public class CreateFavoriteExpenseInputType : InputObjectGraphType
+public sealed class CreateFavoriteExpenseInputType : InputObjectGraphType
 {
     public CreateFavoriteExpenseInputType()
     {

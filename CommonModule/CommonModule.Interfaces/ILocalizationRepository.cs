@@ -5,8 +5,8 @@ namespace CommonModule.Interfaces;
 
 public interface ILocalizationRepository
 {
-    Task<LocalizationsResponse> GetLocalizationDataAllAsync(bool isPublic);
+    Task<LocalizationsResponse> LocalizationDataAllAsync(bool isPublic);
     Task ReinitializeLocalizationDataAsync(LocalizationsResponse values, bool isPublic);
-    Task<string?> GetLocalizationVersionAsync(bool isPublic);
+    Task<string> LocalizationVersionAsync(bool isPublic);
     Task SetLocalizationVersionAsync(bool isPublic);
 }

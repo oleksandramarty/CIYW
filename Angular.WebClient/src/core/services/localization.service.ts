@@ -16,6 +16,8 @@ export class LocalizationService {
     private _nonPublicLocalizations: LocalizationsResponse | undefined;
     private _publicLocalizations: LocalizationsResponse | undefined;
 
+    private _fallbackLocale: string = 'en';
+
     public localeChangedSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     get nonPublicLocalizations(): LocalizationsResponse | undefined {
@@ -61,21 +63,21 @@ export class LocalizationService {
 
         if (this._nonPublicLocalizations?.data) {
             this._nonPublicLocalizations.data.forEach(locale => {
-                mergedData[locale.locale] = locale.items;
+                mergedData[locale.locale ?? this._fallbackLocale] = locale.items;
             });
         }
 
         if (this._publicLocalizations?.data) {
             this._publicLocalizations.data.forEach(locale => {
-                if (!mergedData[locale.locale]) {
-                    mergedData[locale.locale] = [];
+                if (!mergedData[locale.locale ?? this._fallbackLocale]) {
+                    mergedData[locale.locale ?? this._fallbackLocale] = [];
                 }
                 locale.items.forEach(item => {
-                    const existingItem = mergedData[locale.locale].find(i => i.key === item.key);
+                    const existingItem = mergedData[locale.locale ?? this._fallbackLocale].find(i => i.key === item.key);
                     if (existingItem) {
                         existingItem.value = item.value;
                     } else {
-                        mergedData[locale.locale].push(item);
+                        mergedData[locale.locale ?? this._fallbackLocale].push(item);
                     }
                 });
             });
@@ -87,7 +89,7 @@ export class LocalizationService {
         }));
 
         return new LocalizationsResponse({
-            version: this._nonPublicLocalizations?.version ?? this._publicLocalizations?.version,
+            version: this._nonPublicLocalizations?.version ?? this._publicLocalizations?.version ?? '',
             data: mergedLocalizations
         });
     }
@@ -110,11 +112,11 @@ export class LocalizationService {
             (!isPublic && this.siteSettingsService.version.localization !== this.nonPublicLocalizations?.version)) {
             this.loaderService.isBusy = true;
             if (isPublic) {
-                this.graphQlLocalizationsService.getPublicLocalizations(this.publicLocalizations?.version)
+                this.graphQlLocalizationsService.publicLocalizations(this.publicLocalizations?.version)
                     .pipe(
                         take(1),
                         tap((result) => {
-                            const data = result?.data?.localizations_get_public_localizations as LocalizationsResponse;
+                            const data = result?.data?.localizations_public_localizations as LocalizationsResponse;
                             if (data && data.data.length > 0) {
                                 this.publicLocalizations = data;
                             }
@@ -124,11 +126,11 @@ export class LocalizationService {
                         handleApiError(this.snackBar)
                     ).subscribe();
             } else {
-                this.graphQlLocalizationsService.getLocalizations(this.nonPublicLocalizations?.version)
+                this.graphQlLocalizationsService.localizations(this.nonPublicLocalizations?.version)
                     .pipe(
                         take(1),
                         tap((result) => {
-                            const data = result?.data?.localizations_get_localizations as LocalizationsResponse;
+                            const data = result?.data?.localizations_localizations as LocalizationsResponse;
                             if (data && data.data.length > 0) {
                                 this.nonPublicLocalizations = data;
                             }
@@ -158,21 +160,21 @@ export class LocalizationService {
         return publicTranslation ?? nonPublicTranslation ?? key;
     }
 
-    public getAllTranslations(locale: string): { [key: string]: string } | undefined {
-        const translations: { [key: string]: string } = {};
+    public getAllTranslations(locale: string): { [key: string]: string | undefined } | undefined {
+        const translations: { [key: string]: string | undefined } = {};
 
         this._publicLocalizations?.data.find(l => l.locale === locale)?.items.forEach(item => {
-            translations[item.key] = item.value;
+            translations[item.key ?? this._fallbackLocale] = item.value;
         });
 
         this._nonPublicLocalizations?.data.find(l => l.locale === locale)?.items.forEach(item => {
-            translations[item.key] = item.value;
+            translations[item.key ?? this._fallbackLocale] = item.value;
         });
 
         return translations;
     }
 
-    public getAllTranslationsByKey(key: string): string[] | undefined {
+    public getAllTranslationsByKey(key: string | undefined): string[] | undefined {
         const translations: Set<string> = new Set();
 
         this._publicLocalizations?.data.forEach(locale => {

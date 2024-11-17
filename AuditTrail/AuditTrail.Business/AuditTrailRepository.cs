@@ -8,7 +8,7 @@ namespace AuditTrail.Business;
 /// <summary>
 /// Repository for AuditTrail
 /// </summary>
-public class AuditTrailRepository: IAuditTrailRepository
+public class AuditTrailRepository : IAuditTrailRepository
 {
     private readonly IGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> auditTrailRepository;
 
@@ -18,7 +18,7 @@ public class AuditTrailRepository: IAuditTrailRepository
     {
         this.auditTrailRepository = auditTrailRepository;
     }
-    
+
     /// <summary>
     /// Add log to the database
     /// </summary>
@@ -46,16 +46,20 @@ public class AuditTrailRepository: IAuditTrailRepository
         string? payload,
         CancellationToken cancellationToken)
     {
-        await this.auditTrailRepository.AddAsync(new AuditTrailEntity
-        {
-            Id = Guid.NewGuid(),
-            CreatedAt = DateTime.UtcNow,
-            Type = AuditTrailEnum.Error,
-            ExceptionType = exception,
-            Action = AuditTrailActionEnum.ExceptionHandlingMiddleware,
-            Message = message,
-            Payload = payload,
-            UserId = userId
-        }, cancellationToken);
+        AuditTrailEntity result = new AuditTrailEntity(
+            null,
+            AuditTrailActionEnum.ExceptionHandlingMiddleware,
+            AuditTrailEnum.Error,
+            exception,
+            message,
+            null,
+            null,
+            null,
+            payload,
+            null,
+            userId
+        );
+
+        await this.auditTrailRepository.AddAsync(result, cancellationToken);
     }
 }

@@ -20,6 +20,7 @@ import {SharedModule} from "../../../../core/shared.module";
 import {AdminAuditTrailAreaComponent} from "./admin-audit-trail-area/admin-audit-trail-area.component";
 import {AdminAuditTrailComponent} from "./admin-audit-trail/admin-audit-trail.component";
 import {GenericTableComponent} from "../../../common/generic-table/generic-table.component";
+import {CommonFavoriteComponent} from "../../../common/common-favorite/common-favorite.component";
 
 const routes: Routes = [
     {
@@ -57,6 +58,7 @@ const routes: Routes = [
         MatDividerModule,
         SharedModule,
         GenericTableComponent,
+        CommonFavoriteComponent,
     ],
     exports: [
         RouterModule

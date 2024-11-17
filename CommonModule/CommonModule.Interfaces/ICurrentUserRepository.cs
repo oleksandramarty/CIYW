@@ -5,15 +5,15 @@ namespace CommonModule.Interfaces;
 
 public interface ICurrentUserRepository
 {
-    string GetCurrentToken();
-    IEnumerable<Claim> GetCurrentClaims();
-    Guid? GetCurrentUserId();
-    UserRoleEnum GetCurrentUserRole();
+    string CurrentToken();
+    IEnumerable<Claim>? CurrentClaims();
+    Guid? CurrentUserId();
+    UserRoleEnum CurrentUserRole();
 
-    Task<string> GetCurrentTokenAsync();
-    Task<IEnumerable<Claim>> GetCurrentClaimsAsync();
-    Task<Guid?> GetCurrentUserIdAsync();
-    Task<UserRoleEnum> GetCurrentUserRoleAsync();
+    Task<string> CurrentTokenAsync();
+    Task<IEnumerable<Claim>?> CurrentClaimsAsync();
+    Task<Guid?> CurrentUserIdAsync();
+    Task<UserRoleEnum> CurrentUserRoleAsync();
         
     bool IsAuthenticated();
 

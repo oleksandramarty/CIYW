@@ -1,0 +1,15 @@
+<div class="favorite-container">
+    <h1 *ngIf="title">{{ title | translation }}</h1>
+    <i class="fa-regular fa-star"
+       *ngIf="!favorite && !isHovered"
+       (mouseenter)="onMouseEnter()"
+       (mouseleave)="onMouseLeave()"></i>
+    <i class="fa-solid fa-star-half-stroke"
+       *ngIf="isHovered"
+       (mouseenter)="onMouseEnter()"
+       (mouseleave)="onMouseLeave()"></i>
+    <i class="fa-solid fa-star"
+       *ngIf="!!favorite && !isHovered"
+       (mouseenter)="onMouseEnter()"
+       (mouseleave)="onMouseLeave()"></i>
+</div>

@@ -6,8 +6,8 @@ namespace CommonModule.Shared.Responses.Dictionaries.Models.Expenses;
 
 public class FrequencyResponse: BaseIdEntity<int>, IActivatableEntity
 {
-    public string Title { get; set; }
-    public string Description { get; set; }
+    public string? Title { get; set; }
+    public string? Description { get; set; }
     public bool IsActive { get; set; }
     public FrequencyEnum Type { get; set; }
 }

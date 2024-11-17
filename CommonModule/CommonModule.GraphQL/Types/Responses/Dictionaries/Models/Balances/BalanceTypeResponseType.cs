@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Balances;
 
-public class BalanceTypeResponseType : ObjectGraphType<BalanceTypeResponse>
+public sealed class BalanceTypeResponseType : ObjectGraphType<BalanceTypeResponse>
 {
     public BalanceTypeResponseType()
     {

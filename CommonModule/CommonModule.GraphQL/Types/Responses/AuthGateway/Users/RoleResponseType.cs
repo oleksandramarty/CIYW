@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.AuthGateway.Users;
 
-public class RoleResponseType : ObjectGraphType<RoleResponse>
+public sealed class RoleResponseType : ObjectGraphType<RoleResponse>
 {
     public RoleResponseType()
     {

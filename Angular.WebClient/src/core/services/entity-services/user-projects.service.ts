@@ -89,17 +89,17 @@ export class UserProjectsService {
 
     private getUserProjects(ngUnsubscribe: Subject<void>, fetchPolicy: WatchQueryFetchPolicy | undefined): void {
         this.loaderService.isBusy = true;
-        this.graphQlExpensesService.getFilteredUserProjects(fetchPolicy)
+        this.graphQlExpensesService.filteredUserProjects(fetchPolicy)
             .pipe(
                 takeUntil(ngUnsubscribe),
                 switchMap((result) => {
-                    const userProjects = result?.data?.expenses_get_filtered_user_projects as FilteredListResponseOfUserProjectResponse;
+                    const userProjects = result?.data?.expenses_filtered_user_projects as FilteredListResponseOfUserProjectResponse;
                     this._userProjects = userProjects;
                     this.store.dispatch(expenses_setUserProjects({ userProjects }));
-                    return this.graphQlExpensesService.getFilteredUserAllowedProjects(fetchPolicy);
+                    return this.graphQlExpensesService.filteredUserAllowedProjects(fetchPolicy);
                 }),
                 tap((result) => {
-                    const userAllowedProjects = result?.data?.expenses_get_filtered_user_allowed_projects as FilteredListResponseOfUserAllowedProjectResponse;
+                    const userAllowedProjects = result?.data?.expenses_filtered_user_allowed_projects as FilteredListResponseOfUserAllowedProjectResponse;
                     this._userAllowedProjects = userAllowedProjects;
                     this.store.dispatch(expenses_setUserAllowedProjects({ userAllowedProjects }));
                     this.loaderService.isBusy = false

@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Interfaces;
 
-public interface ICacheRepository<TId, TEntity>
-    where TId : notnull
-    where TEntity : class, IBaseIdEntity<TId>
+public interface ICacheRepository<TEntityId, TEntity>
+    where TEntityId : notnull
+    where TEntity : class, IBaseIdEntity<TEntityId>
 {
-    Task<List<TEntity>> GetItemsFromCacheAsync();
+    Task<List<TEntity>?> ItemsFromCacheAsync();
     Task ReinitializeDictionaryAsync(List<TEntity> values);
-    Task<string?> GetCacheVersionAsync();
+    Task<string> CacheVersionAsync();
     Task SetCacheVersionAsync();
 }

@@ -2,7 +2,7 @@ using CommonModule.GraphQL.QueryResolver;
 
 namespace Expenses.GraphQL;
 
-public class ExpensesRootQuery: GraphQLQueryHelper
+public class ExpensesRootQuery: GraphQlQueryHelper
 {
     public ExpensesRootQuery()
     {

@@ -5,7 +5,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.AuditTrail.AuditTrail;
 
-public class AuditTrailResponseType : ObjectGraphType<AuditTrailResponse>
+public sealed class AuditTrailResponseType : ObjectGraphType<AuditTrailResponse>
 {
     public AuditTrailResponseType()
     {

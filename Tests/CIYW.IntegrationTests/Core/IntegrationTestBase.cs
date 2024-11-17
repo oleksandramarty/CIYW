@@ -18,11 +18,11 @@ public class IntegrationTestBase : WebApplicationFactory<Program>
     /// <summary>
     /// Options for integration tests
     /// </summary>
-    private IntegrationTestOptions options { get; }
+    private IntegrationTestOptions Options { get; }
 
     public IntegrationTestBase(IntegrationTestOptions options)
     {
-        this.options = options;
+        this.Options = options;
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public class IntegrationTestBase : WebApplicationFactory<Program>
                 .UseTestServer()
                 .ConfigureTestServices(services =>
                 {
-                    services.AddSingleton<IHttpContextAccessor>(options.GenerateClaims());
+                    services.AddSingleton<IHttpContextAccessor>(Options.GenerateClaims());
                 })
                 .ConfigureAppConfiguration(config => { })
                 .ConfigureTestContainer<ContainerBuilder>(opt => { });

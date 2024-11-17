@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Interfaces;
 
-public interface IDictionaryRepository<TId, TEntity, TResponse, TDataContext>
-    where TEntity : class, IBaseIdEntity<TId>, IActivatableEntity
-    where TResponse : class, IBaseIdEntity<TId>
+public interface IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>
+    where TEntityId : struct
+    where TEntity : class, IBaseIdEntity<TEntityId>, IActivatableEntity
+    where TResponse : class, IBaseIdEntity<TEntityId>
     where TDataContext : DbContext
 {
-    Task<VersionedListResponse<TResponse>> GetDictionaryAsync(
+    Task<VersionedListResponse<TResponse>> DictionaryAsync(
         string? version, 
         CancellationToken cancellationToken,
-        params Func<IQueryable<TEntity>, IQueryable<TEntity>>[] includeFuncs);
+        params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs);
 }

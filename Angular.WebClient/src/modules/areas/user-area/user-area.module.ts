@@ -9,6 +9,7 @@ import {UserSettingsComponent} from "./user-settings/user-settings.component";
 import {UserNotificationsComponent} from "./user-notifications/user-notifications.component";
 import {AppCommonInputModule} from "../../common/common-input/app-common-input.module";
 import {MatButton} from "@angular/material/button";
+import {CommonFavoriteComponent} from "../../common/common-favorite/common-favorite.component";
 
 const routes: Routes = [
     {
@@ -34,7 +35,8 @@ const routes: Routes = [
         SharedModule,
         MatDividerModule,
         AppCommonInputModule,
-        MatButton
+        MatButton,
+        CommonFavoriteComponent
     ],
     exports: [
         RouterModule

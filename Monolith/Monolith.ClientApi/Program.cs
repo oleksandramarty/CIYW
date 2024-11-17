@@ -2,12 +2,13 @@ using AuditTrail.Business;
 using AuditTrail.Domain;
 using AuditTrail.Mediatr;
 using AuditTrail.Mediatr.Mediatr.Requests;
+using AuditTrail.Mediatr.Strategies.FilteredResult;
 using AuthGateway.Domain;
 using AuthGateway.Mediatr;
 using AuthGateway.Mediatr.Validators.Auth;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using CommonModule.Core.Strategies.GetFilteredResult;
+using CommonModule.Core.Strategies.FilteredResult;
 using CommonModule.Facade;
 using CommonModule.Shared.Responses.AuditTrail;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
@@ -19,7 +20,7 @@ using Expenses.Domain;
 using Expenses.Mediatr;
 using Expenses.Mediatr.Mediatr.Expenses.Requests;
 using Expenses.Mediatr.Mediatr.Projects.Requests;
-using Expenses.Mediatr.Strategies.GetFilteredResult;
+using Expenses.Mediatr.Strategies.FilteredResult;
 using Expenses.Mediatr.Validators.Expenses;
 using Expenses.Mediatr.Validators.Projects;
 using FluentValidation;
@@ -47,7 +48,7 @@ public class Program
         builder.AddDatabaseContext<DictionariesDataContext>();
         builder.AddDatabaseContext<AuthGatewayDataContext>();
         builder.AddDatabaseContext<AuditTrailDataContext>("Logs");
-        builder.AddDynamoDB();
+        builder.AddDynamoDb();
         builder.AddSwagger(true);
         builder.AddCorsPolicy();
         builder.Services.AddControllers();
@@ -73,7 +74,7 @@ public class Program
             new MonolithGraphQLSchema(new SelfActivatingServiceProvider(services)));
         // GraphQL schema ends
 
-        builder.AddGraphQL();
+        builder.AddGraphQl();
 
         // Custom DI
         builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
@@ -117,23 +118,23 @@ public class Program
 
         // Strategies
         builder.Services
-            .AddScoped<IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>,
-                GetFilteredResultOfExpenseStrategy>();
+            .AddScoped<IFilteredResultStrategy<FilteredExpensesRequest, ExpenseResponse>,
+                FilteredResultOfExpenseStrategy>();
         builder.Services
-            .AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse>,
-                GetFilteredResultOfPlannedExpenseStrategy>();
+            .AddScoped<IFilteredResultStrategy<FilteredPlannedExpensesRequest, PlannedExpenseResponse>,
+                FilteredResultOfPlannedExpenseStrategy>();
         builder.Services
-            .AddScoped<IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse>,
-                GetFilteredResultOfFavoriteExpenseStrategy>();
+            .AddScoped<IFilteredResultStrategy<FilteredFavoriteExpensesRequest, FavoriteExpenseResponse>,
+                FilteredResultOfFavoriteExpenseStrategy>();
         builder.Services
-            .AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>,
-                GetFilteredResultOfUserProjectStrategy>();
+            .AddScoped<IFilteredResultStrategy<FilteredUserProjectsRequest, UserProjectResponse>,
+                FilteredResultOfUserProjectStrategy>();
         builder.Services
-            .AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>,
-                GetFilteredResultOfUserAllowedProjectStrategy>();
+            .AddScoped<IFilteredResultStrategy<FilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>,
+                FilteredResultOfUserAllowedProjectStrategy>();
         builder.Services
-            .AddScoped<IGetFilteredResultStrategy<GetFilteredAuditTrailRequest, AuditTrailResponse>,
-                GetFilteredResultOfAuditTrailStrategy>();
+            .AddScoped<IFilteredResultStrategy<FilteredAuditTrailRequest, AuditTrailResponse>,
+                FilteredResultOfAuditTrailStrategy>();
         // Strategies end
 
         var app = builder.Build();
@@ -143,7 +144,7 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "DevelopmentMonolith")
         {
-            app.UseSwaggerUI(builder);
+            app.UseSwaggerUi(builder);
             app.UseGraphQLPlayground("/graphql/playground");
         }
 

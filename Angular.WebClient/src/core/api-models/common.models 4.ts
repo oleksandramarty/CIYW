@@ -17,8 +17,8 @@ export const API_BASE_URL_Monolith = new InjectionToken<string>('API_BASE_URL_Mo
 
 
 export class SiteSettingsResponse implements ISiteSettingsResponse {
-    locale!: string;
-    version!: CacheVersionResponse;
+    locale?: string | undefined;
+    version?: CacheVersionResponse | undefined;
 
     constructor(data?: ISiteSettingsResponse) {
         if (data) {
@@ -27,15 +27,12 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
                     (<any>this)[property] = (<any>data)[property];
             }
         }
-        if (!data) {
-            this.version = new CacheVersionResponse();
-        }
     }
 
     init(_data?: any) {
         if (_data) {
             this.locale = _data["locale"];
-            this.version = _data["version"] ? CacheVersionResponse.fromJS(_data["version"]) : new CacheVersionResponse();
+            this.version = _data["version"] ? CacheVersionResponse.fromJS(_data["version"]) : <any>undefined;
         }
     }
 
@@ -55,20 +52,20 @@ export class SiteSettingsResponse implements ISiteSettingsResponse {
 }
 
 export interface ISiteSettingsResponse {
-    locale: string;
-    version: CacheVersionResponse;
+    locale?: string | undefined;
+    version?: CacheVersionResponse | undefined;
 }
 
 export class CacheVersionResponse implements ICacheVersionResponse {
-    localizationPublic!: string;
-    localization!: string;
-    category!: string;
-    currency!: string;
-    country!: string;
-    locale!: string;
-    frequency!: string;
-    balanceType!: string;
-    iconCategory!: string;
+    localizationPublic?: string | undefined;
+    localization?: string | undefined;
+    category?: string | undefined;
+    currency?: string | undefined;
+    country?: string | undefined;
+    locale?: string | undefined;
+    frequency?: string | undefined;
+    balanceType?: string | undefined;
+    iconCategory?: string | undefined;
 
     constructor(data?: ICacheVersionResponse) {
         if (data) {
@@ -116,19 +113,19 @@ export class CacheVersionResponse implements ICacheVersionResponse {
 }
 
 export interface ICacheVersionResponse {
-    localizationPublic: string;
-    localization: string;
-    category: string;
-    currency: string;
-    country: string;
-    locale: string;
-    frequency: string;
-    balanceType: string;
-    iconCategory: string;
+    localizationPublic?: string | undefined;
+    localization?: string | undefined;
+    category?: string | undefined;
+    currency?: string | undefined;
+    country?: string | undefined;
+    locale?: string | undefined;
+    frequency?: string | undefined;
+    balanceType?: string | undefined;
+    iconCategory?: string | undefined;
 }
 
 export class JwtTokenResponse implements IJwtTokenResponse {
-    token!: string;
+    token?: string | undefined;
 
     constructor(data?: IJwtTokenResponse) {
         if (data) {
@@ -160,7 +157,7 @@ export class JwtTokenResponse implements IJwtTokenResponse {
 }
 
 export interface IJwtTokenResponse {
-    token: string;
+    token?: string | undefined;
 }
 
 export class BaseIdEntityOfGuid implements IBaseIdEntityOfGuid {
@@ -237,26 +234,25 @@ export interface IBaseDateTimeEntityOfGuid extends IBaseIdEntityOfGuid {
 }
 
 export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserResponse {
-    login!: string;
-    loginNormalized!: string;
-    email!: string;
-    emailNormalized!: string;
-    passwordHash!: string;
-    salt!: string;
+    login?: string | undefined;
+    loginNormalized?: string | undefined;
+    email?: string | undefined;
+    emailNormalized?: string | undefined;
+    passwordHash?: string | undefined;
+    salt?: string | undefined;
     isActive!: boolean;
     isTemporaryPassword!: boolean;
     authType!: UserAuthMethodEnum;
     lastForgotPassword?: Date | undefined;
     lastForgotPasswordRequest?: Date | undefined;
     roles!: RoleResponse[];
-    userSetting!: UserSettingResponse;
+    userSetting?: UserSettingResponse | undefined;
     version!: string;
 
     constructor(data?: IUserResponse) {
         super(data);
         if (!data) {
             this.roles = [];
-            this.userSetting = new UserSettingResponse();
         }
     }
 
@@ -279,7 +275,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
                 for (let item of _data["roles"])
                     this.roles!.push(RoleResponse.fromJS(item));
             }
-            this.userSetting = _data["userSetting"] ? UserSettingResponse.fromJS(_data["userSetting"]) : new UserSettingResponse();
+            this.userSetting = _data["userSetting"] ? UserSettingResponse.fromJS(_data["userSetting"]) : <any>undefined;
             this.version = _data["version"];
         }
     }
@@ -317,19 +313,19 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
 }
 
 export interface IUserResponse extends IBaseDateTimeEntityOfGuid {
-    login: string;
-    loginNormalized: string;
-    email: string;
-    emailNormalized: string;
-    passwordHash: string;
-    salt: string;
+    login?: string | undefined;
+    loginNormalized?: string | undefined;
+    email?: string | undefined;
+    emailNormalized?: string | undefined;
+    passwordHash?: string | undefined;
+    salt?: string | undefined;
     isActive: boolean;
     isTemporaryPassword: boolean;
     authType: UserAuthMethodEnum;
     lastForgotPassword?: Date | undefined;
     lastForgotPasswordRequest?: Date | undefined;
     roles: RoleResponse[];
-    userSetting: UserSettingResponse;
+    userSetting?: UserSettingResponse | undefined;
     version: string;
 }
 
@@ -375,7 +371,7 @@ export interface IBaseIdEntityOfInteger {
 }
 
 export class RoleResponse extends BaseIdEntityOfInteger implements IRoleResponse {
-    title!: string;
+    title?: string | undefined;
     userRole!: UserRoleEnum;
 
     constructor(data?: IRoleResponse) {
@@ -407,7 +403,7 @@ export class RoleResponse extends BaseIdEntityOfInteger implements IRoleResponse
 }
 
 export interface IRoleResponse extends IBaseIdEntityOfInteger {
-    title: string;
+    title?: string | undefined;
     userRole: UserRoleEnum;
 }
 
@@ -419,7 +415,7 @@ export enum UserRoleEnum {
 }
 
 export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSettingResponse {
-    defaultLocale!: string;
+    defaultLocale?: string | undefined;
     timeZone!: number;
     currencyId?: number | undefined;
     countryId?: number | undefined;
@@ -466,7 +462,7 @@ export class UserSettingResponse extends BaseIdEntityOfGuid implements IUserSett
 }
 
 export interface IUserSettingResponse extends IBaseIdEntityOfGuid {
-    defaultLocale: string;
+    defaultLocale?: string | undefined;
     timeZone: number;
     currencyId?: number | undefined;
     countryId?: number | undefined;
@@ -710,7 +706,7 @@ export interface IBaseAmountRangeFilterRequest {
 }
 
 export class BaseVersionEntity implements IBaseVersionEntity {
-    version?: string | undefined;
+    version!: string;
 
     constructor(data?: IBaseVersionEntity) {
         if (data) {
@@ -742,7 +738,7 @@ export class BaseVersionEntity implements IBaseVersionEntity {
 }
 
 export interface IBaseVersionEntity {
-    version?: string | undefined;
+    version: string;
 }
 
 export class LocalizationsResponse extends BaseVersionEntity implements ILocalizationsResponse {
@@ -790,7 +786,7 @@ export interface ILocalizationsResponse extends IBaseVersionEntity {
 }
 
 export class LocalizationResponse implements ILocalizationResponse {
-    locale!: string;
+    locale?: string | undefined;
     items!: LocalizationItemResponse[];
 
     constructor(data?: ILocalizationResponse) {
@@ -836,13 +832,13 @@ export class LocalizationResponse implements ILocalizationResponse {
 }
 
 export interface ILocalizationResponse {
-    locale: string;
+    locale?: string | undefined;
     items: LocalizationItemResponse[];
 }
 
 export class LocalizationItemResponse implements ILocalizationItemResponse {
-    key!: string;
-    value!: string;
+    key?: string | undefined;
+    value?: string | undefined;
 
     constructor(data?: ILocalizationItemResponse) {
         if (data) {
@@ -876,8 +872,8 @@ export class LocalizationItemResponse implements ILocalizationItemResponse {
 }
 
 export interface ILocalizationItemResponse {
-    key: string;
-    value: string;
+    key?: string | undefined;
+    value?: string | undefined;
 }
 
 export class FilteredListResponseOfExpenseResponse implements IFilteredListResponseOfExpenseResponse {
@@ -936,7 +932,7 @@ export interface IFilteredListResponseOfExpenseResponse {
 }
 
 export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpenseResponse {
-    title!: string;
+    title?: string | undefined;
     description?: string | undefined;
     amount!: number;
     balanceId!: string;
@@ -995,7 +991,7 @@ export class ExpenseResponse extends BaseDateTimeEntityOfGuid implements IExpens
 }
 
 export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
-    title: string;
+    title?: string | undefined;
     description?: string | undefined;
     amount: number;
     balanceId: string;
@@ -1009,7 +1005,7 @@ export interface IExpenseResponse extends IBaseDateTimeEntityOfGuid {
 }
 
 export class FavoriteExpenseResponse extends BaseDateTimeEntityOfGuid implements IFavoriteExpenseResponse {
-    title!: string;
+    title?: string | undefined;
     description?: string | undefined;
     limit?: number | undefined;
     currentAmount?: number | undefined;
@@ -1085,7 +1081,7 @@ export class FavoriteExpenseResponse extends BaseDateTimeEntityOfGuid implements
 }
 
 export interface IFavoriteExpenseResponse extends IBaseDateTimeEntityOfGuid {
-    title: string;
+    title?: string | undefined;
     description?: string | undefined;
     limit?: number | undefined;
     currentAmount?: number | undefined;
@@ -1156,7 +1152,7 @@ export interface IFilteredListResponseOfPlannedExpenseResponse {
 }
 
 export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements IPlannedExpenseResponse {
-    title!: string;
+    title?: string | undefined;
     description?: string | undefined;
     amount!: number;
     categoryId!: number;
@@ -1221,7 +1217,7 @@ export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements 
 }
 
 export interface IPlannedExpenseResponse extends IBaseDateTimeEntityOfGuid {
-    title: string;
+    title?: string | undefined;
     description?: string | undefined;
     amount: number;
     categoryId: number;
@@ -1292,7 +1288,7 @@ export interface IFilteredListResponseOfUserProjectResponse {
 }
 
 export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUserProjectResponse {
-    title!: string;
+    title?: string | undefined;
     isActive!: boolean;
     createdUserId!: string;
     balances!: BalanceResponse[];
@@ -1344,7 +1340,7 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
 }
 
 export interface IUserProjectResponse extends IBaseDateTimeEntityOfGuid {
-    title: string;
+    title?: string | undefined;
     isActive: boolean;
     createdUserId: string;
     balances: BalanceResponse[];
@@ -1355,7 +1351,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
     userId!: string;
     amount!: number;
     currencyId!: number;
-    title!: string;
+    title?: string | undefined;
     iconId!: number;
     userProjectId!: string;
     version!: string;
@@ -1408,7 +1404,7 @@ export interface IBalanceResponse extends IBaseDateTimeEntityOfGuid {
     userId: string;
     amount: number;
     currencyId: number;
-    title: string;
+    title?: string | undefined;
     iconId: number;
     userProjectId: string;
     version: string;
@@ -1473,22 +1469,19 @@ export interface IFilteredListResponseOfUserAllowedProjectResponse {
 
 export class UserAllowedProjectResponse extends BaseIdEntityOfGuid implements IUserAllowedProjectResponse {
     userProjectId!: string;
-    userProject!: UserProjectResponse;
+    userProject?: UserProjectResponse | undefined;
     userId!: string;
     isReadOnly!: boolean;
 
     constructor(data?: IUserAllowedProjectResponse) {
         super(data);
-        if (!data) {
-            this.userProject = new UserProjectResponse();
-        }
     }
 
     override init(_data?: any) {
         super.init(_data);
         if (_data) {
             this.userProjectId = _data["userProjectId"];
-            this.userProject = _data["userProject"] ? UserProjectResponse.fromJS(_data["userProject"]) : new UserProjectResponse();
+            this.userProject = _data["userProject"] ? UserProjectResponse.fromJS(_data["userProject"]) : <any>undefined;
             this.userId = _data["userId"];
             this.isReadOnly = _data["isReadOnly"];
         }
@@ -1514,7 +1507,7 @@ export class UserAllowedProjectResponse extends BaseIdEntityOfGuid implements IU
 
 export interface IUserAllowedProjectResponse extends IBaseIdEntityOfGuid {
     userProjectId: string;
-    userProject: UserProjectResponse;
+    userProject?: UserProjectResponse | undefined;
     userId: string;
     isReadOnly: boolean;
 }
@@ -1789,10 +1782,10 @@ export interface IVersionedListResponseOfCurrencyResponse extends IBaseVersionEn
 }
 
 export class CurrencyResponse extends BaseIdEntityOfInteger implements ICurrencyResponse {
-    title!: string;
-    code!: string;
-    symbol!: string;
-    titleEn!: string;
+    title?: string | undefined;
+    code?: string | undefined;
+    symbol?: string | undefined;
+    titleEn?: string | undefined;
     isActive!: boolean;
     countries!: CountryResponse[];
 
@@ -1844,18 +1837,18 @@ export class CurrencyResponse extends BaseIdEntityOfInteger implements ICurrency
 }
 
 export interface ICurrencyResponse extends IBaseIdEntityOfInteger {
-    title: string;
-    code: string;
-    symbol: string;
-    titleEn: string;
+    title?: string | undefined;
+    code?: string | undefined;
+    symbol?: string | undefined;
+    titleEn?: string | undefined;
     isActive: boolean;
     countries: CountryResponse[];
 }
 
 export class CountryResponse extends BaseIdEntityOfInteger implements ICountryResponse {
-    title!: string;
-    code!: string;
-    titleEn!: string;
+    title?: string | undefined;
+    code?: string | undefined;
+    titleEn?: string | undefined;
     isActive!: boolean;
     currencies!: CurrencyResponse[];
 
@@ -1905,9 +1898,9 @@ export class CountryResponse extends BaseIdEntityOfInteger implements ICountryRe
 }
 
 export interface ICountryResponse extends IBaseIdEntityOfInteger {
-    title: string;
-    code: string;
-    titleEn: string;
+    title?: string | undefined;
+    code?: string | undefined;
+    titleEn?: string | undefined;
     isActive: boolean;
     currencies: CurrencyResponse[];
 }
@@ -1957,8 +1950,8 @@ export interface IVersionedListResponseOfFrequencyResponse extends IBaseVersionE
 }
 
 export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequencyResponse {
-    title!: string;
-    description!: string;
+    title?: string | undefined;
+    description?: string | undefined;
     isActive!: boolean;
     type!: FrequencyEnum;
 
@@ -1995,8 +1988,8 @@ export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequen
 }
 
 export interface IFrequencyResponse extends IBaseIdEntityOfInteger {
-    title: string;
-    description: string;
+    title?: string | undefined;
+    description?: string | undefined;
     isActive: boolean;
     type: FrequencyEnum;
 }
@@ -2058,15 +2051,15 @@ export interface IVersionedListResponseOfLocaleResponse extends IBaseVersionEnti
 }
 
 export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResponse {
-    isoCode!: string;
-    title!: string;
-    titleEn!: string;
-    titleNormalized!: string;
-    titleEnNormalized!: string;
+    isoCode?: string | undefined;
+    title?: string | undefined;
+    titleEn?: string | undefined;
+    titleNormalized?: string | undefined;
+    titleEnNormalized?: string | undefined;
     isDefault!: boolean;
     isActive!: boolean;
     localeEnum!: LocaleEnum;
-    culture!: string;
+    culture?: string | undefined;
 
     constructor(data?: ILocaleResponse) {
         super(data);
@@ -2111,15 +2104,15 @@ export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResp
 }
 
 export interface ILocaleResponse extends IBaseIdEntityOfInteger {
-    isoCode: string;
-    title: string;
-    titleEn: string;
-    titleNormalized: string;
-    titleEnNormalized: string;
+    isoCode?: string | undefined;
+    title?: string | undefined;
+    titleEn?: string | undefined;
+    titleNormalized?: string | undefined;
+    titleEnNormalized?: string | undefined;
     isDefault: boolean;
     isActive: boolean;
     localeEnum: LocaleEnum;
-    culture: string;
+    culture?: string | undefined;
 }
 
 export enum LocaleEnum {
@@ -2221,9 +2214,9 @@ export interface IVersionedListResponseOfCategoryResponse extends IBaseVersionEn
 }
 
 export class CategoryResponse extends BaseIdEntityOfInteger implements ICategoryResponse {
-    title!: string;
+    title?: string | undefined;
     iconId!: number;
-    color!: string;
+    color?: string | undefined;
     isActive!: boolean;
     isPositive!: boolean;
     parentId?: number | undefined;
@@ -2279,9 +2272,9 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
 }
 
 export interface ICategoryResponse extends IBaseIdEntityOfInteger {
-    title: string;
+    title?: string | undefined;
     iconId: number;
-    color: string;
+    color?: string | undefined;
     isActive: boolean;
     isPositive: boolean;
     parentId?: number | undefined;
@@ -2333,7 +2326,7 @@ export interface IVersionedListResponseOfBalanceTypeResponse extends IBaseVersio
 }
 
 export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalanceTypeResponse {
-    title!: string;
+    title?: string | undefined;
     isActive!: boolean;
     type!: BalanceEnum;
 
@@ -2368,7 +2361,7 @@ export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalan
 }
 
 export interface IBalanceTypeResponse extends IBaseIdEntityOfInteger {
-    title: string;
+    title?: string | undefined;
     isActive: boolean;
     type: BalanceEnum;
 }
@@ -2425,7 +2418,7 @@ export interface IVersionedListResponseOfIconCategoryResponse extends IBaseVersi
 }
 
 export class IconCategoryResponse extends BaseIdEntityOfInteger implements IIconCategoryResponse {
-    title!: string;
+    title?: string | undefined;
     isActive!: boolean;
     icons!: IconResponse[];
 
@@ -2471,13 +2464,13 @@ export class IconCategoryResponse extends BaseIdEntityOfInteger implements IIcon
 }
 
 export interface IIconCategoryResponse extends IBaseIdEntityOfInteger {
-    title: string;
+    title?: string | undefined;
     isActive: boolean;
     icons: IconResponse[];
 }
 
 export class IconResponse extends BaseIdEntityOfInteger implements IIconResponse {
-    title!: string;
+    title?: string | undefined;
     isActive!: boolean;
     iconCategoryId!: number;
 
@@ -2512,7 +2505,7 @@ export class IconResponse extends BaseIdEntityOfInteger implements IIconResponse
 }
 
 export interface IIconResponse extends IBaseIdEntityOfInteger {
-    title: string;
+    title?: string | undefined;
     isActive: boolean;
     iconCategoryId: number;
 }

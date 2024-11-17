@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Expenses;
 
-public class FrequencyResponseType : ObjectGraphType<FrequencyResponse>
+public sealed class FrequencyResponseType : ObjectGraphType<FrequencyResponse>
 {
     public FrequencyResponseType()
     {

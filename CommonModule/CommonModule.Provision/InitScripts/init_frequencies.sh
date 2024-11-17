@@ -29,7 +29,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the frequency with the specific ID already exists
-    frequency_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Frequencies\" WHERE \"Id\" = $id;")
+    frequency_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Frequencies\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the frequency does not exist, prepare the SQL for insert
     if [ -z "$frequency_exists" ]; then
@@ -40,7 +40,7 @@ do
       sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"Frequencies\"
       (\"Id\", \"Title\", \"Description\", \"IsActive\", \"Type\")
       VALUES ($id, '$title', '$description', $isActiveBool, $type);"
-      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
         echo "Frequency with ID $id added successfully."
       else
         ((errorAdded++))

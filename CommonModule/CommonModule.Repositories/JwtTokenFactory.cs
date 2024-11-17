@@ -38,19 +38,19 @@ public class JwtTokenFactory: IJwtTokenFactory
     }
     
     public string GenerateJwtToken(
-        Guid userId,
+        Guid? userId,
         string login,
         string email,
         string roles,
         bool rememberMe = false,
-        ClaimsIdentity additionalClaims = null)
+        ClaimsIdentity? additionalClaims = null)
     {
         if (userId == null)
         {
             throw new EntityNotFoundException();
         }
         var tokenHandler = new JwtSecurityTokenHandler();
-        string secretKey = configuration["Authentication:Jwt:SecretKey"];
+        string? secretKey = configuration["Authentication:Jwt:SecretKey"];
         if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)
         {
             throw new ArgumentException(ErrorMessages.JwtMinLength);
@@ -61,7 +61,7 @@ public class JwtTokenFactory: IJwtTokenFactory
         {
             new Claim(AuthClaims.Login, login),
             new Claim(AuthClaims.Email, email),
-            new Claim(AuthClaims.UserId, userId.ToString()),
+            new Claim(AuthClaims.UserId, userId.Value.ToString()),
             new Claim(AuthClaims.Role, roles),
             new Claim(AuthClaims.RememberMe, rememberMe.ToString())
         };
@@ -121,9 +121,9 @@ public class JwtTokenFactory: IJwtTokenFactory
         return newToken;
     }
     
-    public Guid GetUserIdFromToken(string token)
+    public Guid UserIdFromToken(string token)
     {
-        var userIdClaim = this.GetClaim(token, AuthClaims.UserId);
+        var userIdClaim = this.ClaimValue(token, AuthClaims.UserId);
 
         if (userIdClaim == null)
         {
@@ -135,7 +135,7 @@ public class JwtTokenFactory: IJwtTokenFactory
     
     public bool IsTokenRefreshable(string token)
     {
-        var rememberMeClaim = this.GetClaim(token, AuthClaims.RememberMe);
+        var rememberMeClaim = this.ClaimValue(token, AuthClaims.RememberMe);
         if (!bool.TryParse(rememberMeClaim.Value, out var rememberMe))
         {
             throw new InvalidOperationException(ErrorMessages.JwtUserClaimInvalidConversion);
@@ -144,7 +144,7 @@ public class JwtTokenFactory: IJwtTokenFactory
         return rememberMe;
     }
 
-    private Claim? GetClaim(string token, string claimName)
+    private Claim ClaimValue(string token, string claimName)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtToken = tokenHandler.ReadJwtToken(token);

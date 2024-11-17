@@ -34,7 +34,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the country with the specific ID already exists
-    country_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Countries\" WHERE \"Id\" = $id;")
+    country_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Countries\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the country does not exist, prepare the SQL for bulk insert
     if [ -z "$country_exists" ]; then
@@ -50,7 +50,7 @@ do
 
         # If bulkCounter reaches 500, execute the bulk insert
         if [ $bulkCounter -ge 500 ]; then
-          if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+          if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
             echo "Bulk insert of $bulkCounter countries added successfully."
           else
             ((errorAdded+=bulkCounter))
@@ -65,7 +65,7 @@ do
         sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"Countries\"
         (\"Id\", \"Code\", \"TitleEn\", \"Title\", \"IsActive\")
         VALUES ($id, '$code', '$titleEn', '$title', $isActiveBool);"
-        if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+        if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
           echo "Country with ID $id added successfully."
         else
           ((errorAdded++))
@@ -81,7 +81,7 @@ done < "$csv_file"
 
 # Insert any remaining countries
 if [ $bulkCounter -gt 0 ]; then
-  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
     echo "Bulk insert of $bulkCounter remaining countries added successfully."
   else
     ((errorAdded+=bulkCounter))

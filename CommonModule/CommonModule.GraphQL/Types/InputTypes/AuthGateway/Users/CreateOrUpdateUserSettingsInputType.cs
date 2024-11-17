@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.InputTypes.AuthGateway.Users;
 
-public class CreateOrUpdateUserSettingsInputType: InputObjectGraphType
+public sealed class CreateOrUpdateUserSettingsInputType: InputObjectGraphType
 {
     public CreateOrUpdateUserSettingsInputType()
     {

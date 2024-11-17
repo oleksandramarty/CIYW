@@ -15,7 +15,7 @@ export const fadeInOut = trigger('fadeInOut', [
 export const slideInFromLeft = trigger('slideInFromLeft', [
     state('open', style({
         left: '0',
-        zIndex: 9999
+        zIndex: 1000
     })),
     state('closed', style({
         left: '-100%',

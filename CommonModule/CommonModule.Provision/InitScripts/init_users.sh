@@ -33,7 +33,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the user with the specific ID already exists
-    user_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Users\".\"Users\" WHERE \"Id\" = '$id';")
+    user_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Users\".\"Users\" WHERE \"Id\" = '$id';" > /dev/null)
 
     # If the user does not exist, insert it
     if [ -z "$user_exists" ]; then
@@ -51,7 +51,7 @@ do
       VALUES ($role, '$id', '$userRoleId');"
       
       # Execute the SQL command
-      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql1" && psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql2"; then
+      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql1" > /dev/null && psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql2" > /dev/null; then
          echo "User with ID $id added successfully."
       else
         ((errorAdded++))

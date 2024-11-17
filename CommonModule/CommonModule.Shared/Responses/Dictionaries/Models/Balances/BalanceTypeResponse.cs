@@ -6,7 +6,7 @@ namespace CommonModule.Shared.Responses.Dictionaries.Models.Balances;
 
 public class BalanceTypeResponse: BaseIdEntity<int>, IActivatableEntity
 {
-    public string Title { get; set; }
+    public string? Title { get; set; }
     public bool IsActive { get; set; }
     
     public BalanceEnum Type { get; set; }

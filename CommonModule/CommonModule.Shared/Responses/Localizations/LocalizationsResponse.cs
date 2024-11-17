@@ -1,3 +1,4 @@
+using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace CommonModule.Shared.Responses.Localizations;
@@ -23,23 +24,18 @@ public class LocalizationResponse
         this.Locale = locale;
         this.Items = new List<LocalizationItemResponse>();
     }
-    public string Locale { get; set; }
+    public string? Locale { get; set; }
     public ICollection<LocalizationItemResponse> Items { get; set; }
 }
 
 public class LocalizationItemResponse
 {
-    public LocalizationItemResponse()
-    {
-        
-    }
-    
-    public LocalizationItemResponse(string key, string value)
+    public LocalizationItemResponse(string? key, string? value)
     {
         this.Key = key;
         this.Value = value;
     }
     
-    public string Key { get; set; }
-    public string Value { get; set; }
+    public string? Key { get; set; }
+    public string? Value { get; set; }
 }

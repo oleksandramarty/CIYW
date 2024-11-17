@@ -1,6 +1,12 @@
-namespace CommonModule.Shared.Common.BaseInterfaces;
+using System.ComponentModel.DataAnnotations;
+using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Core;
 
-public class BaseVersionEntity: IBaseVersionEntity
+namespace CommonModule.Shared.Common;
+
+public class BaseVersionEntity : IBaseVersionEntity
 {
-    public string? Version { get; set; }
+    [Required]
+    [StringLength(32, MinimumLength = 32)]
+    public string Version { get; set; } = VersionExtension.GenerateVersion();
 }

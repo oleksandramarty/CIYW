@@ -37,14 +37,14 @@ public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
-        if (await this.favoriteExpenseRepository.GetQueryable(fe => fe.UserProjectId == command.UserProjectId)
+        if (await this.favoriteExpenseRepository.Queryable(fe => fe.UserProjectId == command.UserProjectId)
                 .CountAsync(cancellationToken) >= 10)
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
 
         FavoriteExpenseEntity toAdd = this.mapper.Map<FavoriteExpenseEntity>(command);
-        toAdd.CreatedUserId = await this.GetCurrentUserIdAsync();
+        toAdd.CreatedUserId = await this.CurrentUserIdAsync();
             
         await this.favoriteExpenseRepository.AddAsync(toAdd, cancellationToken);
         return;

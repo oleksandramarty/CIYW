@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using CommonModule.Core.Exceptions;
-using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
 using CommonModule.Shared.Enums;
@@ -17,20 +16,20 @@ public class CurrentUserRepository : ICurrentUserRepository
         this.httpContextAccessor = httpContextAccessor;
     }
 
-    public string GetCurrentToken()
+    public string CurrentToken()
     {
-        var authorizationHeader = this.httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
-        return authorizationHeader.StartsWith($"{AuthSchema.Schema} ")
-            ? authorizationHeader.Substring($"{AuthSchema.Schema} ".Length).Trim()
-            : null;
+        string? authorizationHeader = this.httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+        return !string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith($"{AuthSchema.Schema} ") ?
+            authorizationHeader.Substring($"{AuthSchema.Schema} ".Length).Trim()
+            : string.Empty;
     }
 
-    public IEnumerable<Claim> GetCurrentClaims()
+    public IEnumerable<Claim>? CurrentClaims()
     {
-        return this.httpContextAccessor.HttpContext.User.Claims;
+        return this.httpContextAccessor.HttpContext?.User.Claims;
     }
 
-    public Guid? GetCurrentUserId()
+    public Guid? CurrentUserId()
     {
         var userIdClaim = this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId);
         if (userIdClaim == null)
@@ -46,9 +45,9 @@ public class CurrentUserRepository : ICurrentUserRepository
         return null;
     }
 
-    public UserRoleEnum GetCurrentUserRole()
+    public UserRoleEnum CurrentUserRole()
     {
-        var roleString = this.httpContextAccessor.HttpContext.User.FindFirst(AuthClaims.Role)?.Value;
+        string? roleString = this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.Role)?.Value;
         if (Enum.TryParse<UserRoleEnum>(roleString, out var role))
         {
             return role;
@@ -57,37 +56,37 @@ public class CurrentUserRepository : ICurrentUserRepository
         throw new EntityNotFoundException();
     }
 
-    public Task<string> GetCurrentTokenAsync()
+    public Task<string> CurrentTokenAsync()
     {
-        var token = GetCurrentToken();
+        var token = CurrentToken();
         return Task.FromResult(token);
     }
 
-    public Task<IEnumerable<Claim>> GetCurrentClaimsAsync()
+    public Task<IEnumerable<Claim>?> CurrentClaimsAsync()
     {
-        var claims = GetCurrentClaims();
+        var claims = CurrentClaims();
         return Task.FromResult(claims);
     }
 
-    public Task<Guid?> GetCurrentUserIdAsync()
+    public Task<Guid?> CurrentUserIdAsync()
     {
-        return Task.FromResult(GetCurrentUserId());
+        return Task.FromResult(CurrentUserId());
     }
 
-    public Task<UserRoleEnum> GetCurrentUserRoleAsync()
+    public Task<UserRoleEnum> CurrentUserRoleAsync()
     {
-        return Task.FromResult(GetCurrentUserRole());
+        return Task.FromResult(CurrentUserRole());
     }
 
     public bool IsAuthenticated()
     {
-        var currentUserId = GetCurrentUserId();
+        var currentUserId = CurrentUserId();
         return currentUserId != null;
     }
 
     public async Task<bool> HasUserInRoleAsync(UserRoleEnum role)
     {
-        UserRoleEnum currentUserRole = await GetCurrentUserRoleAsync();
+        UserRoleEnum currentUserRole = await CurrentUserRoleAsync();
         return currentUserRole == role;
     }
 }

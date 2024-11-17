@@ -77,7 +77,7 @@ Errors encountered             : 0
 
 =================================================
 Title                          : LOCALIZATIONS
-Total records processed        : 2135
+Total records processed        : 2163
 Records already exist          : 0
 Errors encountered             : 0
 =================================================
@@ -96,6 +96,6 @@ Records already exist          : 7
 Errors encountered             : 0
 =================================================
 
-Provision Start Date           : 2024-11-15 00:56:25
-Provision End Date             : 2024-11-15 00:58:40
-Duration:                      : 135 second(s)
+Provision Start Date           : 2024-11-16 23:52:48
+Provision End Date             : 2024-11-16 23:55:07
+Duration:                      : 139 second(s)

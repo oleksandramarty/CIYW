@@ -1,7 +1,7 @@
 using AuthGateway.Mediatr;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using CommonModule.Core.Strategies.GetFilteredResult;
+using CommonModule.Core.Strategies.FilteredResult;
 using CommonModule.Facade;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
@@ -11,7 +11,7 @@ using Expenses.GraphQL;
 using Expenses.Mediatr;
 using Expenses.Mediatr.Mediatr.Expenses.Requests;
 using Expenses.Mediatr.Mediatr.Projects.Requests;
-using Expenses.Mediatr.Strategies.GetFilteredResult;
+using Expenses.Mediatr.Strategies.FilteredResult;
 using Expenses.Mediatr.Validators.Expenses;
 using Expenses.Mediatr.Validators.Projects;
 using FluentValidation;
@@ -26,7 +26,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.AddDatabaseContext<ExpensesDataContext>();
-builder.AddDynamoDB();
+builder.AddDynamoDb();
 builder.AddSwagger();
 builder.AddCorsPolicy();
 builder.Services.AddControllers();
@@ -50,7 +50,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserProjectCommandVal
 builder.Services.AddSingleton<ISchema, ExpensesGraphQLSchema>(services => new ExpensesGraphQLSchema(new SelfActivatingServiceProvider(services)));
 // GraphQL schema ends
 
-builder.AddGraphQL();
+builder.AddGraphQl();
 
 // Custom DI
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
@@ -69,11 +69,11 @@ builder.Host.ConfigureContainer<ContainerBuilder>(opts => { opts.RegisterModule(
 // MediatR modules ends
 
 // Strategies
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredExpensesRequest, ExpenseResponse>, GetFilteredResultOfExpenseStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredPlannedExpensesRequest, PlannedExpenseResponse>, GetFilteredResultOfPlannedExpenseStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredFavoriteExpensesRequest, FavoriteExpenseResponse>, GetFilteredResultOfFavoriteExpenseStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserProjectsRequest, UserProjectResponse>, GetFilteredResultOfUserProjectStrategy>();
-builder.Services.AddScoped<IGetFilteredResultStrategy<GetFilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>, GetFilteredResultOfUserAllowedProjectStrategy>();
+builder.Services.AddScoped<IFilteredResultStrategy<FilteredExpensesRequest, ExpenseResponse>, FilteredResultOfExpenseStrategy>();
+builder.Services.AddScoped<IFilteredResultStrategy<FilteredPlannedExpensesRequest, PlannedExpenseResponse>, FilteredResultOfPlannedExpenseStrategy>();
+builder.Services.AddScoped<IFilteredResultStrategy<FilteredFavoriteExpensesRequest, FavoriteExpenseResponse>, FilteredResultOfFavoriteExpenseStrategy>();
+builder.Services.AddScoped<IFilteredResultStrategy<FilteredUserProjectsRequest, UserProjectResponse>, FilteredResultOfUserProjectStrategy>();
+builder.Services.AddScoped<IFilteredResultStrategy<FilteredUserAllowedProjectsRequest, UserAllowedProjectResponse>, FilteredResultOfUserAllowedProjectStrategy>();
 // Strategies end
 
 var app = builder.Build();
@@ -83,7 +83,7 @@ app.AddMiddlewares();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUI(builder);
+    app.UseSwaggerUi(builder);
     app.UseGraphQLPlayground("/graphql/playground");
 }
 

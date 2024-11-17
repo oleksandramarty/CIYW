@@ -30,7 +30,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the balance type with the specific ID already exists
-    balance_type_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"BalanceTypes\" WHERE \"Id\" = $id;")
+    balance_type_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"BalanceTypes\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the balance type does not exist, prepare the SQL for insert
     if [ -z "$balance_type_exists" ]; then
@@ -41,7 +41,7 @@ do
       sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"BalanceTypes\"
       (\"Id\", \"Title\", \"Type\", \"IsActive\")
       VALUES ($id, '$title', '$type', $isActiveBool);"
-      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
         echo "Balance type with ID $id added successfully."
       else
         ((errorAdded++))

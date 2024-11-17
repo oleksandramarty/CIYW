@@ -1,5 +1,5 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using CommonModule.Core.JsonConverter;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.JsonConvertors;
@@ -9,10 +9,10 @@ namespace Dictionaries.Domain.Models.Currencies;
 
 public class CurrencyEntity: BaseIdEntity<int>, IActivatableEntity
 {
-    public string Title { get; set; }
-    public string Code { get; set; }
-    public string Symbol { get; set; }
-    public string TitleEn { get; set; }
+    [Required] [MaxLength(50)] public required string Title { get; set; }
+    [Required] [MaxLength(3)] public required string Code { get; set; }
+    [Required] [MaxLength(5)] public required string Symbol { get; set; }
+    [Required] [MaxLength(50)] public required string TitleEn { get; set; }
     [JsonConverter(typeof(BooleanJsonConverter))]
     public bool IsActive { get; set; }
     

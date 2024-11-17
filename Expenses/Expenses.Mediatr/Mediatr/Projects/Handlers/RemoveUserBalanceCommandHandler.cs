@@ -1,3 +1,4 @@
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
@@ -24,10 +25,13 @@ public class RemoveUserBalanceCommandHandler: IRequestHandler<RemoveUserBalanceC
     
     public async Task<BaseBoolResponse> Handle(RemoveUserBalanceCommand command, CancellationToken cancellationToken)
     {
-        BalanceEntity balanceEntity = await this.balanceRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(balanceEntity);
+        BalanceEntity? balance = await this.balanceRepository.ByIdAsync(command.Id, cancellationToken);
+        if (balance == null)
+        {
+            throw new EntityNotFoundException();
+        }
 
-        await this.balanceRepository.DeleteAsync(balanceEntity, cancellationToken);
+        await this.balanceRepository.DeleteAsync(balance, cancellationToken);
 
         return new BaseBoolResponse();
     }

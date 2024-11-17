@@ -32,7 +32,8 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)");
 
                     b.Property<int>("UserRole")
                         .HasColumnType("integer");
@@ -56,11 +57,13 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("EmailNormalized")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -76,19 +79,23 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("LoginNormalized")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
 
                     b.Property<string>("Salt")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -98,7 +105,9 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
@@ -137,7 +146,11 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<string>("DefaultLocale")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(2)
+                        .HasColumnType("character(2)")
+                        .HasDefaultValue("en")
+                        .IsFixedLength();
 
                     b.Property<int?>("DefaultUserProjectCurrencyId")
                         .HasColumnType("integer");
@@ -156,7 +169,9 @@ namespace AuthGateway.Domain.Migrations
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
@@ -205,8 +220,7 @@ namespace AuthGateway.Domain.Migrations
                 {
                     b.Navigation("Roles");
 
-                    b.Navigation("UserSetting")
-                        .IsRequired();
+                    b.Navigation("UserSetting");
                 });
 #pragma warning restore 612, 618
         }

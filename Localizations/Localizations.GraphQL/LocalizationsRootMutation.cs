@@ -2,7 +2,7 @@ using CommonModule.GraphQL.MutationResolver;
 
 namespace Localizations.GraphQL;
 
-public class LocalizationsRootMutation: GraphQLMutationHelper
+public class LocalizationsRootMutation: GraphQlMutationHelper
 {
     public LocalizationsRootMutation()
     {

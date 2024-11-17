@@ -29,7 +29,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the locale with the specific ID already exists
-    locale_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Locales\".\"Locales\" WHERE \"Id\" = $id;")
+    locale_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Locales\".\"Locales\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the locale does not exist, insert it
     if [ -z "$locale_exists" ]; then
@@ -47,7 +47,7 @@ do
       VALUES ($id, '$isoCode', '$title', '$titleEn', '$titleNormalized', '$titleEnNormalized', $isDefaultBool, $isActiveBool, '$localeEnum', '$culture');"
 
       # Execute the SQL command
-      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
          echo "Locale with ID $id added successfully."
       else
         ((errorAdded++))

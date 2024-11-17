@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Countries;
 
-public class CountryResponseType : ObjectGraphType<CountryResponse>
+public sealed class CountryResponseType : ObjectGraphType<CountryResponse>
 {
     public CountryResponseType()
     {

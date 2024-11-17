@@ -31,11 +31,11 @@ for db in "${integration_tests_dbs[@]}"; do
   psql -h $db_host -p $db_port -U $db_user -c "$sql"
   
   # Create the target database
-  psql -U $db_user -h $db_host -p $db_port -c "CREATE DATABASE \"$TARGET_DB\";"
+  psql -U $db_user -h $db_host -p $db_port -c "CREATE DATABASE \"$TARGET_DB\";" > /dev/null
 
   # Dump the source database and restore it to the target database
   pg_dump -U $db_user -h $db_host -p $db_port $SOURCE_DB > /tmp/${SOURCE_DB}.sql
-  psql -U $db_user -h $db_host -p $db_port "$TARGET_DB" < /tmp/${SOURCE_DB}.sql
+  psql -U $db_user -h $db_host -p $db_port "$TARGET_DB" < /tmp/${SOURCE_DB}.sql > /dev/null
   rm /tmp/${SOURCE_DB}.sql
 
   echo "Done."

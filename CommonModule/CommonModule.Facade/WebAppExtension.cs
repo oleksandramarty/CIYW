@@ -35,7 +35,7 @@ public static class WebAppExtension
 
     public static void AddJwtAuthentication(this WebApplicationBuilder builder)
     {
-        string secretKey = builder.Configuration["Authentication:Jwt:SecretKey"];
+        string? secretKey = builder.Configuration["Authentication:Jwt:SecretKey"];
         
         if (string.IsNullOrEmpty(secretKey))
         {
@@ -111,9 +111,9 @@ public static class WebAppExtension
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowSpecificOrigins",
-                builder =>
+                b =>
                 {
-                    builder.WithOrigins(origin.Split(","))
+                    b.WithOrigins(origin.Split(","))
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
@@ -134,7 +134,7 @@ public static class WebAppExtension
             options.UseNpgsql(temp));
     }
 
-    public static void AddDynamoDB(this WebApplicationBuilder builder)
+    public static void AddDynamoDb(this WebApplicationBuilder builder)
     {
         var dynamoDbConfig = new AmazonDynamoDBConfig
         {
@@ -161,7 +161,12 @@ public static class WebAppExtension
         builder.Services.AddScoped<ICurrentUserRepository, CurrentUserRepository>();
         builder.Services.AddScoped<IJwtTokenFactory, JwtTokenFactory>();
 
-        var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];
+        string? redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];
+        if (string.IsNullOrEmpty(redisConnectionString))
+        {
+            throw new ArgumentNullException(nameof(redisConnectionString), "Redis connection string cannot be null or empty.");
+        }
+        
         builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
 
         // Register Kafka services
@@ -193,7 +198,7 @@ public static class WebAppExtension
                 config.AddGraphQLModels(addAdditionalTypes);
             });
 
-        string version = builder.Configuration.GetVersion();
+        string version = builder.Configuration.Version();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -232,9 +237,9 @@ public static class WebAppExtension
         });
     }
 
-    public static void UseSwaggerUI(this IApplicationBuilder app, WebApplicationBuilder builder)
+    public static void UseSwaggerUi(this IApplicationBuilder app, WebApplicationBuilder builder)
     {
-        string version = builder.Configuration.GetVersion();
+        string version = builder.Configuration.Version();
 
         // app.UseDeveloperExceptionPage();
         app.UseSwagger(options => options.SerializeAsV2 = true);
@@ -244,16 +249,23 @@ public static class WebAppExtension
                 $"{builder.Configuration["Microservice:Title"]} v{version}"));
     }
 
-    private static string GetVersion(this IConfiguration configuration)
+    private static string Version(this IConfiguration configuration)
     {
-        return configuration["Microservice:Version"];
+        string? version = configuration["Microservice:Version"];
+        
+        if (string.IsNullOrEmpty(version))
+        {
+            throw new ArgumentNullException(nameof(version), "Version cannot be null or empty.");
+        }
+        
+        return version;
     }
 
     #endregion
 
     #region GraphQL
 
-    public static void AddGraphQL(this WebApplicationBuilder builder)
+    public static void AddGraphQl(this WebApplicationBuilder builder)
     {
         builder.Services.AddGraphQL(options =>
             options.ConfigureExecution((opt, next) =>

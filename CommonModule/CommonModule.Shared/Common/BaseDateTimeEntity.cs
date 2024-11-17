@@ -7,6 +7,7 @@ namespace CommonModule.Shared.Common;
 /// </summary>
 /// <typeparam name="TEntityId">The type of the ID.</typeparam>
 public class BaseDateTimeEntity<TEntityId> : BaseIdEntity<TEntityId>, ICreatedBaseDateTimeEntity, IUpdatedBaseDateTimeEntity
+where TEntityId : struct
 {
     /// <summary>
     /// Gets or sets the date and time when the entity was created.

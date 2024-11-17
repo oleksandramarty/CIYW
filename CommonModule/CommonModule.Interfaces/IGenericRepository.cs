@@ -2,15 +2,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Interfaces;
 
-public interface IGenericRepository<TId, T, TDataContext> : IReadGenericRepository<TId, T, TDataContext>
-    where T : class
+public interface IGenericRepository<TEntityId, TEntity, TDataContext> : IReadGenericRepository<TEntityId, TEntity, TDataContext>
+    where TEntity : class
     where TDataContext : DbContext
 {
-    Task AddAsync(T entity, CancellationToken cancellationToken);
-    Task UpdateAsync(T entity, CancellationToken cancellationToken);
-    Task DeleteAsync(T entity, CancellationToken cancellationToken);
-    Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
-    Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
-    Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
-    Task DeleteByIdAsync(TId id, CancellationToken cancellationToken);
+    Task AddAsync(TEntity entity, CancellationToken cancellationToken);
+    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+    Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+    Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
+    Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
+    Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
+    Task DeleteByIdAsync(TEntityId id, CancellationToken cancellationToken);
 }

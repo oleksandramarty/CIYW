@@ -5,7 +5,7 @@ namespace CommonModule.Shared.Responses.Dictionaries.Models.Icons;
 
 public class IconResponse: BaseIdEntity<int>, IActivatableEntity
 {
-    public string Title { get; set; }
+    public string? Title { get; set; }
     public bool IsActive { get; set; }
     
     public int IconCategoryId { get; set; }

@@ -12,9 +12,9 @@ public class MediatrAuthBase
         this.currentUserRepository = currentUserRepository;
     }
 
-    protected async Task<Guid> GetCurrentUserIdAsync()
+    protected async Task<Guid> CurrentUserIdAsync()
     {
-        Guid? userId = await this.currentUserRepository.GetCurrentUserIdAsync();
+        Guid? userId = await this.currentUserRepository.CurrentUserIdAsync();
 
         if (!userId.HasValue)
         {

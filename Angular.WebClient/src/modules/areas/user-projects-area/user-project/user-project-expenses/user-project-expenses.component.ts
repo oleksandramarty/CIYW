@@ -56,7 +56,7 @@ export class UserProjectExpensesComponent extends BaseFilterComponent<FilteredLi
                     if (result && result.categoryIds) {
                         this.filterFormGroup.get('categoryIds')?.setValue(result.categoryIds);
                     } else {
-                        this.getFilteredItems();
+                        this.filteredItems();
                     }
                 }),
                 handleApiError(this.snackBar)
@@ -78,7 +78,7 @@ export class UserProjectExpensesComponent extends BaseFilterComponent<FilteredLi
 
     public openCreateUpdateExpenseDialog(expense: ExpenseResponse | undefined): void {
         this.commonDialogService.showCreateOrUpdateExpenseDialog(() => {
-            this.getFilteredItems();
+            this.filteredItems();
             this.expanseChanged.emit();
         }, () => {
         }, expense, this.userProject);
@@ -91,7 +91,7 @@ export class UserProjectExpensesComponent extends BaseFilterComponent<FilteredLi
                     .pipe(
                         takeUntil(this.ngUnsubscribe),
                         tap(() => {
-                            this.getFilteredItems();
+                            this.filteredItems();
                             this.expanseChanged.emit();
                         }),
                         handleApiError(this.snackBar)
@@ -113,9 +113,9 @@ export class UserProjectExpensesComponent extends BaseFilterComponent<FilteredLi
         ];
     }
 
-    protected getFilteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfExpenseResponse> {
-        return this.graphQlExpensesService.getFilteredExpenses(...filterRequest).pipe(
-            map(result => result.data.expenses_get_filtered_expenses!)
+    protected filteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfExpenseResponse> {
+        return this.graphQlExpensesService.filteredExpenses(...filterRequest).pipe(
+            map(result => result.data.expenses_filtered_expenses!)
         );
     }
 }

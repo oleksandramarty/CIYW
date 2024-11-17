@@ -32,7 +32,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the icon with the specific ID already exists
-    icon_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Icons\" WHERE \"Id\" = $id;")
+    icon_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Dictionaries\".\"Icons\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the icon does not exist, prepare the SQL for bulk insert
     if [ -z "$icon_exists" ]; then
@@ -40,12 +40,12 @@ do
       isActiveBool=$( [ "$isActive" == "1" ] && echo true || echo false )
 
       # Construct the SQL command
-      bulkInsertSQL+="INSERT INTO \"$db_name\".\"Dictionaries\".\"Icons\" (\"Id\", \"Title\", \"IconCategoryId\", \"IsActive\") VALUES ($id, '$title', $iconCategoryId, $isActiveBool);"
+      bulkInsertSQL+="INSERT INTO \"$db_name\".\"Dictionaries\".\"Icons\" (\"Id\", \"Title\", \"IconCategoryId\", \"IsActive\") VALUES ($id, '$title', $iconCategoryId, $isActiveBool);" > /dev/null
       ((bulkCounter++))
 
       # If bulkCounter reaches 900, execute the bulk insert
       if [ $bulkCounter -ge 900 ]; then
-        if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+        if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
           echo "Bulk insert of $bulkCounter icons added successfully."
         else
           ((errorAdded+=bulkCounter))
@@ -64,7 +64,7 @@ done < "$csv_file_icons"
 
 # Insert any remaining icons
 if [ $bulkCounter -gt 0 ]; then
-  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL"; then
+  if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$bulkInsertSQL" > /dev/null; then
     echo "Bulk insert of $bulkCounter remaining icons added successfully."
   else
     ((errorAdded+=bulkCounter))

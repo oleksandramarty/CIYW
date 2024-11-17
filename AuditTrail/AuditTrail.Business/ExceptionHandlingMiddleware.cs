@@ -42,12 +42,12 @@ public class ExceptionHandlingMiddleware
         catch (AuthException ex)
         {
             await this.CreateAuditTrailAsync(context, ExceptionEnum.AuthException, ex.Message);
-            await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.statusCode);
+            await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.StatusCode);
         }
         catch (BusinessException ex)
         {
             await this.CreateAuditTrailAsync(context, ExceptionEnum.BusinessException, ex.Message);
-            await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.statusCode);
+            await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.StatusCode);
         }
         catch (EntityNotFoundException ex)
         {
@@ -67,7 +67,7 @@ public class ExceptionHandlingMiddleware
         catch (BaseException ex)
         {
             await this.CreateAuditTrailAsync(context, ExceptionEnum.BaseException, ex.Message);
-            await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.statusCode);
+            await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.StatusCode);
         }
         catch (Exception ex)
         {
@@ -81,7 +81,7 @@ public class ExceptionHandlingMiddleware
             {
                 messageSb.AppendLine(ex.StackTrace);
             }
-            if (ex.InnerException != null && ex.InnerException.StackTrace != null)
+            if (ex.InnerException is { StackTrace: not null })
             {
                 messageSb.AppendLine(ex.InnerException.StackTrace);
             }
@@ -101,15 +101,17 @@ public class ExceptionHandlingMiddleware
         HttpContext context, ExceptionEnum exception, string message
     )
     {
+        var userIdStr = this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId)?.Value;
+        if (userIdStr == null || !Guid.TryParse(userIdStr, out var userId))
+        {
+            userId = Guid.Empty;
+        }
+        
         await this.auditTrailRepository.AddExceptionLogAsync(
-            this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId)?.Value != null
-                ? Guid.Parse(this.httpContextAccessor.HttpContext.User.FindFirst(AuthClaims.UserId).Value)
-                : (Guid?)null,
+            userId,
             exception,
             message,
-            context.Request.Body != null
-                ? await new StreamReader(context.Request.Body).ReadToEndAsync()
-                : null,
+            await new StreamReader(context.Request.Body).ReadToEndAsync(),
             CancellationToken.None
         );
     }

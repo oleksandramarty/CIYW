@@ -1,3 +1,4 @@
+using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,7 +57,7 @@ public class DbSaveChangeContext : DbContext
         {
             if (entry.State == EntityState.Modified || entry.State == EntityState.Added)
             {
-                entry.Entity.Version = Guid.NewGuid().ToString("N").ToUpper();
+                entry.Entity.Version = VersionExtension.GenerateVersion();
             }
         }
     }

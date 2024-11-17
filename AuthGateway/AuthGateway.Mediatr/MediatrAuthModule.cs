@@ -22,6 +22,6 @@ public class MediatrAuthModule: Autofac.Module
         builder.RegisterAssemblyTypes(typeof(AuthRestorePasswordCommand).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<>));
         builder.RegisterAssemblyTypes(typeof(AuthRestoreCommand).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<>));
         
-        builder.RegisterAssemblyTypes(typeof(GetCurrentUserRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<>));
+        builder.RegisterAssemblyTypes(typeof(CurrentUserRequest).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<>));
     }
 }

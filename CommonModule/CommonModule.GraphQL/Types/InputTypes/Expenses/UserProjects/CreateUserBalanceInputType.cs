@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.InputTypes.Expenses.UserProjects;
 
-public class CreateUserBalanceInputType: InputObjectGraphType
+public sealed class CreateUserBalanceInputType: InputObjectGraphType
 {
     public CreateUserBalanceInputType()
     {

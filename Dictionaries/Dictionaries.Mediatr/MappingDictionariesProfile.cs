@@ -38,7 +38,7 @@ public class MappingDictionariesProfile : Profile
     {
         CreateMap<CountryEntity, CountryResponse>()
             .ForMember(dest => dest.Currencies, opt => opt.MapFrom(src =>
-                src.Currencies != null
+                src.Currencies.Any()
                     ? src.Currencies.Select(r => new CurrencyResponse
                     {
                         Id = r.Currency.Id,
@@ -55,7 +55,7 @@ public class MappingDictionariesProfile : Profile
     {
         CreateMap<CurrencyEntity, CurrencyResponse>()
             .ForMember(dest => dest.Countries, opt => opt.MapFrom(src =>
-                src.Countries != null
+                src.Countries.Any()
                     ? src.Countries.Select(r => new CountryResponse
                     {
                         Id = r.Currency.Id,

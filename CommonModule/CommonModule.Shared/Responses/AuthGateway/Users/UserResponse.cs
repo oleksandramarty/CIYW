@@ -1,17 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Core;
 using CommonModule.Shared.Enums;
 
 namespace CommonModule.Shared.Responses.AuthGateway.Users;
 
 public class UserResponse: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
 {
-    public string Login { get; set; }
-    public string LoginNormalized { get; set; }
-    public string Email { get; set; }
-    public string EmailNormalized { get; set; }
-    public string PasswordHash { get; set; }
-    public string Salt { get; set; }
+    public string? Login { get; set; }
+    public string? LoginNormalized { get; set; }
+    public string? Email { get; set; }
+    public string? EmailNormalized { get; set; }
+    public string? PasswordHash { get; set; }
+    public string? Salt { get; set; }
     public bool IsActive { get; set; }
     public bool IsTemporaryPassword { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
@@ -21,6 +23,9 @@ public class UserResponse: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVe
     
     public ICollection<RoleResponse> Roles { get; set; }
     
-    public UserSettingResponse UserSetting { get; set; }
-    public string Version { get; set; }
+    public UserSettingResponse? UserSetting { get; set; }
+
+    [Required]
+    [StringLength(32, MinimumLength = 32)]
+    public string Version { get; set; } = VersionExtension.GenerateVersion();
 }

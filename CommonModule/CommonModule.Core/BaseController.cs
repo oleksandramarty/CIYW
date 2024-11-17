@@ -24,7 +24,7 @@ public class BaseController : Controller
         this.mediator = mediator;
     }
     
-    protected async Task<Guid?> GetCurrentUserIdAsync(CancellationToken cancellationToken)
+    protected async Task<Guid?> CurrentUserIdAsync(CancellationToken cancellationToken)
     {
         return await this.mediator.Send(new GetUserIdRequest(), cancellationToken);
     }

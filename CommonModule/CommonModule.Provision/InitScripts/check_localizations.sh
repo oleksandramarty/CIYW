@@ -1,5 +1,5 @@
 #!/bin/bash
-clear
+
 echo "Checking localizations..."
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 {
@@ -44,7 +44,7 @@ do
           WHERE \"LocaleId\" = $id
       ) k ON l.\"Key\" = k.\"Key\"
       WHERE k.\"Key\" IS NULL;
-    ")
+    " > /dev/null)
 
     if [ -z "$missing_localizations" ]; then
       ((alreadyExist++))

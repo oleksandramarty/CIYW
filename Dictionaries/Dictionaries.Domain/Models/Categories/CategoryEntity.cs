@@ -1,5 +1,5 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using CommonModule.Core.JsonConverter;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.JsonConvertors;
@@ -9,11 +9,11 @@ namespace Dictionaries.Domain.Models.Categories;
 
 public class CategoryEntity : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, IActivatableEntity
 {
-    public string Title { get; set; }
+    [Required] [MaxLength(70)] public required string Title { get; set; }
     public int IconId { get; set; }
     [JsonIgnore]
-    public IconEntity Icon { get; set; }
-    public string Color { get; set; }
+    public IconEntity? Icon { get; set; }
+    [Required] [MaxLength(7)] public required string Color { get; set; }
     
     public bool IsActive { get; set; }
 
@@ -23,5 +23,5 @@ public class CategoryEntity : BaseIdEntity<int>, ITreeEntityEntity<int, int?>, I
     public bool IsPositive { get; set; }
 
     [JsonIgnore]
-    public ICollection<CategoryEntity> Children { get; set; } = new List<CategoryEntity>();
+    public ICollection<CategoryEntity> Children { get; set; }
 }

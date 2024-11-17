@@ -46,7 +46,7 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
 
         DateTime currentMonth = DateTimeExtension.GetStartOfCurrentMonth();
         
-        if (await this.expenseRepository.GetQueryable(fe => 
+        if (await this.expenseRepository.Queryable(fe => 
                     fe.UserProjectId == command.UserProjectId &&
                     fe.CreatedAt >= currentMonth
                     )

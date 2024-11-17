@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Expenses.Models.Projects;
 
-public class ListUserAllowedProjectResponseType : ObjectGraphType<List<UserAllowedProjectResponse>>
+public sealed class ListUserAllowedProjectResponseType : ObjectGraphType<List<UserAllowedProjectResponse>>
 {
     public ListUserAllowedProjectResponseType()
     {

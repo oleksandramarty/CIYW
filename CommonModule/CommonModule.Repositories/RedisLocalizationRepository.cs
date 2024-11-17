@@ -1,19 +1,16 @@
-using System.Text.RegularExpressions;
 using CommonModule.Interfaces;
-using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Common;
+using CommonModule.Shared.Core;
 using CommonModule.Shared.Responses.Localizations;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
 namespace CommonModule.Repositories;
 
-public class RedisLocalizationRepository : ILocalizationRepository
+public class RedisLocalizationRepository : AuditableNonNullableKey, ILocalizationRepository
 {
     private readonly IDatabase database;
     private readonly IConnectionMultiplexer connectionMultiplexer;
-    private readonly string instanceName;
-
-    private readonly string fallbackLocale = "en";
     
     public RedisLocalizationRepository(
         IConnectionMultiplexer connectionMultiplexer,
@@ -22,15 +19,15 @@ public class RedisLocalizationRepository : ILocalizationRepository
         this.connectionMultiplexer = connectionMultiplexer;
         this.database = connectionMultiplexer.GetDatabase();
 
-        this.instanceName = configuration["Redis:InstanceNameLocalization"];
+        this.Key = configuration["Redis:InstanceNameLocalization"];
     }
     
-    public async Task<LocalizationsResponse> GetLocalizationDataAllAsync(bool isPublic)
+    public async Task<LocalizationsResponse> LocalizationDataAllAsync(bool isPublic)
     {
         var server = connectionMultiplexer.GetServer(connectionMultiplexer.GetEndPoints().First());
         var keys = isPublic
-            ? server.Keys(pattern: $"{this.instanceName}:*:*:{1}")
-            : server.Keys(pattern: $"{this.instanceName}:*:*:{0}");
+            ? server.Keys(pattern: $"{this.Key}:*:*:{1}")
+            : server.Keys(pattern: $"{this.Key}:*:*:{0}");
 
         var data = new Dictionary<string, Dictionary<string, string>>();
         foreach (var key in keys)
@@ -66,12 +63,12 @@ public class RedisLocalizationRepository : ILocalizationRepository
     public async Task ReinitializeLocalizationDataAsync(LocalizationsResponse model, bool isPublic)
     {
         string isPublicString = isPublic ? "1" : "0";
-        await database.KeyDeleteAsync( $"{this.instanceName}:*:*:{isPublicString}");
+        await database.KeyDeleteAsync( $"{this.Key}:*:*:{isPublicString}");
 
         var tasks = model.Data.SelectMany(value =>
             value.Items.Select(item =>
             {
-                var redisKey = $"{instanceName}:{value.Locale}:{item.Key}:{isPublicString}";
+                var redisKey = $"{this.Key}:{value.Locale}:{item.Key}:{isPublicString}";
                 return database.StringSetAsync(redisKey, item.Value);
             })
         );
@@ -79,17 +76,19 @@ public class RedisLocalizationRepository : ILocalizationRepository
         await Task.WhenAll(tasks);
     }
 
-    public async Task<string?> GetLocalizationVersionAsync(bool isPublic)
+    public async Task<string> LocalizationVersionAsync(bool isPublic)
     {
         var redisKey = $"version:localization" + (isPublic ? "_public" : string.Empty);
         string? version = await database.StringGetAsync(redisKey);
 
-        return version;
+        // TODO Warning log about nullable version
+        
+        return string.IsNullOrEmpty(version) ? VersionExtension.GenerateVersion() : version;
     }
     
     public async Task SetLocalizationVersionAsync(bool isPublic)
     {
         string redisKey = $"version:localization" + (isPublic ? "_public" : string.Empty);
-        await database.StringSetAsync(redisKey, Guid.NewGuid().ToString("N").ToUpper());
+        await database.StringSetAsync(redisKey, VersionExtension.GenerateVersion());
     }
 }

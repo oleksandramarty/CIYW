@@ -2,7 +2,7 @@ using CommonModule.GraphQL.MutationResolver;
 
 namespace Dictionaries.GraphQL;
 
-public class DictionariesRootMutation: GraphQLMutationHelper
+public class DictionariesRootMutation: GraphQlMutationHelper
 {
     public DictionariesRootMutation()
     {

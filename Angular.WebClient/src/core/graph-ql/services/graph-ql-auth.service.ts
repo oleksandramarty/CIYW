@@ -42,7 +42,7 @@ export class GraphQlAuthService {
             }).valueChanges as Observable<ApolloQueryResult<{ success: boolean }>>;
     }
 
-    public getCurrentUser(): Observable<ApolloQueryResult<{ auth_gateway_current_user: UserResponse | undefined }>> {
+    public currentUser(): Observable<ApolloQueryResult<{ auth_gateway_current_user: UserResponse | undefined }>> {
         return this.apolloClient
             .watchQuery({
                 query: AUTH_GATEWAY_CURRENT_USER,

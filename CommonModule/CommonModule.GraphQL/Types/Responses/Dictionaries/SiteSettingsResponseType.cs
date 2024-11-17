@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Dictionaries;
 
-public class SiteSettingsResponseType : ObjectGraphType<SiteSettingsResponse>
+public sealed class SiteSettingsResponseType : ObjectGraphType<SiteSettingsResponse>
 {
     public SiteSettingsResponseType()
     {
@@ -15,7 +15,7 @@ public class SiteSettingsResponseType : ObjectGraphType<SiteSettingsResponse>
     }
 }
 
-public class CacheVersionResponseType : ObjectGraphType<CacheVersionResponse>
+public sealed class CacheVersionResponseType : ObjectGraphType<CacheVersionResponse>
 {
     public CacheVersionResponseType()
     {

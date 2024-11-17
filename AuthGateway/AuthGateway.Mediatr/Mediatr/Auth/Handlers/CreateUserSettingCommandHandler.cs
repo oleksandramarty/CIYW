@@ -2,6 +2,7 @@ using AuthGateway.Domain;
 using AuthGateway.Domain.Models.Users;
 using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AutoMapper;
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using MediatR;
 
@@ -29,8 +30,11 @@ public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingC
     
     public async Task Handle(CreateUserSettingCommand command, CancellationToken cancellationToken)
     {
-        Guid? userId = await currentUserRepository.GetCurrentUserIdAsync();
-        this.entityValidator.IsEntityExist(userId);
+        Guid? userId = await currentUserRepository.CurrentUserIdAsync();
+        if (!userId.HasValue)
+        {
+            throw new EntityNotFoundException();
+        }
         
         UserSettingEntity toAdd = this.mapper.Map<UserSettingEntity>(command);
         

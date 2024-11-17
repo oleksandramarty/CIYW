@@ -9,7 +9,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  z-index: 100001;
+  z-index: 105;
   //transition: all 0.3s ease-in-out;
 
   &.active {
@@ -30,7 +30,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 100001;
+  z-index: 105;
   //transition: all 0.3s ease-in-out;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 

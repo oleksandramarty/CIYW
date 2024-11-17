@@ -13,12 +13,19 @@ public class KafkaMessageService: IKafkaMessageService
         IConfiguration configuration,
         KafkaProducer kafkaProducer)
     {
-        this.logTopic = configuration["Kafka:AuditTrailTopic"];
+        this.logTopic = configuration["Kafka:AuditTrailTopic"] ?? string.Empty;
         this.kafkaProducer = kafkaProducer;
     }
 
     public async Task LogAuditTrailAsync(object log)
     {
-        await this.kafkaProducer.ProduceAsync(logTopic, log);
+        if (string.IsNullOrWhiteSpace(this.logTopic))
+        {
+            return;
+        }
+        
+        // TODO audit trail log warning empty topic
+        
+        await this.kafkaProducer.ProduceAsync(this.logTopic, log);
     }
 }

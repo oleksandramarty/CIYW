@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Common;
 
-public class PaginatorEntityType: ObjectGraphType<PaginatorEntity>
+public sealed class PaginatorEntityType: ObjectGraphType<PaginatorEntity>
 {
     public PaginatorEntityType()
     {

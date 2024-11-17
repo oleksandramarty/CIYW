@@ -29,7 +29,7 @@ do
   if [ "$id" != "id" ]; then
     ((totalRecords++))
     # Check if the role with the specific ID already exists
-    role_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Users\".\"Roles\" WHERE \"Id\" = $id;")
+    role_exists=$(psql -h $db_host -p $db_port -d $db_name -U $db_user -t -c "SELECT 1 FROM \"$db_name\".\"Users\".\"Roles\" WHERE \"Id\" = $id;" > /dev/null)
 
     # If the role does not exist, insert it
     if [ -z "$role_exists" ]; then
@@ -37,7 +37,7 @@ do
       sql="INSERT INTO \"$db_name\".\"Users\".\"Roles\" (\"Id\", \"Title\", \"UserRole\") VALUES ($id, '$title', $userRole);"
 
       # Execute the SQL command
-      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql"; then
+      if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
          echo "Role with ID $id added successfully."
       else
         ((errorAdded++))

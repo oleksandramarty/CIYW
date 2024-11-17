@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.InputTypes.Expenses.Expenses;
 
-public class UpdateExpenseInputType : InputObjectGraphType
+public sealed class UpdateExpenseInputType : InputObjectGraphType
 {
     public UpdateExpenseInputType()
     {

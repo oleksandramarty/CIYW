@@ -1,8 +1,10 @@
 using AutoMapper;
 using CommonModule.Core.Exceptions;
+using CommonModule.Core.Extensions;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Core;
 using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Projects;
@@ -34,13 +36,13 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
     {
         this.entityValidator.ValidateVoidRequest<CreateUserProjectCommand>(command, () => new CreateUserProjectCommandValidator());
         
-        Guid userId = await this.GetCurrentUserIdAsync();
+        Guid userId = await this.CurrentUserIdAsync();
         
         UserProjectEntity userProjectEntity = this.mapper.Map<UserProjectEntity>(command);
         
         userProjectEntity.Id = Guid.NewGuid();
         userProjectEntity.CreatedUserId = userId;
-        userProjectEntity.Version = Guid.NewGuid().ToString("N").ToUpper();
+        userProjectEntity.Version = VersionExtension.GenerateVersion();
         
         await this.userProjectRepository.AddAsync(userProjectEntity, cancellationToken);
     }

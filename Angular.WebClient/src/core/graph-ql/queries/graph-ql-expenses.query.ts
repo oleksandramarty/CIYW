@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
 
-export const GET_FILTERED_EXPENSES = gql`
-    query GetFilteredExpenses(
+export const FILTERED_EXPENSES = gql`
+    query FilteredExpenses(
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
@@ -15,7 +15,7 @@ export const GET_FILTERED_EXPENSES = gql`
         $userProjectId: ID,
         $categoryIds: [Int]
     ) {
-        expenses_get_filtered_expenses(
+        expenses_filtered_expenses(
             isFull: $isFull,
             pageNumber: $pageNumber,
             pageSize: $pageSize,
@@ -67,8 +67,8 @@ export const GET_FILTERED_EXPENSES = gql`
     }
 `;
 
-export const GET_FILTERED_PLANNED_EXPENSES = gql`
-    query GetFilteredPlannedExpenses(
+export const FILTERED_PLANNED_EXPENSES = gql`
+    query FilteredPlannedExpenses(
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
@@ -82,7 +82,7 @@ export const GET_FILTERED_PLANNED_EXPENSES = gql`
         $userProjectId: ID,
         $categoryIds: [Int]
     ) {
-        expenses_get_filtered_planned_expenses(
+        expenses_filtered_planned_expenses(
             isFull: $isFull,
             pageNumber: $pageNumber,
             pageSize: $pageSize,
@@ -124,8 +124,8 @@ export const GET_FILTERED_PLANNED_EXPENSES = gql`
     }
 `;
 
-export const GET_FILTERED_FAVORITE_EXPENSES = gql`
-    query GetFilteredFavoriteExpenses(
+export const FILTERED_FAVORITE_EXPENSES = gql`
+    query FilteredFavoriteExpenses(
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
@@ -139,7 +139,7 @@ export const GET_FILTERED_FAVORITE_EXPENSES = gql`
         $userProjectId: ID,
         $categoryIds: [Int]
     ) {
-        expenses_get_filtered_favorite_expenses(
+        expenses_filtered_favorite_expenses(
             isFull: $isFull,
             pageNumber: $pageNumber,
             pageSize: $pageSize,
@@ -422,9 +422,9 @@ export const REMOVE_FAVORITE_EXPENSE = gql`
     }
 `;
 
-export const GET_USER_PROJECT_BY_ID = gql`
-    query GetUserProjectById($id: Guid) {
-        expenses_get_user_project_by_id(id: $id) {
+export const USER_PROJECT_BY_ID = gql`
+    query UserProjectById($id: Guid) {
+        expenses_user_project_by_id(id: $id) {
             id
             title
             isActive
@@ -450,8 +450,8 @@ export const GET_USER_PROJECT_BY_ID = gql`
     }
 `;
 
-export const GET_FILTERED_USER_PROJECTS = gql`
-    query GetFilteredUserProjects(
+export const FILTERED_USER_PROJECTS = gql`
+    query FilteredUserProjects(
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
@@ -463,7 +463,7 @@ export const GET_FILTERED_USER_PROJECTS = gql`
         $amountFrom: Decimal,
         $amountTo: Decimal
     ) {
-        expenses_get_filtered_user_projects(
+        expenses_filtered_user_projects(
             isFull: $isFull,
             pageNumber: $pageNumber,
             pageSize: $pageSize,
@@ -508,8 +508,8 @@ export const GET_FILTERED_USER_PROJECTS = gql`
     }
 `;
 
-export const GET_FILTERED_USER_ALLOWED_PROJECTS = gql`
-    query GetFilteredUserAllowedProjects(
+export const FILTERED_USER_ALLOWED_PROJECTS = gql`
+    query FilteredUserAllowedProjects(
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
@@ -521,7 +521,7 @@ export const GET_FILTERED_USER_ALLOWED_PROJECTS = gql`
         $amountFrom: Decimal,
         $amountTo: Decimal
     ) {
-        expenses_get_filtered_user_allowed_projects(
+        expenses_filtered_user_allowed_projects(
             isFull: $isFull,
             pageNumber: $pageNumber,
             pageSize: $pageSize,

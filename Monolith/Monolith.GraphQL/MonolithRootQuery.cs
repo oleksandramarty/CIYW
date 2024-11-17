@@ -2,7 +2,7 @@ using CommonModule.GraphQL.QueryResolver;
 
 namespace Monolith.GraphQL;
 
-public class MonolithRootQuery : GraphQLQueryHelper
+public class MonolithRootQuery : GraphQlQueryHelper
 {
     public MonolithRootQuery()
     {

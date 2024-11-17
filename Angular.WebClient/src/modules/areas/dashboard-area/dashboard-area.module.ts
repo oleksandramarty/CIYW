@@ -7,6 +7,7 @@ import { SharedModule } from "../../../core/shared.module";
 import {DashboardAreaComponent} from "./dashboard-area/dashboard-area.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DashboardUserProjectsComponent} from "./dashboard/dashboard-user-projects/dashboard-user-projects.component";
+import {CommonFavoriteComponent} from "../../common/common-favorite/common-favorite.component";
 
 const routes: Routes = [
     {
@@ -29,7 +30,8 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
         SharedModule,
-        MatDividerModule
+        MatDividerModule,
+        CommonFavoriteComponent
     ],
     exports: [
         RouterModule

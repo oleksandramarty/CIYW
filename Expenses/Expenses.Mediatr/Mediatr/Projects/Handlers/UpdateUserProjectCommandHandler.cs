@@ -34,9 +34,9 @@ public class UpdateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<U
     {
         this.entityValidator.ValidateVoidRequest<UpdateUserProjectCommand>(command, () => new UpdateUserProjectCommandValidator());
         
-        Guid userId = await this.GetCurrentUserIdAsync();
+        Guid userId = await this.CurrentUserIdAsync();
         
-        UserProjectEntity userProjectEntity = await this.userProjectRepository.GetByIdAsync(command.Id, cancellationToken);
+        UserProjectEntity userProjectEntity = await this.userProjectRepository.ByIdAsync(command.Id, cancellationToken);
         
         this.mapper.Map<UpdateUserProjectCommand, UserProjectEntity>(command, userProjectEntity);
         

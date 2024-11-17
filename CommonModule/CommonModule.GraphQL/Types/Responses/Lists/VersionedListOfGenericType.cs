@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Lists;
 
-public class VersionedListOfGenericType<TEntityResponse, TEntityResponseType>: ObjectGraphType<VersionedListResponse<TEntityResponse>>
+public sealed class VersionedListOfGenericType<TEntityResponse, TEntityResponseType>: ObjectGraphType<VersionedListResponse<TEntityResponse>>
     where TEntityResponseType: ObjectGraphType<TEntityResponse>
 {
     public VersionedListOfGenericType()

@@ -1,6 +1,4 @@
 using AuthGateway.Domain.Models.Users;
-using CommonModule.Core;
-using CommonModule.Facade;
 using CommonModule.Shared.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -31,6 +29,13 @@ public class AuthGatewayDataContext : DbSaveChangeContext
             entity.HasOne(u => u.UserSetting)
                 .WithOne(us => us.User)
                 .HasForeignKey<UserSettingEntity>(us => us.UserId);
+            entity.Property(u => u.Login).IsRequired().HasMaxLength(50);
+            entity.Property(u => u.LoginNormalized).IsRequired().HasMaxLength(50);
+            entity.Property(u => u.Email).IsRequired().HasMaxLength(50);
+            entity.Property(u => u.EmailNormalized).IsRequired().HasMaxLength(50);
+            entity.Property(u => u.PasswordHash).IsRequired().HasMaxLength(120);
+            entity.Property(u => u.Salt).IsRequired().HasMaxLength(64);
+            entity.Property(u => u.Version).IsRequired().HasMaxLength(32).IsFixedLength();
         });
 
         modelBuilder.Entity<RoleEntity>(entity =>
@@ -39,6 +44,7 @@ public class AuthGatewayDataContext : DbSaveChangeContext
             entity.HasMany(r => r.Users)
                 .WithOne(ur => ur.Role)
                 .HasForeignKey(ur => ur.RoleId);
+            entity.Property(r => r.Title).IsRequired().HasMaxLength(25);
         });
 
         modelBuilder.Entity<UserRoleEntity>(entity =>
@@ -46,10 +52,12 @@ public class AuthGatewayDataContext : DbSaveChangeContext
             entity.ToTable("UserRoles", "Users");
             entity.HasKey(ur => new { ur.UserId, ur.RoleId });
         });
-        
+
         modelBuilder.Entity<UserSettingEntity>(entity =>
         {
             entity.ToTable("UserSettings", "Users");
+            entity.Property(v => v.DefaultLocale).IsRequired().HasMaxLength(2).IsFixedLength().HasDefaultValue("en");
+            entity.Property(v => v.Version).IsRequired().HasMaxLength(32).IsFixedLength();
         });
 
         var cascadeFKs = modelBuilder.Model.GetEntityTypes()

@@ -15,6 +15,6 @@ public class GetUserIdRequestHandler: IRequestHandler<GetUserIdRequest, Guid?>
     
     public async Task<Guid?> Handle(GetUserIdRequest request, CancellationToken cancellationToken)
     {
-        return await this.currentUserRepository.GetCurrentUserIdAsync();
+        return await this.currentUserRepository.CurrentUserIdAsync();
     }
 }

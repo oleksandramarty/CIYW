@@ -32,7 +32,8 @@ namespace Localizations.Domain.Migrations
 
                     b.Property<string>("Culture")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -42,26 +43,32 @@ namespace Localizations.Domain.Migrations
 
                     b.Property<string>("IsoCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(2)
+                        .HasColumnType("character(2)")
+                        .IsFixedLength();
 
                     b.Property<int>("LocaleEnum")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("TitleEn")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("TitleEnNormalized")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("TitleNormalized")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -79,20 +86,28 @@ namespace Localizations.Domain.Migrations
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
 
                     b.Property<int>("LocaleId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("LocaleId1")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("ValueEn")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocaleId1");
 
                     b.HasIndex("LocaleId", "Key")
                         .IsUnique();
@@ -102,11 +117,15 @@ namespace Localizations.Domain.Migrations
 
             modelBuilder.Entity("Localizations.Domain.Models.Locales.LocalizationEntity", b =>
                 {
-                    b.HasOne("Localizations.Domain.Models.Locales.LocaleEntity", "Locale")
+                    b.HasOne("Localizations.Domain.Models.Locales.LocaleEntity", null)
                         .WithMany("Localizations")
                         .HasForeignKey("LocaleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Localizations.Domain.Models.Locales.LocaleEntity", "Locale")
+                        .WithMany()
+                        .HasForeignKey("LocaleId1");
 
                     b.Navigation("Locale");
                 });

@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Dictionaries.Models.Icons;
 
-public class IconCategoryResponseType : ObjectGraphType<IconCategoryResponse>
+public sealed class IconCategoryResponseType : ObjectGraphType<IconCategoryResponse>
 {
     public IconCategoryResponseType()
     {

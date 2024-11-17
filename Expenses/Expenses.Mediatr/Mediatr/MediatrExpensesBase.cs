@@ -24,37 +24,43 @@ public class MediatrExpensesBase: MediatrAuthBase
     
     public async Task CheckUserProjectByIdAsync(Guid userProjectId, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetCurrentUserIdAsync();
+        Guid userId = await this.CurrentUserIdAsync();
         
-        UserProjectEntity userProjectEntity =
-            await this.userProjectRepository.GetAsync(
+        UserProjectEntity? userProject =
+            await this.userProjectRepository.Async(
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.IsEntityExist(userProjectEntity);
+        if (userProject == null)
+        {
+            throw new EntityNotFoundException();
+        }
         
-        if (userProjectEntity.CreatedUserId != userId && userProjectEntity.AllowedUsers.All(au => au.UserId != userId))
+        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
     }
 
-    public async Task<UserProjectEntity> GetUserProjectByIdAsync(Guid userProjectId, CancellationToken cancellationToken)
+    public async Task<UserProjectEntity> UserProjectByIdAsync(Guid userProjectId, CancellationToken cancellationToken)
     {
-        Guid userId = await this.GetCurrentUserIdAsync();
+        Guid userId = await this.CurrentUserIdAsync();
         
-        UserProjectEntity userProjectEntity =
-            await this.userProjectRepository.GetAsync(
+        UserProjectEntity? userProject =
+            await this.userProjectRepository.Async(
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
-        this.entityValidator.IsEntityExist(userProjectEntity);
+        if (userProject == null)
+        {
+            throw new EntityNotFoundException();
+        }
         
-        if (userProjectEntity.CreatedUserId != userId && userProjectEntity.AllowedUsers.All(au => au.UserId != userId))
+        if (userProject.CreatedUserId != userId && userProject.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
 
-        return userProjectEntity;
+        return userProject;
     }
 }

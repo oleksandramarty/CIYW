@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Interfaces;
 
-public interface ITreeDictionaryRepository<TId, TParentId, TEntity, TResponse, TDataContext>
-    where TEntity : class, ITreeEntityEntity<TId, TParentId>, IActivatableEntity
+public interface ITreeDictionaryRepository<TEntityId, TEntityParentId, TEntity, TResponse, TDataContext>
+    where TEntity : class, ITreeEntityEntity<TEntityId, TEntityParentId>, IActivatableEntity
     where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {
-    Task<VersionedListResponse<TResponse>> GetTreeDictionaryAsync(string? version, CancellationToken cancellationToken);
+    Task<VersionedListResponse<TResponse>> TreeDictionaryAsync(string? version, CancellationToken cancellationToken);
 }

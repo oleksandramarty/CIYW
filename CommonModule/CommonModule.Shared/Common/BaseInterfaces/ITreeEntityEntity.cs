@@ -1,6 +1,6 @@
 namespace CommonModule.Shared.Common.BaseInterfaces;
 
-public interface ITreeEntityEntity<TId, TParentId>: IBaseIdEntity<TId>
+public interface ITreeEntityEntity<TEntityId, TEntityIdParentId>: IBaseIdEntity<TEntityId>
 {
-    TParentId ParentId { get; set; }
+    TEntityIdParentId ParentId { get; set; }
 }

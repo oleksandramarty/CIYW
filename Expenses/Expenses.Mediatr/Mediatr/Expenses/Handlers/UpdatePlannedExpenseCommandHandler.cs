@@ -33,13 +33,16 @@ public class UpdatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
     {        
         this.entityValidator.ValidateVoidRequest<UpdatePlannedExpenseCommand>(command, () => new UpdatePlannedExpenseCommandValidator());
         
-        PlannedExpenseEntity currentPlannedExpenseEntity = await this.plannedExpenseRepository.GetAsync(
+        PlannedExpenseEntity? currentPlannedExpense = await this.plannedExpenseRepository.Async(
             e => e.Id == command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(currentPlannedExpenseEntity);
+        if (currentPlannedExpense == null)
+        {
+            throw new EntityNotFoundException();
+        }
         
-        await this.CheckUserProjectByIdAsync(currentPlannedExpenseEntity.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(currentPlannedExpense.UserProjectId, cancellationToken);
         
         await this.plannedExpenseRepository.UpdateAsync(
-            this.mapper.Map<UpdatePlannedExpenseCommand, PlannedExpenseEntity>(command, currentPlannedExpenseEntity), cancellationToken);
+            this.mapper.Map<UpdatePlannedExpenseCommand, PlannedExpenseEntity>(command, currentPlannedExpense), cancellationToken);
     }
 }

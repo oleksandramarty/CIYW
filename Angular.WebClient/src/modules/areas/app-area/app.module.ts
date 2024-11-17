@@ -100,6 +100,12 @@ export const routes: Routes = [
   },
   {
     path: '',
+    loadChildren: () => import('../favorite-area/favorite-area.module')
+        .then(m => m.FavoriteAreaModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '',
     loadChildren: () => import('../dashboard-area/dashboard-area.module')
       .then(m => m.DashboardAreaModule),
     canActivate: [AuthGuard]

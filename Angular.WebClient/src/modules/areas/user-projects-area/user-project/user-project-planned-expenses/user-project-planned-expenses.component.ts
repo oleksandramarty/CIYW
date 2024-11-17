@@ -56,7 +56,7 @@ export class UserProjectPlannedExpensesComponent extends BaseFilterComponent<Fil
                     if (result && result.categoryIds) {
                         this.filterFormGroup.get('categoryIds')?.setValue(result.categoryIds);
                     } else {
-                        this.getFilteredItems();
+                        this.filteredItems();
                     }
                 }),
                 handleApiError(this.snackBar)
@@ -78,7 +78,7 @@ export class UserProjectPlannedExpensesComponent extends BaseFilterComponent<Fil
 
     public openCreateUpdatePlannedExpenseDialog(plannedExpense: PlannedExpenseResponse | undefined): void {
         this.commonDialogService.showCreateOrUpdatePlannedExpenseDialog(() => {
-            this.getFilteredItems();
+            this.filteredItems();
             this.plannedExpenseChanged.emit();
         }, () => {
         }, plannedExpense, this.userProject);
@@ -91,7 +91,7 @@ export class UserProjectPlannedExpensesComponent extends BaseFilterComponent<Fil
                     .pipe(
                         takeUntil(this.ngUnsubscribe),
                         tap((result) => {
-                            this.getFilteredItems();
+                            this.filteredItems();
                         }),
                         handleApiError(this.snackBar)
                     )
@@ -112,9 +112,9 @@ export class UserProjectPlannedExpensesComponent extends BaseFilterComponent<Fil
         ];
     }
 
-    protected getFilteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfPlannedExpenseResponse> {
-        return this.graphQlExpensesService.getFilteredPlannedExpenses(...filterRequest).pipe(
-            map(result => result.data.expenses_get_filtered_planned_expenses!)
+    protected filteredItemsSub(filterRequest: [BaseGraphQlFilteredModel, string, number[]]): Observable<FilteredListResponseOfPlannedExpenseResponse> {
+        return this.graphQlExpensesService.filteredPlannedExpenses(...filterRequest).pipe(
+            map(result => result.data.expenses_filtered_planned_expenses!)
         );
     }
 }

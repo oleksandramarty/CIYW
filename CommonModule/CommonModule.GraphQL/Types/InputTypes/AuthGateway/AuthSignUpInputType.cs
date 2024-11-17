@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.InputTypes.AuthGateway;
 
-public class AuthSignUpInputType : InputObjectGraphType
+public sealed class AuthSignUpInputType : InputObjectGraphType
 {
     public AuthSignUpInputType()
     {

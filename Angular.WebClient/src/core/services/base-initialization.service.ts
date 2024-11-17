@@ -3,11 +3,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {LocalizationService} from "./localization.service";
 import {SiteSettingsService} from "./site-settings.service";
 import {DictionaryService} from "./dictionary.service";
-import {AuthService} from "./auth.service";
 import {filter, take, tap} from "rxjs";
-import {handleApiError} from "../helpers/rxjs.helper";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
 import {SiteSettingsResponse} from "../api-models/common.models";
+import {AuthService} from "./auth.service";
+import {handleApiError} from "../helpers/rxjs.helper";
 
 @Injectable({
     providedIn: "root"
@@ -23,7 +23,7 @@ export class BaseInitializationService {
     ) {}
 
     public initialize(): void {
-        this.graphQlDictionariesService.getSiteSettings()
+        this.graphQlDictionariesService.siteSettings()
             .pipe(
                 take(1),
                 tap((result) => {

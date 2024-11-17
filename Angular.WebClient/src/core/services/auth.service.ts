@@ -111,7 +111,7 @@ export class AuthService {
                 switchMap((result) => {
                     const token = result?.data?.auth_gateway_sign_in as JwtTokenResponse;
                     this.auth_setToken(token);
-                    return this.graphQlAuthService.getCurrentUser();
+                    return this.graphQlAuthService.currentUser();
                 }),
                 tap((result) => {
                     const user = result?.data?.auth_gateway_current_user as UserResponse;
@@ -147,7 +147,7 @@ export class AuthService {
     }
 
     private getCurrentUser(): void {
-        this.graphQlAuthService.getCurrentUser().pipe(
+        this.graphQlAuthService.currentUser().pipe(
             take(1),
             tap((result) => {
                 const user = result?.data?.auth_gateway_current_user as UserResponse;

@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.AuthGateway;
 
-public class JwtTokenResponseType : ObjectGraphType<JwtTokenResponse>
+public sealed class JwtTokenResponseType : ObjectGraphType<JwtTokenResponse>
 {
     public JwtTokenResponseType()
     {

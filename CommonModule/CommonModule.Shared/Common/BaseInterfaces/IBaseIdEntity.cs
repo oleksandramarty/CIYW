@@ -1,6 +1,6 @@
 namespace CommonModule.Shared.Common.BaseInterfaces;
 
-public interface IBaseIdEntity<T>
+public interface IBaseIdEntity<TEntityId>
 {
-    T Id { get; set; }
+    TEntityId Id { get; set; }
 }

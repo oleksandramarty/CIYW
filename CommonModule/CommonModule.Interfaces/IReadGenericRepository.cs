@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Interfaces;
 
-public interface IReadGenericRepository<TId, T, TDataContext>
-    where T : class
+public interface IReadGenericRepository<TEntityId, TEntity, TDataContext>
+    where TEntity : class
     where TDataContext : DbContext
 {
-    Task<T> GetByIdAsync(TId id, CancellationToken cancellationToken,
-        params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
-    Task<T> GetAsync(Expression<Func<T, bool>> condition,  CancellationToken cancellationToken,
-        params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
-    Task<List<T>> GetListAsync(
-        Expression<Func<T, bool>>? condition,  
+    Task<TEntity> ByIdAsync(TEntityId id, CancellationToken cancellationToken,
+        params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs);
+    Task<TEntity> Async(Expression<Func<TEntity, bool>> condition,  CancellationToken cancellationToken,
+        params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs);
+    Task<List<TEntity>> ListAsync(
+        Expression<Func<TEntity, bool>>? condition,  
         CancellationToken cancellationToken,
-        params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
+        params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs);
     
-    IQueryable<T> GetQueryable(
-        Expression<Func<T, bool>>? condition,
-        params Func<IQueryable<T>, IQueryable<T>>[] includeFuncs);
+    IQueryable<TEntity> Queryable(
+        Expression<Func<TEntity, bool>>? condition,
+        params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs);
 }

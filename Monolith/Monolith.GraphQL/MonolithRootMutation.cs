@@ -2,7 +2,7 @@ using CommonModule.GraphQL.MutationResolver;
 
 namespace Monolith.GraphQL;
 
-public class MonolithRootMutation: GraphQLMutationHelper
+public class MonolithRootMutation: GraphQlMutationHelper
 {
     public MonolithRootMutation()
     {

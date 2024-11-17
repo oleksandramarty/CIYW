@@ -1,28 +1,32 @@
 <section *ngIf="!!userProject" class="user-project-section">
 
-    <div class="section-header">
-        <h1 class="user-project-title">{{ userProject.title | translation }}</h1>
+    <div class="content-area">
+        <div class="section-header">
+            <app-common-favorite [title]="userProject.title" [favorite]="false"></app-common-favorite>
+        </div>
+
+        <div class="content-area-body">
+            <app-common-top-menu type="menuUserProject"
+                                 (activeTabChanged)="activeTab = $event"></app-common-top-menu>
+
+            <ng-container *ngIf="activeTab === 0">
+                <app-user-project-favorites [userProject]="userProject"
+                                            (favoritesChanged)="getUserProjectFromApi()"
+                ></app-user-project-favorites>
+            </ng-container>
+
+            <ng-container *ngIf="activeTab === 1">
+                <app-user-project-expenses [userProject]="userProject"
+                                           (expanseChanged)="getUserProjectFromApi()"
+                ></app-user-project-expenses>
+            </ng-container>
+
+            <ng-container *ngIf="activeTab === 2">
+                <app-user-project-planned-expenses [userProject]="userProject"
+                                                   (plannedExpenseChanged)="getUserProjectFromApi()"
+                ></app-user-project-planned-expenses>
+            </ng-container>
+        </div>
     </div>
-
-    <app-common-top-menu type="menuUserProject"
-                         (activeTabChanged)="activeTab = $event"></app-common-top-menu>
-
-    <ng-container *ngIf="activeTab === 0">
-        <app-user-project-favorites [userProject]="userProject"
-                                    (favoritesChanged)="getUserProjectFromApi()"
-        ></app-user-project-favorites>
-    </ng-container>
-
-    <ng-container *ngIf="activeTab === 1">
-        <app-user-project-expenses [userProject]="userProject"
-                                   (expanseChanged)="getUserProjectFromApi()"
-        ></app-user-project-expenses>
-    </ng-container>
-
-    <ng-container *ngIf="activeTab === 2">
-        <app-user-project-planned-expenses [userProject]="userProject"
-                                           (plannedExpenseChanged)="getUserProjectFromApi()"
-        ></app-user-project-planned-expenses>
-    </ng-container>
 </section>
 

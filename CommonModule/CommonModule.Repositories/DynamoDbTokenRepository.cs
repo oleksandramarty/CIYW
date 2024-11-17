@@ -23,7 +23,7 @@ public class DynamoDbTokenRepository: ITokenRepository
 
     public async Task AddTokenAsync(string token, TimeSpan expiration)
     {
-        var userId = this.jwtTokenFactory.GetUserIdFromToken(token);
+        var userId = this.jwtTokenFactory.UserIdFromToken(token);
         var tokenItem = new TokenItemEntity()
         {
             UserId = userId,
@@ -36,14 +36,14 @@ public class DynamoDbTokenRepository: ITokenRepository
 
     public async Task<bool> IsTokenValidAsync(string token)
     {
-        var userId = this.jwtTokenFactory.GetUserIdFromToken(token);
+        var userId = this.jwtTokenFactory.UserIdFromToken(token);
         var tokenItem = await this.context.LoadAsync<TokenItemEntity>(userId, token);
         return tokenItem != null && tokenItem.Expiration > DateTime.UtcNow;
     }
 
     public async Task RemoveTokenAsync(string token)
     {
-        var userId = this.jwtTokenFactory.GetUserIdFromToken(token);
+        var userId = this.jwtTokenFactory.UserIdFromToken(token);
         await this.context.DeleteAsync<TokenItemEntity>(userId, token);
     }
 
@@ -63,7 +63,7 @@ public class DynamoDbTokenRepository: ITokenRepository
 
     public bool IsTokenExpired(string token)
     {
-        var userId = this.jwtTokenFactory.GetUserIdFromToken(token);
+        var userId = this.jwtTokenFactory.UserIdFromToken(token);
         var tokenItem = this.context.LoadAsync<TokenItemEntity>(userId, token).Result;
         return tokenItem == null || tokenItem.Expiration <= DateTime.UtcNow;
     }

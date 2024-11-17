@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Localizations.Models.Locales;
 
-public class LocaleResponseType : ObjectGraphType<LocaleResponse>
+public sealed class LocaleResponseType : ObjectGraphType<LocaleResponse>
 {
     public LocaleResponseType()
     {

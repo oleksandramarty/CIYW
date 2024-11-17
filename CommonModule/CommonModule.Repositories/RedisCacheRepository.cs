@@ -6,34 +6,34 @@ using CommonModule.Shared.Common.BaseInterfaces;
 
 namespace CommonModule.Repositories;
 
-public class RedisCacheRepository<TId, TEntity> : ICacheRepository<TId, TEntity>
-    where TId : notnull
-    where TEntity : class, IBaseIdEntity<TId>
+public class RedisCacheRepository<TEntityId, TEntity> : ICacheRepository<TEntityId, TEntity>
+    where TEntityId : notnull
+    where TEntity : class, IBaseIdEntity<TEntityId>
 {
-    private readonly ICacheBaseRepository<TId> cacheBaseRepository;
+    private readonly ICacheBaseRepository<TEntityId> cacheBaseRepository;
     private readonly string dictionaryName;
 
     public RedisCacheRepository(
-        ICacheBaseRepository<TId> cacheBaseRepository
+        ICacheBaseRepository<TEntityId> cacheBaseRepository
         )
     {
         this.cacheBaseRepository = cacheBaseRepository;
         this.dictionaryName = typeof(TEntity).Name.Replace("Entity", "").ToLower();
     }
 
-    public async Task<List<TEntity>> GetItemsFromCacheAsync()
+    public async Task<List<TEntity>?> ItemsFromCacheAsync()
     {
-        IEnumerable<string> items = await cacheBaseRepository.GetItemsFromCacheAsync(this.dictionaryName);
-        
-        return items?
-            .Select(result => JsonSerializerExtension.FromString<TEntity>(result))
+        IEnumerable<string> items = await cacheBaseRepository.ItemsFromCacheAsync(this.dictionaryName);
+
+        return items
+            .Select(result => JsonSerializerExtension.FromString<TEntity?>(result))
             .Where(entity => entity != null)
-            .ToList() ?? new List<TEntity>();
+            .ToList();
     }
 
-    private async Task<IEnumerable<RedisKey>> GetAllKeysAsync()
+    private IEnumerable<RedisKey> AllKeys()
     {
-        return await this.cacheBaseRepository.GetAllKeysAsync(this.dictionaryName);
+        return this.cacheBaseRepository.AllKeys(this.dictionaryName);
     }
 
     public async Task ReinitializeDictionaryAsync(List<TEntity> values)
@@ -41,9 +41,23 @@ public class RedisCacheRepository<TId, TEntity> : ICacheRepository<TId, TEntity>
         await this.cacheBaseRepository.ReinitializeDictionaryAsync(this.dictionaryName, values.ToDictionary(item => item.Id, item => JsonSerializerExtension.ToString(item)));
     }
 
-    public async Task<string?> GetCacheVersionAsync()
+    public async Task<string> CacheVersionAsync()
     {
-        return await this.cacheBaseRepository.GetCacheVersionAsync(this.dictionaryName);
+        string? version = await this.cacheBaseRepository.CacheVersionAsync(this.dictionaryName);
+
+        if (string.IsNullOrEmpty(version))
+        {
+            await this.cacheBaseRepository.SetCacheVersionAsync(this.dictionaryName);
+        }
+        
+        version = await this.cacheBaseRepository.CacheVersionAsync(this.dictionaryName);
+
+        if (string.IsNullOrEmpty(version))
+        {
+            throw new VersionException();
+        }
+
+        return version;
     }
 
     public async Task SetCacheVersionAsync()

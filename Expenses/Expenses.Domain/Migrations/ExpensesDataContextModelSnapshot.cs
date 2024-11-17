@@ -47,8 +47,8 @@ namespace Expenses.Domain.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -59,13 +59,20 @@ namespace Expenses.Domain.Migrations
                     b.Property<Guid>("UserProjectId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("UserProjectId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserProjectId");
+
+                    b.HasIndex("UserProjectId1");
 
                     b.ToTable("Balances", "Balance");
                 });
@@ -102,7 +109,6 @@ namespace Expenses.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -114,7 +120,9 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
@@ -175,7 +183,9 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
@@ -237,7 +247,9 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
@@ -263,7 +275,9 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
@@ -289,14 +303,17 @@ namespace Expenses.Domain.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
@@ -305,11 +322,15 @@ namespace Expenses.Domain.Migrations
 
             modelBuilder.Entity("Expenses.Domain.Models.Balances.BalanceEntity", b =>
                 {
-                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", "UserProject")
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", null)
                         .WithMany("Balances")
                         .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Expenses.Domain.Models.Projects.UserProjectEntity", "UserProject")
+                        .WithMany()
+                        .HasForeignKey("UserProjectId1");
 
                     b.Navigation("UserProject");
                 });

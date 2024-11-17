@@ -33,13 +33,16 @@ public class UpdateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
     {        
         this.entityValidator.ValidateVoidRequest<UpdateFavoriteExpenseCommand>(command, () => new UpdateFavoriteExpenseCommandValidator());
         
-        FavoriteExpenseEntity currentFavoriteExpenseEntity = await this.favoriteExpenseRepository.GetAsync(
+        FavoriteExpenseEntity? currentFavoriteExpense = await this.favoriteExpenseRepository.Async(
             e => e.Id == command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(currentFavoriteExpenseEntity);
+        if (currentFavoriteExpense == null)
+        {
+            throw new EntityNotFoundException();
+        }
         
-        await this.CheckUserProjectByIdAsync(currentFavoriteExpenseEntity.UserProjectId, cancellationToken);
+        await this.CheckUserProjectByIdAsync(currentFavoriteExpense.UserProjectId, cancellationToken);
         
         await this.favoriteExpenseRepository.UpdateAsync(
-            this.mapper.Map<UpdateFavoriteExpenseCommand, FavoriteExpenseEntity>(command, currentFavoriteExpenseEntity), cancellationToken);
+            this.mapper.Map<UpdateFavoriteExpenseCommand, FavoriteExpenseEntity>(command, currentFavoriteExpense), cancellationToken);
     }
 }

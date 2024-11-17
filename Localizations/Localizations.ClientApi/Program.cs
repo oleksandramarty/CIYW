@@ -17,7 +17,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.AddDatabaseContext<LocalizationsDataContext>();
-builder.AddDynamoDB();
+builder.AddDynamoDb();
 builder.AddSwagger();
 builder.AddCorsPolicy();
 builder.AddAuthorization();
@@ -32,7 +32,7 @@ builder.AddDependencyInjection();
 builder.Services.AddSingleton<ISchema, LocalizationsGraphQLSchema>(services => new LocalizationsGraphQLSchema(new SelfActivatingServiceProvider(services)));
 // GraphQL schema ends
 
-builder.AddGraphQL();
+builder.AddGraphQl();
 
 // Custom DI
 // Custom DI ends
@@ -59,7 +59,7 @@ app.AddMiddlewares();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUI(builder);
+    app.UseSwaggerUi(builder);
     app.UseGraphQLPlayground("/graphql/playground");
 }
 

@@ -21,17 +21,17 @@ public class BalanceRepositoryTest() : CommonIntegrationTestSetup(UserRoleEnum.U
         // Here you would typically have code to start the application or check its status
 
 
-        using (var scope = this.testApplicationFactory.Services.CreateScope())
+        using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             var httpContextAccessorForTesting = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
-            var t1 = httpContextAccessorForTesting.HttpContext.User;
+            var t1 = httpContextAccessorForTesting.HttpContext?.User;
             bool isAuthenticated = t1?.Identity?.IsAuthenticated ?? false;
             isAuthenticated.Should().BeTrue();
 
             IntegrationTestUserEntity user1 = await this.CreateTestUser(UserRoleEnum.User, false);
-            var t2 = httpContextAccessorForTesting.HttpContext.User;
+            var t2 = httpContextAccessorForTesting.HttpContext?.User;
             IntegrationTestUserEntity user2 = await this.CreateTestUser(UserRoleEnum.User);
-            var t3 = httpContextAccessorForTesting.HttpContext.User;
+            var t3 = httpContextAccessorForTesting.HttpContext?.User;
         }
 
         // Assert

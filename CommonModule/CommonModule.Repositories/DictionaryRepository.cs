@@ -7,19 +7,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Repositories;
 
-public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDictionaryRepository<TId, TEntity, TResponse, TDataContext>
-    where TEntity : class, IBaseIdEntity<TId>, IActivatableEntity
-    where TResponse : class, IBaseIdEntity<TId>
+public class DictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>: IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>
+    where TEntityId : struct
+    where TEntity : class, IBaseIdEntity<TEntityId>, IActivatableEntity
+    where TResponse : class, IBaseIdEntity<TEntityId>
     where TDataContext : DbContext
 {
     private readonly IMapper mapper;
-    private readonly ICacheRepository<TId, TEntity> cacheRepository;
-    private readonly IReadGenericRepository<TId, TEntity, TDataContext> dictionaryRepository;
+    private readonly ICacheRepository<TEntityId, TEntity> cacheRepository;
+    private readonly IReadGenericRepository<TEntityId, TEntity, TDataContext> dictionaryRepository;
     
     public DictionaryRepository(
         IMapper mapper,
-        ICacheRepository<TId, TEntity> cacheRepository,
-        IReadGenericRepository<TId, TEntity, TDataContext> dictionaryRepository
+        ICacheRepository<TEntityId, TEntity> cacheRepository,
+        IReadGenericRepository<TEntityId, TEntity, TDataContext> dictionaryRepository
         )
     {
         this.mapper = mapper;
@@ -27,9 +28,12 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
         this.dictionaryRepository = dictionaryRepository;
     }
 
-    public async Task<VersionedListResponse<TResponse>> GetDictionaryAsync(string? version, CancellationToken cancellationToken, params Func<IQueryable<TEntity>, IQueryable<TEntity>>[] includeFuncs)
+    public async Task<VersionedListResponse<TResponse>> DictionaryAsync(
+        string? version, 
+        CancellationToken cancellationToken, 
+        params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs)
     {
-        string currentVersion = await this.cacheRepository.GetCacheVersionAsync();
+        string currentVersion = await this.cacheRepository.CacheVersionAsync();
         
         if (LocalizationExtension.IsDictionaryActual(version, currentVersion))
         {
@@ -40,18 +44,18 @@ public class DictionaryRepository<TId, TEntity, TResponse, TDataContext>: IDicti
             };
         }
         
-        var items = await this.cacheRepository.GetItemsFromCacheAsync();
+        var items = await this.cacheRepository.ItemsFromCacheAsync();
     
         if (items == null || items.Count == 0)
         {
-            items = await dictionaryRepository.GetListAsync(null, cancellationToken, includeFuncs);
+            items = await dictionaryRepository.ListAsync(null, cancellationToken, includeFuncs);
             await this.cacheRepository.ReinitializeDictionaryAsync(items);
             await this.cacheRepository.SetCacheVersionAsync();
         }
         
         if (string.IsNullOrEmpty(currentVersion))
         {
-            currentVersion = await this.cacheRepository.GetCacheVersionAsync();
+            currentVersion = await this.cacheRepository.CacheVersionAsync();
         }
     
         VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>

@@ -6,21 +6,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Core.Mediatr;
 
-public class MediatrDictionaryBase<TRequest, TId, TEntity, TResponse, TDataContext>: IRequestHandler<TRequest, VersionedListResponse<TResponse>>
+public class MediatrDictionaryBase<TRequest, TEntityId, TEntity, TResponse, TDataContext>: IRequestHandler<TRequest, VersionedListResponse<TResponse>>
+    where TEntityId : struct
     where TRequest : IBaseVersionEntity, IRequest<VersionedListResponse<TResponse>>
-    where TEntity : class, IBaseIdEntity<TId>, IActivatableEntity
-    where TResponse : class, IBaseIdEntity<TId>
+    where TEntity : class, IBaseIdEntity<TEntityId>, IActivatableEntity
+    where TResponse : class, IBaseIdEntity<TEntityId>
     where TDataContext : DbContext
 {
-    private readonly IDictionaryRepository<TId, TEntity, TResponse, TDataContext> dictionaryRepository;
+    private readonly IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext> dictionaryRepository;
     
-    public MediatrDictionaryBase(IDictionaryRepository<TId, TEntity, TResponse, TDataContext> dictionaryRepository)
+    public MediatrDictionaryBase(IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext> dictionaryRepository)
     {
         this.dictionaryRepository = dictionaryRepository;
     }
     
     public async Task<VersionedListResponse<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        return await this.dictionaryRepository.GetDictionaryAsync(request.Version, cancellationToken);
+        return await this.dictionaryRepository.DictionaryAsync(request.Version, cancellationToken);
     }
 }

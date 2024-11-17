@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.Responses.Lists;
 
-public class FilteredListResponseOfGenericType<TEntityResponse, TEntityResponseType>: ObjectGraphType<FilteredListResponse<TEntityResponse>>
+public sealed class FilteredListResponseOfGenericType<TEntityResponse, TEntityResponseType>: ObjectGraphType<FilteredListResponse<TEntityResponse>>
     where TEntityResponseType: ObjectGraphType<TEntityResponse>
 {
     public FilteredListResponseOfGenericType()

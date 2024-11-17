@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace CommonModule.GraphQL.Types.InputTypes.AuthGateway;
 
-public class AuthSignInRequestInputType : InputObjectGraphType
+public sealed class AuthSignInRequestInputType : InputObjectGraphType
 {
     public AuthSignInRequestInputType()
     {

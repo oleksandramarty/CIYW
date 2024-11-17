@@ -1,4 +1,5 @@
 using AutoMapper;
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
@@ -31,9 +32,13 @@ public class UpdateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     {
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
         
-        BalanceEntity balanceEntity = await this.balanceRepository.GetByIdAsync(command.Id, cancellationToken);
-        this.entityValidator.IsEntityExist(balanceEntity);
-        this.mapper.Map(command, balanceEntity);
-        await this.balanceRepository.UpdateAsync(balanceEntity, cancellationToken);
+        BalanceEntity? balance = await this.balanceRepository.ByIdAsync(command.Id, cancellationToken);
+        if (balance == null)
+        {
+            throw new EntityNotFoundException();
+        }
+        
+        this.mapper.Map(command, balance);
+        await this.balanceRepository.UpdateAsync(balance, cancellationToken);
     }
 }
