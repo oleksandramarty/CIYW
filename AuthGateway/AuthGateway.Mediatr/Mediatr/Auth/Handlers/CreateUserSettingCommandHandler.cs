@@ -4,11 +4,12 @@ using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AutoMapper;
 using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Responses.Base;
 using MediatR;
 
 namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
-public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingCommand>
+public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingCommand, BaseEntityIdResponse<Guid>>
 {
     private readonly IMapper mapper;
     private readonly ICurrentUserRepository currentUserRepository;
@@ -28,7 +29,7 @@ public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingC
         this.userSettingRepository = userSettingRepository;
     }
     
-    public async Task Handle(CreateUserSettingCommand command, CancellationToken cancellationToken)
+    public async Task<BaseEntityIdResponse<Guid>> Handle(CreateUserSettingCommand command, CancellationToken cancellationToken)
     {
         Guid? userId = await currentUserRepository.CurrentUserIdAsync();
         if (!userId.HasValue)
@@ -42,5 +43,10 @@ public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingC
             toAdd,
             cancellationToken
         );
+
+        return new BaseEntityIdResponse<Guid>
+        {
+            Id = toAdd.Id
+        };
     }
 }

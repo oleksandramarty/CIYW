@@ -37,27 +37,32 @@ public class AuthSignInRequestHandler : IRequestHandler<AuthSignInRequest, JwtTo
         this.entityValidator.ValidateRequest<AuthSignInRequest, JwtTokenResponse>(request,
             () => new AuthSignInRequestValidator());
 
-        UserEntity userEntity = await this.userRepository.Async(u =>
+        UserEntity user = await this.userRepository.Async(u =>
                 u.Email == request.Login ||
                 u.Login == request.Login,
             cancellationToken,
             user => user.Include(u => u.Roles).ThenInclude(ur => ur.Role));
-        if (userEntity == null)
+        if (user == null)
         {
             throw new EntityNotFoundException();
         }
 
-        var hashedPassword = this.jwtTokenFactory.HashPassword(request.Password, userEntity.Salt);
-        if (hashedPassword != userEntity.PasswordHash)
+        if (!user.IsActive)
+        {
+            throw new BusinessException(ErrorMessages.UserBlocked, StatusCodes.Status403Forbidden);
+        }
+
+        var hashedPassword = this.jwtTokenFactory.HashPassword(request.Password, user.Salt);
+        if (hashedPassword != user.PasswordHash)
         {
             throw new AuthException(ErrorMessages.WrongAuth, StatusCodes.Status403Forbidden);
         }
 
         var token = this.jwtTokenFactory.GenerateJwtToken(
-            userEntity.Id,
-            userEntity.Login,
-            userEntity.Email,
-            string.Join(",", userEntity.Roles.Select(r => r.Role?.Title)),
+            user.Id,
+            user.Login,
+            user.Email,
+            string.Join(",", user.Roles.Select(r => r.Role?.Title)),
             request.RememberMe);
 
         await this.tokenRepository.AddTokenAsync(token,

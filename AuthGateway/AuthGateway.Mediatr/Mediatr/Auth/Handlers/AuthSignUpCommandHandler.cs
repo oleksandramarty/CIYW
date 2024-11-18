@@ -3,13 +3,16 @@ using AuthGateway.Domain.Models.Users;
 using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AuthGateway.Mediatr.Validators.Auth;
 using AutoMapper;
+using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Enums;
+using CommonModule.Shared.Responses.Base;
 using MediatR;
 
 namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
-public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
+public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand, BaseEntityIdResponse<Guid>>
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
@@ -18,7 +21,6 @@ public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
     private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository;
 
     public AuthSignUpCommandHandler(
-        IMediator mediator,
         IMapper mapper, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         IJwtTokenFactory jwtTokenFactory,
@@ -32,9 +34,9 @@ public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
         this.userRoleRepository = userRoleRepository;
     }
 
-    public async Task Handle(AuthSignUpCommand command, CancellationToken cancellationToken)
+    public async Task<BaseEntityIdResponse<Guid>> Handle(AuthSignUpCommand command, CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateVoidRequest<AuthSignUpCommand>(command, () => new AuthSignUpCommandValidator());
+        this.entityValidator.ValidateRequest<AuthSignUpCommand, BaseEntityIdResponse<Guid>>(command, () => new AuthSignUpCommandValidator());
         
         await this.entityValidator.ValidateExistParamAsync<UserEntity>(
             u => u.Email == command.Email, 
@@ -47,10 +49,13 @@ public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand>
         userEntity.PasswordHash = this.jwtTokenFactory.HashPassword(command.Password, userEntity.Salt);
         
         await this.userRepository.AddAsync(userEntity, cancellationToken);
+        
         await this.userRoleRepository.AddAsync(new UserRoleEntity
         {
-            RoleId = (int)command.Role,
+            RoleId = (int)UserRoleEnum.User,
             UserId = userEntity.Id
         }, cancellationToken);
+
+        return new BaseEntityIdResponse<Guid> { Id = userEntity.Id };
     }
 }

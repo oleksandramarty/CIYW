@@ -2,6 +2,7 @@ using AutoMapper;
 using CommonModule.Core.Exceptions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
 using Expenses.Domain.Models.Expenses;
 using Expenses.Domain.Models.Projects;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreateFavoriteExpenseCommand>
+public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreateFavoriteExpenseCommand, BaseEntityIdResponse<Guid>>
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
@@ -31,9 +32,9 @@ public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
         this.favoriteExpenseRepository = favoriteExpenseRepository;
     }
 
-    public async Task Handle(CreateFavoriteExpenseCommand command, CancellationToken cancellationToken)
+    public async Task<BaseEntityIdResponse<Guid>> Handle(CreateFavoriteExpenseCommand command, CancellationToken cancellationToken)
     {        
-        this.entityValidator.ValidateVoidRequest<CreateFavoriteExpenseCommand>(command, () => new CreateFavoriteExpenseCommandValidator());
+        this.entityValidator.ValidateRequest<CreateFavoriteExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateFavoriteExpenseCommandValidator());
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
@@ -47,6 +48,10 @@ public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestH
         toAdd.CreatedUserId = await this.CurrentUserIdAsync();
             
         await this.favoriteExpenseRepository.AddAsync(toAdd, cancellationToken);
-        return;
+
+        return new BaseEntityIdResponse<Guid>
+        {
+            Id = toAdd.Id
+        };
     }
 }

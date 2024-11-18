@@ -5,6 +5,7 @@ using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
 using CommonModule.Shared.Core;
+using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Projects;
@@ -15,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
-public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<CreateUserProjectCommand>
+public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<CreateUserProjectCommand, BaseEntityIdResponse<Guid>>
 {
     private readonly IMapper mapper;
     private readonly IEntityValidator<ExpensesDataContext> entityValidator;
@@ -32,9 +33,9 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         this.userProjectRepository = userProjectRepository;
     }
     
-    public async Task Handle(CreateUserProjectCommand command, CancellationToken cancellationToken)
+    public async Task<BaseEntityIdResponse<Guid>> Handle(CreateUserProjectCommand command, CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateVoidRequest<CreateUserProjectCommand>(command, () => new CreateUserProjectCommandValidator());
+        this.entityValidator.ValidateRequest<CreateUserProjectCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateUserProjectCommandValidator());
         
         Guid userId = await this.CurrentUserIdAsync();
         
@@ -45,5 +46,10 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         userProjectEntity.Version = VersionExtension.GenerateVersion();
         
         await this.userProjectRepository.AddAsync(userProjectEntity, cancellationToken);
+
+        return new BaseEntityIdResponse<Guid>
+        {
+            Id = userProjectEntity.Id
+        };
     }
 }

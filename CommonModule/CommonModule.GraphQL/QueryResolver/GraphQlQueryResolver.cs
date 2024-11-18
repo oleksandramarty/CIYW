@@ -5,7 +5,7 @@ using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Localizations;
 using GraphQL;
 using GraphQL.Types;
-using Localizations.Mediatr.Mediatr.Locations.Requests;
+using Localizations.Mediatr.Mediatr.Localizations.Requests;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 

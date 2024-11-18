@@ -49,19 +49,19 @@ public static class StringExtension
         Array.Resize(ref bytes, index);
         return bytes;
     }
-    
+
     public static bool BeAValidUrl(this string url)
     {
         return Uri.TryCreate(url, UriKind.Absolute, out _);
     }
-    
+
     public static bool NotContainMaliciousContent(this string url)
     {
         // Check for common XSS patterns
         string pattern = @"<script|javascript:|data:|vbscript:|on\w+=";
         return !Regex.IsMatch(url, pattern, RegexOptions.IgnoreCase);
     }
-    
+
     public static string InterleaveStrings(string str1, string str2)
     {
         int maxLength = Math.Max(str1.Length, str2.Length);
@@ -73,6 +73,7 @@ public static class StringExtension
             {
                 result.Append(str1[i]);
             }
+
             if (i < str2.Length)
             {
                 result.Append(str2[i]);
@@ -81,7 +82,7 @@ public static class StringExtension
 
         return result.ToString();
     }
-    
+
     public static TTarget ConvertTo<TTarget>(this string source)
     {
         if (string.IsNullOrEmpty(source))
@@ -135,12 +136,14 @@ public static class StringExtension
 
         throw new InvalidOperationException($"Conversion to {typeof(TTarget).Name} failed.");
     }
-    
-    public static string GenerateRandomString(int length)
+
+    public static string GenerateRandomString(int length, bool withSpecialCharacters = false)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const string specialChars = "@$!%*?&";
         var random = new Random();
-        return new string(Enumerable.Repeat(chars, length)
+        var characterSet = withSpecialCharacters ? chars + specialChars : chars;
+        return new string(Enumerable.Repeat(characterSet, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }

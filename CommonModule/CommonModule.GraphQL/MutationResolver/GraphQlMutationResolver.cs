@@ -9,11 +9,12 @@ namespace CommonModule.GraphQL.MutationResolver;
 
 public class GraphQlMutationResolver: ObjectGraphType, IGraphQlMutationResolver
 {
-    public void CreateEntity<TEntityInputType, TCommand>(GraphQlEndpoint endpoint)
+    public void CreateEntity<TEntityInputType, TEntityType, TCommand, TEntityResponse>(GraphQlEndpoint endpoint)
+        where TEntityType : ObjectGraphType<TEntityResponse>
         where TEntityInputType : InputObjectGraphType
-        where TCommand : IRequest
+        where TCommand : IRequest<TEntityResponse>
     {
-        Field<BooleanGraphType>(endpoint.Name)
+        Field<TEntityType>(endpoint.Name)
             .Arguments(new QueryArguments(
                 new QueryArgument<NonNullGraphType<TEntityInputType>> { Name = "input" }
             ))
@@ -23,8 +24,8 @@ public class GraphQlMutationResolver: ObjectGraphType, IGraphQlMutationResolver
                 var cancellationToken = context.CancellationToken;
                 TCommand command = context.GetArgument<TCommand>("input");
                 IMediator? mediator = context.RequestServices?.GetRequiredService<IMediator>();
-                await ExecuteCommandAsync(mediator, command, cancellationToken, context);
-                return true;
+                TEntityResponse result = await ExecuteCommandAsync(mediator, command, cancellationToken, context);
+                return result;
             });
     }
     

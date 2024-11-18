@@ -8,9 +8,10 @@ namespace CommonModule.GraphQL.MutationResolver;
 
 public interface IGraphQlMutationResolver
 {
-    void CreateEntity<TEntityInputType, TCommand>(GraphQlEndpoint endpoint)
+    void CreateEntity<TEntityInputType, TEntityType, TCommand, TEntityResponse>(GraphQlEndpoint endpoint)
+        where TEntityType : ObjectGraphType<TEntityResponse>
         where TEntityInputType : InputObjectGraphType
-        where TCommand : IRequest;
+        where TCommand : IRequest<TEntityResponse>;
 
     void UpdateEntity<TEntityInputType, TEntityTypeId, TEntityId, TCommand>(GraphQlEndpoint endpoint)
         where TEntityInputType : InputObjectGraphType

@@ -4,7 +4,7 @@ using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Localizations.Models.Locales;
 using Localizations.Domain;
 using Localizations.Domain.Models.Locales;
-using Localizations.Mediatr.Mediatr.Locations.Requests;
+using Localizations.Mediatr.Mediatr.Localizations.Requests;
 using MediatR;
 
 namespace Localizations.Mediatr.Mediatr.Localizations.Handlers;

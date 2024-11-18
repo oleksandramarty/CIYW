@@ -35,7 +35,7 @@ using Dictionaries.Mediatr.Mediatr.Requests;
 using Expenses.Mediatr.Mediatr.Expenses.Requests;
 using Expenses.Mediatr.Mediatr.Projects.Requests;
 using GraphQL.Types;
-using Localizations.Mediatr.Mediatr.Locations.Requests;
+using Localizations.Mediatr.Mediatr.Localizations.Requests;
 
 namespace CommonModule.GraphQL.QueryResolver;
 

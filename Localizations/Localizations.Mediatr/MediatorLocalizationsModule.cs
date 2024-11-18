@@ -1,6 +1,6 @@
 using System.Reflection;
 using Autofac;
-using Localizations.Mediatr.Mediatr.Locations.Requests;
+using Localizations.Mediatr.Mediatr.Localizations.Requests;
 using MediatR;
 
 namespace Localizations.Mediatr;

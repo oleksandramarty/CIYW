@@ -4,7 +4,7 @@ using CommonModule.Interfaces;
 using CommonModule.Shared.Responses.Localizations;
 using Localizations.Domain;
 using Localizations.Domain.Models.Locales;
-using Localizations.Mediatr.Mediatr.Locations.Requests;
+using Localizations.Mediatr.Mediatr.Localizations.Requests;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

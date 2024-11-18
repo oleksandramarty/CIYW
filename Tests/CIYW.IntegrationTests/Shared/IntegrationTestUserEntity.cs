@@ -9,4 +9,6 @@ public class IntegrationTestUserEntity
     public UserEntity? User { get; set; }
     public List<UserProjectEntity>? UserProjects { get; set; }
     public UserRoleEnum? Role { get; set; }
+    
+    public string? Token { get; set; }
 }

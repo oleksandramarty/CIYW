@@ -1,9 +1,10 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Responses.Base;
 using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Commands;
 
-public class CreateFavoriteExpenseCommand: IRequest
+public class CreateFavoriteExpenseCommand: IRequest<BaseEntityIdResponse<Guid>>
 {
     public string Title { get; set; }
     public string? Description { get; set; }

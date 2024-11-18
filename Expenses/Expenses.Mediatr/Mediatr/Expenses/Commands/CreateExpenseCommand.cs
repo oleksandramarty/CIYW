@@ -1,9 +1,10 @@
 using CommonModule.Shared.Common;
+using CommonModule.Shared.Responses.Base;
 using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Commands;
 
-public class CreateExpenseCommand: IRequest
+public class CreateExpenseCommand: IRequest<BaseEntityIdResponse<Guid>>
 {
     public string Title { get; set; }
     public string? Description { get; set; }

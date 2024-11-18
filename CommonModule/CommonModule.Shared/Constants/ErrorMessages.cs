@@ -25,4 +25,5 @@ public class ErrorMessages
     public const string RestorePasswordProcessingIssue = "ERROR.RESTORE_PASSWORD_PROCESSING_ISSUE";
     public const string VersionNotSpecified = "ERROR.VERSION_NOT_SPECIFIED";
     public const string UserProjectLimitExceeded = "ERROR.USER_PROJECT_LIMIT_EXCEEDED";
+    public const string RoleNotSupported = "ERROR.ROLE_NOT_SUPPORTED";
 }

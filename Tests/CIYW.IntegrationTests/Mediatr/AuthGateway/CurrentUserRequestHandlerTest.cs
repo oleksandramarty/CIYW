@@ -1,0 +1,49 @@
+using AuthGateway.Mediatr.Mediatr.Auth.Requests;
+using CIYW.IntegrationTests.Core;
+using CIYW.IntegrationTests.Shared;
+using CommonModule.Interfaces;
+using CommonModule.Shared.Enums;
+using CommonModule.Shared.Responses.AuthGateway.Users;
+using FluentAssertions;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+
+namespace CIYW.IntegrationTests.Mediatr.AuthGateway;
+
+[TestFixture]
+public class CurrentUserRequestHandlerTest(): CommonIntegrationTestSetup()
+{
+    [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
+    public async Task Handle_ShouldReturnTokenResponse_WhenAuthSignInRequestIsValid(UserRoleEnum role)
+    {
+        // Arrange
+        await this.SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role);
+        
+        // Act
+        using (var scope = TestApplicationFactory.Services.CreateScope())
+        {
+            IJwtTokenFactory jwtTokenFactory = scope.ServiceProvider.GetRequiredService<IJwtTokenFactory>();
+            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            
+            IMediator mediator = new Mediator(scope.ServiceProvider);
+            UserResponse response = await mediator.Send(new CurrentUserRequest());
+            
+            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            
+            // Assert
+            beforeSignIn.Should().BeTrue();
+            afterSignIn.Should().BeTrue();
+            response.Should().NotBeNull();
+            response.Id.Should().Be(userToBeSignIn.User.Id);
+            response.Login.Should().Be(userToBeSignIn.User.Login);
+            response.Email.Should().Be(userToBeSignIn.User.Email);
+            response.IsActive.Should().Be(userToBeSignIn.User.IsActive);
+            response.Roles.Should().NotBeNull();
+            response.Roles.Should().NotBeEmpty();
+            response.Roles.Should().HaveCount(1);
+            response.Roles.First().Id.Should().Be((int)userToBeSignIn.Role);
+        }
+    }
+}

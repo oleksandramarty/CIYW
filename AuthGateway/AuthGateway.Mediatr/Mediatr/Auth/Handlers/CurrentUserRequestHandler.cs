@@ -15,25 +15,16 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class CurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<CurrentUserRequest, UserResponse>
 {
-    private readonly IMediator mediator;
     private readonly IMapper mapper;
-    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
     private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
-    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository;
 
     public CurrentUserRequestHandler(
         ICurrentUserRepository currentUserRepository,
-        IMediator mediator,
         IMapper mapper, 
-        IEntityValidator<AuthGatewayDataContext> entityValidator, 
-        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
-        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository): base(currentUserRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository): base(currentUserRepository)
     {
-        this.mediator = mediator;
         this.mapper = mapper;
-        this.entityValidator = entityValidator;
         this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
     }
     
     public async Task<UserResponse> Handle(CurrentUserRequest request, CancellationToken cancellationToken)

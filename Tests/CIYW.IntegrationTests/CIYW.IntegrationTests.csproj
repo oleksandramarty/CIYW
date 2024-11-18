@@ -56,7 +56,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Mediatr\AuthGateway\" />
+      <Folder Include="Repositories\" />
     </ItemGroup>
 
 </Project>

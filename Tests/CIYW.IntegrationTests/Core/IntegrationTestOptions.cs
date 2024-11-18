@@ -7,7 +7,9 @@ using CIYW.IntegrationTests.Shared;
 using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Core;
 using CommonModule.Shared.Enums;
+using CommonModule.Shared.Responses.Dictionaries;
 using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Expenses;
@@ -23,7 +25,7 @@ namespace CIYW.IntegrationTests.Core;
 /// </summary>
 public class IntegrationTestOptions
 {
-    private IntegrationTestUserEntity? CurrentUserEntity { get; set; }
+    public IntegrationTestUserEntity? CurrentUserEntity { get; set; }
 
     private UserRoleEnum? Role { get; set; }
 
@@ -46,32 +48,12 @@ public class IntegrationTestOptions
         CurrentUserEntity = await this.CreateUser(testApplicationFactory, Role.Value);
     }
 
-    public HttpContextAccessorForTesting GenerateClaims()
-    {
-        HttpContextAccessorForTesting httpContextAccessorForTesting = new HttpContextAccessorForTesting();
+    public async Task<IntegrationTestUserEntity> CreateUser(
+        IntegrationTestBase testApplicationFactory,
+        UserRoleEnum role,
+        bool withSignIn = true,
+        IEnumerable<Action<UserEntity>>? userActions = null)
 
-        if (this.CurrentUserEntity == null)
-        {
-            httpContextAccessorForTesting.HttpContext = new DefaultHttpContext()
-            {
-                User = null
-            };
-            return httpContextAccessorForTesting;
-        }
-        
-        List<Claim> claims = this.TestClaims();
-        
-        ClaimsIdentity identity = new ClaimsIdentity(claims, "IntegrationTestAuthentication");
-        ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
-        httpContextAccessorForTesting.HttpContext = new DefaultHttpContext
-        {
-            User = claimsPrincipal
-        };
-        return httpContextAccessorForTesting;
-    }
-
-    public async Task<IntegrationTestUserEntity> CreateUser(IntegrationTestBase testApplicationFactory,
-        UserRoleEnum role, bool withSignIn = true)
     {
         using var scope = testApplicationFactory.Services.CreateScope();
         AuthGatewayDataContext authGatewayDataContext =
@@ -83,8 +65,8 @@ public class IntegrationTestOptions
         string login = IntegrationTestConstants.UserName + StringExtension.GenerateRandomString(5);
         Guid userId = Guid.NewGuid();
         string salt = jwtTokenFactory.GenerateSalt();
-        string passwordHash = jwtTokenFactory.HashPassword(IntegrationTestConstants.UserName, salt);
-            
+        string passwordHash = jwtTokenFactory.HashPassword(login, salt);
+
         UserEntity user = new UserEntity
         {
             Id = userId,
@@ -113,6 +95,14 @@ public class IntegrationTestOptions
                 DefaultLocale = "en"
             }
         };
+
+        if (userActions != null)
+        {
+            foreach (var action in userActions)
+            {
+                action(user);
+            }
+        }
 
         await authGatewayDataContext.Users.AddAsync(user);
         await authGatewayDataContext.SaveChangesAsync();
@@ -144,7 +134,7 @@ public class IntegrationTestOptions
 
         await expensesDataContext.UserProjects.AddAsync(userProject);
         await expensesDataContext.SaveChangesAsync();
-        
+
         IntegrationTestUserEntity result = new IntegrationTestUserEntity
         {
             Role = role,
@@ -153,7 +143,8 @@ public class IntegrationTestOptions
                 .ThenInclude(r => r.Role)
                 .Include(u => u.UserSetting)
                 .FirstOrDefaultAsync(u => u.Id == user.Id),
-            UserProjects = new List<UserProjectEntity> { userProject }
+            UserProjects = new List<UserProjectEntity> { userProject },
+            Token = null
         };
 
         if (withSignIn)
@@ -162,10 +153,10 @@ public class IntegrationTestOptions
             {
                 throw new ArgumentNullException(nameof(result.User));
             }
-                
+
             CurrentUserEntity = result;
             Role = role;
-                
+
             var token = jwtTokenFactory.GenerateJwtToken(
                 CurrentUserEntity.User.Id,
                 CurrentUserEntity.User.Login,
@@ -173,23 +164,80 @@ public class IntegrationTestOptions
                 string.Join(",", Role.Value.ToString()),
                 true);
 
-            await tokenRepository.AddTokenAsync(token, TimeSpan.FromDays(30));
-
-
+            result.Token = token;
+            
             var httpContextAccessorForTesting = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
             List<Claim> claims = this.TestClaims();
-
+            
             ClaimsIdentity identity = new ClaimsIdentity(claims, "IntegrationTestAuthentication");
             ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
             httpContextAccessorForTesting.HttpContext = new DefaultHttpContext
             {
                 User = claimsPrincipal
             };
+
+            await tokenRepository.AddTokenAsync(token, TimeSpan.FromDays(30));
         }
 
         return result;
     }
 
+    public async Task SignOutUserIfExist(IntegrationTestBase testApplicationFactory)
+    {
+        using var scope = testApplicationFactory.Services.CreateScope();
+
+        if (this.CurrentUserEntity?.Token != null)
+        {
+            ITokenRepository tokenRepository = scope.ServiceProvider.GetRequiredService<ITokenRepository>();
+            await tokenRepository.RemoveTokenAsync(this.CurrentUserEntity.Token);
+            
+            HttpContextAccessorForTesting httpContextAccessorForTesting = new HttpContextAccessorForTesting();
+            httpContextAccessorForTesting.HttpContext = new DefaultHttpContext()
+            {
+                User = null
+            };
+
+            this.CurrentUserEntity = null;
+        }
+    }
+
+    public async Task<bool> IsCurrentUserAuthenticated(IntegrationTestBase testApplicationFactory)
+    {
+        using var scope = testApplicationFactory.Services.CreateScope();
+        ITokenRepository tokenRepository = scope.ServiceProvider.GetRequiredService<ITokenRepository>();
+
+        if (this.CurrentUserEntity?.Token == null)
+        {
+            return false;
+        }
+
+        return !tokenRepository.IsTokenExpired(this.CurrentUserEntity.Token);
+    }
+    
+    public HttpContextAccessorForTesting GenerateClaims()
+    {
+        HttpContextAccessorForTesting httpContextAccessorForTesting = new HttpContextAccessorForTesting();
+
+        if (this.CurrentUserEntity == null)
+        {
+            httpContextAccessorForTesting.HttpContext = new DefaultHttpContext()
+            {
+                User = null
+            };
+            return httpContextAccessorForTesting;
+        }
+        
+        List<Claim> claims = this.TestClaims();
+        
+        ClaimsIdentity identity = new ClaimsIdentity(claims, "IntegrationTestAuthentication");
+        ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
+        httpContextAccessorForTesting.HttpContext = new DefaultHttpContext
+        {
+            User = claimsPrincipal
+        };
+        return httpContextAccessorForTesting;
+    }
+    
     private List<Claim> TestClaims()
     {
         if (this.CurrentUserEntity?.User == null)
@@ -249,5 +297,30 @@ public class IntegrationTestOptions
 
         context.RemoveRange(entities);
         await context.SaveChangesAsync();
+    }
+
+    public async Task<SiteSettingsResponse> SiteSettings(IntegrationTestBase testApplicationFactory)
+    {
+        ICacheBaseRepository<Guid> cacheBaseRepository = testApplicationFactory.Services.GetRequiredService<ICacheBaseRepository<Guid>>();
+        
+        SiteSettingsResponse response = new SiteSettingsResponse
+        {
+            //TODO set locale if authorized
+            Locale = "en",
+            Version = new CacheVersionResponse
+            {
+                Category = await cacheBaseRepository.CacheVersionAsync("category") ?? VersionExtension.GenerateVersion(),
+                Country = await cacheBaseRepository.CacheVersionAsync("country") ?? VersionExtension.GenerateVersion(),
+                Currency = await cacheBaseRepository.CacheVersionAsync("currency") ?? VersionExtension.GenerateVersion(),
+                Localization = await cacheBaseRepository.CacheVersionAsync("localization") ?? VersionExtension.GenerateVersion(),
+                LocalizationPublic = await cacheBaseRepository.CacheVersionAsync("localization_public") ?? VersionExtension.GenerateVersion(),
+                Locale = await cacheBaseRepository.CacheVersionAsync("locale") ?? VersionExtension.GenerateVersion(),
+                Frequency = await cacheBaseRepository.CacheVersionAsync("frequency") ?? VersionExtension.GenerateVersion(),
+                BalanceType = await cacheBaseRepository.CacheVersionAsync("balancetype") ?? VersionExtension.GenerateVersion(),
+                IconCategory = await cacheBaseRepository.CacheVersionAsync("iconcategory") ?? VersionExtension.GenerateVersion(),
+            }
+        };
+
+        return response;
     }
 }

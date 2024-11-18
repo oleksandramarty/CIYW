@@ -16,14 +16,15 @@ public class AuthSignUpCommandValidator : AbstractValidator<AuthSignUpCommand>
             .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$")
             .WithMessage(
                 "Password must be at least 10 characters long and contain at least one digit, one uppercase letter, one lowercase letter, and one special symbol.")
-            .MaximumLength(120).WithMessage("Password must not exceed 120 characters.");
+            .MaximumLength(20).WithMessage("Password must not exceed 20 characters.");
 
         RuleFor(x => x.PasswordAgain)
             .NotEmpty().WithMessage("Password is required.")
             .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$")
             .WithMessage(
                 "Password must be at least 10 characters long and contain at least one digit, one uppercase letter, one lowercase letter, and one special symbol.")
-            .MaximumLength(120).WithMessage("Password must not exceed 120 characters.");
+            .MaximumLength(20).WithMessage("Password must not exceed 20 characters.")
+            .Equal(x => x.Password).WithMessage("Passwords must match.");
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("Email is required.")

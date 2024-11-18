@@ -13,6 +13,5 @@ public sealed class AuthSignUpInputType : InputObjectGraphType
         Field<NonNullGraphType<StringGraphType>>("email");
         Field<NonNullGraphType<StringGraphType>>("password");
         Field<NonNullGraphType<StringGraphType>>("passwordAgain");
-        Field<NonNullGraphType<UserRoleEnumType>>("role");
     }
 }

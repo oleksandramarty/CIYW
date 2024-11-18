@@ -3,6 +3,7 @@ using CommonModule.Core.Exceptions;
 using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Responses.Base;
 using Expenses.Business;
 using Expenses.Domain;
 using Expenses.Domain.Models.Expenses;
@@ -14,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
-public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreateExpenseCommand>
+public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreateExpenseCommand, BaseEntityIdResponse<Guid>>
 {
     private readonly IMapper mapper;
     private readonly IBalanceRepository balanceRepository;
@@ -38,9 +39,9 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
         this.userProjectRepository = userProjectRepository;
     }
 
-    public async Task Handle(CreateExpenseCommand command, CancellationToken cancellationToken)
+    public async Task<BaseEntityIdResponse<Guid>> Handle(CreateExpenseCommand command, CancellationToken cancellationToken)
     {        
-        this.entityValidator.ValidateVoidRequest<CreateExpenseCommand>(command, () => new CreateExpenseCommandValidator());
+        this.entityValidator.ValidateRequest<CreateExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateExpenseCommandValidator());
 
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
@@ -57,6 +58,10 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
     
         ExpenseEntity toAdd = this.mapper.Map<ExpenseEntity>(command);
         await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
-        return;
+
+        return new BaseEntityIdResponse<Guid>
+        {
+            Id = toAdd.Id
+        };
     }
 }

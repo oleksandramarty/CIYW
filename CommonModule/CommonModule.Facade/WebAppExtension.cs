@@ -69,15 +69,15 @@ public static class WebAppExtension
         {
             try
             {
-                var tokenService = context.RequestServices.GetRequiredService<ITokenRepository>();
+                var tokenRepository = context.RequestServices.GetRequiredService<ITokenRepository>();
                 var token = context.Request.Headers["Authorization"].ToString().Split(' ').Last();
 
                 if (!string.IsNullOrEmpty(token) &&
-                    !await tokenService.IsTokenValidAsync(token))
+                    !await tokenRepository.IsTokenValidAsync(token))
                 {
                     var tokenFactory = context.RequestServices.GetRequiredService<IJwtTokenFactory>();
 
-                    if (tokenService.IsTokenExpired(token) && tokenFactory.IsTokenRefreshable(token))
+                    if (tokenRepository.IsTokenExpired(token) && tokenFactory.IsTokenRefreshable(token))
                     {
                         var newToken = tokenFactory.GenerateNewJwtToken(context.User);
                         context.Response.Headers.Add("Authorization", $"{AuthSchema.Schema} {newToken}");
