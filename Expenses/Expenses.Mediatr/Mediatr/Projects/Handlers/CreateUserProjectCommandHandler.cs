@@ -39,6 +39,11 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         
         Guid userId = await this.CurrentUserIdAsync();
         
+        if (await this.userProjectRepository.Queryable(up => up.CreatedUserId == userId).CountAsync(cancellationToken) >= 3)
+        {
+            throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
+        }
+        
         UserProjectEntity userProjectEntity = this.mapper.Map<UserProjectEntity>(command);
         
         userProjectEntity.Id = Guid.NewGuid();

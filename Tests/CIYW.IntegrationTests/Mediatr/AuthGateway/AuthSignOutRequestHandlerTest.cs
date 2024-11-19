@@ -52,6 +52,9 @@ public class AuthSignOutRequestHandlerTest() : CommonIntegrationTestSetup()
         await this.SignOutUserIfExist();
         IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(
             role,
+            1,
+            1,
+            true,
             [
                 user => user.IsActive = false
             ]

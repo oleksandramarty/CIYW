@@ -7,6 +7,7 @@ using CommonModule.Shared.Responses.Dictionaries;
 using CommonModule.Shared.Responses.Dictionaries.Models.Balances;
 using Dictionaries.Domain;
 using Dictionaries.Mediatr.Mediatr.Requests;
+using Expenses.Domain.Models.Projects;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -63,13 +64,41 @@ public class CommonIntegrationTestSetup : IDisposable
     /// <param name="role">User role</param>
     /// <param name="withSignIn">Sign in user flag</param>
     /// <param name="userActions">User actions</param>
+    /// <param name="userProjectsCount">User projects count</param>
+    /// <param name="userBalanceCount">User balance count</param>
     /// <returns></returns>
     public async Task<IntegrationTestUserEntity> CreateTestUser(
         UserRoleEnum role,
-        IEnumerable<Action<UserEntity>>? userActions = null,
-        bool withSignIn = true)
+        int userProjectsCount = 1,
+        int userBalanceCount = 1,
+        bool withSignIn = true,
+        IEnumerable<Action<UserEntity>>? userActions = null)
     {
-        return await Options.CreateUser(TestApplicationFactory, role, withSignIn, userActions);
+        return await Options.CreateUser(TestApplicationFactory, role, userProjectsCount, userBalanceCount, withSignIn, userActions);
+    }
+
+    public async Task AddAllExpenses(
+        Guid userId,
+        Guid userProjectId,
+        Guid balanceId,
+        int expenseCount = 0,
+        int plannedExpenseCount = 0,
+        int favoriteExpenseCount = 0)
+    {
+        if (expenseCount > 0)
+        {
+            await Options.AddExpenses(TestApplicationFactory, userId, userProjectId, balanceId, expenseCount);
+        }
+        
+        if (plannedExpenseCount > 0)
+        {
+            await Options.AddPlannedExpenses(TestApplicationFactory, userId, userProjectId, balanceId, plannedExpenseCount);
+        }
+        
+        if (favoriteExpenseCount > 0)
+        {
+            await Options.AddFavoriteExpenses(TestApplicationFactory, userId, userProjectId, favoriteExpenseCount);
+        }
     }
 
     /// <summary>

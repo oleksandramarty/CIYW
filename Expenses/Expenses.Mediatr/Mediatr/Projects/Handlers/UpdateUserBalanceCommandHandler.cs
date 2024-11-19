@@ -5,6 +5,7 @@ using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Projects;
 using Expenses.Mediatr.Mediatr.Projects.Commands;
+using Expenses.Mediatr.Validators.Projects;
 using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
@@ -30,6 +31,8 @@ public class UpdateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
     
     public async Task Handle(UpdateUserBalanceCommand command, CancellationToken cancellationToken)
     {
+        this.entityValidator.ValidateVoidRequest<UpdateUserBalanceCommand>(command, () => new UpdateUserBalanceCommandValidator());
+        
         await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
         
         BalanceEntity? balance = await this.balanceRepository.ByIdAsync(command.Id, cancellationToken);

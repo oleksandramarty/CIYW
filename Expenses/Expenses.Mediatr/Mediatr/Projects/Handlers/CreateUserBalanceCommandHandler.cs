@@ -8,6 +8,7 @@ using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Projects;
 using Expenses.Mediatr.Mediatr.Projects.Commands;
+using Expenses.Mediatr.Validators.Projects;
 using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
@@ -15,6 +16,7 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandler<CreateUserBalanceCommand, BaseEntityIdResponse<Guid>>
 {
     private readonly IMapper mapper;
+    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
     private readonly IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository;
     
     
@@ -27,11 +29,14 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
         ) : base(currentUserRepository, entityValidator, userProjectRepository)
     {
         this.mapper = mapper;
+        this.entityValidator = entityValidator;
         this.balanceRepository = balanceRepository;
     }
     
     public async Task<BaseEntityIdResponse<Guid>> Handle(CreateUserBalanceCommand command, CancellationToken cancellationToken)
     {
+        this.entityValidator.ValidateRequest<CreateUserBalanceCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateUserBalanceCommandValidator());
+        
         UserProjectEntity userProjectEntity = await this.UserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
         if (userProjectEntity.Balances.Count >= 3)

@@ -17,22 +17,21 @@ using NUnit.Framework;
 namespace CIYW.IntegrationTests.Mediatr.AuthGateway;
 
 [TestFixture]
-public class AuthSignInRequestHandlerTest(): CommonIntegrationTestSetup()
+public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
 {
-    
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnTokenResponse_WhenAuthSignInRequestIsValid(UserRoleEnum role)
     {
         // Arrange
         await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, null, false);
-        
+        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false);
+
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             IJwtTokenFactory jwtTokenFactory = scope.ServiceProvider.GetRequiredService<IJwtTokenFactory>();
             bool beforeSignIn = await this.IsCurrentUserAuthenticated();
-            
+
             IMediator mediator = new Mediator(scope.ServiceProvider);
             JwtTokenResponse response = await mediator.Send(new AuthSignInRequest
             {
@@ -42,10 +41,12 @@ public class AuthSignInRequestHandlerTest(): CommonIntegrationTestSetup()
             });
             userToBeSignIn.Token = response.Token;
             this.Options.CurrentUserEntity = userToBeSignIn;
-            
+
             bool afterSignIn = await this.IsCurrentUserAuthenticated();
-            Guid? userId = !string.IsNullOrEmpty(response?.Token) ? jwtTokenFactory.UserIdFromToken(response.Token) : null;
-            
+            Guid? userId = !string.IsNullOrEmpty(response?.Token)
+                ? jwtTokenFactory.UserIdFromToken(response.Token)
+                : null;
+
             // Assert
             beforeSignIn.Should().BeFalse();
             afterSignIn.Should().BeTrue();
@@ -55,90 +56,88 @@ public class AuthSignInRequestHandlerTest(): CommonIntegrationTestSetup()
             userId.Should().Be(userToBeSignIn.User.Id);
         }
     }
-    
+
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnException_WhenAuthSignInRequestIsInvalidPassword(UserRoleEnum role)
     {
         // Arrange
         await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, null, false);
-        
+        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false);
+
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             bool beforeSignIn = await this.IsCurrentUserAuthenticated();
-            
+
             beforeSignIn.Should().BeFalse();
             IMediator mediator = new Mediator(scope.ServiceProvider);
-            
+
             await TestUtilities.Handle_InvalidCommand<AuthSignInRequest, JwtTokenResponse, AuthException>(
-                mediator, 
+                mediator,
                 new AuthSignInRequest
                 {
                     Login = userToBeSignIn.User.Login,
                     Password = userToBeSignIn.User.Login + "1",
                     RememberMe = true
-                }, 
+                },
                 string.Format(ErrorMessages.WrongAuth, nameof(UserEntity)));
         }
     }
-    
+
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnException_WhenAuthSignInRequestIsInvalidLogin(UserRoleEnum role)
     {
         // Arrange
         await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, null,false);
-        
+        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false);
+
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             bool beforeSignIn = await this.IsCurrentUserAuthenticated();
-            
+
             beforeSignIn.Should().BeFalse();
             IMediator mediator = new Mediator(scope.ServiceProvider);
-            
+
             await TestUtilities.Handle_InvalidCommand<AuthSignInRequest, JwtTokenResponse, EntityNotFoundException>(
-                mediator, 
+                mediator,
                 new AuthSignInRequest
                 {
                     Login = userToBeSignIn.User.Login + "1",
                     Password = userToBeSignIn.User.Login,
                     RememberMe = true
-                }, 
+                },
                 string.Format(ErrorMessages.EntityNotFound, nameof(UserEntity)));
         }
     }
-    
+
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnException_WhenAuthSignInRequestWithBlockedUser(UserRoleEnum role)
     {
         // Arrange
         await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(
-            role,
+        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false,
             [
                 user => user.IsActive = false
-            ],
-            false
-            );
-        
+            ]
+        );
+
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             bool beforeSignIn = await this.IsCurrentUserAuthenticated();
-            
+
             beforeSignIn.Should().BeFalse();
             IMediator mediator = new Mediator(scope.ServiceProvider);
-            
+
             await TestUtilities.Handle_InvalidCommand<AuthSignInRequest, JwtTokenResponse, BusinessException>(
-                mediator, 
+                mediator,
                 new AuthSignInRequest
                 {
                     Login = userToBeSignIn.User.Login,
                     Password = userToBeSignIn.User.Login,
                     RememberMe = true
-                }, 
+                },
                 string.Format(ErrorMessages.UserBlocked, nameof(UserEntity)));
         }
     }

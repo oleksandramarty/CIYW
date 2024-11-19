@@ -45,12 +45,14 @@ public class IntegrationTestOptions
             return;
         }
 
-        CurrentUserEntity = await this.CreateUser(testApplicationFactory, Role.Value);
+        await this.CreateUser(testApplicationFactory, Role.Value);
     }
 
     public async Task<IntegrationTestUserEntity> CreateUser(
         IntegrationTestBase testApplicationFactory,
         UserRoleEnum role,
+        int userProjectsCount = 1,
+        int userBalanceCount = 1,
         bool withSignIn = true,
         IEnumerable<Action<UserEntity>>? userActions = null)
 
@@ -107,33 +109,42 @@ public class IntegrationTestOptions
         await authGatewayDataContext.Users.AddAsync(user);
         await authGatewayDataContext.SaveChangesAsync();
 
-        Guid userProjectId = Guid.NewGuid();
+        List<UserProjectEntity> userProjects = new List<UserProjectEntity>();
 
-        UserProjectEntity userProject = new UserProjectEntity
+        for (var i = 0; i < userProjectsCount; i++)
         {
-            Id = userProjectId,
-            Title = $"{user.Login}'s project",
-            IsActive = true,
-            CreatedUserId = user.Id,
-            Balances = new List<BalanceEntity>
+            UserProjectEntity userProject = new UserProjectEntity
             {
-                new BalanceEntity
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = user.Id,
-                    Amount = 0.0m,
-                    CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
-                    Title = "Balance",
-                    IconId = IntegrationTestConstants.DefaultIconId,
-                    UserProjectId = userProjectId,
-                    BalanceTypeId = IntegrationTestConstants.DefaultBalanceTypeId,
-                    IsActive = true
-                }
-            }
-        };
+                Id = Guid.NewGuid(),
+                Title = $"{user.Login}'s project {i}",
+                IsActive = true,
+                CreatedUserId = user.Id,
+                Balances = new List<BalanceEntity>()
+            };
 
-        await expensesDataContext.UserProjects.AddAsync(userProject);
+            for (var j = 0; j < userBalanceCount; j++)
+            {
+                userProject.Balances.Add(
+                    new BalanceEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = user.Id,
+                        Amount = 0.0m,
+                        CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
+                        Title = $"{user.Login}' project {i} Balance {j}",
+                        IconId = IntegrationTestConstants.DefaultIconId,
+                        UserProjectId = userProject.Id,
+                        BalanceTypeId = IntegrationTestConstants.DefaultBalanceTypeId,
+                        IsActive = true
+                    });
+            }
+
+            userProjects.Add(userProject);
+        }
+
+        await expensesDataContext.UserProjects.AddRangeAsync(userProjects);
         await expensesDataContext.SaveChangesAsync();
+
 
         IntegrationTestUserEntity result = new IntegrationTestUserEntity
         {
@@ -143,7 +154,10 @@ public class IntegrationTestOptions
                 .ThenInclude(r => r.Role)
                 .Include(u => u.UserSetting)
                 .FirstOrDefaultAsync(u => u.Id == user.Id),
-            UserProjects = new List<UserProjectEntity> { userProject },
+            UserProjects = await expensesDataContext.UserProjects
+                .Include(up => up.Balances)
+                .Where(up => up.CreatedUserId == user.Id)
+                .ToListAsync(),
             Token = null
         };
 
@@ -165,10 +179,10 @@ public class IntegrationTestOptions
                 true);
 
             result.Token = token;
-            
+
             var httpContextAccessorForTesting = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
             List<Claim> claims = this.TestClaims();
-            
+
             ClaimsIdentity identity = new ClaimsIdentity(claims, "IntegrationTestAuthentication");
             ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
             httpContextAccessorForTesting.HttpContext = new DefaultHttpContext
@@ -182,6 +196,102 @@ public class IntegrationTestOptions
         return result;
     }
 
+    public async Task AddExpenses(
+        IntegrationTestBase testApplicationFactory,
+        Guid userId,
+        Guid userProjectId,
+        Guid balanceId,
+        int count = 1)
+    {
+        using var scope = testApplicationFactory.Services.CreateScope();
+        ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
+
+        List<ExpenseEntity> expenses = new List<ExpenseEntity>();
+        
+        for (var i = 0; i < count; i++)
+        {
+            expenses.Add(new ExpenseEntity
+            {
+                Id = Guid.NewGuid(),
+                CreatedUserId = userId,
+                UserProjectId = userProjectId,
+                BalanceId = balanceId,
+                Amount = 10.0m,
+                CategoryId = 1,
+                Title = $"Expense {i}",
+                Description = $"Expense {i} description",
+                Date = DateTime.UtcNow
+            });
+        }
+        
+        await expensesDataContext.Expenses.AddRangeAsync(expenses);
+        await expensesDataContext.SaveChangesAsync();
+    }
+    
+    public async Task AddPlannedExpenses(
+        IntegrationTestBase testApplicationFactory,
+        Guid userId,
+        Guid userProjectId,
+        Guid balanceId,
+        int count = 1)
+    {
+        using var scope = testApplicationFactory.Services.CreateScope();
+        ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
+
+        List<PlannedExpenseEntity> plannedExpenses = new List<PlannedExpenseEntity>();
+        
+        for (var i = 0; i < count; i++)
+        {
+            plannedExpenses.Add(new PlannedExpenseEntity
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                UserProjectId = userProjectId,
+                BalanceId = balanceId,
+                Amount = 10.0m,
+                CategoryId = 1,
+                Title = $"Planned Expense {i}",
+                Description = $"Planned Expense {i} description",
+                StartDate = DateTime.UtcNow,
+                NextDate = DateTime.UtcNow
+            });
+        }
+        
+        await expensesDataContext.PlannedExpenses.AddRangeAsync(plannedExpenses);
+        await expensesDataContext.SaveChangesAsync();
+    }
+    
+    public async Task AddFavoriteExpenses(
+        IntegrationTestBase testApplicationFactory,
+        Guid userId,
+        Guid userProjectId,
+        int count = 1)
+    {
+        using var scope = testApplicationFactory.Services.CreateScope();
+        ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
+
+        List<FavoriteExpenseEntity> favoriteExpenses = new List<FavoriteExpenseEntity>();
+        
+        for (var i = 0; i < count; i++)
+        {
+            favoriteExpenses.Add(new FavoriteExpenseEntity
+            {
+                Id = Guid.NewGuid(),
+                CreatedUserId = userId,
+                UserProjectId = userProjectId,
+                CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
+                IconId = IntegrationTestConstants.DefaultIconId,
+                CategoryId = 1,
+                Title = $"Favorite Expense {i}",
+                Description = $"Favorite Expense {i} description",
+                Limit = 100.0m
+            });
+        }
+        
+        await expensesDataContext.FavoriteExpenses.AddRangeAsync(favoriteExpenses);
+        await expensesDataContext.SaveChangesAsync();
+    }
+
     public async Task SignOutUserIfExist(IntegrationTestBase testApplicationFactory)
     {
         using var scope = testApplicationFactory.Services.CreateScope();
@@ -190,7 +300,7 @@ public class IntegrationTestOptions
         {
             ITokenRepository tokenRepository = scope.ServiceProvider.GetRequiredService<ITokenRepository>();
             await tokenRepository.RemoveTokenAsync(this.CurrentUserEntity.Token);
-            
+
             HttpContextAccessorForTesting httpContextAccessorForTesting = new HttpContextAccessorForTesting();
             httpContextAccessorForTesting.HttpContext = new DefaultHttpContext()
             {
@@ -213,7 +323,7 @@ public class IntegrationTestOptions
 
         return !tokenRepository.IsTokenExpired(this.CurrentUserEntity.Token);
     }
-    
+
     public HttpContextAccessorForTesting GenerateClaims()
     {
         HttpContextAccessorForTesting httpContextAccessorForTesting = new HttpContextAccessorForTesting();
@@ -226,9 +336,9 @@ public class IntegrationTestOptions
             };
             return httpContextAccessorForTesting;
         }
-        
+
         List<Claim> claims = this.TestClaims();
-        
+
         ClaimsIdentity identity = new ClaimsIdentity(claims, "IntegrationTestAuthentication");
         ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
         httpContextAccessorForTesting.HttpContext = new DefaultHttpContext
@@ -237,7 +347,7 @@ public class IntegrationTestOptions
         };
         return httpContextAccessorForTesting;
     }
-    
+
     private List<Claim> TestClaims()
     {
         if (this.CurrentUserEntity?.User == null)
@@ -301,23 +411,31 @@ public class IntegrationTestOptions
 
     public async Task<SiteSettingsResponse> SiteSettings(IntegrationTestBase testApplicationFactory)
     {
-        ICacheBaseRepository<Guid> cacheBaseRepository = testApplicationFactory.Services.GetRequiredService<ICacheBaseRepository<Guid>>();
-        
+        ICacheBaseRepository<Guid> cacheBaseRepository =
+            testApplicationFactory.Services.GetRequiredService<ICacheBaseRepository<Guid>>();
+
         SiteSettingsResponse response = new SiteSettingsResponse
         {
             //TODO set locale if authorized
             Locale = "en",
             Version = new CacheVersionResponse
             {
-                Category = await cacheBaseRepository.CacheVersionAsync("category") ?? VersionExtension.GenerateVersion(),
+                Category =
+                    await cacheBaseRepository.CacheVersionAsync("category") ?? VersionExtension.GenerateVersion(),
                 Country = await cacheBaseRepository.CacheVersionAsync("country") ?? VersionExtension.GenerateVersion(),
-                Currency = await cacheBaseRepository.CacheVersionAsync("currency") ?? VersionExtension.GenerateVersion(),
-                Localization = await cacheBaseRepository.CacheVersionAsync("localization") ?? VersionExtension.GenerateVersion(),
-                LocalizationPublic = await cacheBaseRepository.CacheVersionAsync("localization_public") ?? VersionExtension.GenerateVersion(),
+                Currency =
+                    await cacheBaseRepository.CacheVersionAsync("currency") ?? VersionExtension.GenerateVersion(),
+                Localization = await cacheBaseRepository.CacheVersionAsync("localization") ??
+                               VersionExtension.GenerateVersion(),
+                LocalizationPublic = await cacheBaseRepository.CacheVersionAsync("localization_public") ??
+                                     VersionExtension.GenerateVersion(),
                 Locale = await cacheBaseRepository.CacheVersionAsync("locale") ?? VersionExtension.GenerateVersion(),
-                Frequency = await cacheBaseRepository.CacheVersionAsync("frequency") ?? VersionExtension.GenerateVersion(),
-                BalanceType = await cacheBaseRepository.CacheVersionAsync("balancetype") ?? VersionExtension.GenerateVersion(),
-                IconCategory = await cacheBaseRepository.CacheVersionAsync("iconcategory") ?? VersionExtension.GenerateVersion(),
+                Frequency = await cacheBaseRepository.CacheVersionAsync("frequency") ??
+                            VersionExtension.GenerateVersion(),
+                BalanceType = await cacheBaseRepository.CacheVersionAsync("balancetype") ??
+                              VersionExtension.GenerateVersion(),
+                IconCategory = await cacheBaseRepository.CacheVersionAsync("iconcategory") ??
+                               VersionExtension.GenerateVersion(),
             }
         };
 
