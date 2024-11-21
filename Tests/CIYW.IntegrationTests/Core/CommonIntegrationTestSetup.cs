@@ -74,9 +74,28 @@ public class CommonIntegrationTestSetup : IDisposable
         bool withSignIn = true,
         IEnumerable<Action<UserEntity>>? userActions = null)
     {
-        return await Options.CreateUser(TestApplicationFactory, role, userProjectsCount, userBalanceCount, withSignIn, userActions);
+        return await Options.CreateUser(TestApplicationFactory, role, userProjectsCount, userBalanceCount, withSignIn,
+            userActions);
     }
 
+    public async Task AddUserAllowedProjects(
+        Guid userId,
+        int userAllowedProjectsCount = 0,
+        bool isAllowedProjectReadOnly = false)
+    {
+        await Options.AddUserAllowedProjects(TestApplicationFactory, userId, userAllowedProjectsCount,
+            isAllowedProjectReadOnly);
+    }
+
+    /// <summary>
+    /// Add all types of expenses for a user
+    /// </summary>
+    /// <param name="userId">User ID</param>
+    /// <param name="userProjectId">User Project ID</param>
+    /// <param name="balanceId">Balance ID</param>
+    /// <param name="expenseCount">Number of expenses to add</param>
+    /// <param name="plannedExpenseCount">Number of planned expenses to add</param>
+    /// <param name="favoriteExpenseCount">Number of favorite expenses to add</param>
     public async Task AddAllExpenses(
         Guid userId,
         Guid userProjectId,
@@ -89,12 +108,13 @@ public class CommonIntegrationTestSetup : IDisposable
         {
             await Options.AddExpenses(TestApplicationFactory, userId, userProjectId, balanceId, expenseCount);
         }
-        
+
         if (plannedExpenseCount > 0)
         {
-            await Options.AddPlannedExpenses(TestApplicationFactory, userId, userProjectId, balanceId, plannedExpenseCount);
+            await Options.AddPlannedExpenses(TestApplicationFactory, userId, userProjectId, balanceId,
+                plannedExpenseCount);
         }
-        
+
         if (favoriteExpenseCount > 0)
         {
             await Options.AddFavoriteExpenses(TestApplicationFactory, userId, userProjectId, favoriteExpenseCount);
@@ -151,10 +171,10 @@ public class CommonIntegrationTestSetup : IDisposable
     }
 
     public async Task HandleValidDictionary<TRequest, TEntity, TEntityResponse>(
-        UserRoleEnum role, 
+        UserRoleEnum role,
         string? version,
         int count = 0)
-        where TRequest : IRequest<VersionedListResponse<TEntityResponse>>, IBaseVersionEntity, new ()
+        where TRequest : IRequest<VersionedListResponse<TEntityResponse>>, IBaseVersionEntity, new()
         where TEntityResponse : class
         where TEntity : class
     {
@@ -169,12 +189,12 @@ public class CommonIntegrationTestSetup : IDisposable
                 scope.ServiceProvider.GetRequiredService<DictionariesDataContext>();
 
             IMediator mediator = new Mediator(scope.ServiceProvider);
-            
+
             TRequest request = new TRequest
             {
                 Version = version
             };
-            
+
             VersionedListResponse<TEntityResponse> response = await mediator.Send(request);
 
             // Assert
@@ -183,7 +203,7 @@ public class CommonIntegrationTestSetup : IDisposable
             {
                 response.Items.Should().NotBeNullOrEmpty();
             }
-            
+
             response.Items.Should().HaveCount(count);
         }
     }

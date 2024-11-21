@@ -106,9 +106,9 @@ public static class FilterExtension
             paginator.PageSize = 10;
         }
         
-        if (paginator.PageSize > 100)
+        if (paginator.PageSize > 150)
         {
-            paginator.PageSize = 100;
+            paginator.PageSize = 150;
         }
     }
     

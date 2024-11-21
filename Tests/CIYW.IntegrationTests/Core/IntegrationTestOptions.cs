@@ -26,6 +26,7 @@ namespace CIYW.IntegrationTests.Core;
 public class IntegrationTestOptions
 {
     public IntegrationTestUserEntity? CurrentUserEntity { get; set; }
+    public IntegrationTestUserEntity? AdditionalUser { get; set; }
 
     private UserRoleEnum? Role { get; set; }
 
@@ -40,6 +41,13 @@ public class IntegrationTestOptions
 
     public async Task InitializeUser(IntegrationTestBase testApplicationFactory)
     {
+        AdditionalUser = await this.CreateUser(
+            testApplicationFactory,
+            UserRoleEnum.User,
+            200,
+            3,
+            false);
+
         if (!Role.HasValue)
         {
             return;
@@ -196,6 +204,34 @@ public class IntegrationTestOptions
         return result;
     }
 
+    public async Task AddUserAllowedProjects(
+        IntegrationTestBase testApplicationFactory,
+        Guid userId,
+        int userAllowedProjectsCount = 0,
+        bool isAllowedProjectReadOnly = false)
+
+    {
+        using var scope = testApplicationFactory.Services.CreateScope();
+        ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
+
+        if (userAllowedProjectsCount > 0
+            && AdditionalUser is { UserProjects: not null })
+        {
+            List<UserAllowedProjectEntity> userAllowedProjects =
+                AdditionalUser.UserProjects.Take(userAllowedProjectsCount)
+                    .Select(up => new UserAllowedProjectEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = userId,
+                        UserProjectId = up.Id,
+                        IsReadOnly = isAllowedProjectReadOnly
+                    }).ToList();
+
+            await expensesDataContext.UserAllowedProjects.AddRangeAsync(userAllowedProjects);
+            await expensesDataContext.SaveChangesAsync();
+        }
+    }
+
     public async Task AddExpenses(
         IntegrationTestBase testApplicationFactory,
         Guid userId,
@@ -207,7 +243,7 @@ public class IntegrationTestOptions
         ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
 
         List<ExpenseEntity> expenses = new List<ExpenseEntity>();
-        
+
         for (var i = 0; i < count; i++)
         {
             expenses.Add(new ExpenseEntity
@@ -223,11 +259,11 @@ public class IntegrationTestOptions
                 Date = DateTime.UtcNow
             });
         }
-        
+
         await expensesDataContext.Expenses.AddRangeAsync(expenses);
         await expensesDataContext.SaveChangesAsync();
     }
-    
+
     public async Task AddPlannedExpenses(
         IntegrationTestBase testApplicationFactory,
         Guid userId,
@@ -239,7 +275,7 @@ public class IntegrationTestOptions
         ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
 
         List<PlannedExpenseEntity> plannedExpenses = new List<PlannedExpenseEntity>();
-        
+
         for (var i = 0; i < count; i++)
         {
             plannedExpenses.Add(new PlannedExpenseEntity
@@ -256,11 +292,11 @@ public class IntegrationTestOptions
                 NextDate = DateTime.UtcNow
             });
         }
-        
+
         await expensesDataContext.PlannedExpenses.AddRangeAsync(plannedExpenses);
         await expensesDataContext.SaveChangesAsync();
     }
-    
+
     public async Task AddFavoriteExpenses(
         IntegrationTestBase testApplicationFactory,
         Guid userId,
@@ -271,7 +307,7 @@ public class IntegrationTestOptions
         ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
 
         List<FavoriteExpenseEntity> favoriteExpenses = new List<FavoriteExpenseEntity>();
-        
+
         for (var i = 0; i < count; i++)
         {
             favoriteExpenses.Add(new FavoriteExpenseEntity
@@ -287,7 +323,7 @@ public class IntegrationTestOptions
                 Limit = 100.0m
             });
         }
-        
+
         await expensesDataContext.FavoriteExpenses.AddRangeAsync(favoriteExpenses);
         await expensesDataContext.SaveChangesAsync();
     }

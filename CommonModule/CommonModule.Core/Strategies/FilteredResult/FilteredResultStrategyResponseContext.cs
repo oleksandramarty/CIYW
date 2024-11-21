@@ -6,18 +6,18 @@ using Microsoft.EntityFrameworkCore;
 namespace CommonModule.Core.Strategies.FilteredResult;
 
 public class FilteredResultStrategyResponseContext<TFilteredRequest, TEntity, TResponse>
-    where TFilteredRequest: IBaseFilterRequest
+    where TFilteredRequest : IBaseFilterRequest
 {
     private readonly IMapper mapper;
-    
+
     public FilteredResultStrategyResponseContext(IMapper mapper)
     {
         this.mapper = mapper;
     }
-    
+
     protected async Task<FilteredListResponse<TResponse>> FilteredResultAsync(
         TFilteredRequest request,
-        IQueryable<TEntity> query, 
+        IQueryable<TEntity> query,
         CancellationToken cancellationToken)
     {
         var total = await query.CountAsync(cancellationToken);
@@ -26,6 +26,11 @@ public class FilteredResultStrategyResponseContext<TFilteredRequest, TEntity, TR
 
         if (request.Paginator != null)
         {
+            if (request.Paginator.IsFull && total > 150)
+            {
+                request.Paginator.PageSize = 150;
+            }
+            
             entities = await query
                 .Skip((request.Paginator.PageNumber - 1) * request.Paginator.PageSize)
                 .Take(request.Paginator.PageSize)
