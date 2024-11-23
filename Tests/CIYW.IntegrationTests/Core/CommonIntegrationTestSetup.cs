@@ -108,12 +108,12 @@ public class CommonIntegrationTestSetup : IDisposable
         {
             await Options.AddExpenses(TestApplicationFactory, userId, userProjectId, balanceId, expenses);
         }
-        
+
         if (plannedExpenses != null)
         {
             await Options.AddPlannedExpenses(TestApplicationFactory, userId, userProjectId, balanceId, plannedExpenses);
         }
-        
+
         if (favoriteExpenses != null)
         {
             await Options.AddFavoriteExpenses(TestApplicationFactory, userId, userProjectId, favoriteExpenses);
@@ -157,11 +157,10 @@ public class CommonIntegrationTestSetup : IDisposable
 
     public static IEnumerable<TestCaseData> CreateAllRolesTestCases()
     {
-        yield return new TestCaseData(UserRoleEnum.User).SetName("User").SetDescription("User role");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport).SetName("TechnicalSupport")
-            .SetDescription("TechnicalSupport role");
-        yield return new TestCaseData(UserRoleEnum.Admin).SetName("Admin").SetDescription("Admin role");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin).SetName("SuperAdmin").SetDescription("SuperAdmin role");
+        foreach (UserRoleEnum role in Enum.GetValues(typeof(UserRoleEnum)))
+        {
+            yield return new TestCaseData(role).SetName(role.ToString()).SetDescription($"{role} role");
+        }
     }
 
     public async Task<SiteSettingsResponse> SiteSettings()

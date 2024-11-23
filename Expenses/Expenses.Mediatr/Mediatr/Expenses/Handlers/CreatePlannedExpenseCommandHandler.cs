@@ -46,6 +46,7 @@ public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHa
         }
 
         PlannedExpenseEntity toAdd = this.mapper.Map<PlannedExpenseEntity>(command);
+        toAdd.CreatedUserId = await this.CurrentUserIdAsync();
             
         await this.plannedExpenseRepository.AddAsync(toAdd, cancellationToken);
 

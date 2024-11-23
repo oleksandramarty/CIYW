@@ -17,15 +17,11 @@ public class LocalizationsRequestHandlerTest(): CommonIntegrationTestSetup()
 {
     private static IEnumerable<TestCaseData> CreateLocalizationsTestCases()
     {
-        // UserRole, IsPublic
-        yield return new TestCaseData(UserRoleEnum.User, false).SetName("Non public localizations for User role");
-        yield return new TestCaseData(UserRoleEnum.User, true).SetName("Public localizations for User role");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, false).SetName("Non public localizations for Technical Support role");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, true).SetName("Public localizations for Technical Support role");
-        yield return new TestCaseData(UserRoleEnum.Admin, false).SetName("Non public localizations for Admin role");
-        yield return new TestCaseData(UserRoleEnum.Admin, true).SetName("Public localizations for Admin role");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, false).SetName("Non public localizations for Super Admin role");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, true).SetName("Public localizations for Super Admin role");
+        foreach (UserRoleEnum role in Enum.GetValues(typeof(UserRoleEnum)))
+        {
+            yield return new TestCaseData(role, false).SetName($"{role} role with isPublic false");
+            yield return new TestCaseData(role, true).SetName($"{role} role with isPublic true");
+        }
     }
     
     [Test, TestCaseSource(nameof(CreateLocalizationsTestCases))]

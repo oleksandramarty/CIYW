@@ -20,37 +20,16 @@ public class FilteredPlannedExpensesRequestHandlerTest() : CommonIntegrationTest
         private static IEnumerable<TestCaseData> CreateAllRolesFilteredPlannedExpensesTestCases()
     {
         // Role, PageNumber, PageSize, IsFull, PredictedCount, PredictedPageNumber, PredictedPageSize, categoriesIds Array
-        yield return new TestCaseData(UserRoleEnum.User, -1, 5, false, 5, 1, 5, new int[] {}).SetName("User role with -1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.User, 1, 5, false, 5, 1, 5, new int[] {}).SetName("User role with 1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.User, 1, 150, false, 150, 1, 150, new int[] {}).SetName("User role with 1 page should return 150 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.User, 201, 1, false, 0, 201, 1, new int[] {}).SetName("User role with 51 page should return 0 planned expenses for 51 page");
-        yield return new TestCaseData(UserRoleEnum.User, 1, 5, true, 150, 1, 150, new int[] {}).SetName("User role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.User, 1, 5, true, 90, 1, 150, new int[] {1, 3, 5}).SetName("User role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.User, 1, 5, true, 10, 1, 150, new int[] {1}).SetName("User role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, -1, 5, false, 5, 1, 5, new int[] {}).SetName("Technical Support role with -1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 1, 5, false, 5, 1, 5, new int[] {}).SetName("Technical Support role with 1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 1, 150, false, 150, 1, 150, new int[] {}).SetName("Technical Support role with 1 page should return 150 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 201, 1, false, 0, 201, 1, new int[] {}).SetName("Technical Support role with 51 page should return 0 planned expenses for 51 page");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 1, 5, true, 150, 1, 150, new int[] {}).SetName("Technical Support role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 1, 5, true, 90, 1, 150, new int[] {1, 3, 5}).SetName("Technical Support role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 1, 5, true, 10, 1, 150, new int[] {1}).SetName("Technical Support role with 1 page should return 150 planned expenses for 1 page with isFull true");
-
-        yield return new TestCaseData(UserRoleEnum.Admin, -1, 5, false, 5, 1, 5, new int[] {}).SetName("Admin role with -1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.Admin, 1, 5, false, 5, 1, 5, new int[] {}).SetName("Admin role with 1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.Admin, 1, 150, false, 150, 1, 150, new int[] {}).SetName("Admin role with 1 page should return 150 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.Admin, 201, 1, false, 0, 201, 1, new int[] {}).SetName("Admin role with 51 page should return 0 planned expenses for 51 page");
-        yield return new TestCaseData(UserRoleEnum.Admin, 1, 5, true, 150, 1, 150, new int[] {}).SetName("Admin role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.Admin, 1, 5, true, 90, 1, 150, new int[] {1, 3, 5}).SetName("Admin role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.Admin, 1, 5, true, 10, 1, 150, new int[] {1}).SetName("Admin role with 1 page should return 150 planned expenses for 1 page with isFull true");
-
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, -1, 5, false, 5, 1, 5, new int[] {}).SetName("Super Admin role with -1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 1, 5, false, 5, 1, 5, new int[] {}).SetName("Super Admin role with 1 page should return 5 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 1, 150, false, 150, 1, 150, new int[] {}).SetName("Super Admin role with 1 page should return 150 planned expenses for 1 page");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 201, 1, false, 0, 201, 1, new int[] {}).SetName("Super Admin role with 51 page should return 0 planned expenses for 51 page");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 1, 5, true, 150, 1, 150, new int[] {}).SetName("Super Admin role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 1, 5, true, 90, 1, 150, new int[] {1, 3, 5}).SetName("Super Admin role with 1 page should return 150 planned expenses for 1 page with isFull true");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 1, 5, true, 10, 1, 150, new int[] {1}).SetName("Super Admin role with 1 page should return 150 planned expenses for 1 page with isFull true");
+        foreach (UserRoleEnum role in Enum.GetValues(typeof(UserRoleEnum)))
+        {
+            yield return new TestCaseData(role, -1, 5, false, 5, 1, 5, new int[] {}).SetName($"{role} role with -1 page should return 5 planned expenses for 1 page");
+            yield return new TestCaseData(role, 1, 5, false, 5, 1, 5, new int[] {}).SetName($"{role} role with 1 page should return 5 planned expenses for 1 page");
+            yield return new TestCaseData(role, 1, 150, false, 150, 1, 150, new int[] {}).SetName($"{role} role with 1 page should return 150 planned expenses for 1 page");
+            yield return new TestCaseData(role, 201, 1, false, 0, 201, 1, new int[] {}).SetName($"{role} role with 51 page should return 0 planned expenses for 51 page");
+            yield return new TestCaseData(role, 1, 5, true, 150, 1, 150, new int[] {}).SetName($"{role} role with 1 page should return 150 planned expenses for 1 page with isFull true");
+            yield return new TestCaseData(role, 1, 5, true, 90, 1, 150, new int[] {1, 3, 5}).SetName($"{role} role with 1 page should return 150 planned expenses for 1 page with isFull true");
+            yield return new TestCaseData(role, 1, 5, true, 10, 1, 150, new int[] {1}).SetName($"{role} role with 1 page should return 150 planned expenses for 1 page with isFull true");
+        }
     }
 
     [Test, TestCaseSource(nameof(CreateAllRolesFilteredPlannedExpensesTestCases))]

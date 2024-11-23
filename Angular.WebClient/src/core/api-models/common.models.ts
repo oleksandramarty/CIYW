@@ -1160,7 +1160,7 @@ export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements 
     startDate!: Date;
     nextDate!: Date;
     endDate?: Date | undefined;
-    userId!: string;
+    createdUserId!: string;
     userProjectId!: string;
     frequencyId!: number;
     isActive!: boolean;
@@ -1181,7 +1181,7 @@ export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements 
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.nextDate = _data["nextDate"] ? new Date(_data["nextDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
-            this.userId = _data["userId"];
+            this.createdUserId = _data["createdUserId"];
             this.userProjectId = _data["userProjectId"];
             this.frequencyId = _data["frequencyId"];
             this.isActive = _data["isActive"];
@@ -1206,7 +1206,7 @@ export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements 
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["nextDate"] = this.nextDate ? this.nextDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        data["userId"] = this.userId;
+        data["createdUserId"] = this.createdUserId;
         data["userProjectId"] = this.userProjectId;
         data["frequencyId"] = this.frequencyId;
         data["isActive"] = this.isActive;
@@ -1225,7 +1225,7 @@ export interface IPlannedExpenseResponse extends IBaseDateTimeEntityOfGuid {
     startDate: Date;
     nextDate: Date;
     endDate?: Date | undefined;
-    userId: string;
+    createdUserId: string;
     userProjectId: string;
     frequencyId: number;
     isActive: boolean;

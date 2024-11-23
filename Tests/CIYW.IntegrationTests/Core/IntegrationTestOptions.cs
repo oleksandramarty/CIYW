@@ -286,7 +286,7 @@ public class IntegrationTestOptions
                 plannedExpenses.Add(new PlannedExpenseEntity
                 {
                     Id = Guid.NewGuid(),
-                    UserId = userId,
+                    CreatedUserId = userId,
                     UserProjectId = userProjectId,
                     BalanceId = balanceId,
                     Amount = 10.0m,

@@ -122,7 +122,7 @@ namespace Expenses.Domain.Migrations
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     NextDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     FrequencyId = table.Column<int>(type: "integer", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),

@@ -18,7 +18,7 @@ public sealed class PlannedExpenseResponseType : ObjectGraphType<PlannedExpenseR
         Field(x => x.StartDate);
         Field(x => x.EndDate, nullable: true);
         Field(x => x.NextDate, nullable: true);
-        Field(x => x.UserId);
+        Field(x => x.CreatedUserId);
         Field(x => x.UserProjectId);
         Field(x => x.FrequencyId);
         Field(x => x.IsActive);

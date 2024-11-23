@@ -108,7 +108,7 @@ export const FILTERED_PLANNED_EXPENSES = gql`
                 startDate
                 endDate
                 nextDate
-                userId
+                createdUserId
                 userProjectId
                 frequencyId
                 isActive

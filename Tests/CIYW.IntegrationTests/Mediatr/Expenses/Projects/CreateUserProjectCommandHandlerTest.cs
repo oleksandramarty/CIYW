@@ -23,20 +23,12 @@ public class CreateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
 {
     private static IEnumerable<TestCaseData> CreateAllRolesUserProjectTestCases()
     {
-        yield return new TestCaseData(UserRoleEnum.User, 0).SetName("User role with 0 user projects");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 0).SetName("Technical Support role with 0 user projects");
-        yield return new TestCaseData(UserRoleEnum.Admin, 0).SetName("Admin role with 0 user projects");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 0).SetName("Super Admin role with 0 user projects");
-        
-        yield return new TestCaseData(UserRoleEnum.User, 1).SetName("User role with 1 user project");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 1).SetName("Technical Support role with 1 user project");
-        yield return new TestCaseData(UserRoleEnum.Admin, 1).SetName("Admin role with 1 user project");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 1).SetName("Super Admin role with 1 user project");
-        
-        yield return new TestCaseData(UserRoleEnum.User, 2).SetName("User role with 2 user projects");
-        yield return new TestCaseData(UserRoleEnum.TechnicalSupport, 2).SetName("Technical Support role with 2 user projects");
-        yield return new TestCaseData(UserRoleEnum.Admin, 2).SetName("Admin role with 2 user projects");
-        yield return new TestCaseData(UserRoleEnum.SuperAdmin, 2).SetName("Super Admin role with 2 user projects");
+        foreach (UserRoleEnum role in Enum.GetValues(typeof(UserRoleEnum)))
+        {
+            yield return new TestCaseData(role, 0).SetName($"{role} role with 0 user projects");
+            yield return new TestCaseData(role, 1).SetName($"{role} role with 1 user project");
+            yield return new TestCaseData(role, 2).SetName($"{role} role with 2 user projects");
+        }
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesUserProjectTestCases))]
