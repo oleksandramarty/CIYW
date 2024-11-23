@@ -8,5 +8,5 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Requests;
 public class FilteredFavoriteExpensesRequest: MediatrBaseFilteredRequest<FavoriteExpenseResponse>
 {
     public Guid UserProjectId { get; set; }
-    public BaseFilterIdsRequest<int> CategoryIds { get; set; }
+    public BaseFilterIdsRequest<int>? CategoryIds { get; set; }
 }

@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace CIYW.IntegrationTests.Mediatr.Expenses;
+namespace CIYW.IntegrationTests.Mediatr.Expenses.Projects;
 
 [TestFixture]
 public class UpdateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup()

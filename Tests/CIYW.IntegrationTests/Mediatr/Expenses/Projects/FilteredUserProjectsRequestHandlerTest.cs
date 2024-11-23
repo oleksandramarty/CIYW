@@ -11,12 +11,12 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace CIYW.IntegrationTests.Mediatr.Expenses;
+namespace CIYW.IntegrationTests.Mediatr.Expenses.Projects;
 
 [TestFixture]
-public class FilteredUserAllowedProjectsRequestHandlerTest() : CommonIntegrationTestSetup()
+public class FilteredUserProjectsRequestHandlerTest() : CommonIntegrationTestSetup()
 {
-    private static IEnumerable<TestCaseData> CreateAllRolesFilteredUserAlloweedProjectTestCases()
+    private static IEnumerable<TestCaseData> CreateAllRolesFilteredUserProjectTestCases()
     {
         // Role, PageNumber, PageSize, IsFull, PredictedCount, PredictedPageNumber, PredictedPageSize
         yield return new TestCaseData(UserRoleEnum.User, -1, 5, false, 5, 1, 5).SetName("User role with -1 page should return 5 projects for 1 page");
@@ -43,10 +43,9 @@ public class FilteredUserAllowedProjectsRequestHandlerTest() : CommonIntegration
         yield return new TestCaseData(UserRoleEnum.SuperAdmin, 201, 1, false, 0, 201, 1).SetName("Super Admin role with 51 page should return 0 projects for 51 page");
         yield return new TestCaseData(UserRoleEnum.SuperAdmin, 1, 5, true, 150, 1, 150).SetName("Super Admin role with 1 page should return 150 projects for 1 page with isFull true");
     }
-    
-    
-    [Test, TestCaseSource(nameof(CreateAllRolesFilteredUserAlloweedProjectTestCases))]
-    public async Task Handle_ShouldReturnFilteredUserAllowedProjects_WhenRequestIsValid(
+        
+    [Test, TestCaseSource(nameof(CreateAllRolesFilteredUserProjectTestCases))]
+    public async Task Handle_ShouldReturnFilteredUserProjects_WhenRequestIsValid(
         UserRoleEnum role,
         int pageNumber,
         int pageSize,
@@ -57,14 +56,13 @@ public class FilteredUserAllowedProjectsRequestHandlerTest() : CommonIntegration
     {
         // Arrange
         await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 1, 1);
-        await AddUserAllowedProjects(user.User.Id,  200);
+        IntegrationTestUserEntity user = await this.CreateTestUser(role, 200, 1);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             IMediator mediator = new Mediator(scope.ServiceProvider);
-            FilteredUserAllowedProjectsRequest request = new FilteredUserAllowedProjectsRequest
+            FilteredUserProjectsRequest request = new FilteredUserProjectsRequest
             {
                 Paginator = new PaginatorEntity(pageNumber, pageSize, isFull),
                 AmountRange = null,
@@ -73,7 +71,7 @@ public class FilteredUserAllowedProjectsRequestHandlerTest() : CommonIntegration
                 Sort = new BaseSortableRequest(ColumnEnum.CreatedAt, OrderDirectionEnum.Desc)
             };
 
-            FilteredListResponse<UserAllowedProjectResponse> response = await mediator.Send(request);
+            FilteredListResponse<UserProjectResponse> response = await mediator.Send(request);
 
             // Assert
             response.Should().NotBeNull();

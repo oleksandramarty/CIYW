@@ -237,27 +237,30 @@ public class IntegrationTestOptions
         Guid userId,
         Guid userProjectId,
         Guid balanceId,
-        int count = 1)
+        Dictionary<int, int> data)
     {
         using var scope = testApplicationFactory.Services.CreateScope();
         ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
 
         List<ExpenseEntity> expenses = new List<ExpenseEntity>();
-
-        for (var i = 0; i < count; i++)
+        
+        foreach (var (key, value) in data)
         {
-            expenses.Add(new ExpenseEntity
+            for (var i = 0; i < value; i++)
             {
-                Id = Guid.NewGuid(),
-                CreatedUserId = userId,
-                UserProjectId = userProjectId,
-                BalanceId = balanceId,
-                Amount = 10.0m,
-                CategoryId = 1,
-                Title = $"Expense {i}",
-                Description = $"Expense {i} description",
-                Date = DateTime.UtcNow
-            });
+                expenses.Add(new ExpenseEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedUserId = userId,
+                    UserProjectId = userProjectId,
+                    BalanceId = balanceId,
+                    Amount = 10.0m,
+                    CategoryId = key,
+                    Title = $"Expense {i} for category {key}",
+                    Description = $"Expense {i} description for category {key}",
+                    Date = DateTime.UtcNow
+                });
+            }
         }
 
         await expensesDataContext.Expenses.AddRangeAsync(expenses);
@@ -269,28 +272,31 @@ public class IntegrationTestOptions
         Guid userId,
         Guid userProjectId,
         Guid balanceId,
-        int count = 1)
+        Dictionary<int, int> data)
     {
         using var scope = testApplicationFactory.Services.CreateScope();
         ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
 
         List<PlannedExpenseEntity> plannedExpenses = new List<PlannedExpenseEntity>();
-
-        for (var i = 0; i < count; i++)
+        
+        foreach (var (key, value) in data)
         {
-            plannedExpenses.Add(new PlannedExpenseEntity
+            for (var i = 0; i < value; i++)
             {
-                Id = Guid.NewGuid(),
-                UserId = userId,
-                UserProjectId = userProjectId,
-                BalanceId = balanceId,
-                Amount = 10.0m,
-                CategoryId = 1,
-                Title = $"Planned Expense {i}",
-                Description = $"Planned Expense {i} description",
-                StartDate = DateTime.UtcNow,
-                NextDate = DateTime.UtcNow
-            });
+                plannedExpenses.Add(new PlannedExpenseEntity
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = userId,
+                    UserProjectId = userProjectId,
+                    BalanceId = balanceId,
+                    Amount = 10.0m,
+                    CategoryId = key,
+                    Title = $"Planned Expense {i} for category {key}",
+                    Description = $"Planned Expense {i} description for category {key}",
+                    StartDate = DateTime.UtcNow,
+                    NextDate = DateTime.UtcNow
+                });
+            }
         }
 
         await expensesDataContext.PlannedExpenses.AddRangeAsync(plannedExpenses);
@@ -301,27 +307,30 @@ public class IntegrationTestOptions
         IntegrationTestBase testApplicationFactory,
         Guid userId,
         Guid userProjectId,
-        int count = 1)
+        Dictionary<int, int> data)
     {
         using var scope = testApplicationFactory.Services.CreateScope();
         ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
 
         List<FavoriteExpenseEntity> favoriteExpenses = new List<FavoriteExpenseEntity>();
 
-        for (var i = 0; i < count; i++)
+        foreach (var (key, value) in data)
         {
-            favoriteExpenses.Add(new FavoriteExpenseEntity
+            for (var i = 0; i < value; i++)
             {
-                Id = Guid.NewGuid(),
-                CreatedUserId = userId,
-                UserProjectId = userProjectId,
-                CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
-                IconId = IntegrationTestConstants.DefaultIconId,
-                CategoryId = 1,
-                Title = $"Favorite Expense {i}",
-                Description = $"Favorite Expense {i} description",
-                Limit = 100.0m
-            });
+                favoriteExpenses.Add(new FavoriteExpenseEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedUserId = userId,
+                    UserProjectId = userProjectId,
+                    CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
+                    IconId = IntegrationTestConstants.DefaultIconId,
+                    CategoryId = key,
+                    Title = $"Favorite Expense {i} for category {key}",
+                    Description = $"Favorite Expense {i} description for category {key}",
+                    Limit = 100.0m
+                });
+            }
         }
 
         await expensesDataContext.FavoriteExpenses.AddRangeAsync(favoriteExpenses);

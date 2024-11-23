@@ -3,6 +3,7 @@ using CommonModule.Core.Extensions;
 using CommonModule.Core.Strategies.FilteredResult;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Enums;
+using CommonModule.Shared.Requests.Base;
 using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using Expenses.Domain;
@@ -26,6 +27,11 @@ public class FilteredResultOfExpenseStrategy: FilteredResultStrategyResponseCont
 
     public async Task<FilteredListResponse<ExpenseResponse>> FilteredResultAsync(FilteredExpensesRequest request, CancellationToken cancellationToken)
     {
+        if (request.CategoryIds == null)
+        {
+            request.CategoryIds = new BaseFilterIdsRequest<int>();
+        }
+        
         var query = this.expenseRepository.Queryable(
             e => e.UserProjectId == request.UserProjectId &&
                  (string.IsNullOrEmpty(request.Query) || EF.Functions.Like(e.Title, $"%{request.Query}%")) &&

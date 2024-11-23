@@ -93,31 +93,30 @@ public class CommonIntegrationTestSetup : IDisposable
     /// <param name="userId">User ID</param>
     /// <param name="userProjectId">User Project ID</param>
     /// <param name="balanceId">Balance ID</param>
-    /// <param name="expenseCount">Number of expenses to add</param>
-    /// <param name="plannedExpenseCount">Number of planned expenses to add</param>
-    /// <param name="favoriteExpenseCount">Number of favorite expenses to add</param>
+    /// <param name="expenses">Expenses</param>
+    /// <param name="plannedExpenses">Planned expenses</param>
+    /// <param name="favoriteExpenses">Favorite expenses</param>
     public async Task AddAllExpenses(
         Guid userId,
         Guid userProjectId,
         Guid balanceId,
-        int expenseCount = 0,
-        int plannedExpenseCount = 0,
-        int favoriteExpenseCount = 0)
+        Dictionary<int, int>? expenses = null,
+        Dictionary<int, int>? plannedExpenses = null,
+        Dictionary<int, int>? favoriteExpenses = null)
     {
-        if (expenseCount > 0)
+        if (expenses != null)
         {
-            await Options.AddExpenses(TestApplicationFactory, userId, userProjectId, balanceId, expenseCount);
+            await Options.AddExpenses(TestApplicationFactory, userId, userProjectId, balanceId, expenses);
         }
-
-        if (plannedExpenseCount > 0)
+        
+        if (plannedExpenses != null)
         {
-            await Options.AddPlannedExpenses(TestApplicationFactory, userId, userProjectId, balanceId,
-                plannedExpenseCount);
+            await Options.AddPlannedExpenses(TestApplicationFactory, userId, userProjectId, balanceId, plannedExpenses);
         }
-
-        if (favoriteExpenseCount > 0)
+        
+        if (favoriteExpenses != null)
         {
-            await Options.AddFavoriteExpenses(TestApplicationFactory, userId, userProjectId, favoriteExpenseCount);
+            await Options.AddFavoriteExpenses(TestApplicationFactory, userId, userProjectId, favoriteExpenses);
         }
     }
 
