@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommonModule.Interfaces;
 
 public interface ITreeDictionaryRepository<TEntityId, TEntityParentId, TEntity, TResponse, TDataContext>
-    where TEntity : class, ITreeEntityEntity<TEntityId, TEntityParentId>, IActivatableEntity
+    where TEntity : class, ITreeEntityEntity<TEntityId, TEntityParentId>, IStatusEntity
     where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {

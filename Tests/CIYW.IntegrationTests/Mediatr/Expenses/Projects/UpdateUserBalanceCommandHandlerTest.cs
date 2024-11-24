@@ -24,6 +24,7 @@ public class UpdateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
         // Arrange
         await this.SignOutUserIfExist();
         IntegrationTestUserEntity user = await this.CreateTestUser(role);
+        Guid balanceId = user.UserProjects.First().Balances.First().Id;
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
@@ -35,21 +36,24 @@ public class UpdateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
             IMediator mediator = new Mediator(scope.ServiceProvider);
             await mediator.Send(new UpdateUserBalanceCommand
             {
-                Id = user.UserProjects.First().Balances.First().Id,
+                Id = balanceId,
                 UserProjectId = user.UserProjects.First().Id,
                 CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
                 IconId = IntegrationTestConstants.DefaultIconId,
                 Title = newTitle,
-                IsActive = true,
                 BalanceTypeId = 1
             });
             
             // Assert
             List<BalanceEntity> userBalances = await expensesDataContext.Balances.Where(up => up.UserId == Options.CurrentUserEntity.User.Id).ToListAsync();
+            BalanceEntity? updatedBalance = userBalances.FirstOrDefault(up => up.Id == balanceId);
+            
             
             userBalances.Should().NotBeNull();
             userBalances.Should().NotBeEmpty();
-            userBalances.Count(up => up.Title == newTitle).Should().Be(1);
+            updatedBalance.Should().NotBeNull();
+            updatedBalance.Title.Should().Be(newTitle);
+            updatedBalance.Status.Should().Be(StatusEnum.Active);
         }
     }
     
@@ -68,8 +72,7 @@ public class UpdateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
         var validator = new UpdateUserBalanceCommandValidator();
         var invalidCommand = new UpdateUserBalanceCommand
         {
-            Title = title,
-            IsActive = true
+            Title = title
         };
 
         // Act

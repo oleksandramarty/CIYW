@@ -28,7 +28,7 @@ bulkInsertSQL=""
 
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 # Read the CSV file line by line
-while IFS=';' read -r id parentId title iconId color isActive isPositive;
+while IFS=';' read -r id parentId title iconId color status isPositive;
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -39,7 +39,6 @@ do
     # If the category does not exist, prepare the SQL for bulk insert
     if [ -z "$category_exists" ]; then
       # Convert boolean values to integers
-      isActiveBool=$( [ "$isActive" == "1" ] && echo true || echo false )
       isPositiveBool=$( [ "$isPositive" == "1" ] && echo true || echo false )
       
       # Handle null parentId
@@ -50,8 +49,8 @@ do
       if [ "$isBulkUpdate" == "true" ]; then
         # Construct the SQL command
         bulkInsertSQL+="INSERT INTO \"$db_name\".\"Dictionaries\".\"Categories\" 
-        (\"Id\", \"Title\", \"IconId\", \"Color\", \"IsActive\", \"ParentId\", \"IsPositive\") 
-        VALUES ($id, '$title', '$iconId', '$color', $isActiveBool, $parentId, $isPositiveBool);"
+        (\"Id\", \"Title\", \"IconId\", \"Color\", \"Status\", \"ParentId\", \"IsPositive\") 
+        VALUES ($id, '$title', '$iconId', '$color', $status, $parentId, $isPositiveBool);"
         ((bulkCounter++))
 
         # If bulkCounter reaches 500, execute the bulk insert
@@ -69,8 +68,8 @@ do
       else
         # Non-bulk insert
         sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"Categories\" 
-        (\"Id\", \"Title\", \"IconId\", \"Color\", \"IsActive\", \"ParentId\", \"IsPositive\") 
-        VALUES ($id, '$title', '$iconId', '$color', $isActiveBool, $parentId, $isPositiveBool);"
+        (\"Id\", \"Title\", \"IconId\", \"Color\", \"Status\", \"ParentId\", \"IsPositive\") 
+        VALUES ($id, '$title', '$iconId', '$color', $status, $parentId, $isPositiveBool);"
         if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
           echo "Category with ID $id added successfully."
         else

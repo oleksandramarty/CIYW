@@ -50,7 +50,7 @@ public class DictionariesDataContext : DbSaveChangeContext
             entity.Property(c => c.Code).IsRequired().HasMaxLength(3);
             entity.Property(c => c.Symbol).IsRequired().HasMaxLength(5);
             entity.Property(c => c.TitleEn).IsRequired().HasMaxLength(50);
-            entity.Property(c => c.IsActive).IsRequired();
+            entity.Property(c => c.Status).IsRequired();
         });
 
         modelBuilder.Entity<CountryCurrencyEntity>()
@@ -78,7 +78,7 @@ public class DictionariesDataContext : DbSaveChangeContext
         {
             entity.ToTable("BalanceTypes", "Dictionaries");
             entity.Property(e => e.Title).IsRequired().HasMaxLength(50);
-            entity.Property(e => e.IsActive).IsRequired();
+            entity.Property(e => e.Status).IsRequired();
             entity.Property(e => e.Type).IsRequired();
         });
 
@@ -88,7 +88,7 @@ public class DictionariesDataContext : DbSaveChangeContext
             entity.HasKey(c => c.Id);
             entity.Property(c => c.Title).IsRequired().HasMaxLength(70);
             entity.Property(c => c.Color).HasMaxLength(7).IsFixedLength().IsRequired(false);
-            entity.Property(c => c.IsActive).IsRequired();
+            entity.Property(c => c.Status).IsRequired();
             entity.Property(c => c.IsPositive).IsRequired();
             entity.HasMany(c => c.Children)
                 .WithOne()

@@ -5,6 +5,7 @@ using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
 using CommonModule.Shared.Core;
+using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
@@ -48,7 +49,7 @@ public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<C
         
         userProjectEntity.Id = Guid.NewGuid();
         userProjectEntity.CreatedUserId = userId;
-        userProjectEntity.Version = VersionExtension.GenerateVersion();
+        userProjectEntity.Status = StatusEnum.Active;
         
         await this.userProjectRepository.AddAsync(userProjectEntity, cancellationToken);
 

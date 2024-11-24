@@ -23,7 +23,7 @@ errorAdded=0
 
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 # Read the CSV file line by line
-while IFS=';' read -r id isoCode title titleEn isDefault isActive localeEnum culture
+while IFS=';' read -r id isoCode title titleEn isDefault status localeEnum culture
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -39,12 +39,11 @@ do
 
       # Convert boolean values to integers
       isDefaultBool=$( [ "$isDefault" == "1" ] && echo true || echo false )
-      isActiveBool=$( [ "$isActive" == "1" ] && echo true || echo false )
 
       # Construct the SQL command
       sql="INSERT INTO \"$db_name\".\"Locales\".\"Locales\" 
-      (\"Id\", \"IsoCode\", \"Title\", \"TitleEn\", \"TitleNormalized\", \"TitleEnNormalized\", \"IsDefault\", \"IsActive\", \"LocaleEnum\", \"Culture\") 
-      VALUES ($id, '$isoCode', '$title', '$titleEn', '$titleNormalized', '$titleEnNormalized', $isDefaultBool, $isActiveBool, '$localeEnum', '$culture');"
+      (\"Id\", \"IsoCode\", \"Title\", \"TitleEn\", \"TitleNormalized\", \"TitleEnNormalized\", \"IsDefault\", \"Status\", \"LocaleEnum\", \"Culture\") 
+      VALUES ($id, '$isoCode', '$title', '$titleEn', '$titleNormalized', '$titleEnNormalized', $isDefaultBool, $status, '$localeEnum', '$culture');"
 
       # Execute the SQL command
       if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then

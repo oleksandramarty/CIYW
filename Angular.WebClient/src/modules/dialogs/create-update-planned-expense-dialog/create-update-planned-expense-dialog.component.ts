@@ -114,7 +114,6 @@ export class CreateUpdatePlannedExpenseDialogComponent extends BaseUnsubscribeCo
             endDate: [this.plannedExpense?.endDate ?? null],
             balanceId: [this.plannedExpense?.balanceId ?? this.balancesDataItems![0]?.id, Validators.required],
             categoryId: [String(this.plannedExpense?.categoryId), Validators.required],
-            isActive: [this.plannedExpense?.isActive ?? true, Validators.required],
             frequencyId: [String(this.plannedExpense?.frequencyId) ?? null, Validators.required]
         });
     }
@@ -138,29 +137,65 @@ export class CreateUpdatePlannedExpenseDialogComponent extends BaseUnsubscribeCo
 
             this.loaderService.isBusy = true;
 
-            this.graphQlExpensesService.createOrUpdatePlannedExpense(
-                this.plannedExpense?.id,
-                this.plannedExpenseFormGroup.value.title,
-                this.plannedExpenseFormGroup.value.description,
-                Number(this.plannedExpenseFormGroup.value.amount),
-                this.plannedExpenseFormGroup.value.balanceId,
-                this.plannedExpenseFormGroup.value.startDate,
-                this.plannedExpenseFormGroup.value.endDate,
-                Number(this.plannedExpenseFormGroup.value.categoryId),
-                !this.plannedExpense ? this.userProject?.id : undefined,
-                Number(this.plannedExpenseFormGroup.value.frequencyId),
-                this.plannedExpenseFormGroup.value.isActive
-            ).pipe(
-                takeUntil(this.ngUnsubscribe),
-                tap(() => {
-                    this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', {duration: 3000});
-                    this.loaderService.isBusy = false;
-                    this.dialogRef.close(true);
-                }),
-                handleApiError(this.snackBar, this.localizationService)
-            ).subscribe();
+            if (!this.plannedExpense) {
+                this._createPlannedExpense();
+            } else {
+                this._updatePlannedExpense();
+            }
         }
 
         this.commonDialogService.showNoComplaintDialog(createOrUpdatePlannedExpenseAction, () => {});
+    }
+
+    private _createPlannedExpense(): void {
+        if (!this.plannedExpenseFormGroup) {
+            return;
+        }
+
+        this.graphQlExpensesService.createPlannedExpense(
+            this.plannedExpenseFormGroup.value.title,
+            this.plannedExpenseFormGroup.value.description,
+            Number(this.plannedExpenseFormGroup.value.amount),
+            this.plannedExpenseFormGroup.value.balanceId,
+            this.plannedExpenseFormGroup.value.startDate,
+            this.plannedExpenseFormGroup.value.endDate,
+            Number(this.plannedExpenseFormGroup.value.categoryId),
+            this.userProject?.id,
+            Number(this.plannedExpenseFormGroup.value.frequencyId)
+        ).pipe(
+            takeUntil(this.ngUnsubscribe),
+            tap(() => {
+                this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', {duration: 3000});
+                this.loaderService.isBusy = false;
+                this.dialogRef.close(true);
+            }),
+            handleApiError(this.snackBar, this.localizationService)
+        ).subscribe();
+    }
+
+    private _updatePlannedExpense(): void {
+        if (!this.plannedExpenseFormGroup) {
+            return;
+        }
+
+        this.graphQlExpensesService.updatePlannedExpense(
+            this.plannedExpense?.id,
+            this.plannedExpenseFormGroup.value.title,
+            this.plannedExpenseFormGroup.value.description,
+            Number(this.plannedExpenseFormGroup.value.amount),
+            this.plannedExpenseFormGroup.value.balanceId,
+            this.plannedExpenseFormGroup.value.startDate,
+            this.plannedExpenseFormGroup.value.endDate,
+            Number(this.plannedExpenseFormGroup.value.categoryId),
+            Number(this.plannedExpenseFormGroup.value.frequencyId)
+        ).pipe(
+            takeUntil(this.ngUnsubscribe),
+            tap(() => {
+                this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', {duration: 3000});
+                this.loaderService.isBusy = false;
+                this.dialogRef.close(true);
+            }),
+            handleApiError(this.snackBar, this.localizationService)
+        ).subscribe();
     }
 }

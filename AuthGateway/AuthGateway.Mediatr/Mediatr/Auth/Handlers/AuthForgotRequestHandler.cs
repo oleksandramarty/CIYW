@@ -7,6 +7,7 @@ using CommonModule.Core.Extensions;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -36,10 +37,8 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
         {
             throw new EntityNotFoundException();
         }
-        if (user.IsActive == false)
-        {
-            throw new BusinessException(ErrorMessages.EntityBlocked, (int)HttpStatusCode.Conflict);
-        }
+
+        user.CheckInvalidStatus();
 
         if (user.LastForgotPasswordRequest.HasValue &&
             user.LastForgotPasswordRequest.Value.AddMinutes(30) > DateTime.UtcNow)

@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Responses.Dictionaries.Models.Countries;
 using GraphQL.Types;
 
@@ -11,6 +12,6 @@ public sealed class CountryResponseType : ObjectGraphType<CountryResponse>
         Field(x => x.Title, nullable: true);
         Field(x => x.Code);
         Field(x => x.TitleEn);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
     }
 }

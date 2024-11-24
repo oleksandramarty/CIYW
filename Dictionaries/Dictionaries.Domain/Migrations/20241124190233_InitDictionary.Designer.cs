@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dictionaries.Domain.Migrations
 {
     [DbContext(typeof(DictionariesDataContext))]
-    [Migration("20241123184822_InitDictionary")]
+    [Migration("20241124190233_InitDictionary")]
     partial class InitDictionary
     {
         /// <inheritdoc />
@@ -32,8 +32,8 @@ namespace Dictionaries.Domain.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -64,13 +64,13 @@ namespace Dictionaries.Domain.Migrations
                     b.Property<int>("IconId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsPositive")
                         .HasColumnType("boolean");
 
                     b.Property<int?>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
@@ -119,8 +119,8 @@ namespace Dictionaries.Domain.Migrations
                         .HasColumnType("character(2)")
                         .IsFixedLength();
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -150,8 +150,8 @@ namespace Dictionaries.Domain.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Symbol")
                         .IsRequired()
@@ -186,8 +186,8 @@ namespace Dictionaries.Domain.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -210,8 +210,8 @@ namespace Dictionaries.Domain.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -234,8 +234,8 @@ namespace Dictionaries.Domain.Migrations
                     b.Property<int>("IconCategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()

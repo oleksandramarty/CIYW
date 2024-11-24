@@ -24,32 +24,31 @@ public class UpdateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
         // Arrange
         await this.SignOutUserIfExist();
         IntegrationTestUserEntity user = await this.CreateTestUser(role);
+        Guid userProjectId = user.UserProjects.First().Id;
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             ExpensesDataContext expensesDataContext = scope.ServiceProvider.GetRequiredService<ExpensesDataContext>();
 
-            user.Should().NotBeNull();
-            user.UserProjects.Should().NotBeNull();
-            user.UserProjects.Should().NotBeEmpty();
-
             string newTitle = StringExtension.GenerateRandomString(10);
             
             IMediator mediator = new Mediator(scope.ServiceProvider);
             await mediator.Send(new UpdateUserProjectCommand
             {
-                Id = user.UserProjects.First().Id, 
-                Title = newTitle,
-                IsActive = true
+                Id = userProjectId, 
+                Title = newTitle
             });
             
             // Assert
             List<UserProjectEntity> userProjects = await expensesDataContext.UserProjects.Where(up => up.CreatedUserId == Options.CurrentUserEntity.User.Id).ToListAsync();
+            UserProjectEntity? updatedUserProject = userProjects.FirstOrDefault(up => up.Id == userProjectId);
             
             userProjects.Should().NotBeNull();
             userProjects.Should().NotBeEmpty();
-            userProjects.Count(up => up.Title == newTitle).Should().Be(1);
+            updatedUserProject.Should().NotBeNull();
+            updatedUserProject.Title.Should().Be(newTitle);
+            updatedUserProject.Status.Should().Be(StatusEnum.Active);
         }
     }
     
@@ -68,8 +67,7 @@ public class UpdateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
         var validator = new UpdateUserProjectCommandValidator();
         var invalidCommand = new UpdateUserProjectCommand
         {
-            Title = title,
-            IsActive = true
+            Title = title
         };
 
         // Act

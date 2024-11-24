@@ -62,7 +62,7 @@ public class UpdatePlannedExpenseCommandHandlerTest : CommonIntegrationTestSetup
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow.AddDays(1),
                 FrequencyId = 2,
-                IsActive = false
+                Status = StatusEnum.Active
             });
 
             // Assert
@@ -83,7 +83,6 @@ public class UpdatePlannedExpenseCommandHandlerTest : CommonIntegrationTestSetup
             updatedExpense!.EndDate.Should().BeCloseTo(DateTime.UtcNow.AddDays(1), TimeSpan.FromSeconds(1));
             updatedExpense!.UserProjectId.Should().Be(userProject.Id);
             updatedExpense!.FrequencyId.Should().Be(2);
-            updatedExpense!.IsActive.Should().BeFalse();
         }
     }
 

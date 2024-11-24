@@ -84,7 +84,7 @@ public class IntegrationTestOptions
             LoginNormalized = login.ToUpper(),
             Email = login + "@mail.com",
             EmailNormalized = (login + "@mail.com").ToUpper(),
-            IsActive = true,
+            Status = StatusEnum.Active,
             IsTemporaryPassword = true,
             AuthType = UserAuthMethodEnum.Base,
             Salt = salt,
@@ -125,7 +125,7 @@ public class IntegrationTestOptions
             {
                 Id = Guid.NewGuid(),
                 Title = $"{user.Login}'s project {i}",
-                IsActive = true,
+                Status = StatusEnum.Active,
                 CreatedUserId = user.Id,
                 Balances = new List<BalanceEntity>()
             };
@@ -143,7 +143,7 @@ public class IntegrationTestOptions
                         IconId = IntegrationTestConstants.DefaultIconId,
                         UserProjectId = userProject.Id,
                         BalanceTypeId = IntegrationTestConstants.DefaultBalanceTypeId,
-                        IsActive = true
+                        Status = StatusEnum.Active,
                     });
             }
 

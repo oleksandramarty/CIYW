@@ -1,4 +1,5 @@
 using CommonModule.GraphQL.Types.Common;
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Responses.Dictionaries.Models.Categories;
 using GraphQL.Types;
 
@@ -12,7 +13,7 @@ public sealed class CategoryResponseType : ObjectGraphType<CategoryResponse>
         Field(x => x.Title, nullable: true);
         Field(x => x.IconId);
         Field(x => x.Color);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
         Field(x => x.IsPositive);
         Field(x => x.ParentId, nullable: true);
         Field(x => x.Children, type: typeof(ListGraphType<CategoryResponseType>), nullable: true);

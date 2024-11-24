@@ -24,7 +24,7 @@ errorAdded=0
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 
 # Read the category icons CSV file line by line
-while IFS=';' read -r id title isActive;
+while IFS=';' read -r id title status;
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -34,13 +34,11 @@ do
 
     # If the category icon does not exist, prepare the SQL for insert
     if [ -z "$category_icon_exists" ]; then
-      # Convert boolean values to integers
-      isActiveBool=$( [ "$isActive" == "1" ] && echo true || echo false )
 
       # Non-bulk insert
       sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"IconCategories\"
-      (\"Id\", \"Title\", \"IsActive\")
-      VALUES ($id, '$title', $isActiveBool);"
+      (\"Id\", \"Title\", \"Status\")
+      VALUES ($id, '$title', $status);"
       if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
         echo "Category icon with ID $id added successfully."
       else

@@ -1,6 +1,7 @@
 using AuthGateway.Domain.Models.Users;
 using CIYW.IntegrationTests.Shared;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Constants;
 using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.Base;
 using CommonModule.Shared.Responses.Dictionaries;
@@ -160,6 +161,17 @@ public class CommonIntegrationTestSetup : IDisposable
         foreach (UserRoleEnum role in Enum.GetValues(typeof(UserRoleEnum)))
         {
             yield return new TestCaseData(role).SetName(role.ToString()).SetDescription($"{role} role");
+        }
+    }
+    public static IEnumerable<TestCaseData> CreateAllRolesWithInvalidRolesTestCases()
+    {
+        foreach (UserRoleEnum role in Enum.GetValues(typeof(UserRoleEnum)))
+        {
+            yield return new TestCaseData(role, StatusEnum.New, ErrorMessages.StatusNew).SetName($"{StatusEnum.New.ToString()} {role.ToString()}").SetDescription($"{role} role with {StatusEnum.New} status");
+            yield return new TestCaseData(role, StatusEnum.Inactive, ErrorMessages.StatusInactive).SetName($"{StatusEnum.Inactive.ToString()} {role.ToString()}").SetDescription($"{role} role with {StatusEnum.Inactive} status");
+            yield return new TestCaseData(role, StatusEnum.Blocked, ErrorMessages.StatusBlocked).SetName($"{StatusEnum.Blocked.ToString()} {role.ToString()}").SetDescription($"{role} role with {StatusEnum.Blocked} status");
+            yield return new TestCaseData(role, StatusEnum.Deleted, ErrorMessages.StatusDeleted).SetName($"{StatusEnum.Deleted.ToString()} {role.ToString()}").SetDescription($"{role} role with {StatusEnum.Deleted} status");
+            yield return new TestCaseData(role, StatusEnum.Archived, ErrorMessages.StatusArchived).SetName($"{StatusEnum.Archived.ToString()} {role.ToString()}").SetDescription($"{role} role with {StatusEnum.Archived} status");
         }
     }
 

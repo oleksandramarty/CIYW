@@ -53,7 +53,6 @@ public class CreateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
                 CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
                 IconId = IntegrationTestConstants.DefaultIconId,
                 Title = "Test",
-                IsActive = true,
                 BalanceTypeId = 1
             });
 
@@ -66,7 +65,7 @@ public class CreateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
             response.Id.Should().NotBeEmpty();
             createdUserBalance.Should().NotBeNull();
             createdUserBalance!.Title.Should().Be("Test");
-            createdUserBalance!.IsActive.Should().BeTrue();
+            createdUserBalance!.Status.Should().Be(StatusEnum.Active);
             userBalances.Should().NotBeNull();
             userBalances.Should().NotBeEmpty();
             userBalances.Count().Should().Be(userBalancesCount + 1);
@@ -95,7 +94,6 @@ public class CreateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
                         CurrencyId = IntegrationTestConstants.DefaultCurrencyId,
                         IconId = IntegrationTestConstants.DefaultIconId,
                         Title = "Test",
-                        IsActive = true,
                         BalanceTypeId = 1
                     },
                     ErrorMessages.UserProjectLimitExceeded);
@@ -118,8 +116,7 @@ public class CreateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
         var validator = new CreateUserBalanceCommandValidator();
         var invalidCommand = new CreateUserBalanceCommand
         {
-            Title = title,
-            IsActive = true
+            Title = title
         };
 
         // Act

@@ -1,10 +1,11 @@
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Enums;
 using MediatR;
 
 namespace Expenses.Mediatr.Mediatr.Expenses.Commands;
 
-public class UpdatePlannedExpenseCommand: BaseIdEntity<Guid>, IRequest
+public class UpdatePlannedExpenseCommand : BaseIdEntity<Guid>, IRequest
 {
     public string Title { get; set; }
     public string? Description { get; set; }
@@ -13,8 +14,8 @@ public class UpdatePlannedExpenseCommand: BaseIdEntity<Guid>, IRequest
     public Guid BalanceId { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    
+
     public int FrequencyId { get; set; }
-    
-    public bool IsActive { get; set; }
+
+    public StatusEnum Status { get; set; }
 }

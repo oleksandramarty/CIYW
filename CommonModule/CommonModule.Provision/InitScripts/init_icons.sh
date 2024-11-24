@@ -26,7 +26,7 @@ bulkInsertSQL=""
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 
 # Read the icons CSV file line by line
-while IFS=';' read -r id title iconCategoryId isActive;
+while IFS=';' read -r id title iconCategoryId status;
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -36,11 +36,9 @@ do
 
     # If the icon does not exist, prepare the SQL for bulk insert
     if [ -z "$icon_exists" ]; then
-      # Convert boolean values to integers
-      isActiveBool=$( [ "$isActive" == "1" ] && echo true || echo false )
 
       # Construct the SQL command
-      bulkInsertSQL+="INSERT INTO \"$db_name\".\"Dictionaries\".\"Icons\" (\"Id\", \"Title\", \"IconCategoryId\", \"IsActive\") VALUES ($id, '$title', $iconCategoryId, $isActiveBool);" > /dev/null
+      bulkInsertSQL+="INSERT INTO \"$db_name\".\"Dictionaries\".\"Icons\" (\"Id\", \"Title\", \"IconCategoryId\", \"Status\") VALUES ($id, '$title', $iconCategoryId, $status);" > /dev/null
       ((bulkCounter++))
 
       # If bulkCounter reaches 900, execute the bulk insert

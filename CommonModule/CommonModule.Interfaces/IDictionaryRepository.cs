@@ -6,7 +6,7 @@ namespace CommonModule.Interfaces;
 
 public interface IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>
     where TEntityId : struct
-    where TEntity : class, IBaseIdEntity<TEntityId>, IActivatableEntity
+    where TEntity : class, IBaseIdEntity<TEntityId>, IStatusEntity
     where TResponse : class, IBaseIdEntity<TEntityId>
     where TDataContext : DbContext
 {

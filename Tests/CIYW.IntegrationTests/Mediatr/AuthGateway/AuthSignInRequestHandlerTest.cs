@@ -111,14 +111,14 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
         }
     }
 
-    [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
-    public async Task Handle_ShouldReturnException_WhenAuthSignInRequestWithBlockedUser(UserRoleEnum role)
+    [Test, TestCaseSource(nameof(CreateAllRolesWithInvalidRolesTestCases))]
+    public async Task Handle_ShouldReturnException_WhenAuthSignInRequestWithBlockedUser(UserRoleEnum role, StatusEnum status, string errorMessage)
     {
         // Arrange
         await this.SignOutUserIfExist();
         IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false,
             [
-                user => user.IsActive = false
+                user => user.Status = status
             ]
         );
 
@@ -138,7 +138,7 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
                     Password = userToBeSignIn.User.Login,
                     RememberMe = true
                 },
-                string.Format(ErrorMessages.UserBlocked, nameof(UserEntity)));
+                errorMessage);
         }
     }
 }

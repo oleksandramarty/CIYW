@@ -1,4 +1,4 @@
-id;parentId;title;iconId;color;isActive;isPositive;
+id;parentId;title;iconId;color;status;isPositive;
 106;;CATEGORY.EXPENSES;339;#FF5733;1;0;
 107;;CATEGORY.INCOMES;209;#FF5733;1;1;
 1;106;CATEGORY.HOUSING;1;#FF5733;1;0;

@@ -5,6 +5,7 @@ using AuthGateway.Mediatr.Validators.Auth;
 using CIYW.IntegrationTests.Core;
 using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
+using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.Base;
 using FluentAssertions;
 using FluentValidation.Results;
@@ -50,9 +51,10 @@ public class AuthSignUpCommandHandlerTest() : CommonIntegrationTestSetup()
             afterSignIn.Should().BeFalse();
             response.Should().NotBeNull();
             user.Should().NotBeNull();
-            user!.Email.Should().Be(command.Email);
-            user!.Login.Should().Be(command.Login);
+            user.Email.Should().Be(command.Email);
+            user.Login.Should().Be(command.Login);
             user.Id.Should().Be(response.Id);
+            user.Status.Should().Be(StatusEnum.New);
         }
     }
 

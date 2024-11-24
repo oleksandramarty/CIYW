@@ -112,21 +112,11 @@ export class CreateUpdateFavoriteExpenseDialogComponent extends BaseUnsubscribeC
 
             this.loaderService.isBusy = true;
 
-            (!!this.favoriteExpense ?
-                this.graphQlExpensesService.updateFavoriteExpense(
-                    this.favoriteExpense.id,
-                    ...this.inputParams) :
-                this.graphQlExpensesService.createFavoriteExpense(
-                    ...this.inputParams))
-                .pipe(
-                    takeUntil(this.ngUnsubscribe),
-                    tap(() => {
-                        this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', {duration: 3000});
-                        this.loaderService.isBusy = false;
-                        this.dialogRef.close(true);
-                    }),
-                    handleApiError(this.snackBar)
-                ).subscribe();
+            if (!this.favoriteExpense) {
+                this._createFavoriteExpense();
+            } else {
+                this._updateFavoriteExpense();
+            }
         }
 
         this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction, () => {})
@@ -152,5 +142,34 @@ export class CreateUpdateFavoriteExpenseDialogComponent extends BaseUnsubscribeC
             this.userProject!.id,
             Number(this.favoriteExpenseFormGroup?.value.iconId)
         ];
+    }
+
+    private _createFavoriteExpense(): void {
+        this.graphQlExpensesService.createFavoriteExpense(
+            ...this.inputParams)
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                tap(() => {
+                    this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', {duration: 3000});
+                    this.loaderService.isBusy = false;
+                    this.dialogRef.close(true);
+                }),
+                handleApiError(this.snackBar)
+            ).subscribe();
+    }
+
+    private _updateFavoriteExpense(): void {
+        this.graphQlExpensesService.updateFavoriteExpense(
+            this.favoriteExpense!.id,
+            ...this.inputParams)
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                tap(() => {
+                    this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', {duration: 3000});
+                    this.loaderService.isBusy = false;
+                    this.dialogRef.close(true);
+                }),
+                handleApiError(this.snackBar)
+            ).subscribe();
     }
 }

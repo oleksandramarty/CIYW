@@ -49,8 +49,7 @@ public class CreateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
             IMediator mediator = new Mediator(scope.ServiceProvider);
             BaseEntityIdResponse<Guid> response = await mediator.Send(new CreateUserProjectCommand
             {
-                Title = "Test",
-                IsActive = true
+                Title = "Test"
             });
             
             // Assert
@@ -61,7 +60,7 @@ public class CreateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
             response.Id.Should().NotBeEmpty();
             createdUserProject.Should().NotBeNull();
             createdUserProject!.Title.Should().Be("Test");
-            createdUserProject!.IsActive.Should().BeTrue();
+            createdUserProject!.Status.Should().Be(StatusEnum.Active);
             userProjects.Should().NotBeNull();
             userProjects.Should().NotBeEmpty();
             userProjects.Count().Should().Be(userProjectsCount + 1);
@@ -85,8 +84,7 @@ public class CreateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
                 mediator,
                 new CreateUserProjectCommand
                 {
-                    Title = "Test",
-                    IsActive = true
+                    Title = "Test"
                 },
                 ErrorMessages.UserProjectLimitExceeded);
         }
@@ -107,8 +105,7 @@ public class CreateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
         var validator = new CreateUserProjectCommandValidator();
         var invalidCommand = new CreateUserProjectCommand
         {
-            Title = title,
-            IsActive = true
+            Title = title
         };
 
         // Act

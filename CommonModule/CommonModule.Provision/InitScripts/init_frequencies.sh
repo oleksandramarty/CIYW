@@ -23,7 +23,7 @@ errorAdded=0
 
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 # Read the CSV file line by line
-while IFS=';' read -r id title description type isActive;
+while IFS=';' read -r id title description type status;
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -33,13 +33,11 @@ do
 
     # If the frequency does not exist, prepare the SQL for insert
     if [ -z "$frequency_exists" ]; then
-      # Convert boolean values to integers
-      isActiveBool=$( [ "$isActive" == "1" ] && echo true || echo false )
 
       # Non-bulk insert
       sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"Frequencies\"
-      (\"Id\", \"Title\", \"Description\", \"IsActive\", \"Type\")
-      VALUES ($id, '$title', '$description', $isActiveBool, $type);"
+      (\"Id\", \"Title\", \"Description\", \"Status\", \"Type\")
+      VALUES ($id, '$title', '$description', $status, $type);"
       if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
         echo "Frequency with ID $id added successfully."
       else

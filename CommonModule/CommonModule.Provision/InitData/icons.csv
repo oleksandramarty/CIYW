@@ -1,4 +1,4 @@
-id;title;iconCategoryId;isActive;
+id;title;iconCategoryId;status;
 1;fa-solid fa-house;1;1;
 2;fa-solid fa-warehouse;1;1;
 3;fa-solid fa-hospital;1;1;

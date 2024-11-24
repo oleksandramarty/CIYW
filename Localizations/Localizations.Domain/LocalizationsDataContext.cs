@@ -55,7 +55,7 @@ public class LocalizationsDataContext : DbSaveChangeContext
             entity.Property(e => e.IsDefault)
                 .IsRequired();
 
-            entity.Property(e => e.IsActive)
+            entity.Property(e => e.Status)
                 .IsRequired();
 
             entity.Property(e => e.LocaleEnum)

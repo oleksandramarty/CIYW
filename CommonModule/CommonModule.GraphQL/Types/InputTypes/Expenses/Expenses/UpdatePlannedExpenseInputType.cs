@@ -15,6 +15,5 @@ public sealed class UpdatePlannedExpenseInputType : InputObjectGraphType
         Field<NonNullGraphType<DateTimeGraphType>>("startDate");
         Field<DateTimeGraphType>("endDate");
         Field<NonNullGraphType<IntGraphType>>("frequencyId");
-        Field<NonNullGraphType<BooleanGraphType>>("isActive");
     }
 }

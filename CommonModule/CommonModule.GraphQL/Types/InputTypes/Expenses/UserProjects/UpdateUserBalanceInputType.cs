@@ -11,7 +11,6 @@ public sealed class UpdateUserBalanceInputType: InputObjectGraphType
         Field<NonNullGraphType<IntGraphType>>("currencyId");
         Field<NonNullGraphType<StringGraphType>>("title");
         Field<NonNullGraphType<IntGraphType>>("balanceTypeId");
-        Field<NonNullGraphType<BooleanGraphType>>("isActive");
         Field<NonNullGraphType<GuidGraphType>>("userProjectId");
         Field<NonNullGraphType<IntGraphType>>("iconId");
     }

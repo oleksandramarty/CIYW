@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Responses.Dictionaries.Models.Icons;
 using GraphQL.Types;
 
@@ -9,7 +10,7 @@ public sealed class IconCategoryResponseType : ObjectGraphType<IconCategoryRespo
     {
         Field(x => x.Id);
         Field(x => x.Title, nullable: true);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
         Field(x => x.Icons, type: typeof(ListGraphType<IconResponseType>), nullable: true);
     }
 }

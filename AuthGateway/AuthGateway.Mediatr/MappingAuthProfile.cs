@@ -33,7 +33,7 @@ public class MappingAuthProfile: Profile
                 dest.Id = Guid.NewGuid();
                 dest.LoginNormalized = src.Login.ToUpper();
                 dest.EmailNormalized = src.Email.ToUpper();
-                dest.IsActive = true;
+                dest.Status = StatusEnum.New;
                 dest.IsTemporaryPassword = true;
                 dest.AuthType = UserAuthMethodEnum.Base;
             });

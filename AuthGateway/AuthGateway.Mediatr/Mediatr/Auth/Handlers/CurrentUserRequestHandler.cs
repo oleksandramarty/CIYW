@@ -4,6 +4,7 @@ using AuthGateway.Domain.Models.Users;
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using AutoMapper;
 using CommonModule.Core.Exceptions;
+using CommonModule.Core.Extensions;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
@@ -41,10 +42,8 @@ public class CurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<Current
         {
             throw new EntityNotFoundException();
         }
-        if (user.IsActive == false)
-        {
-            throw new BusinessException(ErrorMessages.EntityBlocked, (int)HttpStatusCode.Conflict);
-        }
+
+        user.CheckInvalidStatus();
         
         UserResponse response = this.mapper.Map<UserEntity, UserResponse>(user);
 

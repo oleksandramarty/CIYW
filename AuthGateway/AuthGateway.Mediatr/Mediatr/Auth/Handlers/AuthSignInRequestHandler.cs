@@ -4,6 +4,7 @@ using AuthGateway.Mediatr.Mediatr.Auth.Commands;
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using AuthGateway.Mediatr.Validators.Auth;
 using CommonModule.Core.Exceptions;
+using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
 using CommonModule.Shared.Responses.Auth;
@@ -46,11 +47,8 @@ public class AuthSignInRequestHandler : IRequestHandler<AuthSignInRequest, JwtTo
         {
             throw new EntityNotFoundException();
         }
-
-        if (!user.IsActive)
-        {
-            throw new BusinessException(ErrorMessages.UserBlocked, StatusCodes.Status403Forbidden);
-        }
+        
+        user.CheckInvalidStatus();
 
         var hashedPassword = this.jwtTokenFactory.HashPassword(request.Password, user.Salt);
         if (hashedPassword != user.PasswordHash)

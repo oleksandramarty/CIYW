@@ -5,7 +5,7 @@ using CommonModule.Shared.Enums;
 
 namespace Localizations.Domain.Models.Locales;
 
-public class LocaleEntity: BaseIdEntity<int>, IActivatableEntity
+public class LocaleEntity : BaseIdEntity<int>, IStatusEntity
 {
     [Required] [MaxLength(2)] public required string IsoCode { get; set; }
     [Required] [MaxLength(50)] public required string Title { get; set; }
@@ -13,7 +13,7 @@ public class LocaleEntity: BaseIdEntity<int>, IActivatableEntity
     [Required] [MaxLength(50)] public required string TitleNormalized { get; set; }
     [Required] [MaxLength(50)] public required string TitleEnNormalized { get; set; }
     public bool IsDefault { get; set; }
-    public bool IsActive { get; set; }
+    public StatusEnum Status { get; set; }
     public LocaleEnum LocaleEnum { get; set; }
     [Required] [MaxLength(8)] public string? Culture { get; set; }
     public ICollection<LocalizationEntity> Localizations { get; set; }

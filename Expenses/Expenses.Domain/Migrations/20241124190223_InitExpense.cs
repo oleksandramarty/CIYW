@@ -27,7 +27,7 @@ namespace Expenses.Domain.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Version = table.Column<string>(type: "character(32)", fixedLength: true, maxLength: 32, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -53,7 +53,7 @@ namespace Expenses.Domain.Migrations
                     UserProjectId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     Version = table.Column<string>(type: "character(32)", fixedLength: true, maxLength: 32, nullable: false),
                     BalanceTypeId = table.Column<int>(type: "integer", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -125,7 +125,7 @@ namespace Expenses.Domain.Migrations
                     CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     FrequencyId = table.Column<int>(type: "integer", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     Version = table.Column<string>(type: "character(32)", fixedLength: true, maxLength: 32, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)

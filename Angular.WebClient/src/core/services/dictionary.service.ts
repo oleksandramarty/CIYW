@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {catchError, forkJoin, of, take, tap} from "rxjs";
+import {forkJoin, of, take, tap} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {handleApiError} from "../helpers/rxjs.helper";
 import {Dictionary, DictionaryDataItems, DictionaryMap} from "../models/common/dictionary.model";
@@ -12,16 +12,21 @@ import {
     CategoryResponse,
     CountryResponse,
     CurrencyResponse,
-    FrequencyResponse, IconCategoryResponse, IconResponse,
-    LocaleResponse, VersionedListResponseOfBalanceTypeResponse, VersionedListResponseOfCategoryResponse,
+    FrequencyResponse,
+    IconCategoryResponse,
+    IconResponse,
+    LocaleResponse,
+    StatusEnum,
+    VersionedListResponseOfBalanceTypeResponse,
+    VersionedListResponseOfCategoryResponse,
     VersionedListResponseOfCountryResponse,
     VersionedListResponseOfCurrencyResponse,
-    VersionedListResponseOfFrequencyResponse, VersionedListResponseOfIconCategoryResponse,
+    VersionedListResponseOfFrequencyResponse,
+    VersionedListResponseOfIconCategoryResponse,
     VersionedListResponseOfLocaleResponse
 } from "../api-models/common.models";
 import {GraphQlLocalizationsService} from "../graph-ql/services/graph-ql-localizations.service";
 import {GraphQlDictionariesService} from "../graph-ql/services/graph-ql-dictionaries.service";
-import {extractClassName} from "../helpers/dom.helper";
 import {LoaderService} from "./loader.service";
 
 @Injectable({
@@ -419,7 +424,7 @@ export class DictionaryService {
             description: category?.isPositive ? 'EXPENSES.INCOME' : 'EXPENSES.EXPENSE',
             iconId: category?.iconId,
             color: category?.color,
-            isActive: category?.isActive,
+            isActive: category?.status === StatusEnum.Active,
             isImportant: false,
             children: category?.children ? this.mapCategories(category.children) : []
         };

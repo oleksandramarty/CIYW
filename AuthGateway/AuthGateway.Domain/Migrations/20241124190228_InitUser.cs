@@ -42,7 +42,7 @@ namespace AuthGateway.Domain.Migrations
                     EmailNormalized = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     PasswordHash = table.Column<string>(type: "character varying(120)", maxLength: 120, nullable: false),
                     Salt = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     IsTemporaryPassword = table.Column<bool>(type: "boolean", nullable: false),
                     AuthType = table.Column<int>(type: "integer", nullable: false),
                     LastForgotPassword = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),

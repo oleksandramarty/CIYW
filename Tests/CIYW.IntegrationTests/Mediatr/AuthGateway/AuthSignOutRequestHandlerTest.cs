@@ -45,8 +45,8 @@ public class AuthSignOutRequestHandlerTest() : CommonIntegrationTestSetup()
         }
     }
 
-    [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
-    public async Task Handle_ShouldReturnException_WhenAuthSignOutRequestWithBlockedUser(UserRoleEnum role)
+    [Test, TestCaseSource(nameof(CreateAllRolesWithInvalidRolesTestCases))]
+    public async Task Handle_ShouldReturnException_WhenAuthSignOutRequestWithBlockedUser(UserRoleEnum role, StatusEnum status, string errorMessage)
     {
         // Arrange
         await this.SignOutUserIfExist();
@@ -56,7 +56,7 @@ public class AuthSignOutRequestHandlerTest() : CommonIntegrationTestSetup()
             1,
             true,
             [
-                user => user.IsActive = false
+                user => user.Status = status
             ]
         );
 
@@ -76,7 +76,7 @@ public class AuthSignOutRequestHandlerTest() : CommonIntegrationTestSetup()
                     Password = userToBeSignIn.User.Login,
                     RememberMe = true
                 },
-                string.Format(ErrorMessages.UserBlocked, nameof(UserEntity)));
+                errorMessage);
         }
     }
 }

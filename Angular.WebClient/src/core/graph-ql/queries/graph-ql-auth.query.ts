@@ -22,7 +22,7 @@ export const AUTH_GATEWAY_CURRENT_USER = gql`
             id
             login
             email
-            isActive
+            status
             isTemporaryPassword
             authType
             lastForgotPassword

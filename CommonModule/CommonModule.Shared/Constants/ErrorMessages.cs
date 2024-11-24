@@ -26,4 +26,15 @@ public class ErrorMessages
     public const string VersionNotSpecified = "ERROR.VERSION_NOT_SPECIFIED";
     public const string UserProjectLimitExceeded = "ERROR.USER_PROJECT_LIMIT_EXCEEDED";
     public const string RoleNotSupported = "ERROR.ROLE_NOT_SUPPORTED";
+    public const string StatusNew = "STATUS.NEW";
+    public const string StatusActive = "STATUS.ACTIVE";
+    public const string StatusInactive = "STATUS.INACTIVE";
+    public const string StatusBlocked = "STATUS.BLOCKED";
+    public const string StatusDeleted = "STATUS.DELETED";
+    public const string StatusPending = "STATUS.PENDING";
+    public const string StatusApproved = "STATUS.APPROVED";
+    public const string StatusRejected = "STATUS.REJECTED";
+    public const string StatusCompleted = "STATUS.COMPLETED";
+    public const string StatusCancelled = "STATUS.CANCELLED";
+    public const string StatusArchived = "STATUS.ARCHIVED";
 }

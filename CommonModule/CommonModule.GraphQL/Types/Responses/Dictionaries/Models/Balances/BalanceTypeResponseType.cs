@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Responses.Dictionaries.Models.Balances;
 using GraphQL.Types;
 
@@ -9,7 +10,7 @@ public sealed class BalanceTypeResponseType : ObjectGraphType<BalanceTypeRespons
     {
         Field(x => x.Id).Description("The ID of the balance type.");
         Field(x => x.Title, nullable: true).Description("The title of the balance type.");
-        Field(x => x.IsActive).Description("Indicates if the balance type is active.");
+        Field(x => x.Status, type: typeof(StatusEnumType));
         Field(x => x.Type).Description("The type of the balance.");
     }
 }

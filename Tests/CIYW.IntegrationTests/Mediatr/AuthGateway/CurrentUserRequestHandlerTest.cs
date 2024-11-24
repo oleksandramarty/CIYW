@@ -39,7 +39,7 @@ public class CurrentUserRequestHandlerTest(): CommonIntegrationTestSetup()
             response.Id.Should().Be(userToBeSignIn.User.Id);
             response.Login.Should().Be(userToBeSignIn.User.Login);
             response.Email.Should().Be(userToBeSignIn.User.Email);
-            response.IsActive.Should().Be(userToBeSignIn.User.IsActive);
+            response.Status.Should().Be(userToBeSignIn.User.Status);
             response.Roles.Should().NotBeNull();
             response.Roles.Should().NotBeEmpty();
             response.Roles.Should().HaveCount(1);

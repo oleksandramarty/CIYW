@@ -2,10 +2,11 @@ using System.ComponentModel.DataAnnotations;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Core;
+using CommonModule.Shared.Enums;
 
 namespace CommonModule.Shared.Responses.Expenses.Models.Expenses;
 
-public class PlannedExpenseResponse: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
+public class PlannedExpenseResponse: BaseDateTimeEntity<Guid>, IStatusEntity, IBaseVersionEntity
 {
     public string? Title { get; set; }
     public string? Description { get; set; }
@@ -22,7 +23,7 @@ public class PlannedExpenseResponse: BaseDateTimeEntity<Guid>, IActivatableEntit
     
     public int FrequencyId { get; set; }
     
-    public bool IsActive { get; set; }
+    public StatusEnum Status { get; set; }
     [Required]
     [StringLength(32, MinimumLength = 32)]
     public string Version { get; set; } = VersionExtension.GenerateVersion();

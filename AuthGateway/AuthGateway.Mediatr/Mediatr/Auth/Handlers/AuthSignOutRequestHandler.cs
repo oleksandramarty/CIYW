@@ -3,6 +3,7 @@ using AuthGateway.Domain;
 using AuthGateway.Domain.Models.Users;
 using AuthGateway.Mediatr.Mediatr.Auth.Requests;
 using CommonModule.Core.Exceptions;
+using CommonModule.Core.Extensions;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
@@ -34,10 +35,8 @@ public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSig
         {
             throw new EntityNotFoundException();
         }
-        if (user.IsActive == false)
-        {
-            throw new BusinessException(ErrorMessages.EntityBlocked, (int)HttpStatusCode.Conflict);
-        }
+
+        user.CheckInvalidStatus();
 
         await this.tokenService.RemoveUserTokenAsync(user.Id);
 

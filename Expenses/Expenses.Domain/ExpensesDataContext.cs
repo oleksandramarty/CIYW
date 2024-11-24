@@ -66,7 +66,7 @@ public class ExpensesDataContext : DbSaveChangeContext
         {
             entity.ToTable("UserProjects", "Projects");
             entity.Property(e => e.Title).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.IsActive);
+            entity.Property(e => e.Status);
             entity.Property(e => e.CreatedUserId);
             entity.Property(v => v.Version).IsRequired().HasMaxLength(32).IsFixedLength();
 

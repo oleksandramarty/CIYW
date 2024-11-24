@@ -3,15 +3,16 @@ using CommonModule.Core.Extensions;
 using CommonModule.Shared.Common;
 using CommonModule.Shared.Common.BaseInterfaces;
 using CommonModule.Shared.Core;
+using CommonModule.Shared.Enums;
 using Expenses.Domain.Models.Balances;
 using Expenses.Domain.Models.Expenses;
 
 namespace Expenses.Domain.Models.Projects;
 
-public class UserProjectEntity: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
+public class UserProjectEntity: BaseDateTimeEntity<Guid>, IStatusEntity, IBaseVersionEntity
 {
     [Required] [MaxLength(100)] public required string Title { get; set; }
-    public bool IsActive { get; set; }
+    public StatusEnum Status { get; set; }
     public Guid CreatedUserId { get; set; }
     
     public ICollection<BalanceEntity> Balances { get; set; }

@@ -11,7 +11,7 @@ export const LOCALES_DICTIONARY = gql`
                 titleNormalized
                 titleEnNormalized
                 isDefault
-                isActive
+                status
                 localeEnum
                 culture
             }

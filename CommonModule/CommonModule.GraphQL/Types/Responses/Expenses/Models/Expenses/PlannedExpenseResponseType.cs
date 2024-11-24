@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Responses.Expenses.Models.Expenses;
 using GraphQL.Types;
 
@@ -21,7 +22,7 @@ public sealed class PlannedExpenseResponseType : ObjectGraphType<PlannedExpenseR
         Field(x => x.CreatedUserId);
         Field(x => x.UserProjectId);
         Field(x => x.FrequencyId);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
         Field(x => x.Version);
     }
 }

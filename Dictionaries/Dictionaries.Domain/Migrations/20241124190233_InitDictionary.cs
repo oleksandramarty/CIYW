@@ -22,7 +22,7 @@ namespace Dictionaries.Domain.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -40,7 +40,7 @@ namespace Dictionaries.Domain.Migrations
                     Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Code = table.Column<string>(type: "character(2)", fixedLength: true, maxLength: 2, nullable: false),
                     TitleEn = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,7 +58,7 @@ namespace Dictionaries.Domain.Migrations
                     Code = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
                     Symbol = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: false),
                     TitleEn = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,7 +74,7 @@ namespace Dictionaries.Domain.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     Description = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -90,7 +90,7 @@ namespace Dictionaries.Domain.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -132,7 +132,7 @@ namespace Dictionaries.Domain.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     IconCategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -157,7 +157,7 @@ namespace Dictionaries.Domain.Migrations
                     Title = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
                     IconId = table.Column<int>(type: "integer", nullable: false),
                     Color = table.Column<string>(type: "character(7)", fixedLength: true, maxLength: 7, nullable: true),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: true),
                     IsPositive = table.Column<bool>(type: "boolean", nullable: false)
                 },

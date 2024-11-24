@@ -46,7 +46,7 @@ public class MappingDictionariesProfile : Profile
                         Code = r.Currency.Code,
                         Symbol = r.Currency.Symbol,
                         TitleEn = r.Currency.TitleEn,
-                        IsActive = r.Currency.IsActive
+                        Status = r.Currency.Status
                     }).ToList()
                     : new List<CurrencyResponse>()));
     }
@@ -62,7 +62,7 @@ public class MappingDictionariesProfile : Profile
                         Title = r.Currency.Title,
                         Code = r.Currency.Code,
                         TitleEn = r.Currency.TitleEn,
-                        IsActive = r.Currency.IsActive
+                        Status = r.Currency.Status
                     }).ToList()
                     : new List<CountryResponse>()));
     }

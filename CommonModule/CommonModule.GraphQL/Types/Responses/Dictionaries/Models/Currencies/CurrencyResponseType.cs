@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Responses.Dictionaries.Models.Currencies;
 using GraphQL.Types;
 
@@ -12,6 +13,6 @@ public sealed class CurrencyResponseType : ObjectGraphType<CurrencyResponse>
         Field(x => x.Code);
         Field(x => x.Symbol);
         Field(x => x.TitleEn);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
     }
 }

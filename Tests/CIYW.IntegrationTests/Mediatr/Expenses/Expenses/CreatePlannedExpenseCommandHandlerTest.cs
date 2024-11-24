@@ -71,8 +71,7 @@ public class CreatePlannedExpenseCommandHandlerTest() : CommonIntegrationTestSet
                 StartDate = DateTime.UtcNow,
                 EndDate = null,
                 UserProjectId = userProject.Id,
-                FrequencyId = 1,
-                IsActive = true
+                FrequencyId = 1
             });
 
             // Assert
@@ -95,7 +94,6 @@ public class CreatePlannedExpenseCommandHandlerTest() : CommonIntegrationTestSet
             plannedExpenseEntity!.EndDate.Should().BeNull();
             plannedExpenseEntity!.UserProjectId.Should().Be(userProject.Id);
             plannedExpenseEntity!.FrequencyId.Should().Be(1);
-            plannedExpenseEntity!.IsActive.Should().BeTrue();
         }
     }
 
@@ -135,8 +133,7 @@ public class CreatePlannedExpenseCommandHandlerTest() : CommonIntegrationTestSet
                         StartDate = DateTime.UtcNow,
                         EndDate = null,
                         UserProjectId = userProject.Id,
-                        FrequencyId = 1,
-                        IsActive = true
+                        FrequencyId = 1
                     },
                     ErrorMessages.UserProjectLimitExceeded);
         }

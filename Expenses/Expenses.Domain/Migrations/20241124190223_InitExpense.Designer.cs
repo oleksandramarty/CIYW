@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Expenses.Domain.Migrations
 {
     [DbContext(typeof(ExpensesDataContext))]
-    [Migration("20241123184808_InitExpense")]
+    [Migration("20241124190223_InitExpense")]
     partial class InitExpense
     {
         /// <inheritdoc />
@@ -46,8 +46,8 @@ namespace Expenses.Domain.Migrations
                     b.Property<int>("IconId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .HasMaxLength(50)
@@ -228,14 +228,14 @@ namespace Expenses.Domain.Migrations
                     b.Property<int>("FrequencyId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTime>("NextDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -301,8 +301,8 @@ namespace Expenses.Domain.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()

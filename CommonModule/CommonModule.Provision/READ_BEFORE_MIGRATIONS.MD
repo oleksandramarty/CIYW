@@ -110,7 +110,17 @@ if you dont see translation after = create your own
 
 START from 312
 
-ERROR.ROLE_NOT_SUPPORTED
+    public const string StatusNew = "STATUS.NEW";
+    public const string StatusActive = "STATUS.ACTIVE";
+    public const string StatusInactive = "STATUS.INACTIVE";
+    public const string StatusBlocked = "STATUS.BLOCKED";
+    public const string StatusDeleted = "STATUS.DELETED";
+    public const string StatusPending = "STATUS.PENDING";
+    public const string StatusApproved = "STATUS.APPROVED";
+    public const string StatusRejected = "STATUS.REJECTED";
+    public const string StatusCompleted = "STATUS.COMPLETED";
+    public const string StatusCancelled = "STATUS.CANCELLED";
+    public const string StatusArchived = "STATUS.ARCHIVED";
 
 do all for en after all for es etc
 do without empty lines

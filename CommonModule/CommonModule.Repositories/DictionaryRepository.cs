@@ -2,6 +2,7 @@ using AutoMapper;
 using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ namespace CommonModule.Repositories;
 
 public class DictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>: IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>
     where TEntityId : struct
-    where TEntity : class, IBaseIdEntity<TEntityId>, IActivatableEntity
+    where TEntity : class, IBaseIdEntity<TEntityId>, IStatusEntity
     where TResponse : class, IBaseIdEntity<TEntityId>
     where TDataContext : DbContext
 {
@@ -60,7 +61,7 @@ public class DictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>: 
     
         VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>
         {
-            Items = items.Where(i => i.IsActive).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
+            Items = items.Where(i => i.Status == StatusEnum.Active).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
             Version = currentVersion
         };
 

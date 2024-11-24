@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthGateway.Domain.Migrations
 {
     [DbContext(typeof(AuthGatewayDataContext))]
-    [Migration("20241123184815_InitUser")]
+    [Migration("20241124190228_InitUser")]
     partial class InitUser
     {
         /// <inheritdoc />
@@ -68,9 +68,6 @@ namespace AuthGateway.Domain.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsTemporaryPassword")
                         .HasColumnType("boolean");
 
@@ -99,6 +96,9 @@ namespace AuthGateway.Domain.Migrations
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

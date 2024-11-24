@@ -7,5 +7,4 @@ namespace Expenses.Mediatr.Mediatr.Projects.Commands;
 public class CreateUserProjectCommand: IRequest<BaseEntityIdResponse<Guid>>
 {
     [Required] [MaxLength(100)] public required string Title { get; set; }
-    public bool IsActive { get; set; }
 }

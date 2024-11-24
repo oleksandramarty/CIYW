@@ -7,7 +7,7 @@ using CommonModule.Shared.Enums;
 
 namespace AuthGateway.Domain.Models.Users;
 
-public class UserEntity: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
+public class UserEntity: BaseDateTimeEntity<Guid>, IStatusEntity, IBaseVersionEntity
 {
     [Required] [MaxLength(50)] public required string Login { get; set; }
     [Required] [MaxLength(50)] public required string LoginNormalized { get; set; }
@@ -15,7 +15,7 @@ public class UserEntity: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVers
     [Required] [MaxLength(50)] public required string EmailNormalized { get; set; }
     [Required] [MaxLength(120)] public required string PasswordHash { get; set; }
     [Required] [MaxLength(64)] public required string Salt { get; set; }
-    public bool IsActive { get; set; }
+    public StatusEnum Status { get; set; }
     public bool IsTemporaryPassword { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
     

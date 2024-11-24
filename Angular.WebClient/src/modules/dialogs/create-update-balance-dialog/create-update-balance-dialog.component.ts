@@ -75,13 +75,12 @@ export class CreateUpdateBalanceDialogComponent extends BaseUnsubscribeComponent
     }
 
     override ngOnInit(): void {
-        this.createUserForm();
+        this.createBalanceForm();
     }
 
-    private createUserForm() {
+    private createBalanceForm() {
         this.balanceFormGroup = this.fb.group({
             title: [this.balance?.title, [Validators.required]],
-            isActive: [this.balance?.isActive ?? true, [Validators.required]],
             currencyId: [this.balance?.currencyId, [Validators.required]],
             balanceTypeId: [this.balance?.balanceTypeId, [Validators.required]],
             iconId: [this.balance?.iconId, [Validators.required]],
@@ -107,21 +106,12 @@ export class CreateUpdateBalanceDialogComponent extends BaseUnsubscribeComponent
 
             this.loaderService.isBusy = true;
 
-            (!!this.balance ?
-                this.graphQlExpensesService.updateUserBalance(
-                    this.balance.id,
-                    ...this.inputParams)  :
-                this.graphQlExpensesService.createUserBalance(
-                    ...this.inputParams))
-                .pipe(
-                    takeUntil(this.ngUnsubscribe),
-                    tap(() => {
-                        this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', { duration: 3000 });
-                        this.loaderService.isBusy = false;
-                        this.dialogRef.close(true);
-                    }),
-                    handleApiError(this.snackBar)
-                ).subscribe();
+            if (!this.balance) {
+                this._createBalance();
+            } else {
+                this._updateBalance();
+            }
+
         }
 
         this.commonDialogService.showNoComplaintDialog(createOrUpdateBalanceAction, () => {})
@@ -131,14 +121,42 @@ export class CreateUpdateBalanceDialogComponent extends BaseUnsubscribeComponent
         this.snackBar.open('In development', 'Close', { duration: 3000 });
     }
 
-    get inputParams(): [string, boolean, number, number, string, number] {
+    get inputParams(): [string, number, number, string, number] {
         return [
             this.balanceFormGroup?.value.title,
-            this.balanceFormGroup?.value.isActive,
             Number(this.balanceFormGroup?.value.currencyId),
             Number(this.balanceFormGroup?.value.balanceTypeId),
             this.userProject!.id,
             this.balanceFormGroup?.value.iconId
         ];
+    }
+
+    private _createBalance(): void {
+        this.graphQlExpensesService.createUserBalance(
+            ...this.inputParams)
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                tap(() => {
+                    this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', { duration: 3000 });
+                    this.loaderService.isBusy = false;
+                    this.dialogRef.close(true);
+                }),
+                handleApiError(this.snackBar)
+            ).subscribe();
+    }
+
+    private _updateBalance(): void {
+        this.graphQlExpensesService.updateUserBalance(
+            this.balance!.id,
+            ...this.inputParams)
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                tap(() => {
+                    this.snackBar.open(this.localizationService?.getTranslation('SUCCESS') ?? '', 'Close', { duration: 3000 });
+                    this.loaderService.isBusy = false;
+                    this.dialogRef.close(true);
+                }),
+                handleApiError(this.snackBar)
+            ).subscribe();
     }
 }

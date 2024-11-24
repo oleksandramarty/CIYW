@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.GraphQL.Types.Responses.Expenses.Models.Balances;
 using CommonModule.Shared.Responses.Expenses.Models.Balances;
 using CommonModule.Shared.Responses.Expenses.Models.Projects;
@@ -11,7 +12,7 @@ public sealed class UserProjectResponseType : ObjectGraphType<UserProjectRespons
     {
         Field(x => x.Id);
         Field(x => x.Title, nullable: true);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
         Field(x => x.CreatedUserId);
         Field<ListGraphType<BalanceResponseType>>(nameof(UserProjectResponse.Balances));
         Field(x => x.Version);

@@ -53,13 +53,12 @@ export class CreateUpdateUserProjectDialogComponent extends BaseUnsubscribeCompo
   }
 
   override ngOnInit(): void {
-    this.createUserForm();
+    this.createUserProjectForm();
   }
 
-  private createUserForm() {
+  private createUserProjectForm() {
     this.userProjectForm = this.fb.group({
-      title: [this.userProject?.title, [Validators.required]],
-      isActive: [this.userProject?.isActive ?? true, [Validators.required]]
+      title: [this.userProject?.title, [Validators.required]]
     });
   }
 
@@ -83,8 +82,7 @@ export class CreateUpdateUserProjectDialogComponent extends BaseUnsubscribeCompo
       this.loaderService.isBusy = true;
 
       this.graphQlExpensesService.createUserProject(
-          this.userProjectForm.value.title,
-          this.userProjectForm.value.isActive)
+          this.userProjectForm.value.title)
           .pipe(
               takeUntil(this.ngUnsubscribe),
               tap(() => {

@@ -240,7 +240,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
     emailNormalized?: string | undefined;
     passwordHash?: string | undefined;
     salt?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     isTemporaryPassword!: boolean;
     authType!: UserAuthMethodEnum;
     lastForgotPassword?: Date | undefined;
@@ -265,7 +265,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
             this.emailNormalized = _data["emailNormalized"];
             this.passwordHash = _data["passwordHash"];
             this.salt = _data["salt"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.isTemporaryPassword = _data["isTemporaryPassword"];
             this.authType = _data["authType"];
             this.lastForgotPassword = _data["lastForgotPassword"] ? new Date(_data["lastForgotPassword"].toString()) : <any>undefined;
@@ -295,7 +295,7 @@ export class UserResponse extends BaseDateTimeEntityOfGuid implements IUserRespo
         data["emailNormalized"] = this.emailNormalized;
         data["passwordHash"] = this.passwordHash;
         data["salt"] = this.salt;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["isTemporaryPassword"] = this.isTemporaryPassword;
         data["authType"] = this.authType;
         data["lastForgotPassword"] = this.lastForgotPassword ? this.lastForgotPassword.toISOString() : <any>undefined;
@@ -319,7 +319,7 @@ export interface IUserResponse extends IBaseDateTimeEntityOfGuid {
     emailNormalized?: string | undefined;
     passwordHash?: string | undefined;
     salt?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     isTemporaryPassword: boolean;
     authType: UserAuthMethodEnum;
     lastForgotPassword?: Date | undefined;
@@ -327,6 +327,20 @@ export interface IUserResponse extends IBaseDateTimeEntityOfGuid {
     roles: RoleResponse[];
     userSetting?: UserSettingResponse | undefined;
     version: string;
+}
+
+export enum StatusEnum {
+    New = 0,
+    Active = 1,
+    Inactive = 2,
+    Blocked = 3,
+    Deleted = 4,
+    Pending = 5,
+    Approved = 6,
+    Rejected = 7,
+    Completed = 8,
+    Cancelled = 9,
+    Archived = 10,
 }
 
 export enum UserAuthMethodEnum {
@@ -1163,7 +1177,7 @@ export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements 
     createdUserId!: string;
     userProjectId!: string;
     frequencyId!: number;
-    isActive!: boolean;
+    status!: StatusEnum;
     version!: string;
 
     constructor(data?: IPlannedExpenseResponse) {
@@ -1184,7 +1198,7 @@ export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements 
             this.createdUserId = _data["createdUserId"];
             this.userProjectId = _data["userProjectId"];
             this.frequencyId = _data["frequencyId"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.version = _data["version"];
         }
     }
@@ -1209,7 +1223,7 @@ export class PlannedExpenseResponse extends BaseDateTimeEntityOfGuid implements 
         data["createdUserId"] = this.createdUserId;
         data["userProjectId"] = this.userProjectId;
         data["frequencyId"] = this.frequencyId;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["version"] = this.version;
         super.toJSON(data);
         return data;
@@ -1228,7 +1242,7 @@ export interface IPlannedExpenseResponse extends IBaseDateTimeEntityOfGuid {
     createdUserId: string;
     userProjectId: string;
     frequencyId: number;
-    isActive: boolean;
+    status: StatusEnum;
     version: string;
 }
 
@@ -1289,7 +1303,7 @@ export interface IFilteredListResponseOfUserProjectResponse {
 
 export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUserProjectResponse {
     title?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     createdUserId!: string;
     balances!: BalanceResponse[];
     version!: string;
@@ -1305,7 +1319,7 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
         super.init(_data);
         if (_data) {
             this.title = _data["title"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.createdUserId = _data["createdUserId"];
             if (Array.isArray(_data["balances"])) {
                 this.balances = [] as any;
@@ -1326,7 +1340,7 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["createdUserId"] = this.createdUserId;
         if (Array.isArray(this.balances)) {
             data["balances"] = [];
@@ -1341,7 +1355,7 @@ export class UserProjectResponse extends BaseDateTimeEntityOfGuid implements IUs
 
 export interface IUserProjectResponse extends IBaseDateTimeEntityOfGuid {
     title?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     createdUserId: string;
     balances: BalanceResponse[];
     version: string;
@@ -1356,7 +1370,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
     userProjectId!: string;
     version!: string;
     balanceTypeId!: number;
-    isActive!: boolean;
+    status!: StatusEnum;
 
     constructor(data?: IBalanceResponse) {
         super(data);
@@ -1373,7 +1387,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
             this.userProjectId = _data["userProjectId"];
             this.version = _data["version"];
             this.balanceTypeId = _data["balanceTypeId"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
         }
     }
 
@@ -1394,7 +1408,7 @@ export class BalanceResponse extends BaseDateTimeEntityOfGuid implements IBalanc
         data["userProjectId"] = this.userProjectId;
         data["version"] = this.version;
         data["balanceTypeId"] = this.balanceTypeId;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         super.toJSON(data);
         return data;
     }
@@ -1409,7 +1423,7 @@ export interface IBalanceResponse extends IBaseDateTimeEntityOfGuid {
     userProjectId: string;
     version: string;
     balanceTypeId: number;
-    isActive: boolean;
+    status: StatusEnum;
 }
 
 export class FilteredListResponseOfUserAllowedProjectResponse implements IFilteredListResponseOfUserAllowedProjectResponse {
@@ -1786,7 +1800,7 @@ export class CurrencyResponse extends BaseIdEntityOfInteger implements ICurrency
     code?: string | undefined;
     symbol?: string | undefined;
     titleEn?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     countries!: CountryResponse[];
 
     constructor(data?: ICurrencyResponse) {
@@ -1803,7 +1817,7 @@ export class CurrencyResponse extends BaseIdEntityOfInteger implements ICurrency
             this.code = _data["code"];
             this.symbol = _data["symbol"];
             this.titleEn = _data["titleEn"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             if (Array.isArray(_data["countries"])) {
                 this.countries = [] as any;
                 for (let item of _data["countries"])
@@ -1825,7 +1839,7 @@ export class CurrencyResponse extends BaseIdEntityOfInteger implements ICurrency
         data["code"] = this.code;
         data["symbol"] = this.symbol;
         data["titleEn"] = this.titleEn;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         if (Array.isArray(this.countries)) {
             data["countries"] = [];
             for (let item of this.countries)
@@ -1841,7 +1855,7 @@ export interface ICurrencyResponse extends IBaseIdEntityOfInteger {
     code?: string | undefined;
     symbol?: string | undefined;
     titleEn?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     countries: CountryResponse[];
 }
 
@@ -1849,7 +1863,7 @@ export class CountryResponse extends BaseIdEntityOfInteger implements ICountryRe
     title?: string | undefined;
     code?: string | undefined;
     titleEn?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     currencies!: CurrencyResponse[];
 
     constructor(data?: ICountryResponse) {
@@ -1865,7 +1879,7 @@ export class CountryResponse extends BaseIdEntityOfInteger implements ICountryRe
             this.title = _data["title"];
             this.code = _data["code"];
             this.titleEn = _data["titleEn"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             if (Array.isArray(_data["currencies"])) {
                 this.currencies = [] as any;
                 for (let item of _data["currencies"])
@@ -1886,7 +1900,7 @@ export class CountryResponse extends BaseIdEntityOfInteger implements ICountryRe
         data["title"] = this.title;
         data["code"] = this.code;
         data["titleEn"] = this.titleEn;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         if (Array.isArray(this.currencies)) {
             data["currencies"] = [];
             for (let item of this.currencies)
@@ -1901,7 +1915,7 @@ export interface ICountryResponse extends IBaseIdEntityOfInteger {
     title?: string | undefined;
     code?: string | undefined;
     titleEn?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     currencies: CurrencyResponse[];
 }
 
@@ -1952,7 +1966,7 @@ export interface IVersionedListResponseOfFrequencyResponse extends IBaseVersionE
 export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequencyResponse {
     title?: string | undefined;
     description?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     type!: FrequencyEnum;
 
     constructor(data?: IFrequencyResponse) {
@@ -1964,7 +1978,7 @@ export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequen
         if (_data) {
             this.title = _data["title"];
             this.description = _data["description"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.type = _data["type"];
         }
     }
@@ -1980,7 +1994,7 @@ export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequen
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["description"] = this.description;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["type"] = this.type;
         super.toJSON(data);
         return data;
@@ -1990,7 +2004,7 @@ export class FrequencyResponse extends BaseIdEntityOfInteger implements IFrequen
 export interface IFrequencyResponse extends IBaseIdEntityOfInteger {
     title?: string | undefined;
     description?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     type: FrequencyEnum;
 }
 
@@ -2057,7 +2071,7 @@ export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResp
     titleNormalized?: string | undefined;
     titleEnNormalized?: string | undefined;
     isDefault!: boolean;
-    isActive!: boolean;
+    status!: StatusEnum;
     localeEnum!: LocaleEnum;
     culture?: string | undefined;
 
@@ -2074,7 +2088,7 @@ export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResp
             this.titleNormalized = _data["titleNormalized"];
             this.titleEnNormalized = _data["titleEnNormalized"];
             this.isDefault = _data["isDefault"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.localeEnum = _data["localeEnum"];
             this.culture = _data["culture"];
         }
@@ -2095,7 +2109,7 @@ export class LocaleResponse extends BaseIdEntityOfInteger implements ILocaleResp
         data["titleNormalized"] = this.titleNormalized;
         data["titleEnNormalized"] = this.titleEnNormalized;
         data["isDefault"] = this.isDefault;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["localeEnum"] = this.localeEnum;
         data["culture"] = this.culture;
         super.toJSON(data);
@@ -2110,7 +2124,7 @@ export interface ILocaleResponse extends IBaseIdEntityOfInteger {
     titleNormalized?: string | undefined;
     titleEnNormalized?: string | undefined;
     isDefault: boolean;
-    isActive: boolean;
+    status: StatusEnum;
     localeEnum: LocaleEnum;
     culture?: string | undefined;
 }
@@ -2217,7 +2231,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
     title?: string | undefined;
     iconId!: number;
     color?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     isPositive!: boolean;
     parentId?: number | undefined;
     children!: CategoryResponse[];
@@ -2235,7 +2249,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
             this.title = _data["title"];
             this.iconId = _data["iconId"];
             this.color = _data["color"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.isPositive = _data["isPositive"];
             this.parentId = _data["parentId"];
             if (Array.isArray(_data["children"])) {
@@ -2258,7 +2272,7 @@ export class CategoryResponse extends BaseIdEntityOfInteger implements ICategory
         data["title"] = this.title;
         data["iconId"] = this.iconId;
         data["color"] = this.color;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["isPositive"] = this.isPositive;
         data["parentId"] = this.parentId;
         if (Array.isArray(this.children)) {
@@ -2275,7 +2289,7 @@ export interface ICategoryResponse extends IBaseIdEntityOfInteger {
     title?: string | undefined;
     iconId: number;
     color?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     isPositive: boolean;
     parentId?: number | undefined;
     children: CategoryResponse[];
@@ -2327,7 +2341,7 @@ export interface IVersionedListResponseOfBalanceTypeResponse extends IBaseVersio
 
 export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalanceTypeResponse {
     title?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     type!: BalanceEnum;
 
     constructor(data?: IBalanceTypeResponse) {
@@ -2338,7 +2352,7 @@ export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalan
         super.init(_data);
         if (_data) {
             this.title = _data["title"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.type = _data["type"];
         }
     }
@@ -2353,7 +2367,7 @@ export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalan
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["type"] = this.type;
         super.toJSON(data);
         return data;
@@ -2362,7 +2376,7 @@ export class BalanceTypeResponse extends BaseIdEntityOfInteger implements IBalan
 
 export interface IBalanceTypeResponse extends IBaseIdEntityOfInteger {
     title?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     type: BalanceEnum;
 }
 
@@ -2419,7 +2433,7 @@ export interface IVersionedListResponseOfIconCategoryResponse extends IBaseVersi
 
 export class IconCategoryResponse extends BaseIdEntityOfInteger implements IIconCategoryResponse {
     title?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     icons!: IconResponse[];
 
     constructor(data?: IIconCategoryResponse) {
@@ -2433,7 +2447,7 @@ export class IconCategoryResponse extends BaseIdEntityOfInteger implements IIcon
         super.init(_data);
         if (_data) {
             this.title = _data["title"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             if (Array.isArray(_data["icons"])) {
                 this.icons = [] as any;
                 for (let item of _data["icons"])
@@ -2452,7 +2466,7 @@ export class IconCategoryResponse extends BaseIdEntityOfInteger implements IIcon
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         if (Array.isArray(this.icons)) {
             data["icons"] = [];
             for (let item of this.icons)
@@ -2465,13 +2479,13 @@ export class IconCategoryResponse extends BaseIdEntityOfInteger implements IIcon
 
 export interface IIconCategoryResponse extends IBaseIdEntityOfInteger {
     title?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     icons: IconResponse[];
 }
 
 export class IconResponse extends BaseIdEntityOfInteger implements IIconResponse {
     title?: string | undefined;
-    isActive!: boolean;
+    status!: StatusEnum;
     iconCategoryId!: number;
 
     constructor(data?: IIconResponse) {
@@ -2482,7 +2496,7 @@ export class IconResponse extends BaseIdEntityOfInteger implements IIconResponse
         super.init(_data);
         if (_data) {
             this.title = _data["title"];
-            this.isActive = _data["isActive"];
+            this.status = _data["status"];
             this.iconCategoryId = _data["iconCategoryId"];
         }
     }
@@ -2497,7 +2511,7 @@ export class IconResponse extends BaseIdEntityOfInteger implements IIconResponse
     override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["isActive"] = this.isActive;
+        data["status"] = this.status;
         data["iconCategoryId"] = this.iconCategoryId;
         super.toJSON(data);
         return data;
@@ -2506,7 +2520,7 @@ export class IconResponse extends BaseIdEntityOfInteger implements IIconResponse
 
 export interface IIconResponse extends IBaseIdEntityOfInteger {
     title?: string | undefined;
-    isActive: boolean;
+    status: StatusEnum;
     iconCategoryId: number;
 }
 
@@ -2544,5 +2558,77 @@ export class BaseBoolResponse implements IBaseBoolResponse {
 
 export interface IBaseBoolResponse {
     success: boolean;
+}
+
+export class BaseEntityIdResponseOfGuid implements IBaseEntityIdResponseOfGuid {
+    id!: string;
+
+    constructor(data?: IBaseEntityIdResponseOfGuid) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): BaseEntityIdResponseOfGuid {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseEntityIdResponseOfGuid();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IBaseEntityIdResponseOfGuid {
+    id: string;
+}
+
+export class BaseEntityIdResponseOfInteger implements IBaseEntityIdResponseOfInteger {
+    id!: number;
+
+    constructor(data?: IBaseEntityIdResponseOfInteger) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): BaseEntityIdResponseOfInteger {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseEntityIdResponseOfInteger();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IBaseEntityIdResponseOfInteger {
+    id: number;
 }
 

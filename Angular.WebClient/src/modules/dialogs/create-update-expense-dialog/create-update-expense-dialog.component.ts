@@ -154,27 +154,63 @@ export class CreateUpdateExpenseDialogComponent extends BaseUnsubscribeComponent
 
             this.loaderService.isBusy = true;
 
-            this.graphQlExpensesService.createOrUpdateExpense(
-                this.expense?.id,
-                this.expenseFormGroup.value.title,
-                this.expenseFormGroup.value.description,
-                Number(this.expenseFormGroup.value.amount),
-                this.expenseFormGroup.value.balanceId,
-                this.expenseFormGroup.value.date,
-                Number(this.expenseFormGroup.value.categoryId),
-                !this.expense ? this.userProject?.id : undefined,
-                !this.expense ? this.favoriteExpense?.id : undefined
-            ).pipe(
-                takeUntil(this.ngUnsubscribe),
-                tap(() => {
-                    this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', { duration: 3000 });
-                    this.loaderService.isBusy = false;
-                    this.dialogRef.close(true);
-                }),
-                handleApiError(this.snackBar, this.localizationService)
-            ).subscribe();
+            if (!this.expense) {
+                this._createExpense();
+            } else {
+                this._updateExpense();
+            }
+
         }
 
         this.commonDialogService.showNoComplaintDialog(createOrUpdateExpenseAction, () => {});
+    }
+
+    private _createExpense(): void {
+        if (!this.expenseFormGroup) {
+            return;
+        }
+
+        this.graphQlExpensesService.createExpense(
+            this.expenseFormGroup.value.title,
+            this.expenseFormGroup.value.description,
+            Number(this.expenseFormGroup.value.amount),
+            this.expenseFormGroup.value.balanceId,
+            this.expenseFormGroup.value.date,
+            Number(this.expenseFormGroup.value.categoryId),
+            this.userProject?.id,
+            this.favoriteExpense?.id
+        ).pipe(
+            takeUntil(this.ngUnsubscribe),
+            tap(() => {
+                this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', { duration: 3000 });
+                this.loaderService.isBusy = false;
+                this.dialogRef.close(true);
+            }),
+            handleApiError(this.snackBar, this.localizationService)
+        ).subscribe();
+    }
+
+    private _updateExpense(): void {
+        if (!this.expenseFormGroup) {
+            return;
+        }
+
+        this.graphQlExpensesService.updateExpense(
+            this.expense?.id,
+            this.expenseFormGroup.value.title,
+            this.expenseFormGroup.value.description,
+            Number(this.expenseFormGroup.value.amount),
+            this.expenseFormGroup.value.balanceId,
+            this.expenseFormGroup.value.date,
+            Number(this.expenseFormGroup.value.categoryId)
+        ).pipe(
+            takeUntil(this.ngUnsubscribe),
+            tap(() => {
+                this.snackBar.open(this.localizationService?.getTranslation('SUCCESS.EXPENSE_CREATED') ?? 'SUCCESS', 'Close', { duration: 3000 });
+                this.loaderService.isBusy = false;
+                this.dialogRef.close(true);
+            }),
+            handleApiError(this.snackBar, this.localizationService)
+        ).subscribe();
     }
 }

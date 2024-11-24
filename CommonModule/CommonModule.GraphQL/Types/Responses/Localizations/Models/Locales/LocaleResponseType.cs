@@ -15,7 +15,7 @@ public sealed class LocaleResponseType : ObjectGraphType<LocaleResponse>
         Field(x => x.TitleNormalized);
         Field(x => x.TitleEnNormalized);
         Field(x => x.IsDefault);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
         Field(x => x.LocaleEnum, type: typeof(LocaleEnumType));
         Field(x => x.Culture);
     }

@@ -3,13 +3,14 @@ using CommonModule.Core.Exceptions;
 using CommonModule.Core.Extensions;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Common.BaseInterfaces;
+using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommonModule.Repositories;
 
 public class TreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TResponse, TDataContext>: ITreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TResponse, TDataContext>
-    where TEntity : class, ITreeEntityEntity<TEntityId, TEntityIdParentId>, IActivatableEntity
+    where TEntity : class, ITreeEntityEntity<TEntityId, TEntityIdParentId>, IStatusEntity
     where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {
@@ -62,8 +63,8 @@ public class TreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TRe
         VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>
         {
             Items = await BuildSummitsTreeNode(
-                items.Where(c => c.ParentId == null && c.IsActive), 
-                items.Where(c => c.ParentId != null && c.IsActive), 
+                items.Where(c => c.ParentId == null && c.Status == StatusEnum.Active), 
+                items.Where(c => c.ParentId != null && c.Status == StatusEnum.Active), 
                 cancellationToken),
             Version = currentVersion
         };

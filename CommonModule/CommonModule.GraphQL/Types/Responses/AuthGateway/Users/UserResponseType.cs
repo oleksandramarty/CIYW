@@ -1,3 +1,4 @@
+using CommonModule.GraphQL.Types.EnumType;
 using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.AuthGateway.Users;
 using GraphQL.Types;
@@ -11,7 +12,7 @@ public sealed class UserResponseType : ObjectGraphType<UserResponse>
         Field(x => x.Id);
         Field(x => x.Login);
         Field(x => x.Email);
-        Field(x => x.IsActive);
+        Field(x => x.Status, type: typeof(StatusEnumType));
         Field(x => x.IsTemporaryPassword);
         Field(x => x.AuthType, type: typeof(EnumerationGraphType<UserAuthMethodEnum>));
         Field(x => x.LastForgotPassword, nullable: true);

@@ -28,7 +28,7 @@ bulkInsertSQL=""
 
 log_file=$(cd "$(dirname "$0")" && pwd | sed 's|/InitScripts||')"/provision_logs.txt"
 # Read the CSV file line by line
-while IFS=';' read -r id titleEn title code symbol isActive;
+while IFS=';' read -r id titleEn title code symbol status;
 do
   # Skip the header line
   if [ "$id" != "id" ]; then
@@ -38,14 +38,12 @@ do
 
     # If the currency does not exist, prepare the SQL for bulk insert
     if [ -z "$currency_exists" ]; then
-      # Convert boolean values to integers
-      isActiveBool=$( [ "$isActive" == "1" ] && echo true || echo false )
 
       if [ "$isBulkUpdate" == "true" ]; then
         # Construct the SQL command
         bulkInsertSQL+="INSERT INTO \"$db_name\".\"Dictionaries\".\"Currencies\" 
-        (\"Id\", \"TitleEn\", \"Title\", \"Code\", \"Symbol\", \"IsActive\") 
-        VALUES ($id, '$titleEn', '$title', '$code', '$symbol', $isActiveBool);"
+        (\"Id\", \"TitleEn\", \"Title\", \"Code\", \"Symbol\", \"Status\") 
+        VALUES ($id, '$titleEn', '$title', '$code', '$symbol', $status);"
         ((bulkCounter++))
 
         # If bulkCounter reaches 500, execute the bulk insert
@@ -63,8 +61,8 @@ do
       else
         # Non-bulk insert
         sql="INSERT INTO \"$db_name\".\"Dictionaries\".\"Currencies\" 
-        (\"Id\", \"TitleEn\", \"Title\", \"Code\", \"Symbol\", \"IsActive\") 
-        VALUES ($id, '$titleEn', '$title', '$code', '$symbol', $isActiveBool);"
+        (\"Id\", \"TitleEn\", \"Title\", \"Code\", \"Symbol\", \"Status\") 
+        VALUES ($id, '$titleEn', '$title', '$code', '$symbol', $status);"
         if psql -h $db_host -p $db_port -d $db_name -U $db_user -c "$sql" > /dev/null; then
           echo "Currency with ID $id added successfully."
         else

@@ -8,6 +8,5 @@ public sealed class UpdateUserProjectInputType : InputObjectGraphType
     {
         Name = "UpdateUserProjectInput";
         Field<NonNullGraphType<StringGraphType>>("title");
-        Field<NonNullGraphType<BooleanGraphType>>("isActive");
     }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Localizations.Domain.Migrations
 {
     [DbContext(typeof(LocalizationsDataContext))]
-    [Migration("20241123184755_InitLocalization")]
+    [Migration("20241124190218_InitLocalization")]
     partial class InitLocalization
     {
         /// <inheritdoc />
@@ -38,9 +38,6 @@ namespace Localizations.Domain.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("character varying(8)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsDefault")
                         .HasColumnType("boolean");
 
@@ -51,6 +48,9 @@ namespace Localizations.Domain.Migrations
                         .IsFixedLength();
 
                     b.Property<int>("LocaleEnum")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")

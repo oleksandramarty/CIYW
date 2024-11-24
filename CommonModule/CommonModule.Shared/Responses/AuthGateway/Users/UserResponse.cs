@@ -6,7 +6,7 @@ using CommonModule.Shared.Enums;
 
 namespace CommonModule.Shared.Responses.AuthGateway.Users;
 
-public class UserResponse: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVersionEntity
+public class UserResponse: BaseDateTimeEntity<Guid>, IStatusEntity, IBaseVersionEntity
 {
     public string? Login { get; set; }
     public string? LoginNormalized { get; set; }
@@ -14,7 +14,7 @@ public class UserResponse: BaseDateTimeEntity<Guid>, IActivatableEntity, IBaseVe
     public string? EmailNormalized { get; set; }
     public string? PasswordHash { get; set; }
     public string? Salt { get; set; }
-    public bool IsActive { get; set; }
+    public StatusEnum Status { get; set; }
     public bool IsTemporaryPassword { get; set; }
     public UserAuthMethodEnum AuthType { get; set; }
     

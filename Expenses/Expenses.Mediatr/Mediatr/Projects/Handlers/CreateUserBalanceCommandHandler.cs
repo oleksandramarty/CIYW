@@ -3,6 +3,7 @@ using CommonModule.Core.Exceptions;
 using CommonModule.Core.Mediatr;
 using CommonModule.Interfaces;
 using CommonModule.Shared.Constants;
+using CommonModule.Shared.Enums;
 using CommonModule.Shared.Responses.Base;
 using Expenses.Domain;
 using Expenses.Domain.Models.Balances;
@@ -46,6 +47,7 @@ public class CreateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandl
         
         BalanceEntity balanceEntity = this.mapper.Map<CreateUserBalanceCommand, BalanceEntity>(command);
         balanceEntity.UserId = await this.CurrentUserIdAsync();
+        balanceEntity.Status = StatusEnum.Active;
         await this.balanceRepository.AddAsync(balanceEntity, cancellationToken);
 
         return new BaseEntityIdResponse<Guid>

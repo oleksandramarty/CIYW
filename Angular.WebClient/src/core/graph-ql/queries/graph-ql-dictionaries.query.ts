@@ -27,7 +27,7 @@ export const COUNTRIES_DICTIONARY = gql`
                 title
                 code
                 titleEn
-                isActive
+                status
             }
             version
         }
@@ -43,7 +43,7 @@ export const CURRENCIES_DICTIONARY = gql`
                 code
                 symbol
                 titleEn
-                isActive
+                status
             }
             version
         }
@@ -57,7 +57,7 @@ export const FREQUENCIES_DICTIONARY = gql`
                 id
                 title
                 description
-                isActive
+                status
                 type
             }
             version
@@ -71,7 +71,7 @@ export const BALANCE_TYPES_DICTIONARY = gql`
             items {
                 id
                 title
-                isActive
+                status
                 type
             }
             version
@@ -103,7 +103,7 @@ export const CATEGORIES_DICTIONARY = gql`
         title
         iconId
         color
-        isActive
+        status
         isPositive
         parentId
     }
@@ -115,11 +115,11 @@ export const ICON_CATEGORIES_DICTIONARY = gql`
             items {
                 id
                 title
-                isActive
+                status
                 icons {
                     id
                     title
-                    isActive
+                    status
                     iconCategoryId
                 }
             }
@@ -141,11 +141,11 @@ export const NON_PUBLIC_DICTIONARIES = gql`
             items {
                 id
                 title
-                isActive
+                status
                 icons {
                     id
                     title
-                    isActive
+                    status
                     iconCategoryId
                 }
             }
@@ -170,7 +170,7 @@ export const NON_PUBLIC_DICTIONARIES = gql`
             items {
                 id
                 title
-                isActive
+                status
                 type
             }
             version
@@ -180,7 +180,7 @@ export const NON_PUBLIC_DICTIONARIES = gql`
                 id
                 title
                 description
-                isActive
+                status
                 type
             }
             version
@@ -192,7 +192,7 @@ export const NON_PUBLIC_DICTIONARIES = gql`
                 code
                 symbol
                 titleEn
-                isActive
+                status
             }
             version
         }
@@ -202,7 +202,7 @@ export const NON_PUBLIC_DICTIONARIES = gql`
                 title
                 code
                 titleEn
-                isActive
+                status
             }
             version
         }
@@ -213,7 +213,7 @@ export const NON_PUBLIC_DICTIONARIES = gql`
         title
         iconId
         color
-        isActive
+        status
         isPositive
         parentId
     }

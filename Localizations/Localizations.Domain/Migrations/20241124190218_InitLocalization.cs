@@ -28,7 +28,7 @@ namespace Localizations.Domain.Migrations
                     TitleNormalized = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     TitleEnNormalized = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     IsDefault = table.Column<bool>(type: "boolean", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     LocaleEnum = table.Column<int>(type: "integer", nullable: false),
                     Culture = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false)
                 },
