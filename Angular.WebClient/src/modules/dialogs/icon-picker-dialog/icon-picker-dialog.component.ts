@@ -8,18 +8,17 @@ import {DictionaryService} from "../../../core/services/dictionary.service";
 import {VersionedListResponseOfIconCategoryResponse} from "../../../core/api-models/common.models";
 
 @Component({
-  selector: 'app-icon-picker-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CommonLoaderComponent,
-    CurrencyPipe,
-    MatButtonModule,
-    MatDialogTitle,
-    SharedModule
-  ],
-  templateUrl: './icon-picker-dialog.component.html',
-  styleUrls: ['./icon-picker-dialog.component.scss']
+    selector: 'app-icon-picker-dialog',
+    imports: [
+        CommonModule,
+        CommonLoaderComponent,
+        CurrencyPipe,
+        MatButtonModule,
+        MatDialogTitle,
+        SharedModule
+    ],
+    templateUrl: './icon-picker-dialog.component.html',
+    styleUrls: ['./icon-picker-dialog.component.scss']
 })
 export class IconPickerDialogComponent {
   activeIndex: number = 0;

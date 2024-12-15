@@ -11,9 +11,10 @@ import {
 import {BaseUnsubscribeComponent} from "../../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
-  selector: 'app-dashboard-user-projects',
-  templateUrl: './dashboard-user-projects.component.html',
-  styleUrl: './dashboard-user-projects.component.scss'
+    selector: 'app-dashboard-user-projects',
+    templateUrl: './dashboard-user-projects.component.html',
+    styleUrl: './dashboard-user-projects.component.scss',
+    standalone: false
 })
 export class DashboardUserProjectsComponent extends BaseUnsubscribeComponent {
   get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {

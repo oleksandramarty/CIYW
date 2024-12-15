@@ -24,7 +24,8 @@ import {createUserProjectPlannedExpensesHeader, ITableHeaderItem} from "../../..
 @Component({
     selector: 'app-user-project-planned-expenses',
     templateUrl: './user-project-planned-expenses.component.html',
-    styleUrl: '../user-project.component.scss'
+    styleUrl: '../user-project.component.scss',
+    standalone: false
 })
 export class UserProjectPlannedExpensesComponent extends BaseFilterComponent<FilteredListResponseOfPlannedExpenseResponse, [BaseGraphQlFilteredModel, string, number[]]> {
     @Input() userProject: UserProjectResponse | undefined;

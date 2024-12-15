@@ -4,7 +4,8 @@ import { Subject, takeUntil, tap } from 'rxjs';
 import {BaseUnsubscribeComponent} from "../base-components/base-unsubscribe.compoinent";
 
 @Directive({
-  selector: '[translation]'
+    selector: '[translation]',
+    standalone: false
 })
 export class TranslateDirective extends BaseUnsubscribeComponent {
   @Input('translation') key: string | undefined;

@@ -13,7 +13,8 @@ import {Router} from "@angular/router";
 @Component({
     selector: 'app-common-quick-actions',
     templateUrl: './common-quick-actions.component.html',
-    styleUrls: ['./common-quick-actions.component.scss']
+    styleUrls: ['./common-quick-actions.component.scss'],
+    standalone: false
 })
 export class CommonQuickActionsComponent extends BaseAuthorizeComponent {
     public quickActionsOpen: boolean = false;

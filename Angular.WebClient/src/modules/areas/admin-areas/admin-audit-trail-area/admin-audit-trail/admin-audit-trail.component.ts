@@ -28,7 +28,8 @@ import {
 @Component({
     selector: 'app-admin-audit-trail',
     templateUrl: './admin-audit-trail.component.html',
-    styleUrl: './admin-audit-trail.component.scss'
+    styleUrl: './admin-audit-trail.component.scss',
+    standalone: false
 })
 export class AdminAuditTrailComponent extends BaseFilterComponent<FilteredListResponseOfAuditTrailResponse, [
     BaseGraphQlFilteredModel,

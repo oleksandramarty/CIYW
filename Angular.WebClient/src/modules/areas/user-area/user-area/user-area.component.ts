@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user-area',
-  templateUrl: './user-area.component.html',
-  styleUrl: './user-area.component.scss'
+    selector: 'app-user-area',
+    templateUrl: './user-area.component.html',
+    styleUrl: './user-area.component.scss',
+    standalone: false
 })
 export class UserAreaComponent {
 

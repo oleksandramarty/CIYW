@@ -17,7 +17,6 @@ import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-un
 
 @Component({
     selector: 'app-input-icon-picker',
-    standalone: true,
     imports: [
         CommonModule,
         MatDialogModule,

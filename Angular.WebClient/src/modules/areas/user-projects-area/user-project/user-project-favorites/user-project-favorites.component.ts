@@ -24,7 +24,8 @@ import {map} from "rxjs/operators";
 @Component({
     selector: 'app-user-project-favorites',
     templateUrl: './user-project-favorites.component.html',
-    styleUrl: '../user-project.component.scss'
+    styleUrl: '../user-project.component.scss',
+    standalone: false
 })
 export class UserProjectFavoritesComponent extends BaseFilterComponent<FilteredListResponseOfFavoriteExpenseResponse, [BaseGraphQlFilteredModel, string, number[]]> {
     @Input() userProject: UserProjectResponse | undefined;

@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 
 @Component({
     selector: 'app-night-sky',
-    standalone: true,
     imports: [CommonModule],
     templateUrl: './night-sky.component.html',
     styleUrls: ['./night-sky.component.scss']

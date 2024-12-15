@@ -3,7 +3,8 @@ import { LocalizationService } from '../services/localization.service';
 
 @Pipe({
     name: 'translation',
-    pure: false
+    pure: false,
+    standalone: false
 })
 export class TranslationPipe implements PipeTransform {
     constructor(private localizationService: LocalizationService) {}

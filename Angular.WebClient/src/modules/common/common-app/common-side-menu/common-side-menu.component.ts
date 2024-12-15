@@ -12,10 +12,11 @@ import {of, tap} from "rxjs";
 import {fadeInOut, slideInFromLeft, slideInOut} from "../../../../core/animations/animations";
 
 @Component({
-  selector: 'app-common-side-menu',
-  templateUrl: './common-side-menu.component.html',
-  styleUrl: './common-side-menu.component.scss',
-  animations: [fadeInOut, slideInOut, slideInFromLeft]
+    selector: 'app-common-side-menu',
+    templateUrl: './common-side-menu.component.html',
+    styleUrl: './common-side-menu.component.scss',
+    animations: [fadeInOut, slideInOut, slideInFromLeft],
+    standalone: false
 })
 export class CommonSideMenuComponent extends BaseAuthorizeComponent {
   private _isSideMenuVisible$ = this.store.select(selectMenuState);

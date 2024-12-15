@@ -8,9 +8,10 @@ import {selectToken} from "../../../../core/store/selectors/auth.selectors";
 import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
-  selector: 'app-auth-area',
-  templateUrl: './auth-area.component.html',
-  styleUrl: './auth-area.component.scss'
+    selector: 'app-auth-area',
+    templateUrl: './auth-area.component.html',
+    styleUrl: './auth-area.component.scss',
+    standalone: false
 })
 export class AuthAreaComponent extends BaseUnsubscribeComponent {
   constructor(

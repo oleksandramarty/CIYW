@@ -7,9 +7,10 @@ import { AuthService } from "../../../../core/services/auth.service";
 import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
-  selector: 'app-auth-sign-in',
-  templateUrl: './auth-sign-in.component.html',
-  styleUrl: '../auth-area/auth-area.component.scss',
+    selector: 'app-auth-sign-in',
+    templateUrl: './auth-sign-in.component.html',
+    styleUrl: '../auth-area/auth-area.component.scss',
+    standalone: false
 })
 export class AuthSignInComponent extends BaseUnsubscribeComponent {
   loginForm: FormGroup | undefined;

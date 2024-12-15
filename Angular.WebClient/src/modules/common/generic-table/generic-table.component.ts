@@ -8,19 +8,18 @@ import {PaginatorEntity} from "../../../core/api-models/common.models";
 import {CommonPaginatorComponent} from "../common-paginator/common-paginator.component";
 
 @Component({
-  selector: 'app-generic-table',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    SharedModule,
-    MatDividerModule,
-    MatTooltipModule,
-    CommonPaginatorComponent
-  ],
-  templateUrl: './generic-table.component.html',
-  styleUrl: './generic-table.component.scss'
+    selector: 'app-generic-table',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        SharedModule,
+        MatDividerModule,
+        MatTooltipModule,
+        CommonPaginatorComponent
+    ],
+    templateUrl: './generic-table.component.html',
+    styleUrl: './generic-table.component.scss'
 })
 export class GenericTableComponent {
   @Input() public totalCount: number | undefined;

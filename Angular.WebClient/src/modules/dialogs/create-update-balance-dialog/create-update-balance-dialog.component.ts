@@ -27,8 +27,7 @@ import {InputIconPickerComponent} from "../../common/common-input/input-icon-pic
 import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
-  selector: 'app-create-update-balance-dialog',
-    standalone: true,
+    selector: 'app-create-update-balance-dialog',
     imports: [
         CommonModule,
         MatDialogModule,
@@ -39,8 +38,8 @@ import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsub
         RouterLink,
         SharedModule,
     ],
-  templateUrl: './create-update-balance-dialog.component.html',
-  styleUrl: './create-update-balance-dialog.component.scss'
+    templateUrl: './create-update-balance-dialog.component.html',
+    styleUrl: './create-update-balance-dialog.component.scss'
 })
 export class CreateUpdateBalanceDialogComponent extends BaseUnsubscribeComponent {
     public balance: BalanceResponse | undefined;

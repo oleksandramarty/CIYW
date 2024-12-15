@@ -6,7 +6,6 @@ import {CommonModule} from "@angular/common";
 
 @Component({
     selector: 'app-common-loader',
-    standalone: true,
     imports: [
         MatProgressSpinnerModule,
         CommonModule

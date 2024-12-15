@@ -3,7 +3,8 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Directive({
-  selector: '[appCopyToClipboard]'
+    selector: '[appCopyToClipboard]',
+    standalone: false
 })
 export class CopyToClipboardDirective {
   @Input('appCopyToClipboard') textToCopy: string | undefined;

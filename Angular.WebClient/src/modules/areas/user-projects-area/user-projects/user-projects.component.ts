@@ -14,7 +14,8 @@ import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-un
 @Component({
     selector: 'app-user-projects',
     templateUrl: './user-projects.component.html',
-    styleUrl: './user-projects.component.scss'
+    styleUrl: './user-projects.component.scss',
+    standalone: false
 })
 export class UserProjectsComponent extends BaseUnsubscribeComponent {
     get currenciesMap(): DictionaryMap<number, CurrencyResponse> | undefined {

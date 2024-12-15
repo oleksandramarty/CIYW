@@ -4,7 +4,6 @@ import {CommonModule} from "@angular/common";
 
 @Component({
     selector: 'app-common-favorite',
-    standalone: true,
     imports: [
         CommonModule,
         SharedModule

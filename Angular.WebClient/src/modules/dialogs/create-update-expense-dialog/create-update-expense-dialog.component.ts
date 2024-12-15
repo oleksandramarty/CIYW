@@ -29,7 +29,6 @@ import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsub
 
 @Component({
     selector: 'app-create-update-expense-dialog',
-    standalone: true,
     imports: [
         CommonModule,
         MatDialogModule,

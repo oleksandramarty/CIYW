@@ -5,9 +5,10 @@ import {Store} from "@ngrx/store";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
-  selector: 'app-not-found',
-  templateUrl: './not-found.component.html',
-  styleUrl: './not-found.component.scss'
+    selector: 'app-not-found',
+    templateUrl: './not-found.component.html',
+    styleUrl: './not-found.component.scss',
+    standalone: false
 })
 export class NotFoundComponent extends BaseAuthorizeComponent {
   constructor(

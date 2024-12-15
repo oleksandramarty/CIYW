@@ -7,19 +7,18 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle } from "@angular/material
 import { SharedModule } from "../../../core/shared.module";
 
 @Component({
-  selector: 'app-confirmation-message-dialog',
-  standalone: true,
-  imports: [
-    AppCommonInputModule,
-    CommonModule,
-    CommonLoaderComponent,
-    CurrencyPipe,
-    MatButtonModule,
-    MatDialogTitle,
-    SharedModule
-  ],
-  templateUrl: './confirmation-message-dialog.component.html',
-  styleUrls: ['./confirmation-message-dialog.component.scss']
+    selector: 'app-confirmation-message-dialog',
+    imports: [
+        AppCommonInputModule,
+        CommonModule,
+        CommonLoaderComponent,
+        CurrencyPipe,
+        MatButtonModule,
+        MatDialogTitle,
+        SharedModule
+    ],
+    templateUrl: './confirmation-message-dialog.component.html',
+    styleUrls: ['./confirmation-message-dialog.component.scss']
 })
 export class ConfirmationMessageDialogComponent {
   yesBtn: string | undefined;

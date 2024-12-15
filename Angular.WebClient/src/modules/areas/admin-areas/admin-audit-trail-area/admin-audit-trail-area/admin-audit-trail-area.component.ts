@@ -8,9 +8,10 @@ import {takeUntil, tap} from "rxjs";
 import {handleApiError} from "../../../../../core/helpers/rxjs.helper";
 
 @Component({
-  selector: 'app-admin-audit-trail-area',
-  templateUrl: './admin-audit-trail-area.component.html',
-  styleUrl: './admin-audit-trail-area.component.scss'
+    selector: 'app-admin-audit-trail-area',
+    templateUrl: './admin-audit-trail-area.component.html',
+    styleUrl: './admin-audit-trail-area.component.scss',
+    standalone: false
 })
 export class AdminAuditTrailAreaComponent extends BaseUnsubscribeComponent {
   constructor(

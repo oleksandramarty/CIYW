@@ -18,19 +18,18 @@ import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsub
 import {handleApiError} from "../../../core/helpers/rxjs.helper";
 
 @Component({
-  selector: 'app-create-update-user-project-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    CommonLoaderComponent,
-    AppCommonInputModule,
-    RouterLink,
-    SharedModule,
-  ],
-  templateUrl: './create-update-user-project-dialog.component.html',
-  styleUrls: ['./create-update-user-project-dialog.component.scss']
+    selector: 'app-create-update-user-project-dialog',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        CommonLoaderComponent,
+        AppCommonInputModule,
+        RouterLink,
+        SharedModule,
+    ],
+    templateUrl: './create-update-user-project-dialog.component.html',
+    styleUrls: ['./create-update-user-project-dialog.component.scss']
 })
 export class CreateUpdateUserProjectDialogComponent extends BaseUnsubscribeComponent {
   public userProject: UserProjectResponse | undefined;

@@ -12,19 +12,18 @@ import {AuditTrailResponse, UserResponse} from "../../../core/api-models/common.
 import {BaseUnsubscribeComponent} from "../../../core/base-components/base-unsubscribe.compoinent";
 
 @Component({
-  selector: 'app-audit-trail-details-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    CommonLoaderComponent,
-    AppCommonInputModule,
-    RouterLink,
-    SharedModule,
-  ],
-  templateUrl: './audit-trail-details-dialog.component.html',
-  styleUrl: './audit-trail-details-dialog.component.scss'
+    selector: 'app-audit-trail-details-dialog',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        CommonLoaderComponent,
+        AppCommonInputModule,
+        RouterLink,
+        SharedModule,
+    ],
+    templateUrl: './audit-trail-details-dialog.component.html',
+    styleUrl: './audit-trail-details-dialog.component.scss'
 })
 export class AuditTrailDetailsDialogComponent extends BaseUnsubscribeComponent{
   public auditTrail: AuditTrailResponse | undefined;

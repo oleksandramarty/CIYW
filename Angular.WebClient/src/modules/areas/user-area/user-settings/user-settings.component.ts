@@ -14,7 +14,8 @@ import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-un
 @Component({
     selector: 'app-user-settings',
     templateUrl: './user-settings.component.html',
-    styleUrl: './user-settings.component.scss'
+    styleUrl: './user-settings.component.scss',
+    standalone: false
 })
 export class UserSettingsComponent extends BaseUnsubscribeComponent {
     public currentUser: UserResponse | undefined;

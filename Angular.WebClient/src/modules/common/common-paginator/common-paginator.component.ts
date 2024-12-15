@@ -4,14 +4,13 @@ import {CommonModule} from "@angular/common";
 import {PaginatorEntity} from "../../../core/api-models/common.models";
 
 @Component({
-  selector: 'app-common-paginator',
-  standalone: true,
-  imports: [
-    MatPaginatorModule,
-    CommonModule
-  ],
-  templateUrl: './common-paginator.component.html',
-  styleUrl: './common-paginator.component.scss'
+    selector: 'app-common-paginator',
+    imports: [
+        MatPaginatorModule,
+        CommonModule
+    ],
+    templateUrl: './common-paginator.component.html',
+    styleUrl: './common-paginator.component.scss'
 })
 export class CommonPaginatorComponent {
   @Input() paginator: PaginatorEntity | undefined;

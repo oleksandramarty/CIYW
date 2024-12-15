@@ -22,7 +22,8 @@ import {BaseUnsubscribeComponent} from "../../../../core/base-components/base-un
     selector: 'app-user-project',
     templateUrl: './user-project.component.html',
     styleUrl: './user-project.component.scss',
-    animations: [fadeInOut]
+    animations: [fadeInOut],
+    standalone: false
 })
 export class UserProjectComponent extends BaseUnsubscribeComponent {
     public userProjectId: string | undefined;

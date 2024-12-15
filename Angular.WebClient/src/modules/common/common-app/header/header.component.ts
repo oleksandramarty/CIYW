@@ -16,7 +16,8 @@ import {MenuModel, MenuModelItem} from "../../../../core/models/common/menu.mode
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    standalone: false
 })
 export class HeaderComponent extends BaseAuthorizeComponent {
     public langFlags: Map<string, string> = new Map([

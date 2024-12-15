@@ -12,18 +12,17 @@ type InputType =
     undefined;
 
 @Component({
-  selector: 'app-common-top-menu',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    CommonLoaderComponent,
-    RouterLink,
-    SharedModule,
-  ],
-  templateUrl: './common-top-menu.component.html',
-  styleUrl: './common-top-menu.component.scss'
+    selector: 'app-common-top-menu',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        CommonLoaderComponent,
+        RouterLink,
+        SharedModule,
+    ],
+    templateUrl: './common-top-menu.component.html',
+    styleUrl: './common-top-menu.component.scss'
 })
 export class CommonTopMenuComponent {
   @Input() type: InputType;
