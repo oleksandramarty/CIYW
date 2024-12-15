@@ -22,8 +22,8 @@ public class UpdateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
     public async Task Handle_ShouldReturnBalanceId_WhenUpdateUserBalanceCommandIsValid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role);
         Guid balanceId = user.UserProjects.First().Balances.First().Id;
         
         // Act

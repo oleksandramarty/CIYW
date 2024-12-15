@@ -7,6 +7,6 @@ public class MonolithRootMutation: GraphQlMutationHelper
     public MonolithRootMutation()
     {
         Name = "Mutation";
-        this.AddMonolithMutations();
+        AddMonolithMutations();
     }
 }

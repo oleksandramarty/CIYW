@@ -16,39 +16,39 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class CreatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreatePlannedExpenseCommand, BaseEntityIdResponse<Guid>>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> _readGenericPlannedExpenseRepository;
 
     public CreatePlannedExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-        ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> readGenericPlannedExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+        ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.plannedExpenseRepository = plannedExpenseRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _readGenericPlannedExpenseRepository = readGenericPlannedExpenseRepository;
     }
 
     public async Task<BaseEntityIdResponse<Guid>> Handle(CreatePlannedExpenseCommand command, CancellationToken cancellationToken)
     {        
-        this.entityValidator.ValidateRequest<CreatePlannedExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreatePlannedExpenseCommandValidator());
+        _entityValidator.ValidateRequest<CreatePlannedExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreatePlannedExpenseCommandValidator());
 
-        await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
         
-        if (await this.plannedExpenseRepository.Queryable(fe => fe.UserProjectId == command.UserProjectId)
+        if (await _readGenericPlannedExpenseRepository.Queryable(fe => fe.UserProjectId == command.UserProjectId)
                 .CountAsync(cancellationToken) >= 10)
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
 
-        PlannedExpenseEntity toAdd = this.mapper.Map<PlannedExpenseEntity>(command);
-        toAdd.CreatedUserId = await this.CurrentUserIdAsync();
+        PlannedExpenseEntity toAdd = _mapper.Map<PlannedExpenseEntity>(command);
+        toAdd.CreatedUserId = await CurrentUserIdAsync();
             
-        await this.plannedExpenseRepository.AddAsync(toAdd, cancellationToken);
+        await _readGenericPlannedExpenseRepository.AddAsync(toAdd, cancellationToken);
 
         return new BaseEntityIdResponse<Guid>
         {

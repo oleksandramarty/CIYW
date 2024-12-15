@@ -12,22 +12,22 @@ namespace Localizations.Mediatr.Mediatr.Localizations.Handlers;
 
 public class LocalizationsRequestHandler : IRequestHandler<LocalizationsRequest, LocalizationsResponse>
 {
-    private readonly ILocalizationRepository localizationCacheRepository;
-    private readonly IReadGenericRepository<int, LocaleEntity, LocalizationsDataContext> localeRepository;
+    private readonly ILocalizationRepository _localizationCacheRepository;
+    private readonly IReadGenericRepository<int, LocaleEntity, LocalizationsDataContext> _readGenericLocaleRepository;
 
     public LocalizationsRequestHandler(
         ILocalizationRepository localizationCacheRepository,
-        IReadGenericRepository<int, LocaleEntity, LocalizationsDataContext> localeRepository
+        IReadGenericRepository<int, LocaleEntity, LocalizationsDataContext> readGenericLocaleRepository
     )
     {
-        this.localizationCacheRepository = localizationCacheRepository;
-        this.localeRepository = localeRepository;
+        _localizationCacheRepository = localizationCacheRepository;
+        _readGenericLocaleRepository = readGenericLocaleRepository;
     }
 
     public async Task<LocalizationsResponse> Handle(LocalizationsRequest request,
         CancellationToken cancellationToken)
     {
-        string currentVersion = await this.localizationCacheRepository.LocalizationVersionAsync(request.IsPublic);
+        string currentVersion = await _localizationCacheRepository.LocalizationVersionAsync(request.IsPublic);
 
         if (LocalizationExtension.IsDictionaryActual(request.Version, currentVersion))
         {
@@ -39,11 +39,11 @@ public class LocalizationsRequestHandler : IRequestHandler<LocalizationsRequest,
         }
 
         LocalizationsResponse response =
-            await this.localizationCacheRepository.LocalizationDataAllAsync(request.IsPublic);
+            await _localizationCacheRepository.LocalizationDataAllAsync(request.IsPublic);
 
         if (response.Data == null || response.Data.Count == 0)
         {
-            var locales = await this.localeRepository.ListAsync(
+            var locales = await _readGenericLocaleRepository.ListAsync(
                 null,
                 cancellationToken,
                 loc => loc.Include(l => l.Localizations));
@@ -56,15 +56,15 @@ public class LocalizationsRequestHandler : IRequestHandler<LocalizationsRequest,
                     .Select(l => new LocalizationItemResponse(l?.Key, l?.Value)).ToList()
             }).ToList();
             
-            await this.localizationCacheRepository.ReinitializeLocalizationDataAsync(
+            await _localizationCacheRepository.ReinitializeLocalizationDataAsync(
                 response,
                 request.IsPublic);
-            await this.localizationCacheRepository.SetLocalizationVersionAsync(request.IsPublic);
+            await _localizationCacheRepository.SetLocalizationVersionAsync(request.IsPublic);
         }
         
         if (string.IsNullOrEmpty(currentVersion))
         {
-            currentVersion = await this.localizationCacheRepository.LocalizationVersionAsync(request.IsPublic);
+            currentVersion = await _localizationCacheRepository.LocalizationVersionAsync(request.IsPublic);
         }
 
         response.Version = currentVersion;

@@ -10,42 +10,42 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class UpdateUserSettingCommandHandler: IRequestHandler<UpdateUserSettingCommand>
 {
-    private readonly IMapper mapper;
-    private readonly ICurrentUserRepository currentUserRepository;
-    private readonly IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository;
+    private readonly IMapper _mapper;
+    private readonly ICurrentUserRepository _currentUserRepository;
+    private readonly IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> _genericUserSettingRepository;
     
     public UpdateUserSettingCommandHandler(
         IMapper mapper,
         ICurrentUserRepository currentUserRepository,
-        IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository
+        IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> genericUserSettingRepository
         )
     {
-        this.mapper = mapper;
-        this.currentUserRepository = currentUserRepository;
-        this.userSettingRepository = userSettingRepository;
+        _mapper = mapper;
+        _currentUserRepository = currentUserRepository;
+        _genericUserSettingRepository = genericUserSettingRepository;
     }
     
     public async Task Handle(UpdateUserSettingCommand command, CancellationToken cancellationToken)
     {
-        Guid? userId = await currentUserRepository.CurrentUserIdAsync();
+        Guid? userId = await _currentUserRepository.CurrentUserIdAsync();
         if (!userId.HasValue)
         {
             throw new EntityNotFoundException();
         }
 
-        UserSettingEntity? userSetting = await userSettingRepository.ByIdAsync(command.Id, cancellationToken);
+        UserSettingEntity? userSetting = await _genericUserSettingRepository.ByIdAsync(command.Id, cancellationToken);
         if (userSetting == null)
         {
             throw new EntityNotFoundException();
         }
 
-        UserSettingEntity? updatedUserSettingEntity = this.mapper.Map(command, userSetting);
+        UserSettingEntity? updatedUserSettingEntity = _mapper.Map(command, userSetting);
         if (updatedUserSettingEntity == null)
         {
             throw new InvalidOperationException("User can update only own settings");
         }
             
-        await this.userSettingRepository.UpdateAsync(
+        await _genericUserSettingRepository.UpdateAsync(
             updatedUserSettingEntity,
             cancellationToken
         );

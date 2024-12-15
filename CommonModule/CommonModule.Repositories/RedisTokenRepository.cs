@@ -7,61 +7,61 @@ namespace CommonModule.Repositories;
 
 public class RedisTokenRepository : AuditableNonNullableKey, ITokenRepository
 {
-    private readonly IDatabase database;
-    private readonly IJwtTokenFactory jwtTokenFactory;
+    private readonly IDatabase _database;
+    private readonly IJwtTokenFactory _jwtTokenFactory;
 
     public RedisTokenRepository(
         IConnectionMultiplexer connectionMultiplexer,
         IConfiguration configuration,
         IJwtTokenFactory jwtTokenFactory)
     {
-        this.database = connectionMultiplexer.GetDatabase();
-        this.jwtTokenFactory = jwtTokenFactory;
+        _database = connectionMultiplexer.GetDatabase();
+        _jwtTokenFactory = jwtTokenFactory;
 
-        this.Key = configuration["Redis:InstanceNameToken"] ?? string.Empty;
+        Key = configuration["Redis:InstanceNameToken"] ?? string.Empty;
     }
 
     public async Task AddTokenAsync(string token, TimeSpan expiration)
     {
-        string key = $"{this.Key}:{this.jwtTokenFactory.UserIdFromToken(token)}:{token}";
-        await database.StringSetAsync(key, "valid", expiration);
+        string key = $"{Key}:{_jwtTokenFactory.UserIdFromToken(token)}:{token}";
+        await _database.StringSetAsync(key, "valid", expiration);
     }
 
     public async Task<bool> IsTokenValidAsync(string token)
     {
-        string key = $"{this.Key}:{this.jwtTokenFactory.UserIdFromToken(token)}:{token}";
-        return await database.KeyExistsAsync(key);
+        string key = $"{Key}:{_jwtTokenFactory.UserIdFromToken(token)}:{token}";
+        return await _database.KeyExistsAsync(key);
     }
 
     public async Task RemoveTokenAsync(string token)
     {
-        string key = $"{this.Key}:{this.jwtTokenFactory.UserIdFromToken(token)}:{token}";
-        await database.KeyDeleteAsync(key);
+        string key = $"{Key}:{_jwtTokenFactory.UserIdFromToken(token)}:{token}";
+        await _database.KeyDeleteAsync(key);
     }
 
     public async Task RemoveUserTokenAsync(Guid userId)
     {
-        string pattern = $"{this.Key}:{userId.ToString()}:*";
-        var keys = database.Multiplexer.GetServer(database.Multiplexer.GetEndPoints()[0]).Keys(pattern: pattern);
+        string pattern = $"{Key}:{userId.ToString()}:*";
+        var keys = _database.Multiplexer.GetServer(_database.Multiplexer.GetEndPoints()[0]).Keys(pattern: pattern);
         foreach (var key in keys)
         {
-            await database.KeyDeleteAsync(key);
+            await _database.KeyDeleteAsync(key);
         }
     }
 
     public async Task RemoveAllTokensAsync(Guid userId)
     {
-        string key = $"{this.Key}:{userId.ToString()}:*";
-        var keys = database.Multiplexer.GetServer(database.Multiplexer.GetEndPoints()[0]).Keys(pattern: key);
+        string key = $"{Key}:{userId.ToString()}:*";
+        var keys = _database.Multiplexer.GetServer(_database.Multiplexer.GetEndPoints()[0]).Keys(pattern: key);
         foreach (var redisKey in keys)
         {
-            await database.KeyDeleteAsync(redisKey);
+            await _database.KeyDeleteAsync(redisKey);
         }
     }
 
     public bool IsTokenExpired(string token)
     {
-        string key = $"{this.Key}:{this.jwtTokenFactory.UserIdFromToken(token)}:{token}";
-        return !database.KeyExists(key);
+        string key = $"{Key}:{_jwtTokenFactory.UserIdFromToken(token)}:{token}";
+        return !_database.KeyExists(key);
     }
 }

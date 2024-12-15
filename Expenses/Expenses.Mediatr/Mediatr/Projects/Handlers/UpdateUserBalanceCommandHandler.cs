@@ -12,36 +12,36 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
 public class UpdateUserBalanceCommandHandler: MediatrExpensesBase, IRequestHandler<UpdateUserBalanceCommand>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> _genericBalanceRepository;
     
     public UpdateUserBalanceCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-        ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> genericBalanceRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+        ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.balanceRepository = balanceRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _genericBalanceRepository = genericBalanceRepository;
     }
     
     public async Task Handle(UpdateUserBalanceCommand command, CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateVoidRequest<UpdateUserBalanceCommand>(command, () => new UpdateUserBalanceCommandValidator());
+        _entityValidator.ValidateVoidRequest<UpdateUserBalanceCommand>(command, () => new UpdateUserBalanceCommandValidator());
         
-        await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
         
-        BalanceEntity? balance = await this.balanceRepository.ByIdAsync(command.Id, cancellationToken);
+        BalanceEntity? balance = await _genericBalanceRepository.ByIdAsync(command.Id, cancellationToken);
         if (balance == null)
         {
             throw new EntityNotFoundException();
         }
         
-        this.mapper.Map(command, balance);
-        await this.balanceRepository.UpdateAsync(balance, cancellationToken);
+        _mapper.Map(command, balance);
+        await _genericBalanceRepository.UpdateAsync(balance, cancellationToken);
     }
 }

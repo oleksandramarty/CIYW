@@ -24,49 +24,51 @@ namespace CIYW.IntegrationTests.Mediatr.Dictionaries;
 [TestFixture]
 public class DictionariesHandlerTest() : CommonIntegrationTestSetup()
 {
-    private SiteSettingsResponse siteSettings;
+    private SiteSettingsResponse _siteSettings;
+    
+    
     
     [OneTimeSetUp]
     public async Task OneTimeSetup()
     {
         await base.OneTimeSetup();
-        this.siteSettings = await this.SiteSettings();
+        _siteSettings = await SiteSettings();
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnVersionedEmptyBalanceTypesDictionary_WhenRequestWithActualVersion(UserRoleEnum role)
     {
-        await this.HandleValidDictionary<BalanceTypesRequest, BalanceEntity, BalanceTypeResponse>(role, siteSettings.Version.BalanceType);
+        await HandleValidDictionary<BalanceTypesRequest, BalanceEntity, BalanceTypeResponse>(role, _siteSettings.Version.BalanceType);
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnVersionedEmptyCategoriesDictionary_WhenRequestWithActualVersion(UserRoleEnum role)
     {
-        await this.HandleValidDictionary<CategoriesRequest, CategoryEntity, CategoryResponse>(role, siteSettings.Version.Category);
+        await HandleValidDictionary<CategoriesRequest, CategoryEntity, CategoryResponse>(role, _siteSettings.Version.Category);
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnVersionedEmptyCountriesDictionary_WhenRequestWithActualVersion(UserRoleEnum role)
     {
-        await this.HandleValidDictionary<CountriesRequest, CountryEntity, CountryResponse>(role, siteSettings.Version.Country);
+        await HandleValidDictionary<CountriesRequest, CountryEntity, CountryResponse>(role, _siteSettings.Version.Country);
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnVersionedEmptyCurrenciesDictionary_WhenRequestWithActualVersion(UserRoleEnum role)
     {
-        await this.HandleValidDictionary<CurrenciesRequest, CurrencyEntity, CurrencyResponse>(role, siteSettings.Version.Currency);
+        await HandleValidDictionary<CurrenciesRequest, CurrencyEntity, CurrencyResponse>(role, _siteSettings.Version.Currency);
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnVersionedEmptyFrequenciesDictionary_WhenRequestWithActualVersion(UserRoleEnum role)
     {
-        await this.HandleValidDictionary<FrequenciesRequest, FrequencyEntity, FrequencyResponse>(role, siteSettings.Version.Frequency);
+        await HandleValidDictionary<FrequenciesRequest, FrequencyEntity, FrequencyResponse>(role, _siteSettings.Version.Frequency);
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
     public async Task Handle_ShouldReturnVersionedEmptyIconCategoriesDictionary_WhenRequestWithActualVersion(UserRoleEnum role)
     {
-        await this.HandleValidDictionary<IconCategoriesRequest, IconCategoryEntity, IconCategoryResponse>(role, siteSettings.Version.IconCategory);
+        await HandleValidDictionary<IconCategoriesRequest, IconCategoryEntity, IconCategoryResponse>(role, _siteSettings.Version.IconCategory);
     }
     
     [Test, TestCaseSource(nameof(CreateAllRolesTestCases))]
@@ -76,7 +78,7 @@ public class DictionariesHandlerTest() : CommonIntegrationTestSetup()
         {
             DictionariesDataContext dictionariesDataContext =
                 scope.ServiceProvider.GetRequiredService<DictionariesDataContext>();
-            await this.HandleValidDictionary<BalanceTypesRequest, BalanceEntity, BalanceTypeResponse>(role,
+            await HandleValidDictionary<BalanceTypesRequest, BalanceEntity, BalanceTypeResponse>(role,
                 string.Empty, await dictionariesDataContext.BalanceTypes.CountAsync());
         }
     }
@@ -88,7 +90,7 @@ public class DictionariesHandlerTest() : CommonIntegrationTestSetup()
         {
             DictionariesDataContext dictionariesDataContext =
                 scope.ServiceProvider.GetRequiredService<DictionariesDataContext>();  
-            await this.HandleValidDictionary<CategoriesRequest, CategoryEntity, CategoryResponse>(role, string.Empty, await dictionariesDataContext.Categories.CountAsync(c => c.ParentId == null));
+            await HandleValidDictionary<CategoriesRequest, CategoryEntity, CategoryResponse>(role, string.Empty, await dictionariesDataContext.Categories.CountAsync(c => c.ParentId == null));
         }
     }
     
@@ -99,7 +101,7 @@ public class DictionariesHandlerTest() : CommonIntegrationTestSetup()
         {
             DictionariesDataContext dictionariesDataContext =
                 scope.ServiceProvider.GetRequiredService<DictionariesDataContext>();
-            await this.HandleValidDictionary<CountriesRequest, CountryEntity, CountryResponse>(role, string.Empty, await dictionariesDataContext.Countries.CountAsync());
+            await HandleValidDictionary<CountriesRequest, CountryEntity, CountryResponse>(role, string.Empty, await dictionariesDataContext.Countries.CountAsync());
         }
     }
     
@@ -110,7 +112,7 @@ public class DictionariesHandlerTest() : CommonIntegrationTestSetup()
         {
             DictionariesDataContext dictionariesDataContext =
                 scope.ServiceProvider.GetRequiredService<DictionariesDataContext>();
-            await this.HandleValidDictionary<CurrenciesRequest, CurrencyEntity, CurrencyResponse>(role, string.Empty, await dictionariesDataContext.Currencies.CountAsync());
+            await HandleValidDictionary<CurrenciesRequest, CurrencyEntity, CurrencyResponse>(role, string.Empty, await dictionariesDataContext.Currencies.CountAsync());
         }
     }
     
@@ -121,7 +123,7 @@ public class DictionariesHandlerTest() : CommonIntegrationTestSetup()
         {
             DictionariesDataContext dictionariesDataContext =
                 scope.ServiceProvider.GetRequiredService<DictionariesDataContext>();
-            await this.HandleValidDictionary<FrequenciesRequest, FrequencyEntity, FrequencyResponse>(role, string.Empty, await dictionariesDataContext.Frequencies.CountAsync());
+            await HandleValidDictionary<FrequenciesRequest, FrequencyEntity, FrequencyResponse>(role, string.Empty, await dictionariesDataContext.Frequencies.CountAsync());
         }
     }
     
@@ -132,7 +134,7 @@ public class DictionariesHandlerTest() : CommonIntegrationTestSetup()
         {
             DictionariesDataContext dictionariesDataContext =
                 scope.ServiceProvider.GetRequiredService<DictionariesDataContext>();
-            await this.HandleValidDictionary<IconCategoriesRequest, IconCategoryEntity, IconCategoryResponse>(role, string.Empty, await dictionariesDataContext.IconCategories.CountAsync());
+            await HandleValidDictionary<IconCategoriesRequest, IconCategoryEntity, IconCategoryResponse>(role, string.Empty, await dictionariesDataContext.IconCategories.CountAsync());
         }
     }
 }

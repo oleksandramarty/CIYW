@@ -13,9 +13,9 @@ namespace AuditTrail.Business;
 /// </summary>
 public class ExceptionHandlingMiddleware
 {
-    private readonly RequestDelegate next;
-    private readonly IAuditTrailRepository auditTrailRepository;
-    private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly RequestDelegate _next;
+    private readonly IAuditTrailRepository _auditTrailRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     
     public ExceptionHandlingMiddleware(
         RequestDelegate next,
@@ -23,9 +23,9 @@ public class ExceptionHandlingMiddleware
         IHttpContextAccessor httpContextAccessor
     )
     {
-        this.next = next;
-        this.auditTrailRepository = auditTrailRepository;
-        this.httpContextAccessor = httpContextAccessor;
+        _next = next;
+        _auditTrailRepository = auditTrailRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     /// <summary>
@@ -37,36 +37,36 @@ public class ExceptionHandlingMiddleware
     {
         try
         {
-            await this.next(context);
+            await _next(context);
         }
         catch (AuthException ex)
         {
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.AuthException, ex.Message);
+            await CreateAuditTrailAsync(context, ExceptionEnum.AuthException, ex.Message);
             await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.StatusCode);
         }
         catch (BusinessException ex)
         {
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.BusinessException, ex.Message);
+            await CreateAuditTrailAsync(context, ExceptionEnum.BusinessException, ex.Message);
             await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.StatusCode);
         }
         catch (EntityNotFoundException ex)
         {
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.EntityNotFoundException, ex.Message);
+            await CreateAuditTrailAsync(context, ExceptionEnum.EntityNotFoundException, ex.Message);
             await HandleExceptionAsync(context, ex, HttpStatusCode.NotFound);
         }
         catch (ForbiddenException ex)
         {
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.ForbiddenException, ex.Message);
+            await CreateAuditTrailAsync(context, ExceptionEnum.ForbiddenException, ex.Message);
             await HandleExceptionAsync(context, ex, HttpStatusCode.Forbidden);
         }
         catch (VersionException ex)
         {
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.VersionException, ex.Message);
+            await CreateAuditTrailAsync(context, ExceptionEnum.VersionException, ex.Message);
             await HandleExceptionAsync(context, ex, HttpStatusCode.NotFound);
         }
         catch (BaseException ex)
         {
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.BaseException, ex.Message);
+            await CreateAuditTrailAsync(context, ExceptionEnum.BaseException, ex.Message);
             await HandleExceptionAsync(context, ex, (HttpStatusCode)ex.StatusCode);
         }
         catch (Exception ex)
@@ -86,7 +86,7 @@ public class ExceptionHandlingMiddleware
                 messageSb.AppendLine(ex.InnerException.StackTrace);
             }
             
-            await this.CreateAuditTrailAsync(context, ExceptionEnum.Exception, messageSb.ToString());
+            await CreateAuditTrailAsync(context, ExceptionEnum.Exception, messageSb.ToString());
             await HandleExceptionAsync(context, ex, HttpStatusCode.InternalServerError);
         }
     }
@@ -101,13 +101,13 @@ public class ExceptionHandlingMiddleware
         HttpContext context, ExceptionEnum exception, string message
     )
     {
-        var userIdStr = this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId)?.Value;
+        var userIdStr = _httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId)?.Value;
         if (userIdStr == null || !Guid.TryParse(userIdStr, out var userId))
         {
             userId = Guid.Empty;
         }
         
-        await this.auditTrailRepository.AddExceptionLogAsync(
+        await _auditTrailRepository.AddExceptionLogAsync(
             userId,
             exception,
             message,

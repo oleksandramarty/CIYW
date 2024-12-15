@@ -13,26 +13,26 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 public class FilteredExpensesRequestHandler : MediatrExpensesBase,
     IRequestHandler<FilteredExpensesRequest, FilteredListResponse<ExpenseResponse>>
 {
-    private readonly IFilteredResultStrategy<FilteredExpensesRequest, ExpenseResponse> strategy;
+    private readonly IFilteredResultStrategy<FilteredExpensesRequest, ExpenseResponse> _strategy;
 
     public FilteredExpensesRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository,
         IFilteredResultStrategy<FilteredExpensesRequest, ExpenseResponse> strategy
-    ) : base(currentUserRepository, entityValidator, userProjectRepository)
+    ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.strategy = strategy;
+        _strategy = strategy;
     }
 
     public async Task<FilteredListResponse<ExpenseResponse>> Handle(FilteredExpensesRequest request,
         CancellationToken cancellationToken)
     {
-        await this.CheckUserProjectByIdAsync(request.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(request.UserProjectId, cancellationToken);
 
         request.CheckBaseFilter();
         request.CategoryIds.CheckIds();
 
-        return await this.strategy.FilteredResultAsync(request, cancellationToken);
+        return await _strategy.FilteredResultAsync(request, cancellationToken);
     }
 }

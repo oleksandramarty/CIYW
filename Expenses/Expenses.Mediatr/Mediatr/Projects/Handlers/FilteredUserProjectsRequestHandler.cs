@@ -15,13 +15,13 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
 public class FilteredUserProjectsRequestHandler: IRequestHandler<FilteredUserProjectsRequest, FilteredListResponse<UserProjectResponse>>
 {
-    private readonly IFilteredResultStrategy<FilteredUserProjectsRequest, UserProjectResponse> strategy;
+    private readonly IFilteredResultStrategy<FilteredUserProjectsRequest, UserProjectResponse> _strategy;
     
     public FilteredUserProjectsRequestHandler(
         IFilteredResultStrategy<FilteredUserProjectsRequest, UserProjectResponse> strategy
         )
     {
-        this.strategy = strategy;
+        _strategy = strategy;
     }
     
     public async Task<FilteredListResponse<UserProjectResponse>> Handle(FilteredUserProjectsRequest request, CancellationToken cancellationToken)
@@ -29,6 +29,6 @@ public class FilteredUserProjectsRequestHandler: IRequestHandler<FilteredUserPro
         
         request.CheckBaseFilter();
 
-        return await this.strategy.FilteredResultAsync(request, cancellationToken);
+        return await _strategy.FilteredResultAsync(request, cancellationToken);
     }
 }

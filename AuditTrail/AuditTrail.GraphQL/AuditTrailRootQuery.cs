@@ -6,6 +6,6 @@ public class AuditTrailRootQuery: GraphQlQueryHelper
 {
     public AuditTrailRootQuery()
     {
-        this.AddAuditTrailQueries();
+        AddAuditTrailQueries();
     }
 }  

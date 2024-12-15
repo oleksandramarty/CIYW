@@ -22,7 +22,7 @@ public class IntegrationTestBase : WebApplicationFactory<Program>
 
     public IntegrationTestBase(IntegrationTestOptions options)
     {
-        this.Options = options;
+        Options = options;
     }
 
     /// <summary>

@@ -6,26 +6,26 @@ namespace CommonModule.Repositories;
 
 public class KafkaMessageService: IKafkaMessageService
 {
-    private readonly KafkaProducer kafkaProducer;
-    private readonly string logTopic;
+    private readonly KafkaProducer _kafkaProducer;
+    private readonly string _logTopic;
 
     public KafkaMessageService(
         IConfiguration configuration,
         KafkaProducer kafkaProducer)
     {
-        this.logTopic = configuration["Kafka:AuditTrailTopic"] ?? string.Empty;
-        this.kafkaProducer = kafkaProducer;
+        _logTopic = configuration["Kafka:AuditTrailTopic"] ?? string.Empty;
+        _kafkaProducer = kafkaProducer;
     }
 
     public async Task LogAuditTrailAsync(object log)
     {
-        if (string.IsNullOrWhiteSpace(this.logTopic))
+        if (string.IsNullOrWhiteSpace(_logTopic))
         {
             return;
         }
         
         // TODO audit trail log warning empty topic
         
-        await this.kafkaProducer.ProduceAsync(this.logTopic, log);
+        await _kafkaProducer.ProduceAsync(_logTopic, log);
     }
 }

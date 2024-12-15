@@ -8,11 +8,11 @@ namespace CommonModule.Core.Strategies.FilteredResult;
 public class FilteredResultStrategyResponseContext<TFilteredRequest, TEntity, TResponse>
     where TFilteredRequest : IBaseFilterRequest
 {
-    private readonly IMapper mapper;
+    private readonly IMapper _mapper;
 
     public FilteredResultStrategyResponseContext(IMapper mapper)
     {
-        this.mapper = mapper;
+        _mapper = mapper;
     }
 
     protected async Task<FilteredListResponse<TResponse>> FilteredResultAsync(
@@ -42,7 +42,7 @@ public class FilteredResultStrategyResponseContext<TFilteredRequest, TEntity, TR
         }
 
         return new FilteredListResponse<TResponse>(
-            entities.Select(x => this.mapper.Map<TEntity, TResponse>(x)).ToList(),
+            entities.Select(x => _mapper.Map<TEntity, TResponse>(x)).ToList(),
             request.Paginator,
             total);
     }

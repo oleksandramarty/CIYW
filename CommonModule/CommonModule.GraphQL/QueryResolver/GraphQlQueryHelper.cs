@@ -43,79 +43,79 @@ public class GraphQlQueryHelper: GraphQlQueryResolver
 {
     public void AddMonolithQueries()
     {
-        this.AddLocalizationsQueries();
-        this.AddExpensesQueries();
-        this.AddDictionariesQueries();
-        this.AddAuthGatewayQueries();
-        this.AddAuditTrailQueries();
+        AddLocalizationsQueries();
+        AddExpensesQueries();
+        AddDictionariesQueries();
+        AddAuthGatewayQueries();
+        AddAuditTrailQueries();
     }
     public void AddLocalizationsQueries()
     {
-        this.VersionedList<
+        VersionedList<
             VersionedListOfGenericType<LocaleResponse, LocaleResponseType>, 
             LocaleResponse, 
             LocalesRequest
         >(GraphQlEndpoints.LocalesDictionary);
         
-        this.Localizations(GraphQlEndpoints.Localizations);
-        this.Localizations(GraphQlEndpoints.PublicLocalizations);
+        Localizations(GraphQlEndpoints.Localizations);
+        Localizations(GraphQlEndpoints.PublicLocalizations);
     }
 
     public void AddExpensesQueries()
     {
-        this.FilteredEntities<FilteredListResponseOfGenericType<ExpenseResponse, ExpenseResponseType>, ExpenseResponse, FilteredExpensesRequest>(GraphQlEndpoints.FilteredExpenses);
-        this.FilteredEntities<FilteredListResponseOfGenericType<PlannedExpenseResponse, PlannedExpenseResponseType>, PlannedExpenseResponse, FilteredPlannedExpensesRequest>(GraphQlEndpoints.FilteredPlannedExpenses);
-        this.FilteredEntities<FilteredListResponseOfGenericType<FavoriteExpenseResponse, FavoriteExpenseResponseType>, FavoriteExpenseResponse, FilteredFavoriteExpensesRequest>(GraphQlEndpoints.FilteredFavoriteExpenses);
-        this.FilteredEntities<FilteredListResponseOfGenericType<UserProjectResponse, UserProjectResponseType>, UserProjectResponse, FilteredUserProjectsRequest>(GraphQlEndpoints.FilteredUserProjects);
-        this.FilteredEntities<FilteredListResponseOfGenericType<UserAllowedProjectResponse, UserAllowedProjectResponseType>, UserAllowedProjectResponse, FilteredUserAllowedProjectsRequest>(GraphQlEndpoints.FilteredUserAllowedProjects);
+        FilteredEntities<FilteredListResponseOfGenericType<ExpenseResponse, ExpenseResponseType>, ExpenseResponse, FilteredExpensesRequest>(GraphQlEndpoints.FilteredExpenses);
+        FilteredEntities<FilteredListResponseOfGenericType<PlannedExpenseResponse, PlannedExpenseResponseType>, PlannedExpenseResponse, FilteredPlannedExpensesRequest>(GraphQlEndpoints.FilteredPlannedExpenses);
+        FilteredEntities<FilteredListResponseOfGenericType<FavoriteExpenseResponse, FavoriteExpenseResponseType>, FavoriteExpenseResponse, FilteredFavoriteExpensesRequest>(GraphQlEndpoints.FilteredFavoriteExpenses);
+        FilteredEntities<FilteredListResponseOfGenericType<UserProjectResponse, UserProjectResponseType>, UserProjectResponse, FilteredUserProjectsRequest>(GraphQlEndpoints.FilteredUserProjects);
+        FilteredEntities<FilteredListResponseOfGenericType<UserAllowedProjectResponse, UserAllowedProjectResponseType>, UserAllowedProjectResponse, FilteredUserAllowedProjectsRequest>(GraphQlEndpoints.FilteredUserAllowedProjects);
         
-        this.EntityById<GuidGraphType, UserProjectResponseType, Guid, UserProjectResponse, UserProjectByIdRequest, UserProjectResponse>(GraphQlEndpoints.UserProjectById);
+        EntityById<GuidGraphType, UserProjectResponseType, Guid, UserProjectResponse, UserProjectByIdRequest, UserProjectResponse>(GraphQlEndpoints.UserProjectById);
     }
     public void AddAuditTrailQueries()
     {
-        this.FilteredEntities<FilteredListResponseOfGenericType<AuditTrailResponse, AuditTrailResponseType>, AuditTrailResponse, FilteredAuditTrailRequest>(GraphQlEndpoints.FilteredAuditTrail);
+        FilteredEntities<FilteredListResponseOfGenericType<AuditTrailResponse, AuditTrailResponseType>, AuditTrailResponse, FilteredAuditTrailRequest>(GraphQlEndpoints.FilteredAuditTrail);
     }
 
     public void AddDictionariesQueries()
     {
-        this.ResultForEmptyCommand<
+        ResultForEmptyCommand<
             SiteSettingsResponseType,
             SiteSettingsResponse,
             SiteSettingsRequest,
             SiteSettingsResponse
         >(GraphQlEndpoints.SiteSettings);
 
-        this.VersionedList<
+        VersionedList<
             VersionedListOfGenericType<CurrencyResponse, CurrencyResponseType>, 
             CurrencyResponse, 
             CurrenciesRequest
         >(GraphQlEndpoints.CurrenciesDictionary);
         
-        this.VersionedList<
+        VersionedList<
             VersionedListOfGenericType<CountryResponse, CountryResponseType>, 
             CountryResponse, 
             CountriesRequest
         >(GraphQlEndpoints.CountriesDictionary);
         
-        this.VersionedList<
+        VersionedList<
             VersionedListOfGenericType<FrequencyResponse, FrequencyResponseType>, 
             FrequencyResponse, 
             FrequenciesRequest
         >(GraphQlEndpoints.FrequenciesDictionary);
         
-        this.VersionedList<
+        VersionedList<
             VersionedListOfGenericType<CategoryResponse, CategoryResponseType>, 
             CategoryResponse, 
             CategoriesRequest
         >(GraphQlEndpoints.CategoriesDictionary);
         
-        this.VersionedList<
+        VersionedList<
             VersionedListOfGenericType<BalanceTypeResponse, BalanceTypeResponseType>, 
             BalanceTypeResponse, 
             BalanceTypesRequest
         >(GraphQlEndpoints.BalanceTypesDictionary);
         
-        this.VersionedList<
+        VersionedList<
             VersionedListOfGenericType<IconCategoryResponse, IconCategoryResponseType>, 
             IconCategoryResponse, 
             IconCategoriesRequest
@@ -124,14 +124,14 @@ public class GraphQlQueryHelper: GraphQlQueryResolver
 
     public void AddAuthGatewayQueries()
     {
-        this.ResultForEmptyCommand<
+        ResultForEmptyCommand<
             UserResponseType,
             UserResponse,
             CurrentUserRequest,
             UserResponse
         >(GraphQlEndpoints.CurrentUser);
 
-        this.ResultForNonEmptyCommand<
+        ResultForNonEmptyCommand<
             AuthSignInRequestInputType,
             JwtTokenResponseType,
             JwtTokenResponse,
@@ -139,6 +139,6 @@ public class GraphQlQueryHelper: GraphQlQueryResolver
             JwtTokenResponse
         >(GraphQlEndpoints.SignIn);
         
-        this.ExecuteForEmptyCommand<BaseBoolResponseType, AuthSignOutRequest, BaseBoolResponse>(GraphQlEndpoints.SignOut);
+        ExecuteForEmptyCommand<BaseBoolResponseType, AuthSignOutRequest, BaseBoolResponse>(GraphQlEndpoints.SignOut);
     }
 }

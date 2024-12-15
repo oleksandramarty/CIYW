@@ -24,18 +24,18 @@ public class AuthSignOutRequestHandlerTest() : CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnTrue_WhenAuthSignOutRequestIsValid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        await CreateTestUser(role);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
 
             IMediator mediator = new Mediator(scope.ServiceProvider);
             BaseBoolResponse response = await mediator.Send(new AuthSignOutRequest());
 
-            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            bool afterSignIn = await IsCurrentUserAuthenticated();
 
             // Assert
             beforeSignIn.Should().BeTrue();
@@ -49,8 +49,8 @@ public class AuthSignOutRequestHandlerTest() : CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnException_WhenAuthSignOutRequestWithBlockedUser(UserRoleEnum role, StatusEnum status, string errorMessage)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(
             role,
             1,
             1,
@@ -63,7 +63,7 @@ public class AuthSignOutRequestHandlerTest() : CommonIntegrationTestSetup()
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
 
             beforeSignIn.Should().BeTrue();
             IMediator mediator = new Mediator(scope.ServiceProvider);

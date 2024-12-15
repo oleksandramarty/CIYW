@@ -4,13 +4,13 @@ namespace CommonModule.Shared.Common;
 
 public class AuditableNonNullableKey : IAuditableNonNullableKey
 {
-    private string key = string.Empty;
+    private string _key = string.Empty;
 
     public string? Key
     {
         get
         {
-            if (string.IsNullOrEmpty(this.key))
+            if (string.IsNullOrEmpty(_key))
             {
                 // TODO Audit Trail warning empty key
             }
@@ -19,15 +19,15 @@ public class AuditableNonNullableKey : IAuditableNonNullableKey
                 // TODO Audit Trail warning empty instance name
             }
 
-            return this.key;
+            return _key;
         }
         set
         {
-            if (string.IsNullOrEmpty(this.key))
+            if (string.IsNullOrEmpty(_key))
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    this.key = value;
+                    _key = value;
                 }
                 else
                 {

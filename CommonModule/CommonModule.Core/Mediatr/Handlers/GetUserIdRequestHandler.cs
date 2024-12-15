@@ -6,15 +6,15 @@ namespace CommonModule.Core.Mediatr.Handlers;
 
 public class GetUserIdRequestHandler: IRequestHandler<GetUserIdRequest, Guid?>
 {
-    private readonly ICurrentUserRepository currentUserRepository;
+    private readonly ICurrentUserRepository _currentUserRepository;
     
     public GetUserIdRequestHandler(ICurrentUserRepository currentUserRepository)
     {
-        this.currentUserRepository = currentUserRepository;
+        _currentUserRepository = currentUserRepository;
     }
     
     public async Task<Guid?> Handle(GetUserIdRequest request, CancellationToken cancellationToken)
     {
-        return await this.currentUserRepository.CurrentUserIdAsync();
+        return await _currentUserRepository.CurrentUserIdAsync();
     }
 }

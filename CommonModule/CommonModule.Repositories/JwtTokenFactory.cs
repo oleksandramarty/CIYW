@@ -13,11 +13,11 @@ namespace CommonModule.Repositories;
 
 public class JwtTokenFactory: IJwtTokenFactory
 {
-    private readonly IConfiguration configuration;
+    private readonly IConfiguration _configuration;
     
     public JwtTokenFactory(IConfiguration configuration)
     {
-        this.configuration = configuration;
+        _configuration = configuration;
     }
     
     public string GenerateSalt()
@@ -50,7 +50,7 @@ public class JwtTokenFactory: IJwtTokenFactory
             throw new EntityNotFoundException();
         }
         var tokenHandler = new JwtSecurityTokenHandler();
-        string? secretKey = configuration["Authentication:Jwt:SecretKey"];
+        string? secretKey = _configuration["Authentication:Jwt:SecretKey"];
         if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)
         {
             throw new ArgumentException(ErrorMessages.JwtMinLength);
@@ -123,7 +123,7 @@ public class JwtTokenFactory: IJwtTokenFactory
     
     public Guid UserIdFromToken(string token)
     {
-        var userIdClaim = this.ClaimValue(token, AuthClaims.UserId);
+        var userIdClaim = ClaimValue(token, AuthClaims.UserId);
 
         if (userIdClaim == null)
         {
@@ -135,7 +135,7 @@ public class JwtTokenFactory: IJwtTokenFactory
     
     public bool IsTokenRefreshable(string token)
     {
-        var rememberMeClaim = this.ClaimValue(token, AuthClaims.RememberMe);
+        var rememberMeClaim = ClaimValue(token, AuthClaims.RememberMe);
         if (!bool.TryParse(rememberMeClaim.Value, out var rememberMe))
         {
             throw new InvalidOperationException(ErrorMessages.JwtUserClaimInvalidConversion);

@@ -11,31 +11,31 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class RemoveFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemoveFavoriteExpenseCommand, BaseBoolResponse>
 {
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> _genericFavoriteExpenseRepository;
 
     public RemoveFavoriteExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-    ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> genericFavoriteExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+    ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.entityValidator = entityValidator;
-        this.favoriteExpenseRepository = favoriteExpenseRepository;
+        _entityValidator = entityValidator;
+        _genericFavoriteExpenseRepository = genericFavoriteExpenseRepository;
     }
     
     public async Task<BaseBoolResponse> Handle(RemoveFavoriteExpenseCommand command, CancellationToken cancellationToken)
     {
-        FavoriteExpenseEntity? favoriteExpense = await this.favoriteExpenseRepository.ByIdAsync(command.Id, cancellationToken);
+        FavoriteExpenseEntity? favoriteExpense = await _genericFavoriteExpenseRepository.ByIdAsync(command.Id, cancellationToken);
         if (favoriteExpense == null)
         {
             throw new EntityNotFoundException();
         }
 
-        await this.CheckUserProjectByIdAsync(favoriteExpense.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(favoriteExpense.UserProjectId, cancellationToken);
 
-        await this.favoriteExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
+        await _genericFavoriteExpenseRepository.DeleteByIdAsync(command.Id, cancellationToken);
 
         return new BaseBoolResponse();
     }

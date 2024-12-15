@@ -23,7 +23,7 @@ public class AuthSignUpCommandHandlerTest() : CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnUserId_WhenAuthSignUpRequestIsValid()
     {
         // Arrange
-        await this.SignOutUserIfExist();
+        await SignOutUserIfExist();
         string password = StringExtension.GenerateRandomString(10, true) + "Aa!1";
         AuthSignUpCommand command = new AuthSignUpCommand
         {
@@ -37,14 +37,14 @@ public class AuthSignUpCommandHandlerTest() : CommonIntegrationTestSetup()
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             AuthGatewayDataContext authGatewayDataContext = scope.ServiceProvider.GetRequiredService<AuthGatewayDataContext>();
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
 
             IMediator mediator = new Mediator(scope.ServiceProvider);
             BaseEntityIdResponse<Guid> response = await mediator.Send(command);
 
             UserEntity? user = await authGatewayDataContext.Users.FirstOrDefaultAsync(x => x.Id == response.Id);
 
-            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            bool afterSignIn = await IsCurrentUserAuthenticated();
 
             // Assert
             beforeSignIn.Should().BeFalse();

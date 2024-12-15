@@ -38,8 +38,8 @@ public class CreateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
         )
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, userProjectsCount);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, userProjectsCount);
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
@@ -71,8 +71,8 @@ public class CreateUserProjectCommandHandlerTest() : CommonIntegrationTestSetup(
     public async Task Handle_ShouldReturnException_WhenCreateUserProjectCommandIsInvalid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 3);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, 3);
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())

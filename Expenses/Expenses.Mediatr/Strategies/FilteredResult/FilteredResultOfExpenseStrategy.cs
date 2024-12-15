@@ -15,14 +15,14 @@ namespace Expenses.Mediatr.Strategies.FilteredResult;
 
 public class FilteredResultOfExpenseStrategy: FilteredResultStrategyResponseContext<FilteredExpensesRequest, ExpenseEntity, ExpenseResponse>, IFilteredResultStrategy<FilteredExpensesRequest, ExpenseResponse>
 {
-    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository;
+    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> _readGenericExpenseRepository;
 
     public FilteredResultOfExpenseStrategy(
         IMapper mapper,
-        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository
+        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> readGenericExpenseRepository
         ): base(mapper)
     {
-        this.expenseRepository = expenseRepository;
+        _readGenericExpenseRepository = readGenericExpenseRepository;
     }
 
     public async Task<FilteredListResponse<ExpenseResponse>> FilteredResultAsync(FilteredExpensesRequest request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ public class FilteredResultOfExpenseStrategy: FilteredResultStrategyResponseCont
             request.CategoryIds = new BaseFilterIdsRequest<int>();
         }
         
-        var query = this.expenseRepository.Queryable(
+        var query = _readGenericExpenseRepository.Queryable(
             e => e.UserProjectId == request.UserProjectId &&
                  (string.IsNullOrEmpty(request.Query) || EF.Functions.Like(e.Title, $"%{request.Query}%")) &&
                  (!request.CategoryIds.Ids.Any() || request.CategoryIds.Ids.Contains(e.CategoryId)) &&
@@ -73,6 +73,6 @@ public class FilteredResultOfExpenseStrategy: FilteredResultStrategyResponseCont
             }
         }
         
-        return await this.FilteredResultAsync(request, query, cancellationToken);
+        return await FilteredResultAsync(request, query, cancellationToken);
     }
 }

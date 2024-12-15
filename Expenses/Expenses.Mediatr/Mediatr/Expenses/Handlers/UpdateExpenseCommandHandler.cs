@@ -13,42 +13,40 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class UpdateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<UpdateExpenseCommand>
 {
-    private readonly IMapper mapper;
-    private readonly IBalanceRepository balanceRepository;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository;
-    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
-
+    private readonly IMapper _mapper;
+    private readonly IBalanceRepository _balanceRepository;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> _readGenericExpenseRepository;
+    
     public UpdateExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IBalanceRepository balanceRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-        ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> readGenericExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+        ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.mapper = mapper;
-        this.balanceRepository = balanceRepository;
-        this.entityValidator = entityValidator;
-        this.expenseRepository = expenseRepository;
-        this.userProjectRepository = userProjectRepository;
+        _mapper = mapper;
+        _balanceRepository = balanceRepository;
+        _entityValidator = entityValidator;
+        _readGenericExpenseRepository = readGenericExpenseRepository;
     }
 
     public async Task Handle(UpdateExpenseCommand command, CancellationToken cancellationToken)
     {        
-        this.entityValidator.ValidateVoidRequest<UpdateExpenseCommand>(command, () => new UpdateExpenseCommandValidator());
+        _entityValidator.ValidateVoidRequest<UpdateExpenseCommand>(command, () => new UpdateExpenseCommandValidator());
 
-        ExpenseEntity? currentExpense = await this.expenseRepository.Async(
+        ExpenseEntity? currentExpense = await _readGenericExpenseRepository.Async(
             e => e.Id == command.Id, cancellationToken);
         if (currentExpense == null)
         {
             throw new EntityNotFoundException();
         }
         
-        await this.CheckUserProjectByIdAsync(currentExpense.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(currentExpense.UserProjectId, cancellationToken);
         
-        await this.balanceRepository.UpdateExpenseAsync(currentExpense,
-            this.mapper.Map<ExpenseEntity>(command), cancellationToken);
+        await _balanceRepository.UpdateExpenseAsync(currentExpense,
+            _mapper.Map<ExpenseEntity>(command), cancellationToken);
     }
 }

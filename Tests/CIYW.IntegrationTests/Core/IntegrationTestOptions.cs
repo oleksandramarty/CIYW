@@ -41,7 +41,7 @@ public class IntegrationTestOptions
 
     public async Task InitializeUser(IntegrationTestBase testApplicationFactory)
     {
-        AdditionalUser = await this.CreateUser(
+        AdditionalUser = await CreateUser(
             testApplicationFactory,
             UserRoleEnum.User,
             200,
@@ -53,7 +53,7 @@ public class IntegrationTestOptions
             return;
         }
 
-        await this.CreateUser(testApplicationFactory, Role.Value);
+        await CreateUser(testApplicationFactory, Role.Value);
     }
 
     public async Task<IntegrationTestUserEntity> CreateUser(
@@ -189,7 +189,7 @@ public class IntegrationTestOptions
             result.Token = token;
 
             var httpContextAccessorForTesting = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
-            List<Claim> claims = this.TestClaims();
+            List<Claim> claims = TestClaims();
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, "IntegrationTestAuthentication");
             ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
@@ -341,10 +341,10 @@ public class IntegrationTestOptions
     {
         using var scope = testApplicationFactory.Services.CreateScope();
 
-        if (this.CurrentUserEntity?.Token != null)
+        if (CurrentUserEntity?.Token != null)
         {
             ITokenRepository tokenRepository = scope.ServiceProvider.GetRequiredService<ITokenRepository>();
-            await tokenRepository.RemoveTokenAsync(this.CurrentUserEntity.Token);
+            await tokenRepository.RemoveTokenAsync(CurrentUserEntity.Token);
 
             HttpContextAccessorForTesting httpContextAccessorForTesting = new HttpContextAccessorForTesting();
             httpContextAccessorForTesting.HttpContext = new DefaultHttpContext()
@@ -352,7 +352,7 @@ public class IntegrationTestOptions
                 User = null
             };
 
-            this.CurrentUserEntity = null;
+            CurrentUserEntity = null;
         }
     }
 
@@ -361,19 +361,19 @@ public class IntegrationTestOptions
         using var scope = testApplicationFactory.Services.CreateScope();
         ITokenRepository tokenRepository = scope.ServiceProvider.GetRequiredService<ITokenRepository>();
 
-        if (this.CurrentUserEntity?.Token == null)
+        if (CurrentUserEntity?.Token == null)
         {
             return false;
         }
 
-        return !tokenRepository.IsTokenExpired(this.CurrentUserEntity.Token);
+        return !tokenRepository.IsTokenExpired(CurrentUserEntity.Token);
     }
 
     public HttpContextAccessorForTesting GenerateClaims()
     {
         HttpContextAccessorForTesting httpContextAccessorForTesting = new HttpContextAccessorForTesting();
 
-        if (this.CurrentUserEntity == null)
+        if (CurrentUserEntity == null)
         {
             httpContextAccessorForTesting.HttpContext = new DefaultHttpContext()
             {
@@ -382,7 +382,7 @@ public class IntegrationTestOptions
             return httpContextAccessorForTesting;
         }
 
-        List<Claim> claims = this.TestClaims();
+        List<Claim> claims = TestClaims();
 
         ClaimsIdentity identity = new ClaimsIdentity(claims, "IntegrationTestAuthentication");
         ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
@@ -395,25 +395,25 @@ public class IntegrationTestOptions
 
     private List<Claim> TestClaims()
     {
-        if (this.CurrentUserEntity?.User == null)
+        if (CurrentUserEntity?.User == null)
         {
-            throw new ArgumentNullException(nameof(this.CurrentUserEntity.User));
+            throw new ArgumentNullException(nameof(CurrentUserEntity.User));
         }
 
-        if (this.CurrentUserEntity.User.Roles == null || !this.CurrentUserEntity.User.Roles.Any())
+        if (CurrentUserEntity.User.Roles == null || !CurrentUserEntity.User.Roles.Any())
         {
-            throw new ArgumentNullException(nameof(this.CurrentUserEntity.User.Roles));
+            throw new ArgumentNullException(nameof(CurrentUserEntity.User.Roles));
         }
 
         bool rememberMe = true;
 
         List<Claim> claims =
         [
-            new Claim(AuthClaims.Login, this.CurrentUserEntity.User.Login),
-            new Claim(AuthClaims.Email, this.CurrentUserEntity.User.Email),
-            new Claim(AuthClaims.UserId, this.CurrentUserEntity.User.Id.ToString()),
+            new Claim(AuthClaims.Login, CurrentUserEntity.User.Login),
+            new Claim(AuthClaims.Email, CurrentUserEntity.User.Email),
+            new Claim(AuthClaims.UserId, CurrentUserEntity.User.Id.ToString()),
             new Claim(AuthClaims.Role,
-                this.CurrentUserEntity.User.Roles.FirstOrDefault()?.Role?.UserRole.ToString() ?? string.Empty),
+                CurrentUserEntity.User.Roles.FirstOrDefault()?.Role?.UserRole.ToString() ?? string.Empty),
             new Claim(AuthClaims.RememberMe, rememberMe.ToString())
         ];
 
@@ -429,19 +429,19 @@ public class IntegrationTestOptions
         AuditTrailDataContext auditTrailDataContext =
             scope.ServiceProvider.GetRequiredService<AuditTrailDataContext>();
 
-        await this.RemoveAllFromTable<AuthGatewayDataContext, UserSettingEntity>(authGatewayDataContext);
-        await this.RemoveAllFromTable<AuthGatewayDataContext, UserRoleEntity>(authGatewayDataContext);
-        await this.RemoveAllFromTable<AuthGatewayDataContext, UserEntity>(authGatewayDataContext);
+        await RemoveAllFromTable<AuthGatewayDataContext, UserSettingEntity>(authGatewayDataContext);
+        await RemoveAllFromTable<AuthGatewayDataContext, UserRoleEntity>(authGatewayDataContext);
+        await RemoveAllFromTable<AuthGatewayDataContext, UserEntity>(authGatewayDataContext);
 
-        await this.RemoveAllFromTable<ExpensesDataContext, ExpenseEntity>(expensesDataContext);
-        await this.RemoveAllFromTable<ExpensesDataContext, PlannedExpenseEntity>(expensesDataContext);
-        await this.RemoveAllFromTable<ExpensesDataContext, FavoriteExpenseEntity>(expensesDataContext);
-        await this.RemoveAllFromTable<ExpensesDataContext, BalanceEntity>(expensesDataContext);
-        await this.RemoveAllFromTable<ExpensesDataContext, UserAllowedProjectEntity>(expensesDataContext);
-        await this.RemoveAllFromTable<ExpensesDataContext, UserProjectEntity>(expensesDataContext);
+        await RemoveAllFromTable<ExpensesDataContext, ExpenseEntity>(expensesDataContext);
+        await RemoveAllFromTable<ExpensesDataContext, PlannedExpenseEntity>(expensesDataContext);
+        await RemoveAllFromTable<ExpensesDataContext, FavoriteExpenseEntity>(expensesDataContext);
+        await RemoveAllFromTable<ExpensesDataContext, BalanceEntity>(expensesDataContext);
+        await RemoveAllFromTable<ExpensesDataContext, UserAllowedProjectEntity>(expensesDataContext);
+        await RemoveAllFromTable<ExpensesDataContext, UserProjectEntity>(expensesDataContext);
 
-        await this.RemoveAllFromTable<AuditTrailDataContext, AuditTrailEntity>(auditTrailDataContext);
-        await this.RemoveAllFromTable<AuditTrailDataContext, AuditTrailArchiveEntity>(auditTrailDataContext);
+        await RemoveAllFromTable<AuditTrailDataContext, AuditTrailEntity>(auditTrailDataContext);
+        await RemoveAllFromTable<AuditTrailDataContext, AuditTrailArchiveEntity>(auditTrailDataContext);
     }
 
     private async Task RemoveAllFromTable<TDataContext, TEntity>(TDataContext context)

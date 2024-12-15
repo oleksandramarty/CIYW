@@ -11,18 +11,18 @@ namespace Localizations.Mediatr.Mediatr.Localizations.Handlers;
 
 public class LocalesRequestHandler : IRequestHandler<LocalesRequest, VersionedListResponse<LocaleResponse>>
 {
-    private readonly IDictionaryRepository<int, LocaleEntity, LocaleResponse, LocalizationsDataContext> dictionaryRepository;
+    private readonly IDictionaryRepository<int, LocaleEntity, LocaleResponse, LocalizationsDataContext> _dictionaryRepository;
     
     public LocalesRequestHandler(
         IDictionaryRepository<int, LocaleEntity, LocaleResponse, LocalizationsDataContext> dictionaryRepository
         )
     {
-        this.dictionaryRepository = dictionaryRepository;
+        _dictionaryRepository = dictionaryRepository;
     }
     
     public async Task<VersionedListResponse<LocaleResponse>> Handle(LocalesRequest request, CancellationToken cancellationToken)
     {
-        VersionedListResponse<LocaleResponse> response = await this.dictionaryRepository.DictionaryAsync(request.Version, cancellationToken);
+        VersionedListResponse<LocaleResponse> response = await _dictionaryRepository.DictionaryAsync(request.Version, cancellationToken);
 
         response.Items = response.Items.OrderBy(i => i.Id).ToList();
         

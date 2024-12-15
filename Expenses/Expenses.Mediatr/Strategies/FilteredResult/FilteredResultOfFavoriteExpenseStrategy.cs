@@ -15,14 +15,14 @@ namespace Expenses.Mediatr.Strategies.FilteredResult;
 
 public class FilteredResultOfFavoriteExpenseStrategy: FilteredResultStrategyResponseContext<FilteredFavoriteExpensesRequest, FavoriteExpenseEntity, FavoriteExpenseResponse>, IFilteredResultStrategy<FilteredFavoriteExpensesRequest, FavoriteExpenseResponse>
 {
-    private readonly IReadGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository;
+    private readonly IReadGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> _readGenericFavoriteExpenseRepository;
 
     public FilteredResultOfFavoriteExpenseStrategy(
         IMapper mapper,
-        IReadGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository
+        IReadGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> readGenericFavoriteExpenseRepository
         ): base(mapper)
     {
-        this.favoriteExpenseRepository = favoriteExpenseRepository;
+        _readGenericFavoriteExpenseRepository = readGenericFavoriteExpenseRepository;
     }
 
     public async Task<FilteredListResponse<FavoriteExpenseResponse>> FilteredResultAsync(FilteredFavoriteExpensesRequest request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ public class FilteredResultOfFavoriteExpenseStrategy: FilteredResultStrategyResp
             request.CategoryIds = new BaseFilterIdsRequest<int>();
         }
         
-        var query = this.favoriteExpenseRepository.Queryable(
+        var query = _readGenericFavoriteExpenseRepository.Queryable(
             e => e.UserProjectId == request.UserProjectId &&
                  (string.IsNullOrEmpty(request.Query) || EF.Functions.Like(e.Title, $"%{request.Query}%")) &&
                  (!request.CategoryIds.Ids.Any() || e.CategoryId.HasValue && request.CategoryIds.Ids.Contains(e.CategoryId.Value)) &&
@@ -76,6 +76,6 @@ public class FilteredResultOfFavoriteExpenseStrategy: FilteredResultStrategyResp
             }
         }
         
-        return await this.FilteredResultAsync(request, query, cancellationToken);
+        return await FilteredResultAsync(request, query, cancellationToken);
     }
 }

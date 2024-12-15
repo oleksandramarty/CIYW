@@ -8,21 +8,21 @@ public class GenericRepository<TEntityId, TEntity, TDataContext> : IGenericRepos
     where TEntity : class
     where TDataContext : DbContext
 {
-    private readonly TDataContext dataContext;
-    private readonly DbSet<TEntity> dbSet;
+    private readonly TDataContext _dataContext;
+    private readonly DbSet<TEntity> _dbSet;
 
     public GenericRepository(
         TDataContext dataContext
     )
     {
-        this.dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
-        this.dbSet = this.dataContext.Set<TEntity>();
+        _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+        _dbSet = _dataContext.Set<TEntity>();
     }
 
     public async Task<TEntity> ByIdAsync(TEntityId id, CancellationToken cancellationToken,
         params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs)
     {
-        IQueryable<TEntity> query = dbSet;
+        IQueryable<TEntity> query = _dbSet;
 
         if (includeFuncs != null)
         {
@@ -39,7 +39,7 @@ public class GenericRepository<TEntityId, TEntity, TDataContext> : IGenericRepos
     public async Task<TEntity> Async(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken,
         params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs)
     {
-        IQueryable<TEntity> query = dbSet;
+        IQueryable<TEntity> query = _dbSet;
 
         if (includeFuncs != null)
         {
@@ -58,7 +58,7 @@ public class GenericRepository<TEntityId, TEntity, TDataContext> : IGenericRepos
         CancellationToken cancellationToken,
         params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs)
     {
-        IQueryable<TEntity> query = dbSet;
+        IQueryable<TEntity> query = _dbSet;
 
         if (includeFuncs != null)
         {
@@ -76,7 +76,7 @@ public class GenericRepository<TEntityId, TEntity, TDataContext> : IGenericRepos
         Expression<Func<TEntity, bool>>? condition,
         params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs)
     {
-        IQueryable<TEntity> query = dbSet;
+        IQueryable<TEntity> query = _dbSet;
 
         if (includeFuncs != null)
         {
@@ -91,51 +91,51 @@ public class GenericRepository<TEntityId, TEntity, TDataContext> : IGenericRepos
 
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        await this.dbSet.AddAsync(entity, cancellationToken);
-        await this.dataContext.SaveChangesAsync(cancellationToken);
+        await _dbSet.AddAsync(entity, cancellationToken);
+        await _dataContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        this.dataContext.Entry(entity).State = EntityState.Modified;
-        await this.dataContext.SaveChangesAsync(cancellationToken);
+        _dataContext.Entry(entity).State = EntityState.Modified;
+        await _dataContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        this.dataContext.Entry(entity).State = EntityState.Deleted;
-        await this.dataContext.SaveChangesAsync(cancellationToken);
+        _dataContext.Entry(entity).State = EntityState.Deleted;
+        await _dataContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken)
     {
-        await this.dbSet.AddRangeAsync(entities, cancellationToken);
-        await this.dataContext.SaveChangesAsync(cancellationToken);
+        await _dbSet.AddRangeAsync(entities, cancellationToken);
+        await _dataContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken)
     {
         foreach (var entity in entities)
         {
-            this.dataContext.Entry(entity).State = EntityState.Modified;
+            _dataContext.Entry(entity).State = EntityState.Modified;
         }
 
-        await this.dataContext.SaveChangesAsync(cancellationToken);
+        await _dataContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken)
     {
-        this.dbSet.RemoveRange(entities);
-        await this.dataContext.SaveChangesAsync(cancellationToken);
+        _dbSet.RemoveRange(entities);
+        await _dataContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteByIdAsync(TEntityId id, CancellationToken cancellationToken)
     {
-        var entity = await this.ByIdAsync(id, cancellationToken);
+        var entity = await ByIdAsync(id, cancellationToken);
         if (entity != null)
         {
-            this.dbSet.Remove(entity);
-            await this.dataContext.SaveChangesAsync(cancellationToken);
+            _dbSet.Remove(entity);
+            await _dataContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

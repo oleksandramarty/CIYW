@@ -7,7 +7,7 @@ public class LocalizationsResponse: BaseVersionEntity
 {
     public LocalizationsResponse()
     {
-        this.Data = new List<LocalizationResponse>();
+        Data = new List<LocalizationResponse>();
     }
     public ICollection<LocalizationResponse> Data { get; set; }
 }
@@ -16,13 +16,13 @@ public class LocalizationResponse
 {
     public LocalizationResponse()
     {
-        this.Items = new List<LocalizationItemResponse>();
+        Items = new List<LocalizationItemResponse>();
     }
     
     public LocalizationResponse(string locale)
     {
-        this.Locale = locale;
-        this.Items = new List<LocalizationItemResponse>();
+        Locale = locale;
+        Items = new List<LocalizationItemResponse>();
     }
     public string? Locale { get; set; }
     public ICollection<LocalizationItemResponse> Items { get; set; }
@@ -32,8 +32,8 @@ public class LocalizationItemResponse
 {
     public LocalizationItemResponse(string? key, string? value)
     {
-        this.Key = key;
-        this.Value = value;
+        Key = key;
+        Value = value;
     }
     
     public string? Key { get; set; }

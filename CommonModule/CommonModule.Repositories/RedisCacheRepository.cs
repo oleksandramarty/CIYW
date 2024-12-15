@@ -10,20 +10,20 @@ public class RedisCacheRepository<TEntityId, TEntity> : ICacheRepository<TEntity
     where TEntityId : notnull
     where TEntity : class, IBaseIdEntity<TEntityId>
 {
-    private readonly ICacheBaseRepository<TEntityId> cacheBaseRepository;
-    private readonly string dictionaryName;
+    private readonly ICacheBaseRepository<TEntityId> _cacheBaseRepository;
+    private readonly string _dictionaryName;
 
     public RedisCacheRepository(
         ICacheBaseRepository<TEntityId> cacheBaseRepository
         )
     {
-        this.cacheBaseRepository = cacheBaseRepository;
-        this.dictionaryName = typeof(TEntity).Name.Replace("Entity", "").ToLower();
+        _cacheBaseRepository = cacheBaseRepository;
+        _dictionaryName = typeof(TEntity).Name.Replace("Entity", "").ToLower();
     }
 
     public async Task<List<TEntity>?> ItemsFromCacheAsync()
     {
-        IEnumerable<string> items = await cacheBaseRepository.ItemsFromCacheAsync(this.dictionaryName);
+        IEnumerable<string> items = await _cacheBaseRepository.ItemsFromCacheAsync(_dictionaryName);
 
         return items
             .Select(result => JsonSerializerExtension.FromString<TEntity?>(result))
@@ -33,24 +33,24 @@ public class RedisCacheRepository<TEntityId, TEntity> : ICacheRepository<TEntity
 
     private IEnumerable<RedisKey> AllKeys()
     {
-        return this.cacheBaseRepository.AllKeys(this.dictionaryName);
+        return _cacheBaseRepository.AllKeys(_dictionaryName);
     }
 
     public async Task ReinitializeDictionaryAsync(List<TEntity> values)
     {
-        await this.cacheBaseRepository.ReinitializeDictionaryAsync(this.dictionaryName, values.ToDictionary(item => item.Id, item => JsonSerializerExtension.ToString(item)));
+        await _cacheBaseRepository.ReinitializeDictionaryAsync(_dictionaryName, values.ToDictionary(item => item.Id, item => JsonSerializerExtension.ToString(item)));
     }
 
     public async Task<string> CacheVersionAsync()
     {
-        string? version = await this.cacheBaseRepository.CacheVersionAsync(this.dictionaryName);
+        string? version = await _cacheBaseRepository.CacheVersionAsync(_dictionaryName);
 
         if (string.IsNullOrEmpty(version))
         {
-            await this.cacheBaseRepository.SetCacheVersionAsync(this.dictionaryName);
+            await _cacheBaseRepository.SetCacheVersionAsync(_dictionaryName);
         }
         
-        version = await this.cacheBaseRepository.CacheVersionAsync(this.dictionaryName);
+        version = await _cacheBaseRepository.CacheVersionAsync(_dictionaryName);
 
         if (string.IsNullOrEmpty(version))
         {
@@ -62,6 +62,6 @@ public class RedisCacheRepository<TEntityId, TEntity> : ICacheRepository<TEntity
 
     public async Task SetCacheVersionAsync()
     {
-        await this.cacheBaseRepository.SetCacheVersionAsync(this.dictionaryName);
+        await _cacheBaseRepository.SetCacheVersionAsync(_dictionaryName);
     }
 }

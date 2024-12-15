@@ -8,7 +8,7 @@ public class MappingLocalizationsProfile: Profile
 {
     public MappingLocalizationsProfile()
     {
-        this.CreateMap<LocaleEntity, LocaleResponse>();
-        this.CreateMap<LocalizationEntity, LocalizationResponse>();
+        CreateMap<LocaleEntity, LocaleResponse>();
+        CreateMap<LocalizationEntity, LocalizationResponse>();
     }
 }

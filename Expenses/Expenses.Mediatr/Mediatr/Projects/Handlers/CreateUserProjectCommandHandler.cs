@@ -19,39 +19,39 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
 public class CreateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<CreateUserProjectCommand, BaseEntityIdResponse<Guid>>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> _genericUserProjectRepository;
     
     public CreateUserProjectCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository): base(currentUserRepository)
+        IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> genericUserProjectRepository): base(currentUserRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.userProjectRepository = userProjectRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _genericUserProjectRepository = genericUserProjectRepository;
     }
     
     public async Task<BaseEntityIdResponse<Guid>> Handle(CreateUserProjectCommand command, CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateRequest<CreateUserProjectCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateUserProjectCommandValidator());
+        _entityValidator.ValidateRequest<CreateUserProjectCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateUserProjectCommandValidator());
         
-        Guid userId = await this.CurrentUserIdAsync();
+        Guid userId = await CurrentUserIdAsync();
         
-        if (await this.userProjectRepository.Queryable(up => up.CreatedUserId == userId).CountAsync(cancellationToken) >= 3)
+        if (await _genericUserProjectRepository.Queryable(up => up.CreatedUserId == userId).CountAsync(cancellationToken) >= 3)
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
         
-        UserProjectEntity userProjectEntity = this.mapper.Map<UserProjectEntity>(command);
+        UserProjectEntity userProjectEntity = _mapper.Map<UserProjectEntity>(command);
         
         userProjectEntity.Id = Guid.NewGuid();
         userProjectEntity.CreatedUserId = userId;
         userProjectEntity.Status = StatusEnum.Active;
         
-        await this.userProjectRepository.AddAsync(userProjectEntity, cancellationToken);
+        await _genericUserProjectRepository.AddAsync(userProjectEntity, cancellationToken);
 
         return new BaseEntityIdResponse<Guid>
         {

@@ -54,7 +54,7 @@ public class CommonIntegrationTestSetup : IDisposable
     public async Task OneTimeSetup()
     {
         TestApplicationFactory = new IntegrationTestBase(Options);
-        this.Client = TestApplicationFactory.CreateClient();
+        Client = TestApplicationFactory.CreateClient();
 
         await Options.InitializeUser(TestApplicationFactory);
     }
@@ -135,7 +135,7 @@ public class CommonIntegrationTestSetup : IDisposable
     /// <returns></returns>
     public async Task<bool> IsCurrentUserAuthenticated()
     {
-        return await this.Options.IsCurrentUserAuthenticated(TestApplicationFactory);
+        return await Options.IsCurrentUserAuthenticated(TestApplicationFactory);
     }
 
     /// <summary>
@@ -145,7 +145,7 @@ public class CommonIntegrationTestSetup : IDisposable
     public async Task OneTimeTearDown()
     {
         await Options.Dispose(TestApplicationFactory);
-        this.Dispose();
+        Dispose();
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public class CommonIntegrationTestSetup : IDisposable
 
     public async Task<SiteSettingsResponse> SiteSettings()
     {
-        return await this.Options.SiteSettings(TestApplicationFactory);
+        return await Options.SiteSettings(TestApplicationFactory);
     }
 
     public async Task HandleValidDictionary<TRequest, TEntity, TEntityResponse>(
@@ -189,8 +189,8 @@ public class CommonIntegrationTestSetup : IDisposable
         where TEntity : class
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        await CreateTestUser(role);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())

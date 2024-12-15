@@ -45,8 +45,8 @@ public class FilteredFavoriteExpensesRequestHandlerTest() : CommonIntegrationTes
         int[] categoriesIds)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 1, 1);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, 1, 1);
         UserProjectEntity userProject = user.UserProjects.First();
         Guid balanceId = userProject.Balances.First().Id;
         var favoriteExpenses = new Dictionary<int, int>
@@ -58,7 +58,7 @@ public class FilteredFavoriteExpensesRequestHandlerTest() : CommonIntegrationTes
             { 5, 50 },
             { 6, 50 },
         };
-        await this.AddAllExpenses(user.User.Id, userProject.Id, balanceId, null, null, favoriteExpenses);
+        await AddAllExpenses(user.User.Id, userProject.Id, balanceId, null, null, favoriteExpenses);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())

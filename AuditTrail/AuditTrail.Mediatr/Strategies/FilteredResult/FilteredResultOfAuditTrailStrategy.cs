@@ -16,21 +16,21 @@ public class FilteredResultOfAuditTrailStrategy :
     FilteredResultStrategyResponseContext<FilteredAuditTrailRequest, AuditTrailEntity, AuditTrailResponse>,
     IFilteredResultStrategy<FilteredAuditTrailRequest, AuditTrailResponse>
 {
-    private readonly IReadGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> auditTrailRepository;
+    private readonly IReadGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> _readGenericAuditTrailRepository;
 
     public FilteredResultOfAuditTrailStrategy(
         IMapper mapper,
-        IReadGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> auditTrailRepository
+        IReadGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> readGenericAuditTrailRepository
     ) : base(mapper)
     {
-        this.auditTrailRepository = auditTrailRepository;
+        _readGenericAuditTrailRepository = readGenericAuditTrailRepository;
     }
 
 
     public async Task<FilteredListResponse<AuditTrailResponse>> FilteredResultAsync(
         FilteredAuditTrailRequest request, CancellationToken cancellationToken)
     {
-        var query = this.auditTrailRepository.Queryable(e =>
+        var query = _readGenericAuditTrailRepository.Queryable(e =>
             (
                 string.IsNullOrEmpty(request.Query) ||
                 (
@@ -98,6 +98,6 @@ public class FilteredResultOfAuditTrailStrategy :
             }
         }
 
-        return await this.FilteredResultAsync(request, query, cancellationToken);
+        return await FilteredResultAsync(request, query, cancellationToken);
     }
 }

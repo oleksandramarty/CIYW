@@ -22,15 +22,15 @@ public class UpdateFavoriteExpenseCommandHandlerTest : CommonIntegrationTestSetu
     public async Task Handle_ShouldUpdateFavoriteExpense_WhenUpdateFavoriteExpenseCommandIsValid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role);
         UserProjectEntity userProject = user.UserProjects.First();
         Guid balanceId = userProject.Balances.First().Id;
         var favoriteExpenses = new Dictionary<int, int>
         {
             { 1, 1 }
         };
-        await this.AddAllExpenses(
+        await AddAllExpenses(
             user.User.Id,
             userProject.Id,
             balanceId,

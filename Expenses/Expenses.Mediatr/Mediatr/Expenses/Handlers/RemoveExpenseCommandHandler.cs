@@ -16,34 +16,34 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class RemoveExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<RemoveExpenseCommand, BaseBoolResponse>
 {
-    private readonly IBalanceRepository balanceRepository;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository;
+    private readonly IBalanceRepository _balanceRepository;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> _readGenericExpenseRepository;
 
     public RemoveExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IBalanceRepository balanceRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-    ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> readGenericExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+    ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.balanceRepository = balanceRepository;
-        this.entityValidator = entityValidator;
-        this.expenseRepository = expenseRepository;
+        _balanceRepository = balanceRepository;
+        _entityValidator = entityValidator;
+        _readGenericExpenseRepository = readGenericExpenseRepository;
     }
     
     public async Task<BaseBoolResponse> Handle(RemoveExpenseCommand command, CancellationToken cancellationToken)
     {
-        ExpenseEntity? expense = await this.expenseRepository.ByIdAsync(command.Id, cancellationToken);
+        ExpenseEntity? expense = await _readGenericExpenseRepository.ByIdAsync(command.Id, cancellationToken);
         if (expense == null)
         {
             throw new EntityNotFoundException();
         }
 
-        await this.CheckUserProjectByIdAsync(expense.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(expense.UserProjectId, cancellationToken);
 
-        await this.balanceRepository.RemoveExpenseAsync(expense, cancellationToken);
+        await _balanceRepository.RemoveExpenseAsync(expense, cancellationToken);
 
         return new BaseBoolResponse();
     }

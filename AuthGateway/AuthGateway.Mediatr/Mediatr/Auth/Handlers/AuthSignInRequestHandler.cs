@@ -16,29 +16,29 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthSignInRequestHandler : IRequestHandler<AuthSignInRequest, JwtTokenResponse>
 {
-    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
-    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly ITokenRepository tokenRepository;
-    private readonly IJwtTokenFactory jwtTokenFactory;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> _genericUserRepository;
+    private readonly IEntityValidator<AuthGatewayDataContext> _entityValidator;
+    private readonly ITokenRepository _tokenRepository;
+    private readonly IJwtTokenFactory _jwtTokenFactory;
 
     public AuthSignInRequestHandler(
-        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> genericUserRepository,
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         ITokenRepository tokenRepository,
         IJwtTokenFactory jwtTokenFactory)
     {
-        this.userRepository = userRepository;
-        this.entityValidator = entityValidator;
-        this.tokenRepository = tokenRepository;
-        this.jwtTokenFactory = jwtTokenFactory;
+        _genericUserRepository = genericUserRepository;
+        _entityValidator = entityValidator;
+        _tokenRepository = tokenRepository;
+        _jwtTokenFactory = jwtTokenFactory;
     }
 
     public async Task<JwtTokenResponse> Handle(AuthSignInRequest request, CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateRequest<AuthSignInRequest, JwtTokenResponse>(request,
+        _entityValidator.ValidateRequest<AuthSignInRequest, JwtTokenResponse>(request,
             () => new AuthSignInRequestValidator());
 
-        UserEntity user = await this.userRepository.Async(u =>
+        UserEntity user = await _genericUserRepository.Async(u =>
                 u.Email == request.Login ||
                 u.Login == request.Login,
             cancellationToken,
@@ -50,20 +50,20 @@ public class AuthSignInRequestHandler : IRequestHandler<AuthSignInRequest, JwtTo
         
         user.CheckInvalidStatus();
 
-        var hashedPassword = this.jwtTokenFactory.HashPassword(request.Password, user.Salt);
+        var hashedPassword = _jwtTokenFactory.HashPassword(request.Password, user.Salt);
         if (hashedPassword != user.PasswordHash)
         {
             throw new AuthException(ErrorMessages.WrongAuth, StatusCodes.Status403Forbidden);
         }
 
-        var token = this.jwtTokenFactory.GenerateJwtToken(
+        var token = _jwtTokenFactory.GenerateJwtToken(
             user.Id,
             user.Login,
             user.Email,
             string.Join(",", user.Roles.Select(r => r.Role?.Title)),
             request.RememberMe);
 
-        await this.tokenRepository.AddTokenAsync(token,
+        await _tokenRepository.AddTokenAsync(token,
             request.RememberMe ? TimeSpan.FromDays(30) : TimeSpan.FromDays(1));
 
         return new JwtTokenResponse

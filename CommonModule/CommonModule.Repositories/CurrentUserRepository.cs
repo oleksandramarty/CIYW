@@ -9,16 +9,16 @@ namespace CommonModule.Repositories;
 
 public class CurrentUserRepository : ICurrentUserRepository
 {
-    private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public CurrentUserRepository(IHttpContextAccessor httpContextAccessor)
     {
-        this.httpContextAccessor = httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public string CurrentToken()
     {
-        string? authorizationHeader = this.httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+        string? authorizationHeader = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
         return !string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith($"{AuthSchema.Schema} ") ?
             authorizationHeader.Substring($"{AuthSchema.Schema} ".Length).Trim()
             : string.Empty;
@@ -26,12 +26,12 @@ public class CurrentUserRepository : ICurrentUserRepository
 
     public IEnumerable<Claim>? CurrentClaims()
     {
-        return this.httpContextAccessor.HttpContext?.User.Claims;
+        return _httpContextAccessor.HttpContext?.User.Claims;
     }
 
     public Guid? CurrentUserId()
     {
-        var userIdClaim = this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId);
+        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.UserId);
         if (userIdClaim == null)
         {
             return null;
@@ -47,7 +47,7 @@ public class CurrentUserRepository : ICurrentUserRepository
 
     public UserRoleEnum CurrentUserRole()
     {
-        string? roleString = this.httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.Role)?.Value;
+        string? roleString = _httpContextAccessor.HttpContext?.User.FindFirst(AuthClaims.Role)?.Value;
         if (Enum.TryParse<UserRoleEnum>(roleString, out var role))
         {
             return role;

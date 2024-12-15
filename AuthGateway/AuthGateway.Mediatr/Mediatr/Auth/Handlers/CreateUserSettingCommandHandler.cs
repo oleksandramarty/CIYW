@@ -11,35 +11,35 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class CreateUserSettingCommandHandler: IRequestHandler<CreateUserSettingCommand, BaseEntityIdResponse<Guid>>
 {
-    private readonly IMapper mapper;
-    private readonly ICurrentUserRepository currentUserRepository;
-    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository;
+    private readonly IMapper _mapper;
+    private readonly ICurrentUserRepository _currentUserRepository;
+    private readonly IEntityValidator<AuthGatewayDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> _genericUserSettingRepository;
     
     public CreateUserSettingCommandHandler(
         IMapper mapper,
         ICurrentUserRepository currentUserRepository, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
-        IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> userSettingRepository
+        IGenericRepository<Guid, UserSettingEntity, AuthGatewayDataContext> genericUserSettingRepository
         )
     {
-        this.mapper = mapper;
-        this.currentUserRepository = currentUserRepository;
-        this.entityValidator = entityValidator;
-        this.userSettingRepository = userSettingRepository;
+        _mapper = mapper;
+        _currentUserRepository = currentUserRepository;
+        _entityValidator = entityValidator;
+        _genericUserSettingRepository = genericUserSettingRepository;
     }
     
     public async Task<BaseEntityIdResponse<Guid>> Handle(CreateUserSettingCommand command, CancellationToken cancellationToken)
     {
-        Guid? userId = await currentUserRepository.CurrentUserIdAsync();
+        Guid? userId = await _currentUserRepository.CurrentUserIdAsync();
         if (!userId.HasValue)
         {
             throw new EntityNotFoundException();
         }
         
-        UserSettingEntity toAdd = this.mapper.Map<UserSettingEntity>(command);
+        UserSettingEntity toAdd = _mapper.Map<UserSettingEntity>(command);
         
-        await this.userSettingRepository.AddAsync(
+        await _genericUserSettingRepository.AddAsync(
             toAdd,
             cancellationToken
         );

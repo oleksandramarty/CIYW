@@ -28,14 +28,14 @@ public class LocalizationsRequestHandlerTest(): CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnLocalizations_WhenLocalizationRequestIsValid(UserRoleEnum role, bool isPublic)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(role);
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             LocalizationsDataContext localizationsDataContext = scope.ServiceProvider.GetRequiredService<LocalizationsDataContext>();
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
             
             IMediator mediator = new Mediator(scope.ServiceProvider);
             LocalizationsResponse response = await mediator.Send(new LocalizationsRequest
@@ -43,7 +43,7 @@ public class LocalizationsRequestHandlerTest(): CommonIntegrationTestSetup()
                 IsPublic = isPublic
             });
             
-            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            bool afterSignIn = await IsCurrentUserAuthenticated();
             
             // Assert
             beforeSignIn.Should().BeTrue();
@@ -62,13 +62,13 @@ public class LocalizationsRequestHandlerTest(): CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnPublicLocalizations_WhenLocalizationRequestIsValid()
     {
         // Arrange
-        await this.SignOutUserIfExist();
+        await SignOutUserIfExist();
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             LocalizationsDataContext localizationsDataContext = scope.ServiceProvider.GetRequiredService<LocalizationsDataContext>();
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
             
             IMediator mediator = new Mediator(scope.ServiceProvider);
             LocalizationsResponse response = await mediator.Send(new LocalizationsRequest
@@ -76,7 +76,7 @@ public class LocalizationsRequestHandlerTest(): CommonIntegrationTestSetup()
                 IsPublic = true
             });
             
-            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            bool afterSignIn = await IsCurrentUserAuthenticated();
             
             // Assert
             beforeSignIn.Should().BeFalse();

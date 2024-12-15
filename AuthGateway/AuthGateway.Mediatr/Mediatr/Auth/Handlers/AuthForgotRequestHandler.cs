@@ -15,24 +15,24 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthForgotRequest>
 {
-    private readonly ICurrentUserRepository currentUserRepository;
-    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
+    private readonly ICurrentUserRepository _currentUserRepository;
+    private readonly IEntityValidator<AuthGatewayDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> _genericUserRepository;
 
     public AuthForgotRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<AuthGatewayDataContext> entityValidator,
-        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> genericUserRepository
     ) : base(currentUserRepository)
     {
-        this.entityValidator = entityValidator;
-        this.userRepository = userRepository;
+        _entityValidator = entityValidator;
+        _genericUserRepository = genericUserRepository;
     }
 
     public async Task Handle(AuthForgotRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.CurrentUserIdAsync();
-        UserEntity? user = await this.userRepository.ByIdAsync(userId, cancellationToken);
+        Guid userId = await CurrentUserIdAsync();
+        UserEntity? user = await _genericUserRepository.ByIdAsync(userId, cancellationToken);
         if (user == null)
         {
             throw new EntityNotFoundException();
@@ -47,7 +47,7 @@ public class AuthForgotRequestHandler : MediatrAuthBase, IRequestHandler<AuthFor
         }
 
         user.LastForgotPasswordRequest = DateTime.UtcNow;
-        await this.userRepository.UpdateAsync(user, cancellationToken);
+        await _genericUserRepository.UpdateAsync(user, cancellationToken);
 
         // TODO Send email
         string restoreLink =

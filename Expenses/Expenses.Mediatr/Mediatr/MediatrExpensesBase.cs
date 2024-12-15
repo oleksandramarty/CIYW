@@ -9,25 +9,25 @@ namespace Expenses.Mediatr.Mediatr;
 
 public class MediatrExpensesBase: MediatrAuthBase
 {
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> _readGenericUserProjectRepository;
     
     public MediatrExpensesBase(
         ICurrentUserRepository currentUserRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
         ) : base(currentUserRepository)
     {
-        this.entityValidator = entityValidator;
-        this.userProjectRepository = userProjectRepository;
+        _entityValidator = entityValidator;
+        _readGenericUserProjectRepository = readGenericUserProjectRepository;
     }
     
     public async Task CheckUserProjectByIdAsync(Guid userProjectId, CancellationToken cancellationToken)
     {
-        Guid userId = await this.CurrentUserIdAsync();
+        Guid userId = await CurrentUserIdAsync();
         
         UserProjectEntity? userProject =
-            await this.userProjectRepository.Async(
+            await _readGenericUserProjectRepository.Async(
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));
@@ -44,10 +44,10 @@ public class MediatrExpensesBase: MediatrAuthBase
 
     public async Task<UserProjectEntity> UserProjectByIdAsync(Guid userProjectId, CancellationToken cancellationToken)
     {
-        Guid userId = await this.CurrentUserIdAsync();
+        Guid userId = await CurrentUserIdAsync();
         
         UserProjectEntity? userProject =
-            await this.userProjectRepository.Async(
+            await _readGenericUserProjectRepository.Async(
                 up => up.Id == userProjectId, 
                 cancellationToken,
                 up => up.Include(a => a.AllowedUsers).Include(b => b.Balances));

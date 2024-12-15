@@ -7,6 +7,6 @@ public class AuthGatewayRootMutation: GraphQlMutationHelper
     public AuthGatewayRootMutation()
     {
         Name = "Mutation";
-        this.AddAuthGatewayMutations();
+        AddAuthGatewayMutations();
     }
 }

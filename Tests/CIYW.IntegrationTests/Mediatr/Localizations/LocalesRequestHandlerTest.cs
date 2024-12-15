@@ -20,19 +20,19 @@ public class LocalesRequestHandlerTest(): CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnLocales_WhenLocalesRequestIsValid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(role);
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             LocalizationsDataContext localizationsDataContext = scope.ServiceProvider.GetRequiredService<LocalizationsDataContext>();
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
             
             IMediator mediator = new Mediator(scope.ServiceProvider);
             VersionedListResponse<LocaleResponse> response = await mediator.Send(new LocalesRequest());
             
-            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            bool afterSignIn = await IsCurrentUserAuthenticated();
             
             // Assert
             beforeSignIn.Should().BeTrue();

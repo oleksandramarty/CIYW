@@ -13,16 +13,16 @@ namespace CommonModule.Repositories;
 
 public class EntityValidator<TDataContext> : IEntityValidator<TDataContext> where TDataContext : DbContext
 {
-    private readonly TDataContext dataContext;
+    private readonly TDataContext _dataContext;
 
     public EntityValidator(TDataContext dataContext)
     {
-        this.dataContext = dataContext;
+        _dataContext = dataContext;
     }
 
     public async Task ValidateExistParamAsync<TEntity>(Expression<Func<TEntity, bool>> predicate, string customErrorMessage, CancellationToken cancellationToken) where TEntity : class
     {
-        TEntity? entity = await this.dataContext.Set<TEntity>().FirstOrDefaultAsync(predicate, cancellationToken);
+        TEntity? entity = await _dataContext.Set<TEntity>().FirstOrDefaultAsync(predicate, cancellationToken);
 
         if (entity != null)
         {
@@ -32,12 +32,12 @@ public class EntityValidator<TDataContext> : IEntityValidator<TDataContext> wher
 
     public void ValidateRequest<TCommand, TResult>(TCommand command, Func<IValidator<TCommand>> validatorFactory) where TCommand : IRequest<TResult>
     {
-        this.FluentValidation(validatorFactory.Invoke(), command);
+        FluentValidation(validatorFactory.Invoke(), command);
     }
     
     public void ValidateVoidRequest<TCommand>(TCommand command, Func<IValidator<TCommand>> validatorFactory) where TCommand : IRequest
     {
-        this.FluentValidation(validatorFactory.Invoke(), command);
+        FluentValidation(validatorFactory.Invoke(), command);
     }
 
     private void FluentValidation<TCommand>(IValidator<TCommand> validator, TCommand command)

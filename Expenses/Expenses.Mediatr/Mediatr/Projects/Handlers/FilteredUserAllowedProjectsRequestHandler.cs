@@ -11,19 +11,19 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
 public class FilteredUserAllowedProjectsRequestHandler: IRequestHandler<FilteredUserAllowedProjectsRequest, FilteredListResponse<UserAllowedProjectResponse>>
 {
-    private readonly IFilteredResultStrategy<FilteredUserAllowedProjectsRequest, UserAllowedProjectResponse> strategy;
+    private readonly IFilteredResultStrategy<FilteredUserAllowedProjectsRequest, UserAllowedProjectResponse> _strategy;
 
     public FilteredUserAllowedProjectsRequestHandler(
         IFilteredResultStrategy<FilteredUserAllowedProjectsRequest, UserAllowedProjectResponse> strategy
         )
     {
-        this.strategy = strategy;
+        _strategy = strategy;
     }
     
     public async Task<FilteredListResponse<UserAllowedProjectResponse>> Handle(FilteredUserAllowedProjectsRequest request, CancellationToken cancellationToken)
     {
         request.CheckBaseFilter();
 
-        return await this.strategy.FilteredResultAsync(request, cancellationToken);
+        return await _strategy.FilteredResultAsync(request, cancellationToken);
     }
 }

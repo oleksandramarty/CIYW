@@ -6,6 +6,6 @@ public class AuthGatewayRootQuery : GraphQlQueryHelper
 {
     public AuthGatewayRootQuery()
     {
-        this.AddAuthGatewayQueries();
+        AddAuthGatewayQueries();
     }
 }

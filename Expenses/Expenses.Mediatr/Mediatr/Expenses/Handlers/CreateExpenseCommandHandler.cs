@@ -17,37 +17,37 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreateExpenseCommand, BaseEntityIdResponse<Guid>>
 {
-    private readonly IMapper mapper;
-    private readonly IBalanceRepository balanceRepository;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository;
-    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
+    private readonly IMapper _mapper;
+    private readonly IBalanceRepository _balanceRepository;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> _readGenericExpenseRepository;
+    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> _readGenericUserProjectRepository;
 
     public CreateExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IBalanceRepository balanceRepository,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> expenseRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-        ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IReadGenericRepository<Guid, ExpenseEntity, ExpensesDataContext> readGenericExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+        ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.mapper = mapper;
-        this.balanceRepository = balanceRepository;
-        this.entityValidator = entityValidator;
-        this.expenseRepository = expenseRepository;
-        this.userProjectRepository = userProjectRepository;
+        _mapper = mapper;
+        _balanceRepository = balanceRepository;
+        _entityValidator = entityValidator;
+        _readGenericExpenseRepository = readGenericExpenseRepository;
+        _readGenericUserProjectRepository = readGenericUserProjectRepository;
     }
 
     public async Task<BaseEntityIdResponse<Guid>> Handle(CreateExpenseCommand command, CancellationToken cancellationToken)
     {        
-        this.entityValidator.ValidateRequest<CreateExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateExpenseCommandValidator());
+        _entityValidator.ValidateRequest<CreateExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateExpenseCommandValidator());
 
-        await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
         DateTime currentMonth = DateTimeExtension.GetStartOfCurrentMonth();
         
-        if (await this.expenseRepository.Queryable(fe => 
+        if (await _readGenericExpenseRepository.Queryable(fe => 
                     fe.UserProjectId == command.UserProjectId &&
                     fe.CreatedAt >= currentMonth
                     )
@@ -56,8 +56,8 @@ public class CreateExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<C
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
     
-        ExpenseEntity toAdd = this.mapper.Map<ExpenseEntity>(command);
-        await this.balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
+        ExpenseEntity toAdd = _mapper.Map<ExpenseEntity>(command);
+        await _balanceRepository.AddExpenseAsync(toAdd, cancellationToken);
 
         return new BaseEntityIdResponse<Guid>
         {

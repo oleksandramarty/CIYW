@@ -14,7 +14,7 @@ namespace CommonModule.Core.Mediatr
         where TFilteredRequest : MediatrBaseFilteredRequest<TEntityResponse>
         where TEntityResponse : class
     {
-        private readonly IFilteredResultStrategy<TFilteredRequest, TEntityResponse> strategy;
+        private readonly IFilteredResultStrategy<TFilteredRequest, TEntityResponse> _strategy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediatrBaseFilteredRequestHandler{TFilteredRequest, TEntityResponse}"/> class.
@@ -24,7 +24,7 @@ namespace CommonModule.Core.Mediatr
             IFilteredResultStrategy<TFilteredRequest, TEntityResponse> strategy
         )
         {
-            this.strategy = strategy;
+            _strategy = strategy;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace CommonModule.Core.Mediatr
         {
             request.CheckBaseFilter();
 
-            return await this.strategy.FilteredResultAsync(request, cancellationToken);
+            return await _strategy.FilteredResultAsync(request, cancellationToken);
         }
     }
 }

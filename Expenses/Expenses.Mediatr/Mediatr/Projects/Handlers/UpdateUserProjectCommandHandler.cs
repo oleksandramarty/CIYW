@@ -15,31 +15,31 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
 public class UpdateUserProjectCommandHandler: MediatrAuthBase, IRequestHandler<UpdateUserProjectCommand>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> _genericUserProjectRepository;
     
     public UpdateUserProjectCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository): base(currentUserRepository)
+        IGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> genericUserProjectRepository): base(currentUserRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.userProjectRepository = userProjectRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _genericUserProjectRepository = genericUserProjectRepository;
     }
     
     public async Task Handle(UpdateUserProjectCommand command, CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateVoidRequest<UpdateUserProjectCommand>(command, () => new UpdateUserProjectCommandValidator());
+        _entityValidator.ValidateVoidRequest<UpdateUserProjectCommand>(command, () => new UpdateUserProjectCommandValidator());
         
-        Guid userId = await this.CurrentUserIdAsync();
+        Guid userId = await CurrentUserIdAsync();
         
-        UserProjectEntity userProjectEntity = await this.userProjectRepository.ByIdAsync(command.Id, cancellationToken);
+        UserProjectEntity userProjectEntity = await _genericUserProjectRepository.ByIdAsync(command.Id, cancellationToken);
         
-        this.mapper.Map<UpdateUserProjectCommand, UserProjectEntity>(command, userProjectEntity);
+        _mapper.Map<UpdateUserProjectCommand, UserProjectEntity>(command, userProjectEntity);
         
-        await this.userProjectRepository.UpdateAsync(userProjectEntity, cancellationToken);
+        await _genericUserProjectRepository.UpdateAsync(userProjectEntity, cancellationToken);
     }
 }

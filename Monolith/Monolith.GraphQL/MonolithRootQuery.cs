@@ -6,6 +6,6 @@ public class MonolithRootQuery : GraphQlQueryHelper
 {
     public MonolithRootQuery()
     {
-        this.AddMonolithQueries();
+        AddMonolithQueries();
     }
 }

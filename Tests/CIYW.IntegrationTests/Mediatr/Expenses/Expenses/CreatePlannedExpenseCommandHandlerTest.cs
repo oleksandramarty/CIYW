@@ -39,15 +39,15 @@ public class CreatePlannedExpenseCommandHandlerTest() : CommonIntegrationTestSet
     )
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role);
         UserProjectEntity userProject = user.UserProjects.First();
         Guid balanceId = userProject.Balances.First().Id;
         var plannedExpenses = new Dictionary<int, int>
         {
             { 1, plannedExpensesCount }
         };
-        await this.AddAllExpenses(
+        await AddAllExpenses(
             user.User.Id,
             userProject.Id,
             balanceId,
@@ -101,15 +101,15 @@ public class CreatePlannedExpenseCommandHandlerTest() : CommonIntegrationTestSet
     public async Task Handle_ShouldReturnException_WhenCreatePlannedExpenseCommandIsInvalid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role);
         UserProjectEntity userProject = user.UserProjects.First();
         Guid balanceId = userProject.Balances.First().Id;
         var plannedExpenses = new Dictionary<int, int>
         {
             { 1, 10 }
         };
-        await this.AddAllExpenses(
+        await AddAllExpenses(
             user.User.Id,
             userProject.Id,
             balanceId,

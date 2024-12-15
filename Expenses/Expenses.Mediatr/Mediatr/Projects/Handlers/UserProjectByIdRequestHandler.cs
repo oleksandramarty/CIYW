@@ -14,28 +14,28 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
 public class UserProjectByIdRequestHandler: MediatrExpensesBase, IRequestHandler<UserProjectByIdRequest, UserProjectResponse>
 {
-    private readonly IMapper mapper;
+    private readonly IMapper _mapper;
     
     public UserProjectByIdRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-        ): base(currentUserRepository, entityValidator, userProjectRepository)
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+        ): base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.mapper = mapper;
+        _mapper = mapper;
     }
     
     public async Task<UserProjectResponse> Handle(UserProjectByIdRequest command, CancellationToken cancellationToken)
     {
-        Guid userId = await this.CurrentUserIdAsync();
-        UserProjectEntity userProjectEntity = await this.UserProjectByIdAsync(command.Id, cancellationToken);
+        Guid userId = await CurrentUserIdAsync();
+        UserProjectEntity userProjectEntity = await UserProjectByIdAsync(command.Id, cancellationToken);
         
         if (userProjectEntity.CreatedUserId != userId && userProjectEntity.AllowedUsers.All(au => au.UserId != userId))
         {
             throw new ForbiddenException();
         }
         
-        return mapper.Map<UserProjectResponse>(userProjectEntity);
+        return _mapper.Map<UserProjectResponse>(userProjectEntity);
     }
 }

@@ -12,25 +12,25 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthRestorePasswordCommandHandler: IRequestHandler<AuthRestorePasswordCommand>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IJwtTokenFactory jwtTokenFactory;
-    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
-    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<AuthGatewayDataContext> _entityValidator;
+    private readonly IJwtTokenFactory _jwtTokenFactory;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> _genericUserRepository;
+    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> _genericUserRoleRepository;
 
     public AuthRestorePasswordCommandHandler(
         IMediator mediator,
         IMapper mapper, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         IJwtTokenFactory jwtTokenFactory,
-        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
-        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> genericUserRepository,
+        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> genericUserRoleRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.jwtTokenFactory = jwtTokenFactory;
-        this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _jwtTokenFactory = jwtTokenFactory;
+        _genericUserRepository = genericUserRepository;
+        _genericUserRoleRepository = genericUserRoleRepository;
     }
 
     public async Task Handle(AuthRestorePasswordCommand command, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ public class AuthRestorePasswordCommandHandler: IRequestHandler<AuthRestorePassw
             throw new AuthException(ErrorMessages.RestorePasswordProcessingIssue, 409);
         }
         
-        this.entityValidator.ValidateVoidRequest<AuthRestorePasswordCommand>(command, () => new AuthRestorePasswordCommandValidator());
+        _entityValidator.ValidateVoidRequest<AuthRestorePasswordCommand>(command, () => new AuthRestorePasswordCommandValidator());
         // TODO restore and check 3 questions
     }
 }

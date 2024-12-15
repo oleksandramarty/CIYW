@@ -39,8 +39,8 @@ public class FilteredUserAllowedProjectsRequestHandlerTest() : CommonIntegration
         int predictedPageSize)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 1, 1);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, 1, 1);
         await AddUserAllowedProjects(user.User.Id,  200);
 
         // Act

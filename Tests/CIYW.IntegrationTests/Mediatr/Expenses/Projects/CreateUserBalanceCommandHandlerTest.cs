@@ -38,8 +38,8 @@ public class CreateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
     )
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 1, userBalancesCount);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, 1, userBalancesCount);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
@@ -76,8 +76,8 @@ public class CreateUserBalanceCommandHandlerTest() : CommonIntegrationTestSetup(
     public async Task Handle_ShouldReturnException_WhenCreateUserBalanceCommandIsInvalid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 1, 3);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, 1, 3);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())

@@ -10,10 +10,10 @@ namespace Expenses.Business;
 
 public class BalanceRepository: IBalanceRepository
 {
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly ExpensesDataContext dataContext;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly ExpensesDataContext _dataContext;
     
-    private readonly ICacheBaseRepository<int> cacheBaseRepository; 
+    private readonly ICacheBaseRepository<int> _cacheBaseRepository; 
     
     public BalanceRepository(
         IEntityValidator<ExpensesDataContext> entityValidator,
@@ -21,22 +21,22 @@ public class BalanceRepository: IBalanceRepository
         ICacheBaseRepository<int> cacheBaseRepository
         )
     {
-        this.entityValidator = entityValidator;
-        this.dataContext = dataContext;
-        this.cacheBaseRepository = cacheBaseRepository;
+        _entityValidator = entityValidator;
+        _dataContext = dataContext;
+        _cacheBaseRepository = cacheBaseRepository;
     }
 
     public async Task AddExpenseAsync(
         ExpenseEntity expenseEntity,
         CancellationToken cancellationToken)
     {
-        using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
+        using var transaction = await _dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(expenseEntity, false, cancellationToken);
+            await UpdateBalanceAsync(expenseEntity, false, cancellationToken);
             
-            await this.dataContext.Expenses.AddAsync(expenseEntity, cancellationToken);
-            await this.dataContext.SaveChangesAsync(cancellationToken);
+            await _dataContext.Expenses.AddAsync(expenseEntity, cancellationToken);
+            await _dataContext.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
         }
@@ -52,11 +52,11 @@ public class BalanceRepository: IBalanceRepository
         ExpenseEntity newExpenseEntity,
         CancellationToken cancellationToken)
     {
-        using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
+        using var transaction = await _dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(currentExpenseEntity, true, cancellationToken);
-            await this.UpdateBalanceAsync(newExpenseEntity, false, cancellationToken);
+            await UpdateBalanceAsync(currentExpenseEntity, true, cancellationToken);
+            await UpdateBalanceAsync(newExpenseEntity, false, cancellationToken);
             
             currentExpenseEntity.Title = newExpenseEntity.Title;
             currentExpenseEntity.CategoryId = newExpenseEntity.CategoryId;
@@ -65,8 +65,8 @@ public class BalanceRepository: IBalanceRepository
             currentExpenseEntity.Amount = newExpenseEntity.Amount;
             currentExpenseEntity.BalanceId = newExpenseEntity.BalanceId;
             
-            this.dataContext.Expenses.Update(currentExpenseEntity);
-            await this.dataContext.SaveChangesAsync(cancellationToken);
+            _dataContext.Expenses.Update(currentExpenseEntity);
+            await _dataContext.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
         }
@@ -81,13 +81,13 @@ public class BalanceRepository: IBalanceRepository
         ExpenseEntity expenseEntity,
         CancellationToken cancellationToken)
     {
-        using var transaction = await this.dataContext.Database.BeginTransactionAsync(cancellationToken);
+        using var transaction = await _dataContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await this.UpdateBalanceAsync(expenseEntity, true, cancellationToken);
+            await UpdateBalanceAsync(expenseEntity, true, cancellationToken);
             
-            this.dataContext.Expenses.Remove(expenseEntity);
-            await this.dataContext.SaveChangesAsync(cancellationToken);
+            _dataContext.Expenses.Remove(expenseEntity);
+            await _dataContext.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
         }
@@ -103,20 +103,20 @@ public class BalanceRepository: IBalanceRepository
         bool isRefund,
         CancellationToken cancellationToken)
     {
-        BalanceEntity? balance = await this.dataContext.Balances.FirstOrDefaultAsync(b => b.Id == expenseEntity.BalanceId, cancellationToken);
+        BalanceEntity? balance = await _dataContext.Balances.FirstOrDefaultAsync(b => b.Id == expenseEntity.BalanceId, cancellationToken);
         if (balance == null)
         {
             throw new EntityNotFoundException();
         }
         
-        string? currentCategory = await this.cacheBaseRepository.ItemFromCacheAsync(CacheParams.DictionaryCategory, expenseEntity.CategoryId);
+        string? currentCategory = await _cacheBaseRepository.ItemFromCacheAsync(CacheParams.DictionaryCategory, expenseEntity.CategoryId);
         if (string.IsNullOrEmpty(currentCategory))
         {
             throw new EntityNotFoundException();
         }
         
         FavoriteExpenseEntity? favoriteExpense = expenseEntity.FavoriteExpenseId.HasValue ?
-            await this.dataContext.FavoriteExpenses
+            await _dataContext.FavoriteExpenses
                 .FirstOrDefaultAsync(fe => fe.Id == expenseEntity.FavoriteExpenseId, cancellationToken) :
             null;
 
@@ -146,9 +146,9 @@ public class BalanceRepository: IBalanceRepository
         
         if (favoriteExpense != null)
         {
-            this.dataContext.FavoriteExpenses.Update(favoriteExpense);
+            _dataContext.FavoriteExpenses.Update(favoriteExpense);
         }
         
-        this.dataContext.Balances.Update(balance);
+        _dataContext.Balances.Update(balance);
     }
 }

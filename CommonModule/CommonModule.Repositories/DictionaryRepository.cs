@@ -14,19 +14,19 @@ public class DictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>: 
     where TResponse : class, IBaseIdEntity<TEntityId>
     where TDataContext : DbContext
 {
-    private readonly IMapper mapper;
-    private readonly ICacheRepository<TEntityId, TEntity> cacheRepository;
-    private readonly IReadGenericRepository<TEntityId, TEntity, TDataContext> dictionaryRepository;
+    private readonly IMapper _mapper;
+    private readonly ICacheRepository<TEntityId, TEntity> _cacheRepository;
+    private readonly IReadGenericRepository<TEntityId, TEntity, TDataContext> _readGenericDictionaryRepository;
     
     public DictionaryRepository(
         IMapper mapper,
         ICacheRepository<TEntityId, TEntity> cacheRepository,
-        IReadGenericRepository<TEntityId, TEntity, TDataContext> dictionaryRepository
+        IReadGenericRepository<TEntityId, TEntity, TDataContext> readGenericDictionaryRepository
         )
     {
-        this.mapper = mapper;
-        this.cacheRepository = cacheRepository;
-        this.dictionaryRepository = dictionaryRepository;
+        _mapper = mapper;
+        _cacheRepository = cacheRepository;
+        _readGenericDictionaryRepository = readGenericDictionaryRepository;
     }
 
     public async Task<VersionedListResponse<TResponse>> DictionaryAsync(
@@ -34,7 +34,7 @@ public class DictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>: 
         CancellationToken cancellationToken, 
         params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includeFuncs)
     {
-        string currentVersion = await this.cacheRepository.CacheVersionAsync();
+        string currentVersion = await _cacheRepository.CacheVersionAsync();
         
         if (LocalizationExtension.IsDictionaryActual(version, currentVersion))
         {
@@ -45,23 +45,23 @@ public class DictionaryRepository<TEntityId, TEntity, TResponse, TDataContext>: 
             };
         }
         
-        var items = await this.cacheRepository.ItemsFromCacheAsync();
+        var items = await _cacheRepository.ItemsFromCacheAsync();
     
         if (items == null || items.Count == 0)
         {
-            items = await dictionaryRepository.ListAsync(null, cancellationToken, includeFuncs);
-            await this.cacheRepository.ReinitializeDictionaryAsync(items);
-            await this.cacheRepository.SetCacheVersionAsync();
+            items = await _readGenericDictionaryRepository.ListAsync(null, cancellationToken, includeFuncs);
+            await _cacheRepository.ReinitializeDictionaryAsync(items);
+            await _cacheRepository.SetCacheVersionAsync();
         }
         
         if (string.IsNullOrEmpty(currentVersion))
         {
-            currentVersion = await this.cacheRepository.CacheVersionAsync();
+            currentVersion = await _cacheRepository.CacheVersionAsync();
         }
     
         VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>
         {
-            Items = items.Where(i => i.Status == StatusEnum.Active).Select(r => mapper.Map<TEntity, TResponse>(r)).ToList(),
+            Items = items.Where(i => i.Status == StatusEnum.Active).Select(r => _mapper.Map<TEntity, TResponse>(r)).ToList(),
             Version = currentVersion
         };
 

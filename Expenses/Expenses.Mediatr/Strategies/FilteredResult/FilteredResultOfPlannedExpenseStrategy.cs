@@ -15,14 +15,14 @@ namespace Expenses.Mediatr.Strategies.FilteredResult;
 
 public class FilteredResultOfPlannedExpenseStrategy: FilteredResultStrategyResponseContext<FilteredPlannedExpensesRequest, PlannedExpenseEntity, PlannedExpenseResponse>, IFilteredResultStrategy<FilteredPlannedExpensesRequest, PlannedExpenseResponse>
 {
-    private readonly IReadGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository;
+    private readonly IReadGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> _readGenericPlannedExpenseRepository;
 
     public FilteredResultOfPlannedExpenseStrategy(
         IMapper mapper,
-        IReadGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository
+        IReadGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> readGenericPlannedExpenseRepository
         ): base(mapper)
     {
-        this.plannedExpenseRepository = plannedExpenseRepository;
+        _readGenericPlannedExpenseRepository = readGenericPlannedExpenseRepository;
     }
 
     public async Task<FilteredListResponse<PlannedExpenseResponse>> FilteredResultAsync(FilteredPlannedExpensesRequest request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ public class FilteredResultOfPlannedExpenseStrategy: FilteredResultStrategyRespo
             request.CategoryIds = new BaseFilterIdsRequest<int>();
         }
         
-        var query = this.plannedExpenseRepository.Queryable(
+        var query = _readGenericPlannedExpenseRepository.Queryable(
             e => e.UserProjectId == request.UserProjectId &&
                  (string.IsNullOrEmpty(request.Query) || EF.Functions.Like(e.Title, $"%{request.Query}%")) &&
                  (!request.CategoryIds.Ids.Any() || request.CategoryIds.Ids.Contains(e.CategoryId)) &&
@@ -73,6 +73,6 @@ public class FilteredResultOfPlannedExpenseStrategy: FilteredResultStrategyRespo
             }
         }
         
-        return await this.FilteredResultAsync(request, query, cancellationToken);
+        return await FilteredResultAsync(request, query, cancellationToken);
     }
 }

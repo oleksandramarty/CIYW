@@ -6,6 +6,6 @@ public class LocalizationsRootQuery : GraphQlQueryHelper
 {
     public LocalizationsRootQuery()
     {
-        this.AddLocalizationsQueries();
+        AddLocalizationsQueries();
     }
 }

@@ -14,23 +14,23 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSignOutRequest, BaseBoolResponse>
 {
-    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
-    private readonly ITokenRepository tokenService;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> _genericUserRepository;
+    private readonly ITokenRepository _tokenRepository;
     
     public AuthSignOutRequestHandler(
         ICurrentUserRepository currentUserRepository,
-        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
-        ITokenRepository tokenService): base(currentUserRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> genericUserRepository,
+        ITokenRepository tokenRepository): base(currentUserRepository)
     {
-        this.userRepository = userRepository;
-        this.tokenService = tokenService;
+        _genericUserRepository = genericUserRepository;
+        _tokenRepository = tokenRepository;
     }
     
     
     public async Task<BaseBoolResponse> Handle(AuthSignOutRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.CurrentUserIdAsync();
-        UserEntity? user = await this.userRepository.ByIdAsync(userId, cancellationToken);
+        Guid userId = await CurrentUserIdAsync();
+        UserEntity? user = await _genericUserRepository.ByIdAsync(userId, cancellationToken);
         if (user == null)
         {
             throw new EntityNotFoundException();
@@ -38,7 +38,7 @@ public class AuthSignOutRequestHandler: MediatrAuthBase, IRequestHandler<AuthSig
 
         user.CheckInvalidStatus();
 
-        await this.tokenService.RemoveUserTokenAsync(user.Id);
+        await _tokenRepository.RemoveUserTokenAsync(user.Id);
 
         return new BaseBoolResponse();
     }

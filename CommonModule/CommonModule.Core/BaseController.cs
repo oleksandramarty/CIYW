@@ -17,15 +17,15 @@ namespace CommonModule.Core;
 [ProducesResponseType(typeof(ErrorMessageModel), StatusCodes.Status500InternalServerError)]
 public class BaseController : Controller
 {
-    private readonly IMediator mediator;
+    private readonly IMediator _mediator;
     
     public BaseController(IMediator mediator)
     {
-        this.mediator = mediator;
+        _mediator = mediator;
     }
     
     protected async Task<Guid?> CurrentUserIdAsync(CancellationToken cancellationToken)
     {
-        return await this.mediator.Send(new GetUserIdRequest(), cancellationToken);
+        return await _mediator.Send(new GetUserIdRequest(), cancellationToken);
     }
 }

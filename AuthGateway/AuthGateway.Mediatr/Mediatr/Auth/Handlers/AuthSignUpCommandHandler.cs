@@ -14,43 +14,43 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class AuthSignUpCommandHandler: IRequestHandler<AuthSignUpCommand, BaseEntityIdResponse<Guid>>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<AuthGatewayDataContext> entityValidator;
-    private readonly IJwtTokenFactory jwtTokenFactory;
-    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
-    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<AuthGatewayDataContext> _entityValidator;
+    private readonly IJwtTokenFactory _jwtTokenFactory;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> _genericUserRepository;
+    private readonly IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> _genericUserRoleRepository;
 
     public AuthSignUpCommandHandler(
         IMapper mapper, 
         IEntityValidator<AuthGatewayDataContext> entityValidator,
         IJwtTokenFactory jwtTokenFactory,
-        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository,
-        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> userRoleRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> genericUserRepository,
+        IGenericRepository<Guid, UserRoleEntity, AuthGatewayDataContext> genericUserRoleRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.jwtTokenFactory = jwtTokenFactory;
-        this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _jwtTokenFactory = jwtTokenFactory;
+        _genericUserRepository = genericUserRepository;
+        _genericUserRoleRepository = genericUserRoleRepository;
     }
 
     public async Task<BaseEntityIdResponse<Guid>> Handle(AuthSignUpCommand command, CancellationToken cancellationToken)
     {
-        this.entityValidator.ValidateRequest<AuthSignUpCommand, BaseEntityIdResponse<Guid>>(command, () => new AuthSignUpCommandValidator());
+        _entityValidator.ValidateRequest<AuthSignUpCommand, BaseEntityIdResponse<Guid>>(command, () => new AuthSignUpCommandValidator());
         
-        await this.entityValidator.ValidateExistParamAsync<UserEntity>(
+        await _entityValidator.ValidateExistParamAsync<UserEntity>(
             u => u.Email == command.Email, 
             ErrorMessages.EntityWithEmailAlreadyExists, 
             cancellationToken);
 
-        UserEntity userEntity = this.mapper.Map<AuthSignUpCommand, UserEntity>(command);
+        UserEntity userEntity = _mapper.Map<AuthSignUpCommand, UserEntity>(command);
         
-        userEntity.Salt = this.jwtTokenFactory.GenerateSalt();
-        userEntity.PasswordHash = this.jwtTokenFactory.HashPassword(command.Password, userEntity.Salt);
+        userEntity.Salt = _jwtTokenFactory.GenerateSalt();
+        userEntity.PasswordHash = _jwtTokenFactory.HashPassword(command.Password, userEntity.Salt);
         
-        await this.userRepository.AddAsync(userEntity, cancellationToken);
+        await _genericUserRepository.AddAsync(userEntity, cancellationToken);
         
-        await this.userRoleRepository.AddAsync(new UserRoleEntity
+        await _genericUserRoleRepository.AddAsync(new UserRoleEntity
         {
             RoleId = (int)UserRoleEnum.User,
             UserId = userEntity.Id

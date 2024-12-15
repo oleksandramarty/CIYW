@@ -15,32 +15,32 @@ public class MappingExpensesProfile : Profile
 {
     public MappingExpensesProfile()
     {
-        this.CreateMap<ExpenseEntity, ExpenseResponse>();
-        this.CreateMap<PlannedExpenseEntity, PlannedExpenseResponse>();
-        this.CreateMap<FavoriteExpenseEntity, FavoriteExpenseResponse>();
-        this.CreateMap<CreateUserProjectCommand, UserProjectEntity>();
-        this.CreateMap<UpdateUserProjectCommand, UserProjectEntity>();
+        CreateMap<ExpenseEntity, ExpenseResponse>();
+        CreateMap<PlannedExpenseEntity, PlannedExpenseResponse>();
+        CreateMap<FavoriteExpenseEntity, FavoriteExpenseResponse>();
+        CreateMap<CreateUserProjectCommand, UserProjectEntity>();
+        CreateMap<UpdateUserProjectCommand, UserProjectEntity>();
 
-        this.CreateMap<CreateUserBalanceCommand, BalanceEntity>();
-        this.CreateMap<UpdateUserBalanceCommand, BalanceEntity>();
+        CreateMap<CreateUserBalanceCommand, BalanceEntity>();
+        CreateMap<UpdateUserBalanceCommand, BalanceEntity>();
 
-        this.CreateMap<CreateExpenseCommand, ExpenseEntity>()
+        CreateMap<CreateExpenseCommand, ExpenseEntity>()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.ToUniversalTime()));
-        this.CreateMap<UpdateExpenseCommand, ExpenseEntity>()
+        CreateMap<UpdateExpenseCommand, ExpenseEntity>()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.ToUniversalTime()));
-        this.CreateMap<CreatePlannedExpenseCommand, PlannedExpenseEntity>()
+        CreateMap<CreatePlannedExpenseCommand, PlannedExpenseEntity>()
             .ForMember(dest => dest.NextDate, opt => opt.MapFrom(src => src.StartDate.GetNextDate(src.FrequencyId)));
-        this.CreateMap<UpdatePlannedExpenseCommand, PlannedExpenseEntity>()
+        CreateMap<UpdatePlannedExpenseCommand, PlannedExpenseEntity>()
             .ForMember(dest => dest.NextDate, opt => opt.MapFrom(src => src.StartDate.GetNextDate(src.FrequencyId)));
-        this.CreateMap<CreateFavoriteExpenseCommand, FavoriteExpenseEntity>();
-        this.CreateMap<UpdateFavoriteExpenseCommand, FavoriteExpenseEntity>();
+        CreateMap<CreateFavoriteExpenseCommand, FavoriteExpenseEntity>();
+        CreateMap<UpdateFavoriteExpenseCommand, FavoriteExpenseEntity>();
 
-        this.CreateMap<UserProjectEntity, UserProjectResponse>()
+        CreateMap<UserProjectEntity, UserProjectResponse>()
             .ForMember(dest => dest.Balances, opt => opt.MapFrom(src => src.Balances));
 
-        this.CreateMap<BalanceEntity, BalanceResponse>();
+        CreateMap<BalanceEntity, BalanceResponse>();
 
-        this.CreateMap<UserAllowedProjectEntity, UserAllowedProjectResponse>()
+        CreateMap<UserAllowedProjectEntity, UserAllowedProjectResponse>()
             .ForMember(dest => dest.UserProject, opt => opt.MapFrom(src => src.UserProject));
     }
 }

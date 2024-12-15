@@ -13,15 +13,15 @@ public class MediatrTreeDictionaryBase<TRequest, TEntityId, TParentId, TEntity, 
     where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {
-    private readonly ITreeDictionaryRepository<TEntityId, TParentId, TEntity, TResponse, TDataContext> treeDictionaryRepository;
+    private readonly ITreeDictionaryRepository<TEntityId, TParentId, TEntity, TResponse, TDataContext> _treeDictionaryRepository;
     
     public MediatrTreeDictionaryBase(ITreeDictionaryRepository<TEntityId, TParentId, TEntity, TResponse, TDataContext> treeDictionaryRepository)
     {
-        this.treeDictionaryRepository = treeDictionaryRepository;
+        _treeDictionaryRepository = treeDictionaryRepository;
     }
     
     public async Task<VersionedListResponse<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        return await this.treeDictionaryRepository.TreeDictionaryAsync(request.Version, cancellationToken);
+        return await _treeDictionaryRepository.TreeDictionaryAsync(request.Version, cancellationToken);
     }
 }

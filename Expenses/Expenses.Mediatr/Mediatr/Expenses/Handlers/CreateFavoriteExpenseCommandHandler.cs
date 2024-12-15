@@ -15,39 +15,39 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class CreateFavoriteExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<CreateFavoriteExpenseCommand, BaseEntityIdResponse<Guid>>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> _genericFavoriteExpenseRepository;
 
     public CreateFavoriteExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> favoriteExpenseRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-        ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IGenericRepository<Guid, FavoriteExpenseEntity, ExpensesDataContext> genericFavoriteExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+        ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.favoriteExpenseRepository = favoriteExpenseRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _genericFavoriteExpenseRepository = genericFavoriteExpenseRepository;
     }
 
     public async Task<BaseEntityIdResponse<Guid>> Handle(CreateFavoriteExpenseCommand command, CancellationToken cancellationToken)
     {        
-        this.entityValidator.ValidateRequest<CreateFavoriteExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateFavoriteExpenseCommandValidator());
+        _entityValidator.ValidateRequest<CreateFavoriteExpenseCommand, BaseEntityIdResponse<Guid>>(command, () => new CreateFavoriteExpenseCommandValidator());
 
-        await this.CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(command.UserProjectId, cancellationToken);
 
-        if (await this.favoriteExpenseRepository.Queryable(fe => fe.UserProjectId == command.UserProjectId)
+        if (await _genericFavoriteExpenseRepository.Queryable(fe => fe.UserProjectId == command.UserProjectId)
                 .CountAsync(cancellationToken) >= 10)
         {
             throw new BusinessException(ErrorMessages.UserProjectLimitExceeded, 409);
         }
 
-        FavoriteExpenseEntity toAdd = this.mapper.Map<FavoriteExpenseEntity>(command);
-        toAdd.CreatedUserId = await this.CurrentUserIdAsync();
+        FavoriteExpenseEntity toAdd = _mapper.Map<FavoriteExpenseEntity>(command);
+        toAdd.CreatedUserId = await CurrentUserIdAsync();
             
-        await this.favoriteExpenseRepository.AddAsync(toAdd, cancellationToken);
+        await _genericFavoriteExpenseRepository.AddAsync(toAdd, cancellationToken);
 
         return new BaseEntityIdResponse<Guid>
         {

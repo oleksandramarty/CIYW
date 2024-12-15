@@ -39,8 +39,8 @@ public class FilteredUserProjectsRequestHandlerTest() : CommonIntegrationTestSet
         int predictedPageSize)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 200, 1);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, 200, 1);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())

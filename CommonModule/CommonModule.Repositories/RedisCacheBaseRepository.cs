@@ -9,23 +9,23 @@ namespace CommonModule.Repositories;
 public class RedisCacheBaseRepository<TEntity>: AuditableNonNullableKey, ICacheBaseRepository<TEntity> 
     where TEntity : notnull
 {
-    private readonly IConnectionMultiplexer connectionMultiplexer;
-    private readonly IDatabase database;
+    private readonly IConnectionMultiplexer _connectionMultiplexer;
+    private readonly IDatabase _database;
 
     public RedisCacheBaseRepository(
         IConnectionMultiplexer connectionMultiplexer,
         IConfiguration configuration
         )
     {
-        this.connectionMultiplexer = connectionMultiplexer;
-        this.database = connectionMultiplexer.GetDatabase();
-        this.Key = configuration["Redis:InstanceNameDictionary"];
+        _connectionMultiplexer = connectionMultiplexer;
+        _database = connectionMultiplexer.GetDatabase();
+        Key = configuration["Redis:InstanceNameDictionary"];
     }
 
     public async Task<IEnumerable<string>> ItemsFromCacheAsync(string dictionaryName)
     {
         var keys = AllKeys(dictionaryName);
-        var tasks = keys.Select(key => database.StringGetAsync(key)).ToList();
+        var tasks = keys.Select(key => _database.StringGetAsync(key)).ToList();
         var results = await Task.WhenAll(tasks);
         
         return results
@@ -35,13 +35,13 @@ public class RedisCacheBaseRepository<TEntity>: AuditableNonNullableKey, ICacheB
 
     public IEnumerable<RedisKey> AllKeys(string dictionaryName)
     {
-        var endpoints = connectionMultiplexer.GetEndPoints();
+        var endpoints = _connectionMultiplexer.GetEndPoints();
         var keys = new List<RedisKey>();
 
         foreach (var endpoint in endpoints)
         {
-            var server = connectionMultiplexer.GetServer(endpoint);
-            keys.AddRange(server.Keys(database.Database, $"{this.Key}:{dictionaryName}:*"));
+            var server = _connectionMultiplexer.GetServer(endpoint);
+            keys.AddRange(server.Keys(_database.Database, $"{Key}:{dictionaryName}:*"));
         }
 
         return keys;
@@ -49,12 +49,12 @@ public class RedisCacheBaseRepository<TEntity>: AuditableNonNullableKey, ICacheB
 
     public async Task ReinitializeDictionaryAsync(string dictionaryName, Dictionary<TEntity, string> dictionary)
     {
-        await database.KeyDeleteAsync($"{this.Key}:{dictionaryName}:*");
+        await _database.KeyDeleteAsync($"{Key}:{dictionaryName}:*");
 
         var tasks = dictionary.Select(item =>
         {
-            var redisKey = $"{this.Key}:{dictionaryName}:{item.Key}";
-            return database.StringSetAsync(redisKey, item.Value);
+            var redisKey = $"{Key}:{dictionaryName}:{item.Key}";
+            return _database.StringSetAsync(redisKey, item.Value);
         });
 
         await Task.WhenAll(tasks);
@@ -63,7 +63,7 @@ public class RedisCacheBaseRepository<TEntity>: AuditableNonNullableKey, ICacheB
     public async Task<string?> CacheVersionAsync(string dictionaryName)
     {
         var redisKey = $"version:{dictionaryName.ToLower()}";
-        string? version = await database.StringGetAsync(redisKey);
+        string? version = await _database.StringGetAsync(redisKey);
 
         return version;
     }
@@ -71,12 +71,12 @@ public class RedisCacheBaseRepository<TEntity>: AuditableNonNullableKey, ICacheB
     public async Task SetCacheVersionAsync(string dictionaryName)
     {
         var redisKey = $"version:{dictionaryName.ToLower()}";
-        await database.StringSetAsync(redisKey, VersionExtension.GenerateVersion());
+        await _database.StringSetAsync(redisKey, VersionExtension.GenerateVersion());
     }
 
     public async Task<string?> ItemFromCacheAsync(string dictionaryName, TEntity key)
     {
-        var redisKey = $"{this.Key}:{dictionaryName}:{key}";
-        return await database.StringGetAsync(redisKey);
+        var redisKey = $"{Key}:{dictionaryName}:{key}";
+        return await _database.StringGetAsync(redisKey);
     }
 }

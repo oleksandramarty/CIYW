@@ -6,6 +6,6 @@ public class ExpensesRootQuery: GraphQlQueryHelper
 {
     public ExpensesRootQuery()
     {
-        this.AddExpensesQueries();
+        AddExpensesQueries();
     }
 }  

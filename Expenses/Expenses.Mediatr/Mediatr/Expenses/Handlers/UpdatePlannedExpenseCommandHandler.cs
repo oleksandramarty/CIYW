@@ -12,37 +12,37 @@ namespace Expenses.Mediatr.Mediatr.Expenses.Handlers;
 
 public class UpdatePlannedExpenseCommandHandler: MediatrExpensesBase, IRequestHandler<UpdatePlannedExpenseCommand>
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> _readGenericPlannedExpenseRepository;
 
     public UpdatePlannedExpenseCommandHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
         IEntityValidator<ExpensesDataContext> entityValidator,
-        IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> plannedExpenseRepository,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
-        ) : base(currentUserRepository, entityValidator, userProjectRepository)
+        IGenericRepository<Guid, PlannedExpenseEntity, ExpensesDataContext> readGenericPlannedExpenseRepository,
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
+        ) : base(currentUserRepository, entityValidator, readGenericUserProjectRepository)
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.plannedExpenseRepository = plannedExpenseRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _readGenericPlannedExpenseRepository = readGenericPlannedExpenseRepository;
     }
 
     public async Task Handle(UpdatePlannedExpenseCommand command, CancellationToken cancellationToken)
     {        
-        this.entityValidator.ValidateVoidRequest<UpdatePlannedExpenseCommand>(command, () => new UpdatePlannedExpenseCommandValidator());
+        _entityValidator.ValidateVoidRequest<UpdatePlannedExpenseCommand>(command, () => new UpdatePlannedExpenseCommandValidator());
         
-        PlannedExpenseEntity? currentPlannedExpense = await this.plannedExpenseRepository.Async(
+        PlannedExpenseEntity? currentPlannedExpense = await _readGenericPlannedExpenseRepository.Async(
             e => e.Id == command.Id, cancellationToken);
         if (currentPlannedExpense == null)
         {
             throw new EntityNotFoundException();
         }
         
-        await this.CheckUserProjectByIdAsync(currentPlannedExpense.UserProjectId, cancellationToken);
+        await CheckUserProjectByIdAsync(currentPlannedExpense.UserProjectId, cancellationToken);
         
-        await this.plannedExpenseRepository.UpdateAsync(
-            this.mapper.Map<UpdatePlannedExpenseCommand, PlannedExpenseEntity>(command, currentPlannedExpense), cancellationToken);
+        await _readGenericPlannedExpenseRepository.UpdateAsync(
+            _mapper.Map<UpdatePlannedExpenseCommand, PlannedExpenseEntity>(command, currentPlannedExpense), cancellationToken);
     }
 }

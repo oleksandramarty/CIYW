@@ -7,6 +7,6 @@ public class ExpensesRootMutation: GraphQlMutationHelper
     public ExpensesRootMutation()
     {
         Name = "Mutation";
-        this.AddAuditTrailMutations();
+        AddAuditTrailMutations();
     }
 }

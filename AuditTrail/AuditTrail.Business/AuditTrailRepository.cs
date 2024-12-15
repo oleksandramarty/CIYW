@@ -10,13 +10,13 @@ namespace AuditTrail.Business;
 /// </summary>
 public class AuditTrailRepository : IAuditTrailRepository
 {
-    private readonly IGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> auditTrailRepository;
+    private readonly IGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> _genericAuditTrailRepository;
 
     public AuditTrailRepository(
-        IGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> auditTrailRepository
+        IGenericRepository<Guid, AuditTrailEntity, AuditTrailDataContext> genericAuditTrailRepository
         )
     {
-        this.auditTrailRepository = auditTrailRepository;
+        _genericAuditTrailRepository = genericAuditTrailRepository;
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ public class AuditTrailRepository : IAuditTrailRepository
     /// <returns></returns>
     public async Task AddLogAsync(AuditTrailEntity auditLog, CancellationToken cancellationToken)
     {
-        await this.auditTrailRepository.AddAsync(auditLog, cancellationToken);
+        await _genericAuditTrailRepository.AddAsync(auditLog, cancellationToken);
     }
 
     /// <summary>
@@ -60,6 +60,6 @@ public class AuditTrailRepository : IAuditTrailRepository
             userId
         );
 
-        await this.auditTrailRepository.AddAsync(result, cancellationToken);
+        await _genericAuditTrailRepository.AddAsync(result, cancellationToken);
     }
 }

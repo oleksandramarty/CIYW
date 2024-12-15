@@ -13,15 +13,15 @@ public class MediatrDictionaryBase<TRequest, TEntityId, TEntity, TResponse, TDat
     where TResponse : class, IBaseIdEntity<TEntityId>
     where TDataContext : DbContext
 {
-    private readonly IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext> dictionaryRepository;
+    private readonly IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext> _dictionaryRepository;
     
     public MediatrDictionaryBase(IDictionaryRepository<TEntityId, TEntity, TResponse, TDataContext> dictionaryRepository)
     {
-        this.dictionaryRepository = dictionaryRepository;
+        _dictionaryRepository = dictionaryRepository;
     }
     
     public async Task<VersionedListResponse<TResponse>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        return await this.dictionaryRepository.DictionaryAsync(request.Version, cancellationToken);
+        return await _dictionaryRepository.DictionaryAsync(request.Version, cancellationToken);
     }
 }

@@ -18,19 +18,19 @@ public class CurrentUserRequestHandlerTest(): CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnTokenResponse_WhenAuthSignInRequestIsValid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(role);
         
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             IJwtTokenFactory jwtTokenFactory = scope.ServiceProvider.GetRequiredService<IJwtTokenFactory>();
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
             
             IMediator mediator = new Mediator(scope.ServiceProvider);
             UserResponse response = await mediator.Send(new CurrentUserRequest());
             
-            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            bool afterSignIn = await IsCurrentUserAuthenticated();
             
             // Assert
             beforeSignIn.Should().BeTrue();

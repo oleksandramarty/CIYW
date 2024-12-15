@@ -16,23 +16,23 @@ namespace AuthGateway.Mediatr.Mediatr.Auth.Handlers;
 
 public class CurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<CurrentUserRequest, UserResponse>
 {
-    private readonly IMapper mapper;
-    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository;
+    private readonly IMapper _mapper;
+    private readonly IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> _genericUserRepository;
 
     public CurrentUserRequestHandler(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper, 
-        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> userRepository): base(currentUserRepository)
+        IGenericRepository<Guid, UserEntity, AuthGatewayDataContext> genericUserRepository): base(currentUserRepository)
     {
-        this.mapper = mapper;
-        this.userRepository = userRepository;
+        _mapper = mapper;
+        _genericUserRepository = genericUserRepository;
     }
     
     public async Task<UserResponse> Handle(CurrentUserRequest request, CancellationToken cancellationToken)
     {
-        Guid userId = await this.CurrentUserIdAsync();
+        Guid userId = await CurrentUserIdAsync();
         
-        UserEntity? user = await this.userRepository.ByIdAsync(userId, cancellationToken, 
+        UserEntity? user = await _genericUserRepository.ByIdAsync(userId, cancellationToken, 
             user => 
                 user
                     .Include(u => u.Roles)
@@ -45,7 +45,7 @@ public class CurrentUserRequestHandler: MediatrAuthBase, IRequestHandler<Current
 
         user.CheckInvalidStatus();
         
-        UserResponse response = this.mapper.Map<UserEntity, UserResponse>(user);
+        UserResponse response = _mapper.Map<UserEntity, UserResponse>(user);
 
         return response;
     }

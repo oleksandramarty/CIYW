@@ -6,6 +6,6 @@ public class DictionariesRootQuery : GraphQlQueryHelper
 {
     public DictionariesRootQuery()
     {
-        this.AddDictionariesQueries();
+        AddDictionariesQueries();
     }
 }

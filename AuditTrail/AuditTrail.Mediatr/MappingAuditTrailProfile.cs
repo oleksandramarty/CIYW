@@ -8,6 +8,6 @@ public class MappingAuditTrailProfile : Profile
 {
     public MappingAuditTrailProfile()
     {
-        this.CreateMap<AuditTrailEntity, AuditTrailResponse>();
+        CreateMap<AuditTrailEntity, AuditTrailResponse>();
     }
 }

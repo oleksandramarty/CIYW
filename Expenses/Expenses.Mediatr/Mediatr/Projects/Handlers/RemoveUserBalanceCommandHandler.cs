@@ -11,27 +11,27 @@ namespace Expenses.Mediatr.Mediatr.Projects.Handlers;
 
 public class RemoveUserBalanceCommandHandler: IRequestHandler<RemoveUserBalanceCommand, BaseBoolResponse>
 {
-    private readonly IEntityValidator<ExpensesDataContext> entityValidator;
-    private readonly IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository;
+    private readonly IEntityValidator<ExpensesDataContext> _entityValidator;
+    private readonly IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> _genericBalanceRepository;
 
     public RemoveUserBalanceCommandHandler(
         IEntityValidator<ExpensesDataContext> entityValidator, 
-        IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> balanceRepository
+        IGenericRepository<Guid, BalanceEntity, ExpensesDataContext> genericBalanceRepository
         )
     {
-        this.entityValidator = entityValidator;
-        this.balanceRepository = balanceRepository;
+        _entityValidator = entityValidator;
+        _genericBalanceRepository = genericBalanceRepository;
     }
     
     public async Task<BaseBoolResponse> Handle(RemoveUserBalanceCommand command, CancellationToken cancellationToken)
     {
-        BalanceEntity? balance = await this.balanceRepository.ByIdAsync(command.Id, cancellationToken);
+        BalanceEntity? balance = await _genericBalanceRepository.ByIdAsync(command.Id, cancellationToken);
         if (balance == null)
         {
             throw new EntityNotFoundException();
         }
 
-        await this.balanceRepository.DeleteAsync(balance, cancellationToken);
+        await _genericBalanceRepository.DeleteAsync(balance, cancellationToken);
 
         return new BaseBoolResponse();
     }

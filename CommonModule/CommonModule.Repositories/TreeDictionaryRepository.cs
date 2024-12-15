@@ -14,28 +14,28 @@ public class TreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TRe
     where TResponse : class, ITreeChildrenEntity<TResponse>
     where TDataContext : DbContext
 {
-    private readonly IMapper mapper;
-    private readonly IEntityValidator<TDataContext> entityValidator;
-    private readonly ICacheRepository<TEntityId, TEntity> cacheRepository;
-    private readonly IReadGenericRepository<TEntityId, TEntity, TDataContext> dictionaryRepository;
+    private readonly IMapper _mapper;
+    private readonly IEntityValidator<TDataContext> _entityValidator;
+    private readonly ICacheRepository<TEntityId, TEntity> _cacheRepository;
+    private readonly IReadGenericRepository<TEntityId, TEntity, TDataContext> _readGenericDictionaryRepository;
     
     public TreeDictionaryRepository(
         IMapper mapper,
         IEntityValidator<TDataContext> entityValidator,
         ICacheRepository<TEntityId, TEntity> cacheRepository,
-        IReadGenericRepository<TEntityId, TEntity, TDataContext> dictionaryRepository,
+        IReadGenericRepository<TEntityId, TEntity, TDataContext> readGenericDictionaryRepository,
         IKafkaMessageService kafkaMessageService
         )
     {
-        this.mapper = mapper;
-        this.entityValidator = entityValidator;
-        this.cacheRepository = cacheRepository;
-        this.dictionaryRepository = dictionaryRepository;
+        _mapper = mapper;
+        _entityValidator = entityValidator;
+        _cacheRepository = cacheRepository;
+        _readGenericDictionaryRepository = readGenericDictionaryRepository;
     }
     
     public async Task<VersionedListResponse<TResponse>> TreeDictionaryAsync(string? version, CancellationToken cancellationToken)
     {
-        string? currentVersion = await this.cacheRepository.CacheVersionAsync();
+        string? currentVersion = await _cacheRepository.CacheVersionAsync();
         
         if (LocalizationExtension.IsDictionaryActual(version, currentVersion))
         {
@@ -46,18 +46,18 @@ public class TreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TRe
             };
         }
         
-        var items = await this.cacheRepository.ItemsFromCacheAsync();
+        var items = await _cacheRepository.ItemsFromCacheAsync();
     
         if (items.Count == 0)
         {
-            items = await dictionaryRepository.ListAsync(null, cancellationToken);
-            await this.cacheRepository.ReinitializeDictionaryAsync(items);
-            await this.cacheRepository.SetCacheVersionAsync();
+            items = await _readGenericDictionaryRepository.ListAsync(null, cancellationToken);
+            await _cacheRepository.ReinitializeDictionaryAsync(items);
+            await _cacheRepository.SetCacheVersionAsync();
         }
         
         if (string.IsNullOrEmpty(currentVersion))
         {
-            currentVersion = await this.cacheRepository.CacheVersionAsync();
+            currentVersion = await _cacheRepository.CacheVersionAsync();
         }
     
         VersionedListResponse<TResponse> result = new VersionedListResponse<TResponse>
@@ -99,7 +99,7 @@ public class TreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TRe
         }
     
         var childNodes = await ChildNodes(entity, entities, cancellationToken);
-        TResponse? node = this.mapper.Map<TEntity, TResponse>(entity);
+        TResponse? node = _mapper.Map<TEntity, TResponse>(entity);
     
         if (node != null)
         {
@@ -114,7 +114,7 @@ public class TreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TRe
         IEnumerable<TEntity>? entities,
         CancellationToken cancellationToken)
     {
-        IEnumerable<TEntity> children = this.Children(entities, entity.Id);
+        IEnumerable<TEntity> children = Children(entities, entity.Id);
         var childNodes = new List<TResponse>();
     
         var remainingEntities = entities?.Where(e => !children.Contains(e)).ToList();
@@ -131,6 +131,6 @@ public class TreeDictionaryRepository<TEntityId, TEntityIdParentId, TEntity, TRe
     private IEnumerable<TEntity> Children(IEnumerable<TEntity>? entities, TEntityId parentId)
     {
         return entities?.Where(c => c.ParentId != null && c.ParentId.Equals(parentId)).ToList() ?? 
-               this.dictionaryRepository.Queryable(c => c.ParentId != null && c.ParentId.Equals(parentId)).AsEnumerable();
+               _readGenericDictionaryRepository.Queryable(c => c.ParentId != null && c.ParentId.Equals(parentId)).AsEnumerable();
     }
 }

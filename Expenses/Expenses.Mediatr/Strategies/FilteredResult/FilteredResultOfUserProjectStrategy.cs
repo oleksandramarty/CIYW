@@ -16,33 +16,33 @@ namespace Expenses.Mediatr.Strategies.FilteredResult;
 public class
     FilteredResultOfUserProjectStrategy : FilteredResultStrategyResponseContext<FilteredUserProjectsRequest, UserProjectEntity, UserProjectResponse>, IFilteredResultStrategy<FilteredUserProjectsRequest, UserProjectResponse>
 {
-    private ICurrentUserRepository currentUserRepository;
-    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository;
+    private readonly ICurrentUserRepository _currentUserRepository;
+    private readonly IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> _readGenericUserProjectRepository;
 
     public FilteredResultOfUserProjectStrategy(
         ICurrentUserRepository currentUserRepository,
         IMapper mapper,
-        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> userProjectRepository
+        IReadGenericRepository<Guid, UserProjectEntity, ExpensesDataContext> readGenericUserProjectRepository
     ): base(mapper)
     {
-        this.currentUserRepository = currentUserRepository;
-        this.userProjectRepository = userProjectRepository;
+        _currentUserRepository = currentUserRepository;
+        _readGenericUserProjectRepository = readGenericUserProjectRepository;
     }
 
     public async Task<FilteredListResponse<UserProjectResponse>> FilteredResultAsync(
         FilteredUserProjectsRequest request, CancellationToken cancellationToken)
     {
-        Guid? userId = await this.currentUserRepository.CurrentUserIdAsync();
+        Guid? userId = await _currentUserRepository.CurrentUserIdAsync();
 
         if (!userId.HasValue)
         {
             throw new EntityNotFoundException();
         }
         
-        var query = this.userProjectRepository.Queryable(
+        var query = _readGenericUserProjectRepository.Queryable(
             up => up.CreatedUserId == userId.Value,
             up => up.Include(up =>up.Balances));
 
-        return await this.FilteredResultAsync(request, query, cancellationToken);
+        return await FilteredResultAsync(request, query, cancellationToken);
     }
 }

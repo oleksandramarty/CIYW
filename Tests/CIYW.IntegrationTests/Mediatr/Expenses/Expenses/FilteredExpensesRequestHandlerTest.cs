@@ -44,8 +44,8 @@ public class FilteredExpensesRequestHandlerTest() : CommonIntegrationTestSetup()
         int[] categoriesIds)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity user = await this.CreateTestUser(role, 1, 1);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity user = await CreateTestUser(role, 1, 1);
         UserProjectEntity userProject = user.UserProjects.First();
         Guid balanceId = userProject.Balances.First().Id;
         var expenses = new Dictionary<int, int>
@@ -57,7 +57,7 @@ public class FilteredExpensesRequestHandlerTest() : CommonIntegrationTestSetup()
             { 5, 50 },
             { 6, 50 },
         };
-        await this.AddAllExpenses(user.User.Id, userProject.Id, balanceId, expenses);
+        await AddAllExpenses(user.User.Id, userProject.Id, balanceId, expenses);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())

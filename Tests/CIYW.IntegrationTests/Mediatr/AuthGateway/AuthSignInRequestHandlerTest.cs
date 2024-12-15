@@ -23,14 +23,14 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnTokenResponse_WhenAuthSignInRequestIsValid(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(role, 1, 1, false);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
             IJwtTokenFactory jwtTokenFactory = scope.ServiceProvider.GetRequiredService<IJwtTokenFactory>();
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
 
             IMediator mediator = new Mediator(scope.ServiceProvider);
             JwtTokenResponse response = await mediator.Send(new AuthSignInRequest
@@ -40,9 +40,9 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
                 RememberMe = true
             });
             userToBeSignIn.Token = response.Token;
-            this.Options.CurrentUserEntity = userToBeSignIn;
+            Options.CurrentUserEntity = userToBeSignIn;
 
-            bool afterSignIn = await this.IsCurrentUserAuthenticated();
+            bool afterSignIn = await IsCurrentUserAuthenticated();
             Guid? userId = !string.IsNullOrEmpty(response?.Token)
                 ? jwtTokenFactory.UserIdFromToken(response.Token)
                 : null;
@@ -61,13 +61,13 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnException_WhenAuthSignInRequestIsInvalidPassword(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(role, 1, 1, false);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
 
             beforeSignIn.Should().BeFalse();
             IMediator mediator = new Mediator(scope.ServiceProvider);
@@ -88,13 +88,13 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnException_WhenAuthSignInRequestIsInvalidLogin(UserRoleEnum role)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false);
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(role, 1, 1, false);
 
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
 
             beforeSignIn.Should().BeFalse();
             IMediator mediator = new Mediator(scope.ServiceProvider);
@@ -115,8 +115,8 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
     public async Task Handle_ShouldReturnException_WhenAuthSignInRequestWithBlockedUser(UserRoleEnum role, StatusEnum status, string errorMessage)
     {
         // Arrange
-        await this.SignOutUserIfExist();
-        IntegrationTestUserEntity userToBeSignIn = await this.CreateTestUser(role, 1, 1, false,
+        await SignOutUserIfExist();
+        IntegrationTestUserEntity userToBeSignIn = await CreateTestUser(role, 1, 1, false,
             [
                 user => user.Status = status
             ]
@@ -125,7 +125,7 @@ public class AuthSignInRequestHandlerTest() : CommonIntegrationTestSetup()
         // Act
         using (var scope = TestApplicationFactory.Services.CreateScope())
         {
-            bool beforeSignIn = await this.IsCurrentUserAuthenticated();
+            bool beforeSignIn = await IsCurrentUserAuthenticated();
 
             beforeSignIn.Should().BeFalse();
             IMediator mediator = new Mediator(scope.ServiceProvider);
