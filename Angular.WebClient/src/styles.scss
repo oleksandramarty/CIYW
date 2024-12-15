@@ -1,10 +1,10 @@
 @use 'sass:math';
+@use 'styles/table';
+@use 'styles/filter';
+@use 'styles/dialog';
+@use 'styles/grid';
 
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import "styles/_table.scss";
-@import "styles/_filter.scss";
-@import "styles/_dialog.scss";
-@import "styles/_grid.scss";
 
 html, body {
   font-size: 16px;
