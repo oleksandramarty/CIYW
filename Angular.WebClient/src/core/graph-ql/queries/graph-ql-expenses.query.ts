@@ -1,17 +1,17 @@
-import { gql } from "@apollo/client";
+import {gql} from "@apollo/client";
 
 export const FILTERED_EXPENSES = gql`
     query FilteredExpenses(
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
-        $dateFrom: String,
-        $dateTo: String,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
         $column: String,
         $direction: String,
         $query: String,
-        $amountFrom: Float,
-        $amountTo: Float,
+        $amountFrom: Decimal,
+        $amountTo: Decimal,
         $userProjectId: ID,
         $categoryIds: [Int]
     ) {
@@ -72,13 +72,13 @@ export const FILTERED_PLANNED_EXPENSES = gql`
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
-        $dateFrom: String,
-        $dateTo: String,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
         $column: String,
         $direction: String,
         $query: String,
-        $amountFrom: Float,
-        $amountTo: Float,
+        $amountFrom: Decimal,
+        $amountTo: Decimal,
         $userProjectId: ID,
         $categoryIds: [Int]
     ) {
@@ -129,13 +129,13 @@ export const FILTERED_FAVORITE_EXPENSES = gql`
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
-        $dateFrom: String,
-        $dateTo: String,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
         $column: String,
         $direction: String,
         $query: String,
-        $amountFrom: Float,
-        $amountTo: Float,
+        $amountFrom: Decimal,
+        $amountTo: Decimal,
         $userProjectId: ID,
         $categoryIds: [Int]
     ) {
@@ -184,11 +184,11 @@ export const CREATE_EXPENSE = gql`
     mutation CreateOrUpdateExpenseInput(
         $title: String!,
         $description: String,
-        $amount: Float!,
-        $date: String!,
+        $amount: Decimal!,
+        $date: DateTime!,
         $categoryId: Int!,
         $userProjectId: ID!,
-        $balanceId: ID!,
+        $balanceId: ID!
         $favoriteExpenseId: ID
     ) {
         expenses_create_expense(
@@ -212,11 +212,11 @@ export const CREATE_PLANNED_EXPENSE = gql`
     mutation CreatePlannedExpense(
         $title: String!,
         $description: String,
-        $amount: Float!,
+        $amount: Decimal!,
         $categoryId: Int!,
         $balanceId: ID!,
-        $startDate: String!,
-        $endDate: String,
+        $startDate: DateTime!,
+        $endDate: DateTime,
         $userProjectId: ID!,
         $frequencyId: Int!
     ) {
@@ -240,11 +240,11 @@ export const CREATE_PLANNED_EXPENSE = gql`
 
 export const UPDATE_EXPENSE = gql`
     mutation CreateOrUpdateExpenseInput(
-        $id: ID!,
+        $id: Guid!,
         $title: String!,
         $description: String,
-        $amount: Float!,
-        $date: String!,
+        $amount: Decimal!,
+        $date: DateTime!,
         $categoryId: Int!,
         $balanceId: ID!
     ) {
@@ -266,14 +266,14 @@ export const UPDATE_EXPENSE = gql`
 
 export const UPDATE_PLANNED_EXPENSE = gql`
     mutation UpdatePlannedExpense(
-        $id: ID!,
+        $id: Guid!,
         $title: String!,
         $description: String,
-        $amount: Float!,
+        $amount: Decimal!,
         $categoryId: Int!,
         $balanceId: ID!,
-        $startDate: String!,
-        $endDate: String,
+        $startDate: DateTime!,
+        $endDate: DateTime,
         $frequencyId: Int!
     ) {
         expenses_update_planned_expense(
@@ -295,7 +295,7 @@ export const UPDATE_PLANNED_EXPENSE = gql`
 `;
 
 export const REMOVE_EXPENSE = gql`
-    mutation RemoveExpense($id: ID!) {
+    mutation RemoveExpense($id: Guid!) {
         expenses_remove_expense(id: $id) {
             success
         }
@@ -303,7 +303,7 @@ export const REMOVE_EXPENSE = gql`
 `;
 
 export const REMOVE_PLANNED_EXPENSE = gql`
-    mutation RemovePlannedExpense($id: ID!) {
+    mutation RemovePlannedExpense($id: Guid!) {
         expenses_remove_planned_expense(id: $id) {
             success
         }
@@ -319,7 +319,7 @@ export const CREATE_USER_PROJECT = gql`
 `;
 
 export const UPDATE_USER_PROJECT = gql`
-    mutation UpdateUserProjectInput($id: ID!, $title: String!) {
+    mutation UpdateUserProjectInput($id: Guid!, $title: String!) {
         expenses_create_user_project(id: $id, input: { title: $title }) {
             success
         }
@@ -330,16 +330,16 @@ export const CREATE_USER_BALANCE = gql`
     mutation CreateUserBalanceInput(
         $title: String!,
         $currencyId: Int!,
-        $balanceTypeId: Int!,
-        $userProjectId: ID!,
+        $balanceTypeId: Int!
+        $userProjectId: Guid!
         $iconId: Int!
     ) {
         expenses_create_user_balance(
             input: {
                 title: $title,
                 currencyId: $currencyId,
-                balanceTypeId: $balanceTypeId,
-                userProjectId: $userProjectId,
+                balanceTypeId: $balanceTypeId
+                userProjectId: $userProjectId
                 iconId: $iconId
             }) {
             id
@@ -349,11 +349,11 @@ export const CREATE_USER_BALANCE = gql`
 
 export const UPDATE_USER_BALANCE = gql`
     mutation UpdateUserBalanceInput(
-        $id: ID!,
+        $id: Guid!,
         $title: String!,
         $currencyId: Int!,
-        $balanceTypeId: Int!,
-        $userProjectId: ID!,
+        $balanceTypeId: Int!
+        $userProjectId: Guid!
         $iconId: Int!
     ) {
         expenses_update_user_balance(
@@ -361,8 +361,8 @@ export const UPDATE_USER_BALANCE = gql`
             input: {
                 title: $title,
                 currencyId: $currencyId,
-                balanceTypeId: $balanceTypeId,
-                userProjectId: $userProjectId,
+                balanceTypeId: $balanceTypeId
+                userProjectId: $userProjectId
                 iconId: $iconId
             }) {
             success
@@ -371,7 +371,7 @@ export const UPDATE_USER_BALANCE = gql`
 `;
 
 export const REMOVE_USER_BALANCE = gql`
-    mutation RemoveUserBalance($id: ID!) {
+    mutation RemovePlannedExpense($id: Guid!) {
         expenses_remove_user_balance(id: $id) {
             success
         }
@@ -382,7 +382,7 @@ export const CREATE_FAVORITE_EXPENSE = gql`
     mutation CreateFavoriteExpenseInput(
         $title: String!,
         $description: String,
-        $limit: Float,
+        $limit: Decimal,
         $categoryId: Int,
         $frequencyId: Int,
         $currencyId: Int!,
@@ -407,10 +407,10 @@ export const CREATE_FAVORITE_EXPENSE = gql`
 
 export const UPDATE_FAVORITE_EXPENSE = gql`
     mutation UpdateFavoriteExpenseInput(
-        $id: ID!,
+        $id: Guid!,
         $title: String!,
         $description: String,
-        $limit: Float,
+        $limit: Decimal,
         $categoryId: Int,
         $frequencyId: Int,
         $currencyId: Int!,
@@ -435,7 +435,7 @@ export const UPDATE_FAVORITE_EXPENSE = gql`
 `;
 
 export const REMOVE_FAVORITE_EXPENSE = gql`
-    mutation RemoveFavoriteExpense($id: ID!) {
+    mutation RemoveFavoriteExpense($id: Guid!) {
         expenses_remove_favorite_expense(id: $id) {
             success
         }
@@ -443,7 +443,7 @@ export const REMOVE_FAVORITE_EXPENSE = gql`
 `;
 
 export const USER_PROJECT_BY_ID = gql`
-    query UserProjectById($id: ID) {
+    query UserProjectById($id: Guid) {
         expenses_user_project_by_id(id: $id) {
             id
             title
@@ -475,13 +475,13 @@ export const FILTERED_USER_PROJECTS = gql`
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
-        $dateFrom: String,
-        $dateTo: String,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
         $column: String,
         $direction: String,
         $query: String,
-        $amountFrom: Float,
-        $amountTo: Float
+        $amountFrom: Decimal,
+        $amountTo: Decimal
     ) {
         expenses_filtered_user_projects(
             isFull: $isFull,
@@ -533,13 +533,13 @@ export const FILTERED_USER_ALLOWED_PROJECTS = gql`
         $isFull: Boolean,
         $pageNumber: Int,
         $pageSize: Int,
-        $dateFrom: String,
-        $dateTo: String,
+        $dateFrom: DateTime,
+        $dateTo: DateTime,
         $column: String,
         $direction: String,
         $query: String,
-        $amountFrom: Float,
-        $amountTo: Float
+        $amountFrom: Decimal,
+        $amountTo: Decimal
     ) {
         expenses_filtered_user_allowed_projects(
             isFull: $isFull,
