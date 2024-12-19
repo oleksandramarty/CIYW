@@ -125,10 +125,11 @@ public class BalanceRepository: IBalanceRepository
             favoriteExpense.CurrentAmount = 0.0m;
         }
         
+        bool isPositive = currentCategory.ToLower().Contains("\"ispositive\":true");
+        
         if (isRefund)
         {
-            bool isNegative = currentCategory.ToLower().Contains("\"ispositive\":1");
-            balance.Amount = isNegative ? balance.Amount - expenseEntity.Amount : balance.Amount + expenseEntity.Amount;
+            balance.Amount = isPositive ? balance.Amount - expenseEntity.Amount : balance.Amount + expenseEntity.Amount;
             if (favoriteExpense != null)
             {
                 favoriteExpense.CurrentAmount -= expenseEntity.Amount;
@@ -136,7 +137,6 @@ public class BalanceRepository: IBalanceRepository
         }
         else
         {
-            bool isPositive = currentCategory.ToLower().Contains("\"ispositive\":true");
             balance.Amount = isPositive ? balance.Amount + expenseEntity.Amount : balance.Amount - expenseEntity.Amount;
             if (favoriteExpense != null)
             {
